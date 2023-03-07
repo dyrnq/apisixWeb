@@ -1,0 +1,56 @@
+server:
+  port: 8080
+  contextPath: /
+  request:
+    maxBodySize: 2048mb
+    maxHeaderSize: 20mb
+  session:
+    timeout: 7200
+    name: "TOKEN"
+    prefix: "Bearer"
+    allowExpire: true
+    allowAutoIssue: true
+    allowUseHeader: false
+    state:
+      jwt:
+        secret: "E3F9N2kRDQf55pnJPnFoo5+ylKmZQ7AXmWeOVPKbEd8:"
+
+solon:
+#  debug: 1
+  app:
+    name: apisixWeb
+  view:
+    mapping:
+      html: FreemarkerRender
+  logging:
+    logger:
+      "io.undertow":
+        level: "WARN"
+    appender:
+      console:
+        level: INFO
+      file:
+        level: INFO
+        maxFileSize: "100 MB"
+        maxHistory: "7"
+
+test:
+  db1:
+    jdbcUrl: jdbc:h2:/tmp/h2
+    driverClassName: "org.h2.Driver"
+    username: "sa"
+    password: ""
+#  db2:
+#    schema: rock
+#    jdbcUrl: jdbc:mysql://127.0.0.1:3306/rock?useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=true
+#    driverClassName: com.mysql.jdbc.Driver
+#    username: root
+#    password: 123456
+#  db3:
+#    driverClassName: org.postgresql.Driver
+#    url: jdbc:postgresql://127.0.0.1:5432/rock?&ssl=false
+#    username: rock
+#    password: rock
+
+
+
