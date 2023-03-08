@@ -1,9 +1,11 @@
 package com.dyrnq;
 
 import com.cym.utils.VersionUtils;
+import com.dyrnq.dso.UserMapper;
 import com.palm.easy.util.Captcha;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.noear.snack.ONode;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
@@ -17,6 +19,8 @@ import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.noear.wood.WoodConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
 
 @EnableScheduling
 public class WebApp {
@@ -74,6 +78,9 @@ public class WebApp {
     @Component
     public static class JwtInterceptor implements RouterInterceptor {
 
+        @Inject
+        UserMapper userMapper;
+
         private Claims getClaimsFromToken(String token) {
             return JwtUtils.parseJwt(token);
         }
@@ -95,9 +102,26 @@ public class WebApp {
                 Claims claims = getClaimsFromToken(token);
                 username = claims.getSubject();
             } catch (ExpiredJwtException e) {
+                e.getMessage();
                 throw new TokenExpiredException("令牌过期");
             }
             return username;
+        }
+
+        public Boolean validateToken(String token, String name) throws Exception {
+            String username = getUsernameFromToken(token);
+            return (username.equals(name) && !isTokenExpired(token));
+        }
+        public Boolean isTokenExpired(String token) throws Exception {
+            try {
+                Claims claims = getClaimsFromToken(token);
+                Date expiration = claims.getExpiration();
+                return expiration.before(new Date());
+            } catch (Exception e) {
+                e.getMessage();
+                new Throwable(e);
+            }
+            return true;
         }
 
 
@@ -110,8 +134,26 @@ public class WebApp {
                 "/admin/login".equals(ctx.path()) == false
 
             ) {
-                String token = ctx.header("TOKEN");
+                String token = ctx.cookie("TOKEN");
                 System.out.println(token);
+
+                String userId = null;
+                try {
+                    userId = getUserIdFromToken(token);
+                } catch (TokenExpiredException e) {
+                    return;
+                } catch (MalformedJwtException e) {
+                    return;
+                }
+                if(userId!=null){
+                    com.dyrnq.model.User user = userMapper.selectById(userId);
+                    if (user!=null){
+                        validateToken(token,user.getName());
+                    }
+
+                }
+
+
                 String user_name = ctx.session("user_name", "");
                 if (Utils.isEmpty(user_name)) {
                     //说明未登录，则终止处理
