@@ -1,6 +1,7 @@
 package com.dyrnq.controller;
 
 import com.cym.utils.JsonResult;
+import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
@@ -34,25 +35,22 @@ public class TokenController extends BaseController {
 //        }
 
         if ("admin".equals(name)) {
-            ctx.sessionSet("user_name", name);
-            ctx.sessionSet("user_pass", pass);
-            ctx.sessionSet("user_id", 111);
-            ctx.sessionSet("jkl", 111);
-
+            ctx.sessionSet(Claims.SUBJECT, name);
+            ctx.sessionSet(Claims.ID, 1);
             return Result.succeed(ctx.sessionState().sessionToken());
         } else {
             return Result.failure();
         }
     }
 
-    @Mapping("/login2")
-    public Result login2(Context ctx, String name) {
-        if ("noear".equals(name)) {
-            ctx.sessionSet("user_name", name);
-
-            return Result.succeed(ctx.sessionState().sessionToken());
-        } else {
-            return Result.failure();
-        }
-    }
+//    @Mapping("/login2")
+//    public Result login2(Context ctx, String name) {
+//        if ("noear".equals(name)) {
+//            ctx.sessionSet("user_name", name);
+//
+//            return Result.succeed(ctx.sessionState().sessionToken());
+//        } else {
+//            return Result.failure();
+//        }
+//    }
 }

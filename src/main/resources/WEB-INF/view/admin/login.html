@@ -20,18 +20,84 @@
 
 <form class="layui-form" action="">
     <div class="layui-form-item">
-        <label class="layui-form-label">单行输入框</label>
+        <label class="layui-form-label">用户名</label>
         <div class="layui-input-block">
-            <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+            <input type="text" name="name" id="name" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="text" name="pass" id="pass" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="login()">立即提交</button>
+            <button type="button" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
 </form>
 </body>
+<#include "script.html"/>
+<script>
+function login() {
+	//$("#authCode").val($("#codeInput").val());
+
+	var name = $("#name").val();
+	var pass = $("#pass").val();
+	//var code = Base64.encode(Base64.encode($("#code").val()));
+	//var authCode = Base64.encode(Base64.encode($("#authCode").val()));
+
+	$.ajax({
+		type: 'POST',
+		url: ctx + '/token/getToken',
+		data: {
+			name : name,
+			pass : pass
+		},
+		dataType: 'json',
+		success: function(data) {
+		    //alert(JSON.stringify(data));
+		    console.log(JSON.stringify(data));
+			if (data.code == 200) {
+			//	if($("#remember").prop("checked")){
+			//		window.localStorage.setItem("time", new Date().getTime());
+			//		window.localStorage.setItem("adminId",data.obj.id);
+			//	} else {
+			//		window.localStorage.removeItem("adminId");
+			//	}
+
+              var cname="TOKEN"
+              var cvalue=data.data
+              alert(cvalue)
+              var exdays=1
+//function setCookie(cname, cvalue, exdays) {
+              const d = new Date();
+              d.setTime(d.getTime() + (exdays*24*60*60*1000));
+              let expires = "expires="+ d.toUTCString();
+              document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+//}
+
+
+				location.href = ctx + "/admin?";
+			} else {
+			    alert("登陆失败");
+				//layer.msg(data.msg);
+				//refreshCode('codeImg');
+			}
+
+
+
+		},
+		error: function() {
+			layer.alert(commonStr.errorInfo);
+		}
+	});
+
+}
+
+</script>
 </html>

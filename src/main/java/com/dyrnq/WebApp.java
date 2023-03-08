@@ -2,6 +2,8 @@ package com.dyrnq;
 
 import com.cym.utils.VersionUtils;
 import com.palm.easy.util.Captcha;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.noear.snack.ONode;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
@@ -11,6 +13,7 @@ import org.noear.solon.core.handle.*;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
+import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.noear.wood.WoodConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,22 +74,51 @@ public class WebApp {
     @Component
     public static class JwtInterceptor implements RouterInterceptor {
 
+        private Claims getClaimsFromToken(String token) {
+            return JwtUtils.parseJwt(token);
+        }
+
+        public String getUserIdFromToken(String token) throws TokenExpiredException {
+            String userId = null;
+            try {
+                Claims claims = getClaimsFromToken(token);
+                userId = claims.getId();
+            } catch (ExpiredJwtException e) {
+                throw new TokenExpiredException("令牌过期");
+            }
+            return userId;
+        }
+
+        public String getUsernameFromToken(String token) throws TokenExpiredException {
+            String username = null;
+            try {
+                Claims claims = getClaimsFromToken(token);
+                username = claims.getSubject();
+            } catch (ExpiredJwtException e) {
+                throw new TokenExpiredException("令牌过期");
+            }
+            return username;
+        }
+
+
         @Override
         public void doIntercept(Context ctx, Handler mainHandler, RouterInterceptorChain chain) throws Throwable {
             //如果是登录页则不处理
-//            if(
-//
-//                    "/admin/login".equals(ctx.path()) == false ||
-//                    "/captcha".equals(ctx.path()) == false
-//
-//            ) {
-//                String user_name = ctx.session("user_name", "");
-//                if (Utils.isEmpty(user_name)) {
-//                    //说明未登录，则终止处理
-//                    ctx.status(401);
-//                    return;
-//                }
-//            }
+            if(
+                ctx.path().startsWith("/admin/") &&
+                "/admin/".equals(ctx.path()) == false &&
+                "/admin/login".equals(ctx.path()) == false
+
+            ) {
+                String token = ctx.header("TOKEN");
+                System.out.println(token);
+                String user_name = ctx.session("user_name", "");
+                if (Utils.isEmpty(user_name)) {
+                    //说明未登录，则终止处理
+                    ctx.status(401);
+                    return;
+                }
+            }
 
             chain.doIntercept(ctx, mainHandler);
         }
