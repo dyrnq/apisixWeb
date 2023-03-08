@@ -18,28 +18,50 @@
 
 <body>
 
-<form class="layui-form" action="">
-    <div class="layui-form-item">
-        <label class="layui-form-label">用户名</label>
-        <div class="layui-input-block">
-            <input type="text" name="name" id="name" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
-        </div>
-    </div>
+<div class="layui-bg-gray" style="padding: 30px;">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md6">
+            <div class="layui-panel">
+                <div style="padding: 50px 30px;">
 
-    <div class="layui-form-item">
-        <label class="layui-form-label">密码</label>
-        <div class="layui-input-block">
-            <input type="text" name="pass" id="pass" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">
-        </div>
-    </div>
 
-    <div class="layui-form-item">
-        <div class="layui-input-block">
-            <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="login()">立即提交</button>
-            <button type="button" class="layui-btn layui-btn-primary">重置</button>
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" id="name" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="pass" id="pass" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                            </div>
+                        </div>
+
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="login()">立即提交</button>
+                                <button type="button" class="layui-btn layui-btn-primary">重置</button>
+                            </div>
+                        </div>
+                    </form>
+
+
+
+                </div>
+            </div>
         </div>
+<!--        <div class="layui-col-md6">-->
+<!--            <div class="layui-panel">-->
+<!--                <div style="padding: 50px 30px;">一个面板</div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
-</form>
+</div>
+
+
 </body>
 <#include "script.html"/>
 <script>
