@@ -76,14 +76,18 @@ public class WebApp {
         @Override
         public void doIntercept(Context ctx, Handler mainHandler, RouterInterceptorChain chain) throws Throwable {
             //如果是登录页则不处理
-            if("/".equals(ctx.path()) == false) {
-                String user_name = ctx.session("user_name", "");
-                if (Utils.isEmpty(user_name)) {
-                    //说明未登录，则终止处理
-                    ctx.status(401);
-                    return;
-                }
-            }
+//            if(
+//                    "/".equals(ctx.path()) == false ||
+//                    "/login".equals(ctx.path()) == false
+//
+//                ) {
+//                String user_name = ctx.session("user_name", "");
+//                if (Utils.isEmpty(user_name)) {
+//                    //说明未登录，则终止处理
+//                    ctx.status(401);
+//                    return;
+//                }
+//            }
 
             chain.doIntercept(ctx, mainHandler);
         }

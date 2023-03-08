@@ -1,4 +1,4 @@
-package com.dyrnq.controller.home;
+package com.dyrnq.controller;
 
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
@@ -10,18 +10,27 @@ import org.noear.solon.i18n.annotation.I18n;
 
 @Controller
 @I18n
-@Mapping("")
-public class Home {
+public class IndexController {
 
     @Inject
     UserMapper userMapper;
-    @Mapping("")
+    @Mapping("/")
     public Object index() {
-        ModelAndView model = new ModelAndView("index.html");
+        ModelAndView model = new ModelAndView("index-noauth.html");
         model.put("title","dock");
         model.put("message","你好 world!");
         User user = userMapper.selectById("1");
         System.out.println(user.getName());
+        return model;
+    }
+
+    @Mapping("/test")
+    public Object test() {
+        ModelAndView model = new ModelAndView("login.html");
+        model.put("title","dock");
+        model.put("message","你好 world!");
+//        User user = userMapper.selectById("1");
+//        System.out.println(user.getName());
         return model;
     }
 
