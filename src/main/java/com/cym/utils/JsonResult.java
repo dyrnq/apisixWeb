@@ -19,7 +19,7 @@ public class JsonResult<T> {
 	/**
 	 * 返回内容
 	 */
-	private T obj;
+	private T data;
 
 	public String getMsg() {
 		return msg;
@@ -45,12 +45,12 @@ public class JsonResult<T> {
 		this.status = status;
 	}
 
-	public T getObj() {
-		return obj;
+	public T getData() {
+		return data;
 	}
 
-	public void setObj(T obj) {
-		this.obj = obj;
+	public void setData(T data) {
+		this.data = data;
 	}
 
 }

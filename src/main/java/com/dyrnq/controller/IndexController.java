@@ -16,7 +16,7 @@ public class IndexController {
     UserMapper userMapper;
     @Mapping("/")
     public Object index() {
-        ModelAndView model = new ModelAndView("index-noauth.html");
+        ModelAndView model = new ModelAndView("index.html");
         model.put("title","dock");
         model.put("message","你好 world!");
         User user = userMapper.selectById("1");

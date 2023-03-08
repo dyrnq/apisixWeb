@@ -1,15 +1,13 @@
 package com.dyrnq;
 
 import com.cym.utils.VersionUtils;
+import com.palm.easy.util.Captcha;
 import org.noear.snack.ONode;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.core.handle.Context;
-import org.noear.solon.core.handle.Filter;
-import org.noear.solon.core.handle.FilterChain;
-import org.noear.solon.core.handle.Handler;
+import org.noear.solon.core.handle.*;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
@@ -32,7 +30,7 @@ public class WebApp {
                 }
                 c.pathNew(path);
             });
-
+            app.add("captcha", MethodType.GET, ctx -> Captcha.captcha(ctx));
             app.onEvent(freemarker.template.Configuration.class, cfg -> {
                 cfg.setSetting("classic_compatible", "true");
                 cfg.setSetting("number_format", "0.##");
@@ -77,10 +75,11 @@ public class WebApp {
         public void doIntercept(Context ctx, Handler mainHandler, RouterInterceptorChain chain) throws Throwable {
             //如果是登录页则不处理
 //            if(
-//                    "/".equals(ctx.path()) == false ||
-//                    "/login".equals(ctx.path()) == false
 //
-//                ) {
+//                    "/admin/login".equals(ctx.path()) == false ||
+//                    "/captcha".equals(ctx.path()) == false
+//
+//            ) {
 //                String user_name = ctx.session("user_name", "");
 //                if (Utils.isEmpty(user_name)) {
 //                    //说明未登录，则终止处理
