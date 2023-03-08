@@ -36,7 +36,8 @@ solon:
 
 test:
   db1:
-    jdbcUrl: jdbc:h2:/tmp/h2
+    jdbcUrl: jdbc:h2:file:/tmp/h2
+    #jdbcUrl: jdbc:h2:mem:test_mem
     driverClassName: "org.h2.Driver"
     username: "sa"
     password: ""

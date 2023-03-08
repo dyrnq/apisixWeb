@@ -1,4 +1,4 @@
-package com.dyrnq.controller;
+package com.dyrnq.controller.home;
 
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
@@ -10,11 +10,12 @@ import org.noear.solon.i18n.annotation.I18n;
 
 @Controller
 @I18n
-public class IndexController {
+@Mapping("")
+public class Home {
 
     @Inject
     UserMapper userMapper;
-    @Mapping("/")
+    @Mapping("")
     public Object index() {
         ModelAndView model = new ModelAndView("index.html");
         model.put("title","dock");

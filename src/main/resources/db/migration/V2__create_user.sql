@@ -3,7 +3,7 @@ CREATE TABLE `user` (
   `name` varchar(40) DEFAULT NULL ,
   `pass` varchar(40) DEFAULT NULL ,
   PRIMARY KEY (`id`)
-) ;
+);
 
 INSERT INTO `user` VALUES ('1', 'aaaaaaaaa', 'zzzzzzzzzzzzzzzzzz');
 INSERT INTO `user` VALUES ('2', 'aaaaaaaaa', 'zzzzzzzzzzzzzzzzzz');
