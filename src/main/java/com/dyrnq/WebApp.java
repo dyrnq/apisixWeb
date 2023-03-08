@@ -42,7 +42,6 @@ public class WebApp {
 
             });
 
-            System.out.println(VersionUtils.getVersionFromPom());
 
             if (Solon.cfg().isDebugMode()) {
                 //执行后打印下sql
