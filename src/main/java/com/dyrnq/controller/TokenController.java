@@ -22,7 +22,7 @@ public class TokenController extends BaseController {
      * @param pass 密码
      */
     @Mapping("getToken")
-    public JsonResult getToken(String name, String pass) {
+    public Result getToken(Context ctx,String name, String pass) {
 
         // 用户名密码
 //        Admin admin = adminService.login(name, pass);
@@ -33,10 +33,16 @@ public class TokenController extends BaseController {
 //            return renderError(m.get("loginStr.backError7")); // 无接口权限
 //        }
 
-        Map<String, String> map = new HashMap<String, String>();
-//        map.put("token", adminService.makeToken(admin.getId()));
+        if ("admin".equals(name)) {
+            ctx.sessionSet("user_name", name);
+            ctx.sessionSet("user_pass", pass);
+            ctx.sessionSet("user_id", 111);
+            ctx.sessionSet("jkl", 111);
 
-        return renderSuccess(map);
+            return Result.succeed(ctx.sessionState().sessionToken());
+        } else {
+            return Result.failure();
+        }
     }
 
     @Mapping("/login2")

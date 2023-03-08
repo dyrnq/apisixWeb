@@ -14,7 +14,8 @@ public class AdminAuthAdapterSupplierImpl implements AuthAdapterSupplier {
     public AdminAuthAdapterSupplierImpl(){
         adminAuth = new AuthAdapter()
                 .loginUrl("/admin/login") //设定登录地址，未登录时自动跳转
-                .addRule(b -> b.include("/admin/**").exclude("/admin/login**").verifyPath()) //添加规则
+                .addRule(b -> b.include("/admin/**").exclude("/admin/login**").verifyPath())
+                .addRule(b -> b.include("/admin/**").exclude("/admin/login**").verifyLogined())
                 .processor(new AdminAuthProcessorImpl()) //设定认证处理器
                 .failure((ctx, rst) -> { //设定默认的验证失败处理
                     ctx.render(rst);
