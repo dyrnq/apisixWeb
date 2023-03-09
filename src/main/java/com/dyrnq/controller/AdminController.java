@@ -24,6 +24,8 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
 import org.noear.solon.i18n.annotation.I18n;
 import org.noear.solon.sessionstate.jwt.JwtUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Type;
 
@@ -32,7 +34,7 @@ import java.lang.reflect.Type;
 @Controller
 @I18n
 public class AdminController {
-
+    static Logger logger = LoggerFactory.getLogger(AdminController.class);
     @Mapping("about")
     public Object about() {
         ModelAndView model = new ModelAndView("admin/about.html");
@@ -50,7 +52,7 @@ public class AdminController {
     }
 
     @Mapping("editor")
-    public Object editor() {
+    public Object editor(Context ctx,String id) {
         ModelAndView model = new ModelAndView("admin/editor.html");
         model.put("title", "dock");
         String url ="192.168.66.100:9180";
@@ -63,10 +65,11 @@ public class AdminController {
 
         Type type = new TypeToken<Wrap<Route>>(){}.getType();
         try {
-            jsonObj = gson.toJson(client.getRoute("1"));
+            jsonObj = gson.toJson(client.getRoute(id));
         } catch (ApisixSDKExcetion apisixSDKExcetion) {
-            apisixSDKExcetion.printStackTrace();
-}
+            logger.error(apisixSDKExcetion.getErrorCode(),apisixSDKExcetion);
+//            apisixSDKExcetion.printStackTrace();
+        }
         model.put("json", jsonObj  );
 
         return model;

@@ -12,6 +12,8 @@ import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +21,7 @@ import java.util.Map;
 @Mapping("token")
 @Controller
 public class TokenController extends BaseController {
+    static Logger logger = LoggerFactory.getLogger(TokenController.class);
 //    @Inject
 //    AdminService adminService;
 

@@ -7,11 +7,13 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.ModelAndView;
 import org.noear.solon.i18n.annotation.I18n;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Controller
 @I18n
 public class IndexController {
-
+    static Logger logger = LoggerFactory.getLogger(IndexController.class);
     @Inject
     UserMapper userMapper;
     @Mapping("/")
