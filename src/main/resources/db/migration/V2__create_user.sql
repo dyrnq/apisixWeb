@@ -5,7 +5,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 );
 
-INSERT INTO `user` VALUES ('1', 'aaaaaaaaa', 'zzzzzzzzzzzzzzzzzz');
-INSERT INTO `user` VALUES ('2', 'aaaaaaaaa', 'zzzzzzzzzzzzzzzzzz');
-INSERT INTO `user` VALUES ('3', 'aaaaaaaaa', 'zzzzzzzzzzzzzzzzzz');
+INSERT INTO `user` VALUES ('1', 'admin', 'admin');
+INSERT INTO `user` VALUES ('2', 'test', 'test');
+INSERT INTO `user` VALUES ('3', 'root', 'root');
 
