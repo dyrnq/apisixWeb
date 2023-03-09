@@ -48,6 +48,43 @@ public class AdminClient extends BaseClient {
         return result;
     }
 
+    public List<StreamRoute> listStreamRoutes() throws ApisixSDKExcetion {
+        Multi<StreamRoute> rsp = null;
+        try {
+            Type type = new TypeToken<Multi<StreamRoute>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/stream_routes"), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+
+        List<StreamRoute> result = this.arrangeMulti(rsp.getNodes());
+
+        return result;
+    }
+
+    public List<PluginConfig> listPluginConfigs() throws ApisixSDKExcetion {
+        Multi<PluginConfig> rsp = null;
+        try {
+            Type type = new TypeToken<Multi<PluginConfig>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/plugin_configs"), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+
+        List<PluginConfig> result = this.arrangeMulti(rsp.getNodes());
+
+        return result;
+    }
+
+
     public Route getRoute(String id) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
         try {
@@ -407,7 +444,7 @@ public class AdminClient extends BaseClient {
         Multi<SSL> rsp = null;
         try {
             Type type = new TypeToken<Multi<SSL>>(){}.getType();
-            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/ssl"), type);
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/ssls"), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
@@ -426,7 +463,7 @@ public class AdminClient extends BaseClient {
         Wrap<SSL> rsp = null;
         try {
             Type type = new TypeToken<Wrap<SSL>>(){}.getType();
-            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/ssl/" + id), type);
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/ssls/" + id), type);
         } catch (ApisixSDKExcetion | JsonSyntaxException e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
@@ -439,7 +476,7 @@ public class AdminClient extends BaseClient {
 
 
     public boolean deleteSSL(String id) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/ssl/" + id);
+        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/ssls/" + id);
         return true;
     }
 
@@ -448,7 +485,7 @@ public class AdminClient extends BaseClient {
         Wrap<SSL> rsp = null;
         try {
             Type type = new TypeToken<Wrap<SSL>>(){}.getType();
-            rsp  = gson.fromJson(this.doRequest(ssl, HttpProfile.REQ_PUT, "/apisix/admin/ssl/" + id), type);
+            rsp  = gson.fromJson(this.doRequest(ssl, HttpProfile.REQ_PUT, "/apisix/admin/ssls/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
@@ -464,7 +501,7 @@ public class AdminClient extends BaseClient {
         Wrap<SSL> rsp = null;
         try {
             Type type = new TypeToken<Wrap<SSL>>(){}.getType();
-            rsp  = gson.fromJson(this.doRequest(ssl, HttpProfile.REQ_POST, "/apisix/admin/ssl/"), type);
+            rsp  = gson.fromJson(this.doRequest(ssl, HttpProfile.REQ_POST, "/apisix/admin/ssls/"), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;

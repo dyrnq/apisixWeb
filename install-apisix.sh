@@ -86,7 +86,9 @@ cat > ${apisix_home}/conf/config.yaml <<EOF
 apisix:
   node_listen: 9080
   enable_ipv6: false
-
+  stream_proxy:
+      tcp:
+        - 9100
 
 deployment:
   role: traditional
