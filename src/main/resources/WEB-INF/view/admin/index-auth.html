@@ -1,1 +1,278 @@
-auth
+<!DOCTYPE HTML>
+<html>
+<head>
+    <#include "common.html"/>
+    <style type="text/css">
+
+.long{
+	width: 210px;
+}
+
+.short{
+	width: 110px!important;
+}
+
+input[name='param']{
+	width: 100px;
+}
+</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <#include "header.html"/>
+    <#include "menu.html"/>
+
+    <div class="layui-body">
+
+
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>${i18n.get("menuStr.http")}</legend>
+            </fieldset>
+
+            <form action="${ctx}/adminPage/http" id="searchForm" method="post">
+                <div class="layui-form">
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="add()">${i18n.get("httpStr.add")}</button>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-sm" onclick="guide()">${i18n.get("httpStr.guide")}</button>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-sm" onclick="selectTemplateAsHttp()">${i18n.get("upstreamStr.selectTemplateAsParam")}</button>
+                    </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="preview(null,'http')">${i18n.get("commonStr.preview")}</button>
+                    </div>
+                </div>
+            </form>
+
+            <table class="layui-hide" id="demo" lay-filter="test"></table>
+
+
+        </div>
+    </div>
+</div>
+
+<div style="height: 0px; width: 0px; overflow: hidden;">
+    <!-- 弹出框 -->
+    <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
+        <form id="addForm">
+            <input type="hidden" name="id" id="id">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">${commonStr.name}</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" id="name" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">${commonStr.value}</label>
+                <div class="layui-input-block">
+                    <textarea  name="value" id="value" class="layui-textarea" ></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${commonStr.submit}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="layui-form" id="guideDiv" style="padding: 15px; display: none;">
+        <form id="addForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label long">keepalive_timeout</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="keepalive_timeout" class="layui-input" value="75" lang="s">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.second}，${httpStr.timeout}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">gzip</label>
+                <div class="layui-input-inline short">
+                    <input type="checkbox" name="param" id="gzip" lay-skin="primary" checked lang="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.gzip}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">gzip_min_length</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="gzip_min_length" class="layui-input" value="4" lang="k">
+                </div>
+                <div class="layui-form-mid layui-word-aux">KB，${httpStr.gzipMinLength}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">gzip_comp_level</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="gzip_comp_level" class="layui-input" value="4" lang="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.gzipCompLevel}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">gzip_types</label>
+                <div class="layui-input-inline" style="width: 140px;">
+                    <input type="checkbox" name="type" value="js" lay-skin="primary" checked title="js&nbsp;&nbsp;&nbsp;&nbsp;">
+                    <input type="checkbox" name="type" value="css" lay-skin="primary" checked title="css">
+                    <input type="checkbox" name="type" value="json" lay-skin="primary" checked title="json">
+                    <input type="checkbox" name="type" value="xml" lay-skin="primary" checked title="xml">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.gzipType}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">client_max_body_size</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="client_max_body_size" class="layui-input" value="1024" lang="m">
+                </div>
+                <div class="layui-form-mid layui-word-aux">MB，${httpStr.maxBodySize}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">client_header_buffer_size</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="client_header_buffer_size" class="layui-input" value="32" lang="k">
+                </div>
+                <div class="layui-form-mid layui-word-aux">KB，${httpStr.headerBufferSize}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">client_body_buffer_size</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="client_body_buffer_size" class="layui-input" value="8" lang="m">
+                </div>
+                <div class="layui-form-mid layui-word-aux">MB，${httpStr.bodyBufferSize}</div>
+            </div>
+
+
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">server_names_hash_bucket_size</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="server_names_hash_bucket_size" class="layui-input" value="512" lang="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.serverNamesHash}</div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">proxy_headers_hash_max_size</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="proxy_headers_hash_max_size" class="layui-input" value="51200" lang="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.proxyHeadersMax}</div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">proxy_headers_hash_bucket_size</label>
+                <div class="layui-input-inline short">
+                    <input type="text" name="param" id="proxy_headers_hash_bucket_size" class="layui-input" value="6400" lang="">
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.proxyHeadersHash}</div>
+            </div>
+
+
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">${httpStr.logStatus}</label>
+                <div class="layui-input-inline short">
+                    <input type="checkbox" name="logStatus" id="logStatus" value="on" lay-skin="primary" >
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.logStatusTips}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label long">${httpStr.webSocket}</label>
+                <div class="layui-input-inline short">
+                    <input type="checkbox" name="webSocket" id="webSocket" value="on" lay-skin="primary" >
+                </div>
+                <div class="layui-form-mid layui-word-aux">${httpStr.webSocketTips}</div>
+            </div>
+
+            <div class="layui-form-item center" style="margin-bottom:0px;">
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addGiudeOver()">${commonStr.submit}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<#include 'script.html'/>
+
+</body>
+
+
+<script>
+
+
+layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+  //得到各种内置组件
+  var layer = layui.layer //弹层
+  ,laypage = layui.laypage //分页
+  ,table = layui.table //表格
+
+  //向世界问个好
+  //layer.msg('Hello World');
+
+
+  //执行一个 table 实例
+  table.render({
+    elem: '#demo'
+    ,height: 620
+    ,url: '/token/route' //数据接口
+    ,title: '用户表'
+    ,page: true //开启分页
+    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,totalRow: true //开启合计行
+    ,cols: [[ //表头
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', title: 'ID', width:80, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'name', title: 'name', width:80}
+      ,{field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
+      ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
+      ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+      ,{field: 'uri', title: 'uri', width: 150}
+      ,{field: 'status', title: 'status', width: 200}
+      ,{field: 'upstream', title: 'upstream', width: 200}
+
+    ]]
+    ,response: {
+        statusCode: 200
+    }
+    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+      return {
+        "code": res.code, //解析接口状态
+        "msg": res.description, //解析提示文本
+        "count": res.total, //解析数据长度
+        "data": res.data //解析数据列表
+      };
+    }
+  });
+
+
+
+
+  //监听Tab切换
+  element.on('tab(demo)', function(data){
+    layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
+      tips: 1
+    });
+  });
+});
+
+</script>
+
+</html>

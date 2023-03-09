@@ -1,6 +1,12 @@
 package com.dyrnq.controller;
 
+import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
+import com.apiseven.apisix.common.profile.Credential;
+import com.apiseven.apisix.common.profile.DefaultCredential;
+import com.apiseven.apisix.common.profile.DefaultProfile;
+import com.apiseven.apisix.common.profile.Profile;
 import com.cym.utils.JsonResult;
+import com.dyrnq.apisix.AdminClient;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
@@ -42,6 +48,33 @@ public class TokenController extends BaseController {
             return Result.failure();
         }
     }
+
+    @Mapping("route")
+    public Result route(Context ctx) {
+
+        // 用户名密码
+//        Admin admin = adminService.login(name, pass);
+//        if (admin == null) {
+//            return renderError(m.get("loginStr.backError2")); // 用户名密码错误
+//        }
+//        if (!admin.getApi()) {
+//            return renderError(m.get("loginStr.backError7")); // 无接口权限
+//        }
+
+        String url ="192.168.66.100:9180";
+        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
+        Profile p = DefaultProfile.getProfile (url ,"", c);
+
+
+        AdminClient client =new AdminClient(p);
+
+        try {
+            return Result.succeed(client.listRoutes());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
 
 //    @Mapping("/login2")
 //    public Result login2(Context ctx, String name) {

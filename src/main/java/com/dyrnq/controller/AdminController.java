@@ -1,10 +1,12 @@
 package com.dyrnq.controller;
 
+import com.dyrnq.AuthHandler;
 import com.dyrnq.TokenExpiredException;
 import com.dyrnq.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.noear.solon.Utils;
+import org.noear.solon.annotation.Before;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
@@ -12,6 +14,7 @@ import org.noear.solon.core.handle.ModelAndView;
 import org.noear.solon.i18n.annotation.I18n;
 import org.noear.solon.sessionstate.jwt.JwtUtils;
 
+@Before(AuthHandler.class)
 @Mapping("admin")
 @Controller
 @I18n
