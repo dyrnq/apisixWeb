@@ -65,13 +65,28 @@ public class ApisixClientTest {
             Service service = new Service();
             service.setName("test"+i);
             service.setDesc("test"+i);
+
+            Upstream upstream = new Upstream();
+            upstream.setType("roundrobin");
+            upstream.setName("test"+i);
+            upstream.setDesc("test"+i);
+            upstream.setScheme("http");
+            upstream.setTimeout(new Timeout(6, 6, 6));
+            List<Node> list = new ArrayList<Node>();
+            list.add(new Node("127.0.0.1", 8080, 100));
+            list.add(new Node("127.0.0.1", 8081, 100));
+            list.add(new Node("127.0.0.1", 8082, 100));
+            upstream.setNodes(list);
+            service.setUpstream(upstream);
+
+
             client.putService(""+i, service);
         }
 
         for(int i=1;i<11;i++) {
             SSL ssl = new SSL();
-            ssl.setCert(cn.hutool.core.io.FileUtil.readString(new File("/data/eclipse-workspace/solon-example/server.crt"), Charset.forName("UTF-8")));
-            ssl.setKey(cn.hutool.core.io.FileUtil.readString(new File("/data/eclipse-workspace/solon-example/server.key"), Charset.forName("UTF-8")));
+            ssl.setCert(cn.hutool.core.io.FileUtil.readString(new File("/data/work/solon-example/server.crt"), Charset.forName("UTF-8")));
+            ssl.setKey(cn.hutool.core.io.FileUtil.readString(new File("/data/work/solon-example/server.key"), Charset.forName("UTF-8")));
             List<String> sni = new ArrayList<String>();
             sni.add("abc.com");
             ssl.setSnis(sni);
