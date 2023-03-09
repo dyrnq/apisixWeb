@@ -14,12 +14,12 @@ public class AdminAuthProcessorImpl implements AuthProcessor {
 
     @Override
     public boolean verifyLogined() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean verifyPath(String path, String method) {
-        return false;
+        return true;
     }
 
     @Override

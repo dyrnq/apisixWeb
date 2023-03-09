@@ -26,7 +26,7 @@ public class ApisixClientTest {
             Route r = new Route();
             r.setName("test"+i);
             r.setDesc("test"+i);
-            r.setUri("/");
+            r.setUri("/*");
             Upstream upstream = new Upstream();
             upstream.setType("roundrobin");
             upstream.setName("test");

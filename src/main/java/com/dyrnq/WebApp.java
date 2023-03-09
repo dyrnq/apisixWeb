@@ -137,29 +137,29 @@ public class WebApp {
                 String token = ctx.cookie("TOKEN");
                 System.out.println(token);
 
-                String userId = null;
-                try {
-                    userId = getUserIdFromToken(token);
-                } catch (TokenExpiredException e) {
-                    return;
-                } catch (MalformedJwtException e) {
-                    return;
-                }
-                if(userId!=null){
-                    com.dyrnq.model.User user = userMapper.selectById(userId);
-                    if (user!=null){
-                        validateToken(token,user.getName());
-                    }
+//                String userId = null;
+//                try {
+//                    userId = getUserIdFromToken(token);
+//                } catch (TokenExpiredException e) {
+//                    return;
+//                } catch (MalformedJwtException e) {
+//                    return;
+//                }
+//                if(userId!=null){
+//                    com.dyrnq.model.User user = userMapper.selectById(userId);
+//                    if (user!=null){
+//                        validateToken(token,user.getName());
+//                    }
+//
+//                }
 
-                }
 
-
-                String user_name = ctx.session("user_name", "");
-                if (Utils.isEmpty(user_name)) {
-                    //说明未登录，则终止处理
-                    ctx.status(401);
-                    return;
-                }
+//                String user_name = ctx.session("user_name", "");
+//                if (Utils.isEmpty(user_name)) {
+//                    //说明未登录，则终止处理
+//                    ctx.status(401);
+//                    return;
+//                }
             }
 
             chain.doIntercept(ctx, mainHandler);

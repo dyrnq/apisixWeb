@@ -1,8 +1,19 @@
 package com.dyrnq.controller;
 
+import com.apiseven.apisix.admin.model.response.Wrap;
+import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
+import com.apiseven.apisix.common.profile.Credential;
+import com.apiseven.apisix.common.profile.DefaultCredential;
+import com.apiseven.apisix.common.profile.DefaultProfile;
+import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.AuthHandler;
 import com.dyrnq.TokenExpiredException;
+import com.dyrnq.apisix.AdminClient;
+import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.model.User;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.noear.solon.Utils;
@@ -13,6 +24,8 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
 import org.noear.solon.i18n.annotation.I18n;
 import org.noear.solon.sessionstate.jwt.JwtUtils;
+
+import java.lang.reflect.Type;
 
 @Before(AuthHandler.class)
 @Mapping("admin")
@@ -33,6 +46,29 @@ public class AdminController {
         ModelAndView model = new ModelAndView("admin/login.html");
         model.put("title", "dock");
         model.put("message", "你好 world!");
+        return model;
+    }
+
+    @Mapping("editor")
+    public Object editor() {
+        ModelAndView model = new ModelAndView("admin/editor.html");
+        model.put("title", "dock");
+        String url ="192.168.66.100:9180";
+        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
+        Profile p = DefaultProfile.getProfile (url ,"", c);
+
+        String jsonObj = "{}";
+        AdminClient client =new AdminClient(p);
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        Type type = new TypeToken<Wrap<Route>>(){}.getType();
+        try {
+            jsonObj = gson.toJson(client.getRoute("1"));
+        } catch (ApisixSDKExcetion apisixSDKExcetion) {
+            apisixSDKExcetion.printStackTrace();
+}
+        model.put("json", jsonObj  );
+
         return model;
     }
 
