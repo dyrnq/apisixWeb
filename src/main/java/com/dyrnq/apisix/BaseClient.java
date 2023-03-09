@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dyrnq.WebApp;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -18,9 +19,11 @@ import com.apiseven.apisix.common.profile.Credential;
 import com.apiseven.apisix.common.profile.Endpoint;
 import com.apiseven.apisix.common.profile.HttpProfile;
 import com.apiseven.apisix.common.profile.Profile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseClient {
-
+    static Logger logger = LoggerFactory.getLogger(AdminClient.class);
     public static final int HTTP_OK = 200;
     public static final int HTTP_NOT_OK = 400;
     public static final String SDK_VERSION = "0.1.0";
@@ -57,14 +60,14 @@ public abstract class BaseClient {
         if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
             throw new ApisixSDKExcetion(strResp, String.valueOf(okRsp.code()));
         }
-        System.out.print(strResp);;
+        logger.info(strResp);
         return strResp;
     }
 
     protected String doRequest(Object model, String reqMethod, String path)  throws ApisixSDKExcetion {
-        String strParam = gson.toJson(model);
-        
-        System.out.println("=====>"+strParam);
+        String strParam = model==null ?"":gson.toJson(model);
+
+        logger.info(strParam);
         Response okRsp = doRequest(reqMethod, path, strParam);
 
         String strResp = null;
@@ -77,7 +80,7 @@ public abstract class BaseClient {
         if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
             throw new ApisixSDKExcetion(strResp, String.valueOf(okRsp.code()));
         }
-
+        logger.info(strResp);
         return strResp;
     }
 

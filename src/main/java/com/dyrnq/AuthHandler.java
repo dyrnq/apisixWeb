@@ -8,6 +8,6 @@ import org.noear.solon.core.handle.Handler;
 public class AuthHandler implements Handler {
     @Override
     public void handle(Context ctx) throws Throwable {
-        System.out.println("ok");
+        //System.out.println("ok");
     }
 }
