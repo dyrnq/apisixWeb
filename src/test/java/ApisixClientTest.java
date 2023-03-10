@@ -35,9 +35,10 @@ public class ApisixClientTest {
             upstream.setScheme("http");
             upstream.setTimeout(new Timeout(6, 6, 6));
             List<Node> list = new ArrayList<Node>();
-            list.add(new Node("127.0.0.1", 8080, 100));
-            list.add(new Node("127.0.0.1", 8081, 100));
-            list.add(new Node("127.0.0.1", 8082, 100));
+            list.add(new Node("127.0.0.1", 18081, 100));
+            list.add(new Node("127.0.0.1", 18082, 100));
+            list.add(new Node("127.0.0.1", 18083, 100));
+            list.add(new Node("127.0.0.1", 18084, 100));
             upstream.setNodes(list);
             r.setUpstream(upstream);
             client.putRoute(""+i, r);
