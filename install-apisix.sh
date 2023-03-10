@@ -241,5 +241,52 @@ EOF
 
 }
 
+fun_add_mynet(){
+
+docker network inspect mynet &>/dev/null || docker network create --subnet 172.18.0.0/16 --gateway 172.18.0.1 --driver bridge mynet
+
+}
+
+fun_install_nginx(){
+
+for i in 1 2 3 4; do
+    port=$((i+18080))
+    docker rm -f nginx-$i 2>/dev/null || true
+    mkdir -p $HOME/nginx/nginx-$i && echo "nginx-$i" > $HOME/nginx/nginx-$i/index.html
+    docker run -d --network mynet --restart always -p "${port}":80 --name nginx-$i -v $HOME/nginx/nginx-$i:/usr/share/nginx/html nginx:1.22.1-alpine
+done
+
+}
+
+fun_install_misc(){
+docker rm -f mysql57 2>/dev/null || true
+docker rm -f postgres12 2>/dev/null || true
+docker rm -f adminer 2>/dev/null || true
+
+
+mkdir -p $HOME/var/lib/mysql
+docker run -d --name mysql57 \
+--restart always \
+--network mynet \
+-e MYSQL_ROOT_PASSWORD=666666 \
+-v $HOME/var/lib/mysql:/var/lib/mysql \
+-p 3306:3306 \
+mysql:5.7.41 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00
+
+mkdir -p $HOME/var/lib/postgresql/data
+
+docker run -d --name postgres12 \
+--restart always \
+--network mynet \
+-e POSTGRES_PASSWORD=666666 \
+-p 5432:5432 \
+-v $HOME/var/lib/postgresql/data:/var/lib/postgresql/data postgres:12.14
+
+docker run -d --name=adminer --restart always --network mynet -p 18080:8080 adminer:4.8.1
+}
+
+fun_add_mynet
+fun_install_nginx
+fun_install_misc
 fun_install_etcd
 fun_install
