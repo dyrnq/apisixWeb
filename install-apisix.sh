@@ -6,7 +6,7 @@ iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.1.0-debian}"
+apisix_image="${apisix_image:-apache/apisix:3.2.0-debian}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.0-alpine}"
 
 

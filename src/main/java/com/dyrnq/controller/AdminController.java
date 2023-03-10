@@ -42,6 +42,36 @@ public class AdminController {
         model.put("message", "你好 world!");
         return model;
     }
+    @Mapping("route")
+    public Object route() {
+        ModelAndView model = new ModelAndView("admin/route.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+    @Mapping("upstream")
+    public Object upstream() {
+        ModelAndView model = new ModelAndView("admin/upstream.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
+    @Mapping("service")
+    public Object service() {
+        ModelAndView model = new ModelAndView("admin/service.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
+    @Mapping("ssl")
+    public Object ssl() {
+        ModelAndView model = new ModelAndView("admin/ssl.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
 
     @Mapping("login")
     public Object login() {
@@ -51,21 +81,23 @@ public class AdminController {
         return model;
     }
 
+    private AdminClient getAdminClient(){
+        String url ="192.168.66.100:9180";
+        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
+        Profile p = DefaultProfile.getProfile (url ,"", c);
+        AdminClient client =new AdminClient(p);
+        return client;
+    }
+
     @Mapping("editor")
     public Object editor(Context ctx,String id) {
         ModelAndView model = new ModelAndView("admin/editor.html");
         model.put("title", "dock");
-        String url ="192.168.66.100:9180";
-        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
-        Profile p = DefaultProfile.getProfile (url ,"", c);
-
         String jsonObj = "{}";
-        AdminClient client =new AdminClient(p);
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
         Type type = new TypeToken<Wrap<Route>>(){}.getType();
         try {
-            jsonObj = gson.toJson(client.getRoute(id));
+            jsonObj = gson.toJson(getAdminClient().getRoute(id));
         } catch (ApisixSDKExcetion apisixSDKExcetion) {
             logger.error(apisixSDKExcetion.getErrorCode(),apisixSDKExcetion);
 //            apisixSDKExcetion.printStackTrace();

@@ -232,7 +232,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
   table.render({
     elem: '#demo'
     ,height: 620
-    ,url: '/token/route' //数据接口
+    ,url: '/token/ssl' //数据接口
     ,title: '用户表'
     ,page: true //开启分页
     ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
@@ -240,8 +240,8 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
       ,{field: 'id', title: 'ID', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'name', title: 'name', width:80}
-      ,{field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
+      ,{field: 'cert', title: 'name', width:80}
+      ,{field: 'key', title: 'desc', width: 90, sort: true, totalRow: true}
       ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
       ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
       ,{field: 'uri', title: 'uri', width: 150}
