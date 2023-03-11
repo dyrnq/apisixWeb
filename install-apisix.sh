@@ -133,6 +133,7 @@ EOF
 
 
 docker rm -f apisix 2>/dev/null || true
+docker run --net host --rm --name='wait4x' atkrad/wait4x:2.12 tcp -i 1s -q -t 5s 127.0.0.1:2379 && \
 docker run -d --name apisix \
 --restart always \
 --net host \

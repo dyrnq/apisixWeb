@@ -25,6 +25,28 @@ public class ApisixClientTest {
         AdminClient client = new AdminClient(p);
 
         for(int i=1;i<11;i++) {
+            StreamRoute r = new StreamRoute();
+//            r.setName("test"+i);
+//            r.setDesc("test"+i);
+//            r.setUri("/*");
+            Upstream upstream = new Upstream();
+            upstream.setType("roundrobin");
+            upstream.setName("test");
+            upstream.setScheme("http");
+            upstream.setTimeout(new Timeout(6, 6, 6));
+            List<Node> list = new ArrayList<Node>();
+            list.add(new Node("127.0.0.1", 18081, 100));
+            list.add(new Node("127.0.0.1", 18082, 100));
+            list.add(new Node("127.0.0.1", 18083, 100));
+            list.add(new Node("127.0.0.1", 18084, 100));
+            upstream.setNodes(list);
+            r.setUpstream(upstream);
+            client.putStreamRoute(""+i, r);
+
+        }
+
+
+        for(int i=1;i<11;i++) {
             Route r = new Route();
             r.setName("test"+i);
             r.setDesc("test"+i);

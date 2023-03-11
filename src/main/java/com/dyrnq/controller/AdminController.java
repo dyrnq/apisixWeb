@@ -49,6 +49,15 @@ public class AdminController {
         model.put("message", "你好 world!");
         return model;
     }
+
+    @Mapping("streamRoute")
+    public Object streamRoute() {
+        ModelAndView model = new ModelAndView("admin/streamRoute.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     @Mapping("upstream")
     public Object upstream() {
         ModelAndView model = new ModelAndView("admin/upstream.html");
@@ -90,17 +99,40 @@ public class AdminController {
     }
 
     @Mapping("editor")
-    public Object editor(Context ctx,String id) {
+    public Object editor(Context ctx,String cls,String id) {
         ModelAndView model = new ModelAndView("admin/editor.html");
         model.put("title", "dock");
         String jsonObj = "{}";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         Type type = new TypeToken<Wrap<Route>>(){}.getType();
         try {
-            jsonObj = gson.toJson(getAdminClient().getRoute(id));
+            switch(cls){
+                case "route" :
+                    jsonObj = gson.toJson(getAdminClient().getRoute(id));
+                    break;
+                case "upstream" :
+                    jsonObj = gson.toJson(getAdminClient().getUpstream(id));
+                    break;
+                case "ssl" :
+                    jsonObj = gson.toJson(getAdminClient().getSSL(id));
+                    break;
+                case "service" :
+                    jsonObj = gson.toJson(getAdminClient().getService(id));
+                    break;
+                case "streamRoute" :
+                    jsonObj = gson.toJson(getAdminClient().getStreamRoute(id));
+                    break;
+                default :
+                    jsonObj = gson.toJson(getAdminClient().getRoute(id));
+            }
+
+
+
         } catch (ApisixSDKExcetion apisixSDKExcetion) {
             logger.error(apisixSDKExcetion.getErrorCode(),apisixSDKExcetion);
 //            apisixSDKExcetion.printStackTrace();
+        } catch (java.lang.NullPointerException nullPointerException){
+            logger.error(nullPointerException.getMessage(),nullPointerException);
         }
         model.put("json", jsonObj  );
 

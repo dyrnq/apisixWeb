@@ -1,1 +1,53 @@
-about
+<!DOCTYPE HTML>
+<html>
+<head>
+    <#include "admin/common.html"/>
+    <style type="text/css">
+
+.long{
+	width: 210px;
+}
+
+.short{
+	width: 110px!important;
+}
+
+input[name='param']{
+	width: 100px;
+}
+</style>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+
+    <#include "admin/header.html"/>
+    <#include "admin/menu.html"/>
+
+    <div class="layui-body">
+
+
+
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>${i18n.get("menuStr.http")}</legend>
+            </fieldset>
+
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<#include 'admin/script.html'/>
+
+</body>
+
+
+
+
+</html>

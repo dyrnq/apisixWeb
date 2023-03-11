@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <#include "common.html"/>
+    <#include "admin/common.html"/>
     <style type="text/css">
 
 .long{
@@ -210,7 +210,7 @@ input[name='param']{
 
 </div>
 
-<#include 'script.html'/>
+<#include 'admin/script.html'/>
 
 </body>
 
@@ -224,7 +224,7 @@ function addLink(d) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?id='+d.id+'" lay-event="link">' + d.id + '</a>';
+        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=route&id='+d.id+'" lay-event="link">' + d.id + '</a>';
    }
 }
 

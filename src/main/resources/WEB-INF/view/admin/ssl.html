@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <#include "common.html"/>
+    <#include "admin/common.html"/>
     <style type="text/css">
 
 .long{
@@ -210,13 +210,21 @@ input[name='param']{
 
 </div>
 
-<#include 'script.html'/>
+<#include 'admin/script.html'/>
 
 </body>
 
 
 <script>
-
+function addLink(d) {
+　　var addLink = d.id;
+   if ('' == addLink || null == addLink || undefined == addLink) {
+        return '';
+   }
+   if (addLink.length > 0) {
+        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=ssl&id='+d.id+'" lay-event="link">' + d.id + '</a>';
+   }
+}
 
 layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
   //得到各种内置组件
@@ -246,7 +254,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
       ,{field: 'uri', title: 'uri', width: 150}
       ,{field: 'status', title: 'status', width: 200}
-      ,{field: 'upstream', title: 'upstream', width: 200}
+      ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
 
     ]]
     ,response: {

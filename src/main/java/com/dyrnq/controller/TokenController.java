@@ -60,6 +60,15 @@ public class TokenController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+    @Mapping("streamRoute")
+    public Result streamRoute(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listStreamRoutes());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
 
     @Mapping("upstream")
     public Result upstream(Context ctx) {
