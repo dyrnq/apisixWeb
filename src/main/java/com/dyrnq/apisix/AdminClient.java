@@ -84,6 +84,25 @@ public class AdminClient extends BaseClient {
         return result;
     }
 
+    public List<Secret> listSecrets() throws ApisixSDKExcetion {
+        Multi<Secret> rsp = null;
+        try {
+            Type type = new TypeToken<Multi<Secret>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/secrets"), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+
+        List<Secret> result = this.arrangeMulti(rsp.getNodes());
+
+        return result;
+    }
+
+
 
     public List<StreamRoute> listStreamRoutes() throws ApisixSDKExcetion {
         Multi<StreamRoute> rsp = null;
