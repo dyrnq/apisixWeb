@@ -118,6 +118,9 @@ public class ApisixClientTest {
         client.listSSLs();
         client.listStreamRoutes();
         client.listPluginConfigs();
+        client.listSecrets();
+        client.listConsumers();
+        client.listConsumerGroups();
 
         Route r2 = client.getRoute("1");
         System.out.println(r2.getName());
