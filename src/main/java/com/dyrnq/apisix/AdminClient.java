@@ -43,6 +43,7 @@ public class AdminClient extends BaseClient {
             }
         }
 
+
         List<Route> result = this.arrangeMulti(rsp.getNodes());
 
         return result;
@@ -187,11 +188,11 @@ public class AdminClient extends BaseClient {
         Wrap<StreamRoute> rsp = null;
         String upstreamId = "";
         //fetch the old upstreamID
-        try {
-            StreamRoute exist = getStreamRoute(id);
-            upstreamId = exist.getUpstreamId();
-        }catch (ApisixSDKExcetion e){
-        }
+//        try {
+//            StreamRoute exist = getStreamRoute(id);
+//            upstreamId = exist.getUpstreamId();
+//        }catch (ApisixSDKExcetion e){
+//        }
 
         try {
             //route = resolveUpstream(route);
