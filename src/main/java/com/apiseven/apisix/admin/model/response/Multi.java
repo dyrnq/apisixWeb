@@ -6,8 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Multi<T> {
-    @SerializedName("list")
-    @Expose
+	@SerializedName("list")
+	@Expose
     private List<Item<T>> nodes;
 
 	public List<Item<T>> getNodes() {
@@ -17,4 +17,17 @@ public class Multi<T> {
 	public void setNodes(List<Item<T>> nodes) {
 		this.nodes = nodes;
 	}
+	@SerializedName("total")
+	@Expose
+	private int total;
+
+	public void setTotal(int total){
+		this.total=total;
+	}
+	public int getTotal(){
+		return this.total;
+	}
+
+
+
 }
