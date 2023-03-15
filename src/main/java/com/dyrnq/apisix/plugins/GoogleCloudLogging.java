@@ -56,4 +56,5 @@ public String logId;
 @SerializedName("batch_max_size")
 @Expose
 public Integer batchMaxSize;
+// private Object logFormat;
 }

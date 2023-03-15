@@ -36,4 +36,8 @@ public Integer retryDelay;
 @SerializedName("prefer_name")
 @Expose
 public boolean preferName;
+// private Integer port;
+// private String[] constantTags;
+// private String host;
+// private String namespace;
 }

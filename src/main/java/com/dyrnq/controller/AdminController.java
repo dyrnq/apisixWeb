@@ -123,6 +123,14 @@ public class AdminController {
         return model;
     }
 
+    @Mapping("consumerGroup")
+    public Object consumerGroup() {
+        ModelAndView model = new ModelAndView("admin/consumerGroup.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     private AdminClient getAdminClient(){
         String url ="192.168.66.100:9180";
         Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
@@ -167,6 +175,10 @@ public class AdminController {
                 case "pluginConfig":
                     jsonObj = gson.toJson(getAdminClient().getPluginConfig(id));
                     break;
+                case "consumerGroup":
+                    jsonObj = gson.toJson(getAdminClient().getConsumerGroup(id));
+                    break;
+
 
                 default :
                     jsonObj = gson.toJson(getAdminClient().getRoute(id));

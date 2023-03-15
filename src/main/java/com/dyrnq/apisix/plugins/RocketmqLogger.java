@@ -88,4 +88,5 @@ public boolean includeRespBody;
 @SerializedName("key")
 @Expose
 public String key;
+// private Object logFormat;
 }

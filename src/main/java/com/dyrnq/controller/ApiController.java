@@ -38,7 +38,14 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
-
+    @Mapping("consumerGroup")
+    public Result consumerGroup(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listConsumerGroups());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
 
     @Mapping("upstream")
     public Result upstream(Context ctx) {

@@ -84,4 +84,5 @@ public boolean includeRespBody;
 @SerializedName("database")
 @Expose
 public String database;
+// private Object logFormat;
 }

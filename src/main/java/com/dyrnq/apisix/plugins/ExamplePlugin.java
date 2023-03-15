@@ -28,4 +28,6 @@ public Number i;
 @SerializedName("t")
 @Expose
 public String[] t;
+// private String skey;
+// private Number ikey;
 }

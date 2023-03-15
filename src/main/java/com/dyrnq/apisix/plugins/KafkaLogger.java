@@ -108,4 +108,5 @@ public boolean includeRespBody;
 @SerializedName("log_format")
 @Expose
 public Object logFormat;
+// private Object logFormat;
 }

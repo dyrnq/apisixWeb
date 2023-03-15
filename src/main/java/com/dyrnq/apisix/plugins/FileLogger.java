@@ -24,4 +24,5 @@ public String path;
 @SerializedName("include_resp_body")
 @Expose
 public boolean includeRespBody;
+// private Object logFormat;
 }

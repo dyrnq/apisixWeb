@@ -28,4 +28,6 @@ public String model;
 @SerializedName("username")
 @Expose
 public String username;
+// private String model;
+// private String policy;
 }

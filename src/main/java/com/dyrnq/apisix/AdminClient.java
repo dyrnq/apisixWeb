@@ -170,6 +170,22 @@ public class AdminClient extends BaseClient {
         }
         return rsp.getValue();
     }
+
+    public ConsumerGroup getConsumerGroup(String id) throws ApisixSDKExcetion {
+        Wrap<ConsumerGroup> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<ConsumerGroup>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/consumer_groups/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
     public PluginConfig getPluginConfig(String id) throws ApisixSDKExcetion {
         Wrap<PluginConfig> rsp = null;
         try {
@@ -554,6 +570,21 @@ public class AdminClient extends BaseClient {
         try {
             Type type = new TypeToken<Wrap<Consumer>>(){}.getType();
             rsp  = gson.fromJson(this.doRequest(consumer, HttpProfile.REQ_PUT, "/apisix/admin/consumers/" + username), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public ConsumerGroup putConsumerGroup(String username, ConsumerGroup consumer) throws ApisixSDKExcetion {
+        Wrap<ConsumerGroup> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<ConsumerGroup>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(consumer, HttpProfile.REQ_PUT, "/apisix/admin/consumer_groups/" + username), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;

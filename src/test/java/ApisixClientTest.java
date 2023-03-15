@@ -135,6 +135,18 @@ public class ApisixClientTest {
         }
 
         for(int i=1;i<11;i++) {
+            ConsumerGroup consumer = new ConsumerGroup();
+            consumer.setDesc(i+"");
+            //consumer.setGroupId(i+"");
+            java.util.Map map =new HashMap();
+            Echo e = new Echo();
+            e.afterBody = "<!-- apisix-HTML-mark -->";
+            map.put("echo",e);
+            consumer.setPlugins(map);
+            client.putConsumerGroup(""+i,consumer);
+        }
+
+        for(int i=1;i<11;i++) {
             PluginConfig pluginConfig = new PluginConfig();
             pluginConfig.setDesc(i+"");
             java.util.Map map =new HashMap();
