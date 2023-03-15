@@ -90,9 +90,26 @@ public class AdminController {
         return model;
     }
 
+
+    @Mapping("consumer")
+    public Object consumer() {
+        ModelAndView model = new ModelAndView("admin/consumer.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     @Mapping("login")
     public Object login() {
         ModelAndView model = new ModelAndView("admin/login.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
+    @Mapping("globalRule")
+    public Object globalRule() {
+        ModelAndView model = new ModelAndView("admin/globalRule.html");
         model.put("title", "dock");
         model.put("message", "你好 world!");
         return model;
@@ -132,6 +149,12 @@ public class AdminController {
                     break;
                 case "secret" :
                     jsonObj = gson.toJson(getAdminClient().getSecret(id));
+                    break;
+                case "consumer" :
+                    jsonObj = gson.toJson(getAdminClient().getConsumer(id));
+                    break;
+                case "globalRule":
+                    jsonObj = gson.toJson(getAdminClient().getGlobalRule(id));
                     break;
                 default :
                     jsonObj = gson.toJson(getAdminClient().getRoute(id));

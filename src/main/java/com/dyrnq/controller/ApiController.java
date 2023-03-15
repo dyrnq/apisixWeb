@@ -75,6 +75,24 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("globalRule")
+    public Result globalRule(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listGlobalRules());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("consumer")
+    public Result consumer(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listConsumers());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+
 
     private AdminClient getAdminClient(){
         String url ="192.168.66.100:9180";

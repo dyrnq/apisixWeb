@@ -156,6 +156,21 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public GlobalRule getGlobalRule(String id) throws ApisixSDKExcetion {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/global_rules/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
 
     public Route getRoute(String id) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
@@ -214,6 +229,24 @@ public class AdminClient extends BaseClient {
 //            }catch (ApisixSDKExcetion | InterruptedException e){
 //            }
 //        }
+
+        return rsp.getValue();
+    }
+
+
+    public GlobalRule putGlobalRule(String id, GlobalRule route) throws ApisixSDKExcetion {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(route, HttpProfile.REQ_PUT, "/apisix/admin/global_rules/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+
 
         return rsp.getValue();
     }

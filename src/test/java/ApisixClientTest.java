@@ -5,10 +5,12 @@ import com.apiseven.apisix.common.profile.DefaultProfile;
 import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.*;
+import com.dyrnq.apisix.plugins.Echo;
 
 import java.io.File;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class ApisixClientTest {
@@ -123,6 +125,28 @@ public class ApisixClientTest {
             secret.setToken("343effad");
             client.putSecret(""+i,"vault", secret);
         }
+
+        for(int i=1;i<11;i++) {
+            Consumer consumer = new Consumer();
+            consumer.setUsername(i+"");
+            consumer.setDesc(i+"");
+            //consumer.setGroupId(i+"");
+            client.putConsumer(""+i,consumer);
+        }
+
+        for(int i=1;i<2;i++) {
+            GlobalRule globalRule = new GlobalRule();
+            java.util.Map map =new HashMap();
+            Echo e = new Echo();
+            e.headers = new HashMap<String,String>();
+            e.headers.put("hello","world");
+            e.afterBody = "<!-- apisix-HTML-mark -->";
+            map.put("echo",e);
+            globalRule.setPlugins(map);
+            //consumer.setGroupId(i+"");
+            client.putGlobalRule(""+i,globalRule);
+        }
+
 
         client.listSSLs();
         client.listStreamRoutes();
