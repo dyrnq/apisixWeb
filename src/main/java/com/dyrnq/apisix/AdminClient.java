@@ -613,4 +613,34 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public Secret putSecret(String id,String manager, Secret secret) throws ApisixSDKExcetion {
+        Wrap<Secret> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Secret>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(secret, HttpProfile.REQ_PUT, "/apisix/admin/secrets/"+manager+"/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Secret getSecret(String id) throws ApisixSDKExcetion {
+        Wrap<Secret> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Secret>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/secrets/" + id), type);
+        } catch (ApisixSDKExcetion | JsonSyntaxException e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
 }

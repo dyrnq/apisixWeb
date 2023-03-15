@@ -115,6 +115,15 @@ public class ApisixClientTest {
             ssl.setSnis(sni);
             client.putSSL(""+i, ssl);
         }
+
+        for(int i=1;i<11;i++) {
+            Secret secret = new Secret();
+            secret.setUri("https://localhost/vault");
+            secret.setPrefix("/apisix/kv");
+            secret.setToken("343effad");
+            client.putSecret(""+i,"vault", secret);
+        }
+
         client.listSSLs();
         client.listStreamRoutes();
         client.listPluginConfigs();

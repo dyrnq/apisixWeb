@@ -74,6 +74,14 @@ public class AdminController {
         return model;
     }
 
+    @Mapping("secret")
+    public Object secret() {
+        ModelAndView model = new ModelAndView("admin/secret.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     @Mapping("ssl")
     public Object ssl() {
         ModelAndView model = new ModelAndView("admin/ssl.html");
@@ -121,6 +129,9 @@ public class AdminController {
                     break;
                 case "streamRoute" :
                     jsonObj = gson.toJson(getAdminClient().getStreamRoute(id));
+                    break;
+                case "secret" :
+                    jsonObj = gson.toJson(getAdminClient().getSecret(id));
                     break;
                 default :
                     jsonObj = gson.toJson(getAdminClient().getRoute(id));
