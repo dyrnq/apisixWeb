@@ -170,7 +170,20 @@ public class AdminClient extends BaseClient {
         }
         return rsp.getValue();
     }
-
+    public PluginConfig getPluginConfig(String id) throws ApisixSDKExcetion {
+        Wrap<PluginConfig> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<PluginConfig>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/plugin_configs/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
     public Route getRoute(String id) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
@@ -196,21 +209,25 @@ public class AdminClient extends BaseClient {
         this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/stream_routes/" + id);
         return true;
     }
-
+    public PluginConfig putPluginConfig(String id, PluginConfig route) throws ApisixSDKExcetion {
+        Wrap<PluginConfig> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<PluginConfig>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(route, HttpProfile.REQ_PUT, "/apisix/admin/plugin_configs/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
 
     public StreamRoute putStreamRoute(String id, StreamRoute route) throws ApisixSDKExcetion {
         Wrap<StreamRoute> rsp = null;
-        String upstreamId = "";
-        //fetch the old upstreamID
-//        try {
-//            StreamRoute exist = getStreamRoute(id);
-//            upstreamId = exist.getUpstreamId();
-//        }catch (ApisixSDKExcetion e){
-//        }
-
         try {
-            //route = resolveUpstream(route);
             Type type = new TypeToken<Wrap<StreamRoute>>(){}.getType();
             rsp  = gson.fromJson(this.doRequest(route, HttpProfile.REQ_PUT, "/apisix/admin/stream_routes/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
@@ -220,16 +237,6 @@ public class AdminClient extends BaseClient {
                 throw new ApisixSDKExcetion(e.getMessage());
             }
         }
-
-        // after updated route, if upstreamId changed, try to delete old upstream
-//        if(!"".equals(upstreamId) && !upstreamId.equals(route.getUpstreamId())){
-//            try {
-//                Thread.sleep(500);
-//                deleteUpstream(upstreamId);
-//            }catch (ApisixSDKExcetion | InterruptedException e){
-//            }
-//        }
-
         return rsp.getValue();
     }
 

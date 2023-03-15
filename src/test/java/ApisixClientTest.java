@@ -134,6 +134,17 @@ public class ApisixClientTest {
             client.putConsumer(""+i,consumer);
         }
 
+        for(int i=1;i<11;i++) {
+            PluginConfig pluginConfig = new PluginConfig();
+            pluginConfig.setDesc(i+"");
+            java.util.Map map =new HashMap();
+            Echo e = new Echo();
+            e.afterBody = "<!-- apisix-HTML-mark -->";
+            map.put("echo",e);
+            pluginConfig.setPlugins(map);
+            client.putPluginConfig(""+i,pluginConfig);
+        }
+
         for(int i=1;i<2;i++) {
             GlobalRule globalRule = new GlobalRule();
             java.util.Map map =new HashMap();

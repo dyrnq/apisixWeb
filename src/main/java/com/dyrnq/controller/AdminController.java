@@ -115,6 +115,14 @@ public class AdminController {
         return model;
     }
 
+    @Mapping("pluginConfig")
+    public Object pluginConfig() {
+        ModelAndView model = new ModelAndView("admin/pluginConfig.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     private AdminClient getAdminClient(){
         String url ="192.168.66.100:9180";
         Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
@@ -156,6 +164,10 @@ public class AdminController {
                 case "globalRule":
                     jsonObj = gson.toJson(getAdminClient().getGlobalRule(id));
                     break;
+                case "pluginConfig":
+                    jsonObj = gson.toJson(getAdminClient().getPluginConfig(id));
+                    break;
+
                 default :
                     jsonObj = gson.toJson(getAdminClient().getRoute(id));
             }

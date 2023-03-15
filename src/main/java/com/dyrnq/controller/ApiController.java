@@ -91,7 +91,14 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
-
+    @Mapping("pluginConfig")
+    public Result pluginConfig(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listPluginConfigs());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
 
 
     private AdminClient getAdminClient(){
