@@ -20,6 +20,7 @@ public String header;
 @SerializedName("hide_credentials")
 @Expose
 public boolean hideCredentials;
+// consumer_schema
 // key
 @SerializedName("key")
 @Expose

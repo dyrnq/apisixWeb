@@ -108,5 +108,6 @@ public boolean includeRespBody;
 @SerializedName("log_format")
 @Expose
 public Object logFormat;
+// metadata_schema
 // private Object logFormat;
 }

@@ -68,9 +68,14 @@ public boolean includeRespBody;
 @SerializedName("batch_max_size")
 @Expose
 public Integer batchMaxSize;
+// metadata_schema
 // private Object logFormat;
+// metadata_schema
 // private Integer port;
+// metadata_schema
 // private Integer timeout;
+// metadata_schema
 // private String host;
+// metadata_schema
 // private String protocol;
 }

@@ -28,6 +28,7 @@ public boolean tlsVerify;
 @SerializedName("use_tls")
 @Expose
 public boolean useTls;
+// consumer_schema
 // user_dn
 @SerializedName("user_dn")
 @Expose

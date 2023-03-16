@@ -36,8 +36,12 @@ public Integer retryDelay;
 @SerializedName("prefer_name")
 @Expose
 public boolean preferName;
+// metadata_schema
 // private Integer port;
+// metadata_schema
 // private String[] constantTags;
+// metadata_schema
 // private String host;
+// metadata_schema
 // private String namespace;
 }

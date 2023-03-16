@@ -36,6 +36,8 @@ public boolean keepalive;
 @SerializedName("timeout")
 @Expose
 public Integer timeout;
+// metadata_schema
 // private String masterClientid;
+// metadata_schema
 // private String masterApikey;
 }

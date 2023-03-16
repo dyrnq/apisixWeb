@@ -60,5 +60,6 @@ public Integer inactiveTimeout;
 @SerializedName("batch_max_size")
 @Expose
 public Integer batchMaxSize;
+// metadata_schema
 // private Object logFormat;
 }

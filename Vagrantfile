@@ -18,7 +18,7 @@ Vagrant.configure("2") do |config|
 
 
     my_machines = {
-        'vm100'   => '192.168.66.100',
+        'vm'   => '192.168.66.100',
     }
 
     my_machines.each do |name, ip|

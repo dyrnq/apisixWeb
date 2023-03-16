@@ -28,6 +28,8 @@ public Number i;
 @SerializedName("t")
 @Expose
 public String[] t;
+// metadata_schema
 // private String skey;
+// metadata_schema
 // private Number ikey;
 }

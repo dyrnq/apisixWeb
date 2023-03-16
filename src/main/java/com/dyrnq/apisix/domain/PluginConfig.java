@@ -46,13 +46,13 @@ public class PluginConfig{
 
     @SerializedName("plugins")
     @Expose
-    private Map<String,Plugin> plugins;
+    private Map<String,Object> plugins;
 
-    public void setPlugins(Map<String,Plugin> plugins){
+    public void setPlugins(Map<String,Object> plugins){
         this.plugins=plugins;
     }
 
-    public Map<String,Plugin> getPlugins(){
+    public Map<String,Object> getPlugins(){
         return this.plugins;
     }
 

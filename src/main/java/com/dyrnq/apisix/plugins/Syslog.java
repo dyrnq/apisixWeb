@@ -72,5 +72,6 @@ public Integer dropLimit;
 @SerializedName("port")
 @Expose
 public Integer port;
+// metadata_schema
 // private Object logFormat;
 }

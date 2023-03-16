@@ -12,10 +12,12 @@ public Meta meta;
 @SerializedName("hide_credentials")
 @Expose
 public boolean hideCredentials;
+// consumer_schema
 // username
 @SerializedName("username")
 @Expose
 public String username;
+// consumer_schema
 // password
 @SerializedName("password")
 @Expose

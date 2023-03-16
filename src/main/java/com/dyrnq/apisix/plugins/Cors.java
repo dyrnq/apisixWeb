@@ -40,5 +40,6 @@ public String[] allowOriginsByMetadata;
 @SerializedName("_meta")
 @Expose
 public Meta meta;
+// metadata_schema
 // private Object allowOrigins;
 }
