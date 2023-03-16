@@ -244,7 +244,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,height: 1620
     ,url: '/api/plugin' //数据接口
     ,title: '用户表'
-    ,page: true //开启分页
+    ,page: false //开启分页
     ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
@@ -252,8 +252,6 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       ,{field: 'id', title: 'ID', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
       ,{field: 'name', title: 'name', width:200}
       ,{field: 'type', title: 'desc', width: 90, sort: true, totalRow: true}
-      ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
-      ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
       ,{field: 'version', title: 'version', width: 150}
       ,{field: 'priority', title: 'priority', width: 200}
       ,{field: 'schema', title: 'comment', width: 200}
