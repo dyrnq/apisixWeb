@@ -50,6 +50,14 @@ public class AdminController {
         return model;
     }
 
+    @Mapping("plugin")
+    public Object plugin() {
+        ModelAndView model = new ModelAndView("admin/plugin.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     @Mapping("streamRoute")
     public Object streamRoute() {
         ModelAndView model = new ModelAndView("admin/streamRoute.html");

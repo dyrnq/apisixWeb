@@ -20,7 +20,14 @@ public class ApiController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(ApiController.class);
 
 
-
+    @Mapping("plugin")
+    public Result plugin(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listPlugins());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
 
     @Mapping("route")
     public Result route(Context ctx) {

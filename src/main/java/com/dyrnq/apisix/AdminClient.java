@@ -2,7 +2,10 @@ package com.dyrnq.apisix;
 
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.apiseven.apisix.common.utils.Md5Util;
 import com.dyrnq.apisix.domain.*;
@@ -48,6 +51,39 @@ public class AdminClient extends BaseClient {
 
         return result;
     }
+
+    public List<Map> listPlugins() throws ApisixSDKExcetion {
+        Map<String,Map> rsp = null;
+        try {
+            Type type = new TypeToken<Map<String,Map>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/plugins","all=true"), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+
+        List<Map> result = new ArrayList<Map>();
+
+        if(rsp !=null) {
+
+            for (String key : rsp.keySet()) {
+
+                Map map = new HashMap();
+                map.putAll(rsp.get(key));
+                map.put("name" ,key );
+                result.add(map);
+            }
+
+        }
+
+
+
+        return result;
+    }
+
 
     public List<GlobalRule> listGlobalRules() throws  ApisixSDKExcetion {
         Multi<GlobalRule> rsp = null;

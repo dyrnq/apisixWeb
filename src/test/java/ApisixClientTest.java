@@ -170,7 +170,7 @@ public class ApisixClientTest {
             client.putGlobalRule(""+i,globalRule);
         }
 
-
+        client.listPlugins();
         client.listSSLs();
         client.listStreamRoutes();
         client.listPluginConfigs();

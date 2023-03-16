@@ -65,7 +65,11 @@ public abstract class BaseClient {
     }
 
     protected String doRequest(Object model, String reqMethod, String path)  throws ApisixSDKExcetion {
-        String strParam = model==null ?"":gson.toJson(model);
+            return doRequest(model,reqMethod,path,null);
+    }
+
+    protected String doRequest(Object model, String reqMethod, String path,String param)  throws ApisixSDKExcetion {
+        String strParam = model!=null ?gson.toJson(model):param;
 
         logger.info(strParam);
         Response okRsp = doRequest(reqMethod, path, strParam);
