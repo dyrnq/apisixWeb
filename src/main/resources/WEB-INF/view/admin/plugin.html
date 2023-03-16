@@ -224,7 +224,7 @@ function addLink(d) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=route&id='+d.id+'" lay-event="link">' + d.id + '</a>';
+        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=plugin&id='+d.id+'" lay-event="link">' + d.id + '</a>';
    }
 }
 
@@ -249,14 +249,15 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'ID', width:100, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'name', title: 'name', width:300}
+      ,{field: 'id', title: 'ID', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'name', title: 'name', width:200}
       ,{field: 'type', title: 'desc', width: 90, sort: true, totalRow: true}
       ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
       ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
-      ,{field: 'version', title: 'uri', width: 150}
-      ,{field: 'priority', title: 'status', width: 200}
-      ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
+      ,{field: 'version', title: 'version', width: 150}
+      ,{field: 'priority', title: 'priority', width: 200}
+      ,{field: 'schema', title: 'comment', width: 200}
+      ,{field: 'comment', title: 'comment', width: 200 ,templet: addLink}
 
     ]]
     ,response: {

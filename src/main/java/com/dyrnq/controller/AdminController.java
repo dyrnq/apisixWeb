@@ -153,7 +153,7 @@ public class AdminController {
         model.put("title", "dock");
         String jsonObj = "{}";
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        Type type = new TypeToken<Wrap<Route>>(){}.getType();
+        //Type type = new TypeToken<Wrap<Route>>(){}.getType();
         try {
             switch(cls){
                 case "route" :
@@ -186,7 +186,9 @@ public class AdminController {
                 case "consumerGroup":
                     jsonObj = gson.toJson(getAdminClient().getConsumerGroup(id));
                     break;
-
+                case "plugin":
+                    jsonObj = gson.toJson(getAdminClient().getPlugin(id));
+                    break;
 
                 default :
                     jsonObj = gson.toJson(getAdminClient().getRoute(id));

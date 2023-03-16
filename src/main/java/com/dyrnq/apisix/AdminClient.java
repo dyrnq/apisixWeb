@@ -74,6 +74,7 @@ public class AdminClient extends BaseClient {
                 Map map = new HashMap();
                 map.putAll(rsp.get(key));
                 map.put("name" ,key );
+                map.put("id" ,key );
                 result.add(map);
             }
 
@@ -190,6 +191,21 @@ public class AdminClient extends BaseClient {
             }
         }
         return rsp.getValue();
+    }
+
+    public Map getPlugin(String id) throws ApisixSDKExcetion {
+        Map rsp = null;
+        try {
+            Type type = new TypeToken<Map>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/plugins/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
     }
 
     public GlobalRule getGlobalRule(String id) throws ApisixSDKExcetion {
