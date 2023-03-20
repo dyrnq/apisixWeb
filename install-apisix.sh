@@ -226,7 +226,7 @@ plugins:
   - openfunction
   - tencent-cloud-cls
   - ai
-  - cas-auth  
+  - cas-auth
 EOF
 
 
