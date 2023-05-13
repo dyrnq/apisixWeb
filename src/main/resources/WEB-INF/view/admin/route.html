@@ -26,7 +26,6 @@ input[name='param']{
     <div class="layui-body">
 
 
-
         <!-- 内容主体区域 -->
         <div style="padding: 15px">
             <fieldset class="layui-elem-field layui-field-title">
@@ -47,6 +46,10 @@ input[name='param']{
                     <div class="layui-inline">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="preview(null,'http')">${i18n.get("commonStr.preview")}</button>
                     </div>
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-sm layui-bui-normal" onclick="helper">帮助</button>
+
+                    </div>
                 </div>
             </form>
 
@@ -56,11 +59,28 @@ input[name='param']{
         </div>
     </div>
 </div>
+//新增尝试
+<div id="form" style="display:none;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">新增参数名称</label>
+            <div class="layui-input-block">
+                <input type="text" name="username" required  lay-verify="required" placeholder="请输入参数名称" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">参数描述</label>
+            <div class="layui-input-block">
+                <input type="text" name="desc" required lay-verify="required" placeholder="请输入描述" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+    </form>
+</div>
 
-<div style="height: 0px; width: 0px; overflow: hidden;">
+<div style="height: 500px; width: 300px; overflow: hidden;">
     <!-- 弹出框 -->
     <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
-        <form id="addForm">
+        <form id="addForm1">
             <input type="hidden" name="id" id="id">
 
             <div class="layui-form-item">
@@ -85,7 +105,7 @@ input[name='param']{
     </div>
 
     <div class="layui-form" id="guideDiv" style="padding: 15px; display: none;">
-        <form id="addForm">
+        <form id="addForm2">
             <div class="layui-form-item">
                 <label class="layui-form-label long">keepalive_timeout</label>
                 <div class="layui-input-inline short">
@@ -218,13 +238,14 @@ input[name='param']{
 <script>
 
 
+
 function addLink(d) {
 　　var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=route&id='+d.id+'" lay-event="link">' + d.id + '</a>';
+        return '<a class="layui-btn  layui-btn-radius layui-btn-normal  layui-btn-sm " href="${ctx}/admin/editor?cls=route&id='+'" lay-event="link">' +'编辑' +'</a>';
    }
 }
 
@@ -284,5 +305,4 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
 });
 
 </script>
-
 </html>

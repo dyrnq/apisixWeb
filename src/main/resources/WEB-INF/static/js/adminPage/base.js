@@ -306,3 +306,26 @@ function showHelp() {
 	// 	}
 	// });
 }
+function add() {
+	layui.use(['layer', 'form'], function(){
+		var layer = layui.layer;
+		var form = layui.form;
+
+		layer.open({
+			type: 1,
+			area: ['600px', '400px'],
+			title: '添加http路径',
+			content: $('#form'),
+			btn: ['提交', '取消'],
+			yes: function(index, layero){
+				// 提交表单的逻辑
+			},
+			btn2: function(index, layero){
+				// 取消的逻辑
+			},
+			cancel: function(){
+				// 点击右上角的关闭按钮的逻辑
+			}
+		});
+	});
+}
