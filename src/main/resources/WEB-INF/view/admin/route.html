@@ -234,7 +234,12 @@ input[name='param']{
 
 </body>
 
-
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">删除选中行</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+    </div>
+</script>
 <script>
 
     function add() {
@@ -288,7 +293,12 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,url: '/api/route' //数据接口
     ,title: '用户表'
     ,page: true //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+      ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+          title: '提示'
+          , layEvent: 'LAYTABLE_TIPS'
+          , icon: 'layui-icon-tips'
+      }]
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
@@ -314,6 +324,40 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       };
     }
   });
+
+    table.on('toolbar(test)', function(obj){
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch(obj.event) {
+            case 'getCheckData':
+                var data = checkStatus.data;
+                layer.alert(JSON.stringify(data));
+                break;
+        };
+        if(layEvent === 'detail'){ //查看
+            //do somehing
+        } else if(layEvent === 'deleteAll'){ //删除
+            layer.confirm('真的删除行么', function(index){
+                alert(index);
+                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                layer.close(index);
+                //向服务端发送删除指令
+            });
+        } else if(layEvent === 'edit'){ //编辑
+            //do something
+
+            //同步更新缓存对应的值
+            obj.update({
+                username: '123'
+                ,title: 'xxx'
+            });
+        } else if(layEvent === 'LAYTABLE_TIPS'){
+            layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        }
+        });
+    });
 
 //工具条事件
     table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -347,7 +391,6 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       tips: 1
     });
   });
-});
 
 </script>
 </html>
