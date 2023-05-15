@@ -326,6 +326,20 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public void delRoute(String id) throws ApisixSDKExcetion {
+        Wrap<Route> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/routes/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
+
 
     //update route
     public Route putRoute(String id, Route route) throws ApisixSDKExcetion {
