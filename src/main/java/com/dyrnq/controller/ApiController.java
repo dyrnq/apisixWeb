@@ -39,6 +39,16 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("del/streamRoute")
+    public Result delStreamRoute(Context ctx,String id){
+        try {
+            getAdminClient().delStreamRoute(id);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @Mapping("route")
     public Result route(Context ctx) {
         try {

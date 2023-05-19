@@ -339,6 +339,19 @@ public class AdminClient extends BaseClient {
             }
         }
     }
+    public void delStreamRoute(String id) throws ApisixSDKExcetion {
+        Wrap<StreamRoute> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/stream_routes/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
 
 
     //update route
