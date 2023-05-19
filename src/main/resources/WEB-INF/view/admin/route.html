@@ -387,7 +387,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                     type:'post',
                     data:"id="+obj.data.id,
                          success:function (data,statusText) {
-                            alert(data.code)
+                             //alert(data.code)
                              if(data.code=='200'){
                                  layer.msg('删除成功');
                                  //table.reload('idTest',{});
