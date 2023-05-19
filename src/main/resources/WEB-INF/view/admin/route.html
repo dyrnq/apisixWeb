@@ -240,6 +240,7 @@ input[name='param']{
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
     </div>
 </script>
+
 <script>
 
     function add() {
@@ -267,97 +268,106 @@ input[name='param']{
     }
 
 function addLink(d) {
+        //??
     var addLink = d.id;
+    //判断是否存在合法link,空格和null和未定义都会返回''。
     if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
     }
+    //如果是合法的路径，那么就正常添加，并配备编辑和删除的按键。
     if (addLink.length > 0) {
-        return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=route&id=' + '" lay-event="link">' + '编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+        return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=route&id=' + '" lay-event="link">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
     }
 }
 
-layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
-  //得到各种内置组件
-  var layer = layui.layer //弹层
-  ,laypage = layui.laypage //分页
-  ,table = layui.table //表格
+layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+    //得到各种内置组件
+    var layer = layui.layer //弹层
+        , laypage = layui.laypage //分页
+        , table = layui.table //表格
 
-  //向世界问个好
-  //layer.msg('Hello World');
+    //向世界问个好
+    //layer.msg('Hello World');
 
 
-  //执行一个 table 实例
-  table.render({
-    elem: '#demo'
-    ,height: 620
-    ,url: '/api/route' //数据接口
-    ,title: '用户表'
-    ,page: true //开启分页
-    ,toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-      ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-          title: '提示'
-          , layEvent: 'LAYTABLE_TIPS'
-          , icon: 'layui-icon-tips'
-      }]
-    ,totalRow: false //开启合计行
-    ,cols: [[ //表头
-      {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'ID', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'name', title: 'name', width:80}
-      ,{field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
-      ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
-      ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
-      ,{field: 'uri', title: 'uri', width: 150}
-      ,{field: 'status', title: 'status', width: 200}
-      ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
+    //执行一个 table 实例
+    table.render({
+        elem: '#demo'
+        , height: 620
+        , url: '/api/route' //数据接口
+        , title: '用户表'
+        , page: true //开启分页
+        , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+            title: '提示'
+            , layEvent: 'LAYTABLE_TIPS'
+            , icon: 'layui-icon-tips'
+        }]
+        , totalRow: false //开启合计行
+        , cols: [[ //表头
+            {type: 'checkbox', fixed: 'left'}
+            , {field: 'id', title: 'ID', width: 300, sort: true, fixed: 'left', totalRowText: '合计：'}
+            , {field: 'name', title: 'name', width: 80}
+            , {field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
+            , {
+                field: 'createTime',
+                title: 'create_time',
+                width: 200,
+                sort: false,
+                templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"
+            }
+            , {
+                field: 'updateTime',
+                title: 'update_time',
+                width: 200,
+                sort: false,
+                templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"
+            }
+            , {field: 'uri', title: 'uri', width: 150}
+            , {field: 'status', title: 'status', width: 200}
+            , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
 
-    ]]
-    ,response: {
-        statusCode: 200
-    }
-    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
-      return {
-        "code": res.code, //解析接口状态
-        "msg": res.description, //解析提示文本
-        "count": res.total, //解析数据长度
-        "data": res.data //解析数据列表
-      };
-    }
-  });
-
-    table.on('toolbar(test)', function(obj){
-        var data = obj.data; //获得当前行数据
-        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
-        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
-        var checkStatus = table.checkStatus(obj.config.id);
-        switch(obj.event) {
-            case 'getCheckData':
-                var data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
-                break;
-        };
-        if(layEvent === 'detail'){ //查看
-            //do somehing
-        } else if(layEvent === 'deleteAll'){ //删除
-            layer.confirm('真的删除行么', function(index){
-                alert(index);
-                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                layer.close(index);
-                //向服务端发送删除指令
-            });
-        } else if(layEvent === 'edit'){ //编辑
-            //do something
-
-            //同步更新缓存对应的值
-            obj.update({
-                username: '123'
-                ,title: 'xxx'
-            });
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        ]]
+        , response: {
+            statusCode: 200
         }
-        });
+        , parseData: function (res) { //将原始数据解析成 table 组件所规定的数据
+            return {
+                "code": res.code, //解析接口状态
+                "msg": res.description, //解析提示文本
+                "count": res.total, //解析数据长度
+                "data": res.data //解析数据列表
+            };
+        }
     });
+    // //监听表格复选框
+    // table.on('checkbox(test)', function (obj) {
+    //     console.log(obj)
+    // });
+//头部工具条监听事件
+    table.on('toolbar(test)', function (obj) {
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch (obj.event) {
+            case 'deleteAll':
+                var data = checkStatus.data;
+                if (data.length === 0) {
+                    layer.msg('请选择要删除的数据');
+                } else {
+                    layer.confirm('确定删除选中的数据吗？', function (index) {
+                        // 发送删除请求，并重新加载表格
+                        for (var val in data) {
+                            val.del();
+                        }
+                    });
+                    layer.close(index);
+                    break;
+                }
+
+        }
+    })
+
+
+
 
 //工具条事件
     table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -366,7 +376,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-            //do somehing
+            //do something
         } else if(layEvent === 'del'){ //删除
             layer.confirm('真的删除行么', function(index){
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
@@ -390,7 +400,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
       tips: 1
     });
-  });
+  });})
 
 </script>
 </html>
