@@ -349,17 +349,43 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
             case 'deleteAll':
-                var data = checkStatus.data;
-                if (data.length === 0) {
+                var dataX = checkStatus.data;
+                if (dataX.length === 0) {
                     layer.msg('请选择要删除的数据');
                 } else {
-                    layer.confirm('确定删除选中的数据吗？', function (index) {
+                    layer.confirm('确定删除选中的数据吗？', function(index) {
                         // 发送删除请求，并重新加载表格
-                        for (var val in data) {
-                            val.del();
+                        //console.log(JSON.stringify(dataX));
+
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            console.log(val.id);
+
+                            $.ajax({
+                                url: '/api/del/route',
+                                type:'post',
+                                data:"id="+val.id,
+                                     success:function (data,statusText) {
+                                         //alert(data.code)
+                                         if(data.code=='200'){
+                                             //layer.msg('删除成功');
+                                             //table.reload('idTest',{});
+                                         }else{
+                                             //layer.msg(data.description);
+                                         }
+                                     },
+                                     'error':function () {
+                                         //layer.msg('系统错误');
+                                     }
+                            });
+
+
                         }
+                        table.reload('demo',{});
+
+                        layer.close(index);
                     });
-                    layer.close(index);
+
                     break;
                 }
 
