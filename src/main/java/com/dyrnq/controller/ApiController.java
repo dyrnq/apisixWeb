@@ -29,6 +29,16 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("del/route")
+    public Result delRoute(Context ctx,String id){
+        try {
+            getAdminClient().delRoute(id);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @Mapping("route")
     public Result route(Context ctx) {
         try {

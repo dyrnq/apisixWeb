@@ -379,9 +379,28 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
             //do something
         } else if(layEvent === 'del'){ //删除
             layer.confirm('真的删除行么', function(index){
-                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                layer.close(index);
+                //alert(obj.data.id);
                 //向服务端发送删除指令
+                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                $.ajax({
+                    url: '/api/del/route',
+                    type:'post',
+                    data:"id="+obj.data.id,
+                         success:function (data,statusText) {
+                            alert(data.code)
+                             if(data.code=='200'){
+                                 layer.msg('删除成功');
+                                 //table.reload('idTest',{});
+                             }else{
+                                 layer.msg(data.description);
+                             }
+                         },
+                         'error':function () {
+                             layer.msg('系统错误');
+                         }
+                });
+
+                layer.close(index);
             });
         } else if(layEvent === 'edit'){ //编辑
             //do something
