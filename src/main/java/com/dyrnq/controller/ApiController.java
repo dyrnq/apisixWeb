@@ -14,6 +14,9 @@ import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Array;
+import java.util.List;
+
 @Mapping("api")
 @Controller
 public class ApiController extends BaseController {
@@ -30,9 +33,12 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("del/route")
-    public Result delRoute(Context ctx,String id){
+    public Result delRoute(Context ctx, String... id ){
         try {
-            getAdminClient().delRoute(id);
+            for(int  i = 0; i < id.length; i++){
+                String routeId = id[i];
+                getAdminClient().delRoute(routeId);
+            }
             return Result.succeed("ok");
         }catch (ApisixSDKExcetion e) {
             return Result.failure(e.getMessage());

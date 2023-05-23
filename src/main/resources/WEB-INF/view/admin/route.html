@@ -350,38 +350,43 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
         switch (obj.event) {
             case 'deleteAll':
                 var dataX = checkStatus.data;
+                var allId = [];
                 if (dataX.length === 0) {
                     layer.msg('请选择要删除的数据');
                 } else {
                     layer.confirm('确定删除选中的数据吗？', function(index) {
                         // 发送删除请求，并重新加载表格
                         //console.log(JSON.stringify(dataX));
-
+                        console.log(dataX)
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
-                            console.log(val.id);
+                            allId.push(val.id);
 
-                            $.ajax({
-                                url: '/api/del/route',
-                                type:'post',
-                                data:"id="+val.id,
-                                     success:function (data,statusText) {
-                                         //alert(data.code)
-                                         if(data.code=='200'){
-                                             //layer.msg('删除成功');
-                                             //table.reload('idTest',{});
-                                         }else{
-                                             //layer.msg(data.description);
-                                         }
-                                     },
-                                     'error':function () {
-                                         //layer.msg('系统错误');
-                                     }
-                            });
 
 
                         }
-                        table.reload('demo',{});
+
+                        $.ajax({
+                            url: '/api/del/route',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: allId}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('删除成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    //layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                //layer.msg('系统错误');
+                            }
+                        });
+
+
 
                         layer.close(index);
                     });
