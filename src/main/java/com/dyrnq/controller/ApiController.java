@@ -46,9 +46,12 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("del/streamRoute")
-    public Result delStreamRoute(Context ctx,String id){
+    public Result delStreamRoute(Context ctx,String... id){
         try {
-            getAdminClient().delStreamRoute(id);
+            for(int  i = 0; i < id.length; i++){
+                String StreamRouteId = id[i];
+                getAdminClient().delStreamRoute(StreamRouteId);
+            }
             return Result.succeed("ok");
         }catch (ApisixSDKExcetion e) {
             return Result.failure(e.getMessage());
