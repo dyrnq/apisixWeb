@@ -13,10 +13,11 @@
     #editor {
         margin: 0;
         position: absolute;
-        top: 0;
+        top: 20;
         bottom: 0;
         left: 0;
         right: 0;
+        height: 80%;
     }
   </style>
 </head>
@@ -28,21 +29,74 @@
 
     <div class="layui-body">
 
+        <div>
+            <button class="layui-btn layui-btn-sm" lay-filter="save" id="save">保存</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        </div>
         <div style="padding: 25px">
 
 <pre id="editor">${json}</pre>
         </div>
     </div>
 </div>
-
+<#include 'admin/script.html'/>
 <script src="${ctx}/lib/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+    var id="${id!}"
+    var cls="${cls!}"
     var editor = ace.edit("editor");
     editor.setTheme("ace/theme/twilight");
     editor.session.setMode("ace/mode/json");
     editor.setFontSize(16);
 </script>
-
+<script type="text/javascript" >
+    $("#save").click(function(){
+        //保存当前JSON文本的方法体。
+        var editor = ace.edit("editor");
+        var text = editor.getValue();
+        console.log(text);
+        //确认表单弹窗
+        var layer = layui.layer
+        layer.confirm('确认提交更新吗？', function(index) {
+            $.ajax({
+                url: '/api/add/route',
+                type:'post',
+                contentType: 'application/json',
+                data: JSON.stringify({id: id,rawData: text}),
+                success:function (data,statusText) {
+                    //alert(data.code)
+                    if(data.code=='200'){
+                        layer.msg('修改成功');
+                        //table.reload('idTest',{});
+                    }else{
+                        //layer.msg(data.description);
+                    }
+                },
+                'error':function () {
+                    //layer.msg('系统错误');
+                }
+            });
+            // layer.open({
+            //     type: 1,
+            //     area: ['360px', '290px'],
+            //     title: '确认',
+            //     content:'确认更新吗？',
+            //     btn: ['提交', '取消'],
+            //     yes: function(index, layero){
+            //         // 提交表单的逻辑
+            //         //成功提示。
+            //         layer.msg("提交成功");
+            //     },
+            //     btn2: function(index, layero){
+            //         // 取消的逻辑
+            //     },
+            //     cancel: function(){
+            //         // 点击右上角的关闭按钮的逻辑
+            //     }
+            // });
+        });
+    });
+</script>
 
 
 </body>

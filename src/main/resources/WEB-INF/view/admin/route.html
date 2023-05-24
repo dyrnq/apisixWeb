@@ -276,7 +276,7 @@ function addLink(d) {
     }
     //如果是合法的路径，那么就正常添加，并配备编辑和删除的按键。
     if (addLink.length > 0) {
-        return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=route&id=' + '" lay-event="link">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+        return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=route&id='+d.id + '" lay-event="edit">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
     }
 }
 
@@ -433,16 +433,18 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                 layer.close(index);
             });
-        } else if(layEvent === 'edit'){ //编辑
-            //do something
-
-            //同步更新缓存对应的值
-            obj.update({
-                username: '123'
-                ,title: 'xxx'
-            });
+        // } else if(layEvent === 'edit'){ //编辑
+        //     //do something
+        //
+        //     //同步更新缓存对应的值
+        //     obj.update({
+        //         username: '123'
+        //         ,title: 'xxx'
+        //     });
         } else if(layEvent === 'LAYTABLE_TIPS'){
             layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        }else if (layEvent === 'edit'){//编辑,暂无方法体
+
         }
     });
   //监听Tab切换

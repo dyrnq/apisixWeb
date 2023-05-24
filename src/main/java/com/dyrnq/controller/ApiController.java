@@ -76,6 +76,14 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+    @Mapping("update/route")
+    public Result updateRoute(Context ctx) {
+        try {
+            return Result.succeed(getAdminClient().listRoutes());
+        } catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
     @Mapping("streamRoute")
     public Result streamRoute(Context ctx) {
         try {
