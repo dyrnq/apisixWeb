@@ -110,8 +110,8 @@ public class ApisixClientTest {
 
         for(int i=1;i<11;i++) {
             SSL ssl = new SSL();
-            ssl.setCert(cn.hutool.core.io.FileUtil.readString(new File("/data/work/solon-example/server.crt"), Charset.forName("UTF-8")));
-            ssl.setKey(cn.hutool.core.io.FileUtil.readString(new File("/data/work/solon-example/server.key"), Charset.forName("UTF-8")));
+            ssl.setCert(cn.hutool.core.io.FileUtil.readString(new File("server.crt"), Charset.forName("UTF-8")));
+            ssl.setKey(cn.hutool.core.io.FileUtil.readString(new File("server.key"), Charset.forName("UTF-8")));
             List<String> sni = new ArrayList<String>();
             sni.add("abc.com");
             ssl.setSnis(sni);

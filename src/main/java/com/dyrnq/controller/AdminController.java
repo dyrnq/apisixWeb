@@ -203,6 +203,8 @@ public class AdminController {
             logger.error(nullPointerException.getMessage(),nullPointerException);
         }
         model.put("json", jsonObj  );
+        model.put("id",id);
+        model.put("cls",cls);
 
         return model;
     }

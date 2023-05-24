@@ -1,0 +1,41 @@
+{
+  "desc": "test1",
+  "name": "test1",
+  "priority": 0,
+  "status": 1,
+  "upstream": {
+    "hash_on": "vars",
+    "name": "test",
+    "nodes": [
+      {
+        "host": "127.0.0.1",
+        "port": 18081,
+        "weight": 100
+      },
+      {
+        "host": "127.0.0.1",
+        "port": 18082,
+        "weight": 100
+      },
+      {
+        "host": "127.0.0.1",
+        "port": 18083,
+        "weight": 100
+      },
+      {
+        "host": "127.0.0.1",
+        "port": 18084,
+        "weight": 100
+      }
+    ],
+    "pass_host": "pass",
+    "scheme": "http",
+    "timeout": {
+      "connect": 6,
+      "send": 6,
+      "read": 6
+    },
+    "type": "roundrobin"
+  },
+  "uri": "/*"
+}

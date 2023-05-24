@@ -58,6 +58,16 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("add/route")
+    public Result addRouteRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putRouteRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @Mapping("route")
     public Result route(Context ctx) {
         try {
