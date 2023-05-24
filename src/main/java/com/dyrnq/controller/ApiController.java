@@ -67,7 +67,7 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
-    @Mapping("add/StreamRoute")
+    @Mapping("add/streamRoute")
     public Result addStreamRouteRaw(Context ctx,String id , String rawData){
         try {
             getAdminClient().putStreamRouteRaw(id,rawData);
