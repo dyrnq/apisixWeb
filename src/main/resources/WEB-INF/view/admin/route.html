@@ -47,7 +47,7 @@ input[name='param']{
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="preview(null,'http')">${i18n.get("commonStr.preview")}</button>
                     </div>
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-sm layui-bui-normal" onclick="helper">帮助</button>
+                        <a href="https://apisix.apache.org/zh/docs/apisix/admin-api/#route" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">帮助</a>
 
                     </div>
                 </div>
@@ -279,6 +279,11 @@ function addLink(d) {
         return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=route&id='+d.id + '" lay-event="edit">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
     }
 }
+
+// function helper(){
+//         var html = 'https://apisix.apache.org/zh/docs/apisix/admin-api/#route'
+//     location.href=html
+//     }
 
 layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
     //得到各种内置组件

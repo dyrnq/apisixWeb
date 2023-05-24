@@ -59,7 +59,7 @@
         var layer = layui.layer
         layer.confirm('确认提交更新吗？', function(index) {
             $.ajax({
-                url: '/api/add/route',
+                url: '/api/add/'+cls,
                 type:'post',
                 contentType: 'application/json',
                 data: JSON.stringify({id: id,rawData: text}),
@@ -69,11 +69,11 @@
                         layer.msg('修改成功');
                         //table.reload('idTest',{});
                     }else{
-                        //layer.msg(data.description);
+                        layer.msg(data.description);
                     }
                 },
                 'error':function () {
-                    //layer.msg('系统错误');
+                    layer.msg('系统错误');
                 }
             });
             // layer.open({

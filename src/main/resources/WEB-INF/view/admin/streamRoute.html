@@ -47,6 +47,10 @@ input[name='param']{
                     <div class="layui-inline">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="preview(null,'http')">${i18n.get("commonStr.preview")}</button>
                     </div>
+                    <div class="layui-inline">
+                        <a href="https://apisix.apache.org/zh/docs/apisix/admin-api/##stream-route" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">帮助</a>
+
+                    </div>
                 </div>
             </form>
 
@@ -230,7 +234,7 @@ function addLink(d) {
         return '';
    }
    if (addLink.length > 0) {
-       return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=route&id=' + '" lay-event="link">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+       return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=streamRoute&id=' +addLink+ '" lay-event="link">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
    }
 }
 

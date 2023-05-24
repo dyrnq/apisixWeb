@@ -369,6 +369,21 @@ public class AdminClient extends BaseClient {
         }
         return rsp.getValue();
     }
+    public StreamRoute putStreamRouteRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<StreamRoute> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<StreamRoute>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/stream_routes/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
 
     //update route
