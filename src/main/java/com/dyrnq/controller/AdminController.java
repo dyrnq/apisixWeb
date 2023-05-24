@@ -11,6 +11,8 @@ import com.dyrnq.TokenExpiredException;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.model.User;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -152,7 +154,21 @@ public class AdminController {
         ModelAndView model = new ModelAndView("admin/editor.html");
         model.put("title", "dock");
         String jsonObj = "{}";
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder().setPrettyPrinting().setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f){
+                        if ("id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName()) ) {
+                            return true; // 如果是特殊字段，则排除
+                        }
+                        return false; // 其他字段都保留
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                }).create();
+
         //Type type = new TypeToken<Wrap<Route>>(){}.getType();
         try {
             switch(cls){
