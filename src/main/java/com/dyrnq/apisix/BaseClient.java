@@ -136,7 +136,7 @@ public abstract class BaseClient {
         }
     }
 
-    protected <T extends Object> List<T> arrangeMulti(List<Item<T>> list){
+    public <T extends Object> List<T> arrangeMulti(List<Item<T>> list){
         Item<T> item;
         T model;
         List<T> result = new ArrayList<>();

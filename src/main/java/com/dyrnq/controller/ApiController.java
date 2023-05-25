@@ -1,11 +1,14 @@
 package com.dyrnq.controller;
 
+import com.apiseven.apisix.admin.model.response.Multi;
 import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
 import com.apiseven.apisix.common.profile.Credential;
 import com.apiseven.apisix.common.profile.DefaultCredential;
 import com.apiseven.apisix.common.profile.DefaultProfile;
 import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
+import com.dyrnq.apisix.domain.GlobalRule;
+import com.dyrnq.apisix.domain.Route;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
@@ -78,11 +81,14 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("route")
-    public Result route(Context ctx) {
+    public PageResult route(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listRoutes());
+            Multi<Route> rsp= getAdminClient().queryRoutes(page,limit);
+            List<Route> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
     @Mapping("update/route")

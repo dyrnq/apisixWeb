@@ -2,6 +2,7 @@ package com.dyrnq.apisix;
 
 
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,13 +26,46 @@ import com.apiseven.apisix.admin.model.response.Wrap;
 import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
 import com.apiseven.apisix.common.profile.HttpProfile;
 import com.apiseven.apisix.common.profile.Profile;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 
 
 public class AdminClient extends BaseClient {
 
+    public static final String QUERY_PARAMS_PAGE="page";
+    public static final String QUERY_PARAMS_PAGE_SIZE="page_size";
     public AdminClient(Profile profile) {
         super(profile);
     }
+
+
+    public static String mapToQueryString(Map<String, String> params) {
+        List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        }
+        return URLEncodedUtils.format(nameValuePairs, StandardCharsets.UTF_8);
+    }
+
+
+    public Multi<Route> queryRoutes(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<Route> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<Route>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/routes",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
 
     public List<Route> listRoutes() throws ApisixSDKExcetion {
         Multi<Route> rsp = null;
