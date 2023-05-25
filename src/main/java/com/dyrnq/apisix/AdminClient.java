@@ -65,6 +65,23 @@ public class AdminClient extends BaseClient {
         }
         return rsp;
     }
+    public Multi<StreamRoute> queryStreamRoutes(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<StreamRoute> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<StreamRoute>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/stream_routes",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
 
 
     public List<Route> listRoutes() throws ApisixSDKExcetion {

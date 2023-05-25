@@ -9,6 +9,7 @@ import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.GlobalRule;
 import com.dyrnq.apisix.domain.Route;
+import com.dyrnq.apisix.domain.StreamRoute;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
@@ -100,11 +101,14 @@ public class ApiController extends BaseController {
         }
     }
     @Mapping("streamRoute")
-    public Result streamRoute(Context ctx) {
+    public PageResult streamRoute(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listStreamRoutes());
+            Multi<StreamRoute> rsp= getAdminClient().queryStreamRoutes(page,limit);
+            List<StreamRoute> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
     @Mapping("consumerGroup")

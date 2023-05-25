@@ -26,7 +26,7 @@ public class ApisixClientTest {
 
         AdminClient client = new AdminClient(p);
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             StreamRoute r = new StreamRoute();
 //            r.setName("test"+i);
 //            r.setDesc("test"+i);
@@ -48,7 +48,7 @@ public class ApisixClientTest {
         }
 
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             Route r = new Route();
             r.setName("test"+i);
             r.setDesc("test"+i);
@@ -69,7 +69,7 @@ public class ApisixClientTest {
 
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
 
             Upstream upstream = new Upstream();
             upstream.setType("roundrobin");
@@ -86,7 +86,7 @@ public class ApisixClientTest {
 
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             Service service = new Service();
             service.setName("test"+i);
             service.setDesc("test"+i);
@@ -108,7 +108,7 @@ public class ApisixClientTest {
             client.putService(""+i, service);
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             SSL ssl = new SSL();
             ssl.setCert(cn.hutool.core.io.FileUtil.readString(new File("server.crt"), Charset.forName("UTF-8")));
             ssl.setKey(cn.hutool.core.io.FileUtil.readString(new File("server.key"), Charset.forName("UTF-8")));
@@ -118,7 +118,7 @@ public class ApisixClientTest {
             client.putSSL(""+i, ssl);
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             Secret secret = new Secret();
             secret.setUri("https://localhost/vault");
             secret.setPrefix("/apisix/kv");
@@ -126,7 +126,7 @@ public class ApisixClientTest {
             client.putSecret(""+i,"vault", secret);
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             Consumer consumer = new Consumer();
             consumer.setUsername(i+"");
             consumer.setDesc(i+"");
@@ -134,7 +134,7 @@ public class ApisixClientTest {
             client.putConsumer(""+i,consumer);
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             ConsumerGroup consumer = new ConsumerGroup();
             consumer.setDesc(i+"");
             //consumer.setGroupId(i+"");
@@ -146,7 +146,7 @@ public class ApisixClientTest {
             client.putConsumerGroup(""+i,consumer);
         }
 
-        for(int i=1;i<11;i++) {
+        for(int i=1;i<51;i++) {
             PluginConfig pluginConfig = new PluginConfig();
             pluginConfig.setDesc(i+"");
             java.util.Map map =new HashMap();
