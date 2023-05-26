@@ -303,7 +303,7 @@ public class AdminClient extends BaseClient {
         }
         return rsp.getValue();
     }
-
+    
     public Route getRoute(String id) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
         try {
@@ -404,6 +404,21 @@ public class AdminClient extends BaseClient {
         }
     }
 
+    public Route patchRouteRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<Route> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<Route>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PATCH, "/apisix/admin/routes/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
     public Route putRouteRaw(String id , String rawData) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;

@@ -71,6 +71,28 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+    @Mapping("enable/route")
+    public Result patchRouteRawOn(Context ctx,String... id){
+        try {
+            for(String i : id) {
+                getAdminClient().patchRouteRaw(i, "{\"status\":1}");
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("disable/route")
+    public Result patchRouteRawOff(Context ctx,String... id){
+        try {
+            for(String i : id) {
+                getAdminClient().patchRouteRaw(i, "{\"status\":0}");
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
     @Mapping("add/streamRoute")
     public Result addStreamRouteRaw(Context ctx,String id , String rawData){
         try {

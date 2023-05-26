@@ -238,8 +238,20 @@ input[name='param']{
     <div class="layui-btn-container">
         <button class="layui-btn layui-btn-sm" lay-event="deleteAll">删除选中行</button>
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="statusAll1">状态全部开启</button>
+        <button class="layui-btn layui-btn-sm" lay-event="statusAll0">状态全部关闭</button>
     </div>
 </script>
+
+<!--<script type="text/html" id="status">-->
+<!--    {{#  if(d.status==1){ }}-->
+<!--    <input type="checkbox" name="status" lay-skin="switch" checked lay-text="开启|关闭" value={{ d.status }}-->
+<!--           lay-filter="status">-->
+<!--    {{#  } else { }}-->
+<!--    <input type="checkbox" name="status" lay-skin="switch" lay-text="开启|关闭" value={{ d.status}}-->
+<!--           lay-filter="status">-->
+<!--    {{#  } }}-->
+<!--</script>-->
 
 <script>
 
@@ -311,7 +323,8 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
         , totalRow: false //开启合计行
         , cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
-            , {field: 'id', title: 'ID', width: 300, sort: true, fixed: 'left', totalRowText: '合计：'}
+            , {field: 'id', title: 'ID', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
+            , {field: 'priority',title:'priority',width:100,sort: true, fixed: 'left'}
             , {field: 'name', title: 'name', width: 80}
             , {field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
             , {
@@ -395,12 +408,93 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         layer.close(index);
                     });
-
                     break;
+                }
+            case 'statusAll1':
+                var dataX = checkStatus.data;
+                var Id = [];
+                if(dataX.length === 0){
+                    layer.msg('请勾选需要操作的对象');
+                }else{
+                    layer.confirm('确定全部打开吗？',function (index){
+                        //发送修改请求，重新加载网页
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            Id.push(val.id);
+
+
+
+                        }
+                        $.ajax({
+                            url: '/api/enable/route',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: Id}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('切换成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                layer.msg('系统错误');
+                            }
+                        });
+                        layer.close(index);
+                    });
+            break;
+
+                    }
+            case 'statusAll0':
+                var dataX = checkStatus.data;
+                var Id = [];
+                if(dataX.length === 0){
+                    layer.msg('请勾选需要操作的对象');
+                }else{
+                    layer.confirm('确定全部关闭吗？',function (index){
+                        //发送修改请求，重新加载网页
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            Id.push(val.id);
+
+
+
+                        }
+                        $.ajax({
+                            url: '/api/disable/route',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: Id}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('切换成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                layer.msg('系统错误');
+                            }
+                        });
+                        layer.close(index);
+                    });
+                    break;
+
+                }
+
                 }
 
         }
-    })
+    )
 
 
 
@@ -452,6 +546,29 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
         }
     });
+  //监听status切换
+  // table.on('switch(status)',function (obj){
+  //     var status = obj.data.status;
+  //     $.ajax({
+  //         url: '/api/status/route',
+  //         type:'post',
+  //         data:JSON.stringify({id: obj.data.id,rawData:status}),
+  //         success:function (data,statusText) {
+  //             //alert(data.code)
+  //             if(data.code=='200'){
+  //                 layer.msg('切换成功');
+  //                 //table.reload('idTest',{});
+  //             }else{
+  //                 layer.msg(data.description);
+  //             }
+  //         },
+  //         'error':function () {
+  //             // layer.msg('系统错误');
+  //         }
+  //     });
+  //     // layer.msg('切换成功');
+  //     }
+  // )
   //监听Tab切换
   element.on('tab(demo)', function(data){
     layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
