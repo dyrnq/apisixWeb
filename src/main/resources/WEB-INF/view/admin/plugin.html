@@ -224,7 +224,7 @@ function addLink(d) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=plugin&id='+d.id+'" lay-event="link">' + d.id + '</a>';
+        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=plugin&id='+addLink+'" lay-event="link">' + addLink + '</a>&nbsp;&nbsp;&nbsp;' + '<a class="layui-table-link" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">帮助</a>';
    }
 }
 
@@ -254,8 +254,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       ,{field: 'type', title: 'desc', width: 90, sort: true, totalRow: true}
       ,{field: 'version', title: 'version', width: 150}
       ,{field: 'priority', title: 'priority', width: 200}
-      ,{field: 'schema', title: 'comment', width: 200}
-      ,{field: 'comment', title: 'comment', width: 200 ,templet: addLink}
+      ,{field: 'comment', title: 'comment', width: 500 ,templet: addLink}
 
     ]]
     ,response: {
