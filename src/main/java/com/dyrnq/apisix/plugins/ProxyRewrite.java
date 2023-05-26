@@ -11,7 +11,7 @@ public String[] regexUri;
 // headers
 @SerializedName("headers")
 @Expose
-public Map<String,String> headers;
+public Headers headers;
 // _meta
 @SerializedName("_meta")
 @Expose
