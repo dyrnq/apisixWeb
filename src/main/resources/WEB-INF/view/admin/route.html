@@ -68,12 +68,12 @@ input[name='param']{
                 <input type="text" name="username" required  lay-verify="required" placeholder="请输入参数名称" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">参数描述</label>
-            <div class="layui-input-block">
-                <input type="text" name="desc" required lay-verify="required" placeholder="请输入描述" autocomplete="off" class="layui-input">
-            </div>
-        </div>
+<!--        <div class="layui-form-item">-->
+<!--            <label class="layui-form-label">参数描述</label>-->
+<!--            <div class="layui-input-block">-->
+<!--                <input type="text" name="desc" required lay-verify="required" placeholder="请输入描述" autocomplete="off" class="layui-input">-->
+<!--            </div>-->
+<!--        </div>-->
     </form>
 </div>
 
@@ -408,8 +408,9 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         layer.close(index);
                     });
-                    break;
+
                 }
+                break;
             case 'statusAll1':
                 var dataX = checkStatus.data;
                 var Id = [];
@@ -447,9 +448,10 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                         });
                         layer.close(index);
                     });
-            break;
+
 
                     }
+                break;
             case 'statusAll0':
                 var dataX = checkStatus.data;
                 var Id = [];
@@ -487,14 +489,12 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                         });
                         layer.close(index);
                     });
-                    break;
 
                 }
-
+                break;
                 }
 
-        }
-    )
+})
 
 
 
