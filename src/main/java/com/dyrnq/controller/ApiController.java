@@ -85,6 +85,30 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+    @Mapping("del/consumer")
+    public Result delConsumer(Context ctx,String... id){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String consumerId = id[i];
+                getAdminClient().delConsumer(consumerId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("del/consumerGroup")
+    public Result delConsumerGroup(Context ctx,String... id){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String consumerGroupId = id[i];
+                getAdminClient().delConsumerGroup(consumerGroupId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
 
     @Mapping("add/route")
     public Result addRouteRaw(Context ctx,String id , String rawData){
@@ -140,6 +164,24 @@ public class ApiController extends BaseController {
     public Result addServiceRaw(Context ctx,String id , String rawData){
         try {
             getAdminClient().putServiceRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/consumer")
+    public Result addConsumerRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putConsumerRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/consumerGroup")
+    public Result addConsumerGroupRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putConsumerGroupRaw(id,rawData);
             return Result.succeed("ok");
         }catch (ApisixSDKExcetion e) {
             return Result.failure(e.getMessage());
@@ -237,11 +279,25 @@ public class ApiController extends BaseController {
         }
     }
     @Mapping("consumer")
-    public Result consumer(Context ctx) {
+    public PageResult consumer(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listConsumers());
+            Multi<Consumer> rsp= getAdminClient().queryConsumers(page,limit);
+            List<Consumer> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
+        }
+    }
+    @Mapping("consumerGroup")
+    public PageResult consumerGroup(Context ctx,String page,String limit) {
+        try {
+            Multi<ConsumerGroup> rsp= getAdminClient().queryConsumerGroups(page,limit);
+            List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
+        } catch (ApisixSDKExcetion e) {
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
     @Mapping("pluginConfig")
