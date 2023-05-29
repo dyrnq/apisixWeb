@@ -65,25 +65,25 @@ input[name='param']{
     <!-- 弹出框 -->
     <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
         <form id="addForm1">
-            <input type="hidden" name="id" id="id">
+<!--            <input type="hidden" name="id" id="id">-->
 
             <div class="layui-form-item">
-                <label class="layui-form-label">${commonStr.name}</label>
+                <label class="layui-form-label">${i18n.get("commonStr.name")}</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" id="name" class="layui-input">
+                    <input type="text" name="id" id="id" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">${commonStr.value}</label>
+                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>
                 <div class="layui-input-block">
-                    <textarea  name="value" id="value" class="layui-textarea" ></textarea>
+                    <textarea  name="rawData" id="rawData" class="layui-textarea" ></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item center">
-                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${commonStr.submit}</button>
-                <button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
             </div>
         </form>
     </div>
@@ -220,15 +220,47 @@ input[name='param']{
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">删除选中行</button>
-        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display: none">获取选中行数据</button>
     </div>
 </script>
 
 <script>
+    function add() {
+        layui.use(['layer', 'form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: '添加http路径',
+                content : $('#windowDiv')
+            });
+        });
+    }
+
+    function addOver() {
+        $.ajax({
+            type : 'POST',
+            url : '/api/add/streamRoute',
+            data : $('#addForm1').serialize(),
+            dataType : 'json',
+            success : function(data) {
+                if(data.code=='200'){
+                    //location.reload();
+                    layer.msg("新增成功");
+                } else {
+                    layer.msg(data.description);
+                }
+            },
+            error : function() {
+                layer.alert("系统错误");
+            }
+        });
+    }
 
 
-function addLink(d) {
+    function addLink(d) {
 　　var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
@@ -280,6 +312,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     }
   });
 
+  //头部工具条事件
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {

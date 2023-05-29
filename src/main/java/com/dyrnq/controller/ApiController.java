@@ -62,6 +62,32 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("del/upstream")
+    public Result delUpstream(Context ctx,String... id){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String UpstreamId = id[i];
+                getAdminClient().delUpstream(UpstreamId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("del/service")
+    public Result delService(Context ctx,String... id){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String serviceId = id[i];
+                getAdminClient().delService(serviceId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @Mapping("add/route")
     public Result addRouteRaw(Context ctx,String id , String rawData){
         try {
@@ -97,6 +123,25 @@ public class ApiController extends BaseController {
     public Result addStreamRouteRaw(Context ctx,String id , String rawData){
         try {
             getAdminClient().putStreamRouteRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/upstream")
+    public Result addUpstreamRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putUpstreamRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("add/service")
+    public Result addServiceRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putServiceRaw(id,rawData);
             return Result.succeed("ok");
         }catch (ApisixSDKExcetion e) {
             return Result.failure(e.getMessage());
