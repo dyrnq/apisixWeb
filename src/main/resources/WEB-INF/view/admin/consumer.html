@@ -399,14 +399,14 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
 
                 layer.close(index);
             });
-        } else if(layEvent === 'edit'){ //编辑
+        // } else if(layEvent === 'edit'){ //编辑
             //do something
 
             //同步更新缓存对应的值
-            obj.update({
-                username: '123'
-                ,title: 'xxx'
-            });
+            // obj.update({
+            //     username: '123'
+            //     ,title: 'xxx'
+            // });
         } else if(layEvent === 'LAYTABLE_TIPS'){
             layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }

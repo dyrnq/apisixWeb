@@ -221,14 +221,16 @@ public class ApiController extends BaseController {
         }
     }
     @Mapping("consumerGroup")
-    public Result consumerGroup(Context ctx) {
+    public PageResult consumerGroup(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listConsumerGroups());
+            Multi<ConsumerGroup> rsp= getAdminClient().queryConsumerGroups(page,limit);
+            List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
-
     @Mapping("upstream")
      public PageResult upstream(Context ctx,String page,String limit) {
         try {
@@ -289,17 +291,7 @@ public class ApiController extends BaseController {
             return PageResult.failure(e.getMessage());
         }
     }
-    @Mapping("consumerGroup")
-    public PageResult consumerGroup(Context ctx,String page,String limit) {
-        try {
-            Multi<ConsumerGroup> rsp= getAdminClient().queryConsumerGroups(page,limit);
-            List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
-            logger.error(e.getMessage());
-            return PageResult.failure(e.getMessage());
-        }
-    }
+
     @Mapping("pluginConfig")
     public Result pluginConfig(Context ctx) {
         try {

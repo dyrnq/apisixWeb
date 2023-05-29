@@ -502,11 +502,11 @@ public class AdminClient extends BaseClient {
             }
         }
     }
-    public void delConsumer(String username) throws ApisixSDKExcetion {
+    public void delConsumer(String id) throws ApisixSDKExcetion {
         Wrap<Consumer> rsp = null;
         try {
             //route = resolveUpstream(route);
-            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/consumers/" + username);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/consumers/" + id);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
