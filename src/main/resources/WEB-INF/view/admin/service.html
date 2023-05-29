@@ -265,7 +265,7 @@ input[name='param']{
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=service&id='+d.id+'" lay-event="link">' + d.id + '</a>';
+       return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=service&id='+d.id + '" lay-event="edit">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
    }
 }
 

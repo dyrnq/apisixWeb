@@ -7,9 +7,7 @@ import com.apiseven.apisix.common.profile.DefaultCredential;
 import com.apiseven.apisix.common.profile.DefaultProfile;
 import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
-import com.dyrnq.apisix.domain.GlobalRule;
-import com.dyrnq.apisix.domain.Route;
-import com.dyrnq.apisix.domain.StreamRoute;
+import com.dyrnq.apisix.domain.*;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
@@ -159,6 +157,8 @@ public class ApiController extends BaseController {
             return PageResult.failure(e.getMessage());
         }
     }
+
+
     @Mapping("update/route")
     public Result updateRoute(Context ctx) {
         try {
@@ -188,11 +188,14 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("upstream")
-    public Result upstream(Context ctx) {
+     public PageResult upstream(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listUpstreams());
+            Multi<Upstream> rsp= getAdminClient().queryUpstreams(page,limit);
+            List<Upstream> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
 
@@ -206,11 +209,14 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("service")
-    public Result service(Context ctx) {
+     public PageResult service(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listServices());
+            Multi<Service> rsp= getAdminClient().queryServices(page,limit);
+            List<Service> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
     @Mapping("ssl")

@@ -82,6 +82,41 @@ public class AdminClient extends BaseClient {
         }
         return rsp;
     }
+    public Multi<Upstream> queryUpstreams(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<Upstream> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<Upstream>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/upstreams",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
+    public Multi<Service> queryServices(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<Service> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<Service>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/services",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
 
 
     public List<Route> listRoutes() throws ApisixSDKExcetion {
