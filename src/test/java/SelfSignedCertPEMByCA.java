@@ -26,6 +26,7 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
+import org.junit.Test;
 
 public class SelfSignedCertPEMByCA {
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
@@ -61,8 +62,8 @@ public class SelfSignedCertPEMByCA {
         }
 
     }
-
-    public static void main(String args[]) throws Exception {
+    @Test
+    public void test_createCertByCA() throws Exception {
 
 
         // 加载 CA 证书

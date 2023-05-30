@@ -1,3 +1,4 @@
+import cn.hutool.core.lang.hash.Hash;
 import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
 import com.apiseven.apisix.common.profile.Credential;
 import com.apiseven.apisix.common.profile.DefaultCredential;
@@ -5,28 +6,33 @@ import com.apiseven.apisix.common.profile.DefaultProfile;
 import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.Route;
+import com.dyrnq.apisix.plugins.Gzip;
+import com.dyrnq.apisix.plugins.Headers;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
+import org.junit.Test;
 
 import java.util.*;
 
-public class StaticFileResponse {
+public class StaticFileResponse extends BaseJunit{
 
-    public static void main(String[] args) throws ApisixSDKExcetion {
-        String url = "192.168.66.100:9180";
-        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
-        Profile p = DefaultProfile.getProfile(url, "", c);
-        AdminClient client = new AdminClient(p);
-
+    @Test
+    public void test_StaticFileResponse() throws ApisixSDKExcetion {
         Route r =new Route();
         r.setName("StaticFileResponse");
-        //List<String> host = new ArrayList<>();
-//        host.add("");
         r.setUri("/test/index.html");
-        //r.setHosts(host);
         Map<String, Object> map = new HashMap<>();
         ResponseRewrite responseRewrite = new ResponseRewrite();
-        responseRewrite.body="<html>Jenkins</html>";
+        responseRewrite.body="<html>Jenkins，中文测试</html>";
+        responseRewrite.statusCode=200;
+        Headers headers= new Headers();
+        headers.set =  new HashMap<>();
+        headers.set.put("Content-Type","text/html; charset=utf-8");
+        responseRewrite.headers = headers;
         map.put("response-rewrite",responseRewrite);
+        Gzip gzip = new Gzip();
+        gzip.types="*";
+        map.put("gzip",gzip);
+
         r.setPlugins(map);
 
         client.putRoute("5000",r);

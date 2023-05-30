@@ -22,13 +22,14 @@ import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.junit.Test;
 
 public class SelfSignedCAPEM {
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
-    static {
+
+    @Test
+    public void test_createCA() throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException {
         Security.addProvider(new BouncyCastleProvider());
-    }
-    public static void main(String args[]) throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(2048);
 
