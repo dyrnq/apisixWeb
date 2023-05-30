@@ -34,43 +34,16 @@ public class SelfSignedCertPEMByCA {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
-    private static X509Certificate loadCACertificate() throws Exception {
-        try (InputStream in = new FileInputStream("ca.crt")) {
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            return (X509Certificate) cf.generateCertificate(in);
-        }
-    }
 
-    private static PrivateKey loadCAKey() throws Exception{
-//        try (Reader reader = new FileReader("ca.key")) {
-//            PEMParser parser = new PEMParser(reader);
-//            Object obj = parser.readObject();
-//            JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
-//            return converter.getPrivateKey(((PEMKeyPair) obj).getPrivateKeyInfo());
-//        }
-
-        try (Reader reader = new FileReader("ca.key")) {
-            PEMParser parser = new PEMParser(reader);
-            Object obj = parser.readObject();
-            if (obj instanceof PEMKeyPair) {
-                // 将 PEM 密钥对转换为 JCE 格式的密钥对
-                KeyPair keyPair = new JcaPEMKeyConverter().setProvider("BC").getKeyPair((PEMKeyPair) obj);
-                return keyPair.getPrivate();
-            } else {
-                throw new IllegalArgumentException("Unsupported PEM object.");
-            }
-        }
-
-    }
     @Test
     public void test_createCertByCA() throws Exception {
 
 
         // 加载 CA 证书
-        X509Certificate caCert = loadCACertificate();
+        X509Certificate caCert = CertUtils.loadCertificate("ca.crt");
 
         // 加载 CA 密钥
-        PrivateKey caKey = loadCAKey();
+        PrivateKey caKey = CertUtils.loadPrivateKey("ca.key");
 
 
         // Generate the key pair
