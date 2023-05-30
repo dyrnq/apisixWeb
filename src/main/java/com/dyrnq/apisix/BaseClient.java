@@ -19,6 +19,7 @@ import com.apiseven.apisix.common.profile.Credential;
 import com.apiseven.apisix.common.profile.Endpoint;
 import com.apiseven.apisix.common.profile.HttpProfile;
 import com.apiseven.apisix.common.profile.Profile;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,6 +85,7 @@ public abstract class BaseClient {
         if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
             throw new ApisixSDKExcetion(strResp, String.valueOf(okRsp.code()));
         }
+        strResp=StringUtils.replace(strResp,"\"list\":{}","\"list\":[]");
         logger.info(strResp);
         return strResp;
     }
