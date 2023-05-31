@@ -10,6 +10,7 @@ import com.dyrnq.AuthHandler;
 import com.dyrnq.TokenExpiredException;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.Route;
+import com.dyrnq.dso.InstMapper;
 import com.dyrnq.model.User;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
@@ -21,6 +22,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Before;
 import org.noear.solon.annotation.Controller;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
@@ -37,6 +39,14 @@ import java.lang.reflect.Type;
 @I18n
 public class AdminController {
     static Logger logger = LoggerFactory.getLogger(AdminController.class);
+    @Mapping("inst")
+    public Object inst() {
+        ModelAndView model = new ModelAndView("admin/inst.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
+
     @Mapping("about")
     public Object about() {
         ModelAndView model = new ModelAndView("admin/about.html");

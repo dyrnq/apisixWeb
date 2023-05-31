@@ -1,5 +1,6 @@
 package com.dyrnq.controller;
 
+import cn.hutool.core.util.PageUtil;
 import com.apiseven.apisix.admin.model.response.Multi;
 import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
 import com.apiseven.apisix.common.profile.Credential;
@@ -8,11 +9,15 @@ import com.apiseven.apisix.common.profile.DefaultProfile;
 import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.*;
+import com.dyrnq.dso.InstMapper;
+import com.dyrnq.model.Inst;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
+import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +28,44 @@ import java.util.List;
 @Controller
 public class ApiController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(ApiController.class);
+
+    @Inject
+    InstMapper instMapper;
+
+    @Mapping("inst")
+    public PageResult inst(Context ctx,int page,int limit) {
+        try {
+            int start = PageUtil.getStart(page-1,limit);
+            IPage<Inst> p = instMapper.selectPage(start,limit,null);
+            return PageResult.succeed(p.getList(),new Integer(Long.toString(p.getTotal())));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("add/inst")
+    public Result addInst(Context ctx,Inst inst){
+        try {
+            instMapper.insert(inst,true);
+            return Result.succeed("ok");
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("del/inst")
+    public Result delInst(Context ctx, String... id ){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                instMapper.deleteById(id[i]);
+            }
+            return Result.succeed("ok");
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
 
 
     @Mapping("plugin")
