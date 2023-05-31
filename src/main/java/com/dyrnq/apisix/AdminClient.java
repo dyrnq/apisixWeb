@@ -26,6 +26,7 @@ import com.apiseven.apisix.admin.model.response.Wrap;
 import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
 import com.apiseven.apisix.common.profile.HttpProfile;
 import com.apiseven.apisix.common.profile.Profile;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
@@ -994,12 +995,44 @@ public class AdminClient extends BaseClient {
         return result;
     }
 
+    public Multi<SSL> querySSLs(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<SSL> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<SSL>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/ssls",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
 
     public SSL getSSL(String id) throws ApisixSDKExcetion {
-        Wrap<SSL> rsp = null;
+  //      Wrap<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<SSL>>(){}.getType();
-            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/ssls/" + id), type);
+//            Type type = new TypeToken<Wrap<SSL>>(){}.getType();
+//            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/ssls/" + id), type);
+
+            List<SSL> list = listSSLs();
+
+            SSL fo=null;
+            for(SSL l:list){
+                if(StringUtils.equalsIgnoreCase(id,l.getId())){
+                    fo =l;
+                    break;
+                }
+            }
+
+            if(fo!=null) return fo;
+
+
         } catch (ApisixSDKExcetion | JsonSyntaxException e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
@@ -1007,7 +1040,12 @@ public class AdminClient extends BaseClient {
                 throw new ApisixSDKExcetion(e.getMessage());
             }
         }
-        return rsp.getValue();
+//        return rsp.getValue();
+        return null;
+
+
+
+
     }
 
 

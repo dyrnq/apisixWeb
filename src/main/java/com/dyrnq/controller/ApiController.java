@@ -264,9 +264,11 @@ public class ApiController extends BaseController {
         }
     }
     @Mapping("ssl")
-    public Result ssl(Context ctx) {
+    public Result ssl(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listSSLs());
+            Multi<SSL> rsp= getAdminClient().querySSLs(page,limit);
+            List<SSL> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
             return Result.failure(e.getMessage());
         }
