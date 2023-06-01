@@ -217,6 +217,22 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
             , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
 
         ]]
+        , done: function (res, curr, count){
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            console.log(res);
+            //得到当前页码
+            console.log(curr);
+            //得到数据总量
+            console.log(count);
+            if(res.data.length == 0){
+                if(curr>1){
+                    toPage=curr-1;
+                    console.log(toPage);
+                    table.reload('demo',{page: {curr:toPage}});
+                }
+            }
+        }
         , response: {
             statusCode: 200
         }
@@ -406,6 +422,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 });
 
                 layer.close(index);
+                table.reload('demo',{})
             });
         // } else if(layEvent === 'edit'){ //编辑
         //     //do something
