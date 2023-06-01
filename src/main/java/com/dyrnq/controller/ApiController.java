@@ -177,6 +177,49 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("del/ssl")
+    public Result delSSL(Context ctx, String... id ){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String SSLId = id[i];
+                getAdminClient().delSSL(SSLId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/ssl")
+    public Result addSSLRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putSSLRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("enable/ssl")
+    public Result patchSSLRawOn(Context ctx,String... id){
+        try {
+            for(String i : id) {
+                getAdminClient().patchSSLRaw(i, "{\"status\":1}");
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("disable/ssl")
+    public Result patchSSLRawOff(Context ctx,String... id){
+        try {
+            for(String i : id) {
+                getAdminClient().patchSSLRaw(i, "{\"status\":0}");
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
     @Mapping("add/route")
     public Result addRouteRaw(Context ctx,String id , String rawData){
         try {

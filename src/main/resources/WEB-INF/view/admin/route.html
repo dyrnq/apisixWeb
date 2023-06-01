@@ -139,6 +139,7 @@ function addOver() {
 		success : function(data) {
 			if(data.code=='200'){
 				//location.reload();
+                layer.closeAll();
 				layer.msg("新增成功");
 			} else {
 				layer.msg(data.description);

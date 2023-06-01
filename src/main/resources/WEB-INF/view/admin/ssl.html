@@ -47,6 +47,10 @@ input[name='param']{
                     <div class="layui-inline">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="preview(null,'http')">${i18n.get("commonStr.preview")}</button>
                     </div>
+                    <div class="layui-inline">
+                        <a href="https://apisix.apache.org/zh/docs/apisix/admin-api/#ssl" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">帮助</a>
+
+                    </div>
                 </div>
             </form>
 
@@ -60,26 +64,26 @@ input[name='param']{
 <div style="height: 0px; width: 0px; overflow: hidden;">
     <!-- 弹出框 -->
     <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
-        <form id="addForm">
-            <input type="hidden" name="id" id="id">
+        <form id="addForm1">
+            <!--            <input type="hidden" name="id" id="id">-->
 
             <div class="layui-form-item">
-                <label class="layui-form-label">${commonStr.name}</label>
+                <label class="layui-form-label">${i18n.get("commonStr.name")}</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" id="name" class="layui-input">
+                    <input type="text" name="id" id="id" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">${commonStr.value}</label>
+                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>
                 <div class="layui-input-block">
-                    <textarea  name="value" id="value" class="layui-textarea" ></textarea>
+                    <textarea  name="rawData" id="rawData" class="layui-textarea" ></textarea>
                 </div>
             </div>
 
             <div class="layui-form-item center">
-                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${commonStr.submit}</button>
-                <button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
             </div>
         </form>
     </div>
@@ -214,15 +218,57 @@ input[name='param']{
 
 </body>
 
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display: none">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="statusAll1">批量开启</button>
+        <button class="layui-btn layui-btn-sm" lay-event="statusAll0">批量关闭</button>
+    </div>
+</script>
 
 <script>
+    function add() {
+        layui.use(['layer', 'form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: '添加http路径',
+                content : $('#windowDiv')
+            });
+        });
+    }
+
+    function addOver() {
+        $.ajax({
+            type : 'POST',
+            url : '/api/add/ssl',
+            data : $('#addForm1').serialize(),
+            dataType : 'json',
+            success : function(data) {
+                if(data.code=='200'){
+                    //location.reload();
+
+                    layer.closeAll();
+                    layer.msg("新增成功");
+                } else {
+                    layer.msg(data.description);
+                }
+            },
+            error : function() {
+                layer.alert("系统错误");
+            }
+        });
+    }
 function addLink(d) {
 　　var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=ssl&id='+d.id+'" lay-event="link">' + d.id + '</a>';
+       return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=ssl&id='+d.id + '" lay-event="edit">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
    }
 }
 
@@ -243,7 +289,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,url: '/api/ssl' //数据接口
     ,title: '用户表'
     ,page: true //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,toolbar: '#toolbarDemo'  //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
@@ -257,6 +303,22 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
 
     ]]
+      , done: function (res, curr, count){
+          //如果是异步请求数据方式，res即为你接口返回的信息。
+          //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+          console.log(res);
+          //得到当前页码
+          console.log(curr);
+          //得到数据总量
+          console.log(count);
+          if(res.data.length == 0){
+              if(curr>1){
+                  toPage=curr-1;
+                  console.log(toPage);
+                  table.reload('demo',{page: {curr:toPage}});
+              }
+          }
+      }
     ,response: {
         statusCode: 200
     }
@@ -270,10 +332,218 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     }
   });
 
+    //头部工具条监听事件
+    table.on('toolbar(test)', function (obj) {
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch (obj.event) {
+            case 'getCheckData':
+                var dataX = checkStatus.data;
+                layer.alert(JSON.stringify(dataX));
+                break;
+            case 'deleteAll':
+                var dataX = checkStatus.data;
+                var allId = [];
+                if (dataX.length === 0) {
+                    layer.msg('请选择要删除的数据');
+                } else {
+                    layer.confirm('确定删除选中的数据吗？', function(index) {
+                        // 发送删除请求，并重新加载表格
+                        //console.log(JSON.stringify(dataX));
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            allId.push(val.id);
 
 
 
-  //监听Tab切换
+                        }
+
+                        $.ajax({
+                            url: '/api/del/ssl',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: allId}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{
+                                        // page: {
+                                        //     curr: page-1 // 重新加载第一页的// 指定重新加载的页码
+                                        // },
+                                    });
+                                    layer.msg('删除成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    //layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                //layer.msg('系统错误');
+                            }
+                        });
+                        $.ajax({
+                            url: '/admin/ssls',
+                            type: 'GET',
+                            data: {
+                                pageNum: 1, // 请求的页码
+                                pageSize: 10 // 每页数据的数量
+                            },
+                            dataType: 'json',
+                            success: function(data){
+                                // 获取后端返回的当前页数据量
+                                var currentPageSize = data.currentPageSize;
+
+
+                            },
+                            error: function(jqXHR, textStatus, errorThrown){
+                                // 处理请求错误
+                            }
+                        });
+
+
+
+                        layer.close(index);
+                    });
+
+                }
+                break;
+            case 'statusAll1':
+                var dataX = checkStatus.data;
+                var Id = [];
+                if(dataX.length === 0){
+                    layer.msg('请勾选需要操作的对象');
+                }else{
+                    layer.confirm('确定全部打开吗？',function (index){
+                        //发送修改请求，重新加载网页
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            Id.push(val.id);
+
+
+
+                        }
+                        $.ajax({
+                            url: '/api/enable/ssl',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: Id}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('切换成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                layer.msg('系统错误');
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+
+                }
+                break;
+            case 'statusAll0':
+                var dataX = checkStatus.data;
+                var Id = [];
+                if(dataX.length === 0){
+                    layer.msg('请勾选需要操作的对象');
+                }else{
+                    layer.confirm('确定全部关闭吗？',function (index){
+                        //发送修改请求，重新加载网页
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            Id.push(val.id);
+
+
+
+                        }
+                        $.ajax({
+                            url: '/api/disable/ssl',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: Id}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('切换成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                layer.msg('系统错误');
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+                }
+                break;
+        }
+
+    })
+
+    //工具条事件
+    table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+        if(layEvent === 'detail'){ //查看
+            //do something
+        } else if(layEvent === 'del'){ //删除
+            layer.confirm('真的删除行么', function(index){
+                //alert(obj.data.id);
+                //向服务端发送删除指令
+                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                $.ajax({
+                    url: '/api/del/ssl',
+                    type:'post',
+                    data:"id="+obj.data.id,
+                    success:function (data,statusText) {
+                        //alert(data.code)
+                        if(data.code=='200'){
+                            layer.msg('删除成功');
+                            //table.reload('idTest',{});
+                        }else{
+                            layer.msg(data.description);
+                        }
+                    },
+                    'error':function () {
+                        layer.msg('系统错误');
+                    }
+                });
+
+                layer.close(index);
+                table.reload('demo',{})
+            });
+            // } else if(layEvent === 'edit'){ //编辑
+            //     //do something
+            //
+            //     //同步更新缓存对应的值
+            //     obj.update({
+            //         username: '123'
+            //         ,title: 'xxx'
+            //     });
+        } else if(layEvent === 'LAYTABLE_TIPS'){
+            layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        }else if (layEvent === 'edit'){//编辑,暂无方法体
+
+        }
+    });
+
+
+
+    //监听Tab切换
   element.on('tab(demo)', function(data){
     layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
       tips: 1

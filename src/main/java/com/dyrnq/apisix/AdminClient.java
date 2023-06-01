@@ -619,6 +619,21 @@ public class AdminClient extends BaseClient {
         }
         return rsp.getValue();
     }
+    public SSL patchSSLRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<SSL> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<SSL>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PATCH, "/apisix/admin/ssls/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
     public Route putRouteRaw(String id , String rawData) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
@@ -734,6 +749,21 @@ public class AdminClient extends BaseClient {
             //route = resolveUpstream(route);
             Type type = new TypeToken<Wrap<PluginConfig>>(){}.getType();
             rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/plugin_configs/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+    public SSL putSSLRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<SSL> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<SSL>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/ssls/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
