@@ -160,7 +160,7 @@ public class ApisixClientTest extends BaseJunit {
 
     @Test
     public void test_putGlobalRule() throws ApisixSDKExcetion {
-        for (int i = 1; i < 2; i++) {
+        for (int i = 1; i < 20; i++) {
             GlobalRule globalRule = new GlobalRule();
             java.util.Map map = new HashMap();
             Echo e = new Echo();

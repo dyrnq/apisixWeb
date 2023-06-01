@@ -154,6 +154,40 @@ public class AdminClient extends BaseClient {
         }
         return rsp;
     }
+    public Multi<GlobalRule> queryGlobalRules(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<GlobalRule> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<GlobalRule>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/global_rules",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+    public Multi<PluginConfig> queryPluginConfigs(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<PluginConfig> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<PluginConfig>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/plugin_configs",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
 
 
     public List<Route> listRoutes() throws ApisixSDKExcetion {
@@ -529,6 +563,32 @@ public class AdminClient extends BaseClient {
             }
         }
     }
+    public void delGlobalRule(String id) throws ApisixSDKExcetion {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/global_rules/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
+    public void delPluginConfig(String id) throws ApisixSDKExcetion {
+        Wrap<PluginConfig> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/plugin_configs/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
 
     public Route patchRouteRaw(String id , String rawData) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
@@ -639,6 +699,36 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public GlobalRule putGlobalRuleRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<PluginConfig>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/global_rules/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+    public PluginConfig putPluginConfigRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<PluginConfig> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<PluginConfig>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/plugin_configs/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
     //update route
     public Route putRoute(String id, Route route) throws ApisixSDKExcetion {

@@ -152,6 +152,30 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+    @Mapping("del/globalRule")
+    public Result delGlobalRule(Context ctx,String... id){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String GlobalRuleId = id[i];
+                getAdminClient().delGlobalRule(GlobalRuleId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("del/pluginConfig")
+    public Result delPluginConfig(Context ctx,String... id){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String PluginConfigId = id[i];
+                getAdminClient().delPluginConfig(PluginConfigId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
 
     @Mapping("add/route")
     public Result addRouteRaw(Context ctx,String id , String rawData){
@@ -225,6 +249,24 @@ public class ApiController extends BaseController {
     public Result addConsumerGroupRaw(Context ctx,String id , String rawData){
         try {
             getAdminClient().putConsumerGroupRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/globalRule")
+    public Result addGlobalRuleRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putGlobalRuleRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/pluginConfig")
+    public Result addPluginConfigRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putPluginConfigRaw(id,rawData);
             return Result.succeed("ok");
         }catch (ApisixSDKExcetion e) {
             return Result.failure(e.getMessage());
@@ -318,11 +360,14 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("globalRule")
-    public Result globalRule(Context ctx) {
+    public Result globalRule(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listGlobalRules());
+            Multi<GlobalRule> rsp= getAdminClient().queryGlobalRules(page,limit);
+            List<GlobalRule> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
     @Mapping("consumer")
@@ -338,11 +383,14 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("pluginConfig")
-    public Result pluginConfig(Context ctx) {
+    public PageResult pluginConfig(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listPluginConfigs());
+            Multi<PluginConfig> rsp= getAdminClient().queryPluginConfigs(page,limit);
+            List<PluginConfig> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
 
