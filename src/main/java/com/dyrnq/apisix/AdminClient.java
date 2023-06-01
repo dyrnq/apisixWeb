@@ -425,15 +425,15 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
-    public boolean deleteRoute(String id) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/routes/" + id);
-        return true;
-    }
-
-    public boolean deleteStreamRoute(String id) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/stream_routes/" + id);
-        return true;
-    }
+//    public boolean deleteRoute(String id) throws ApisixSDKExcetion {
+//        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/routes/" + id);
+//        return true;
+//    }
+//
+//    public boolean deleteStreamRoute(String id) throws ApisixSDKExcetion {
+//        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/stream_routes/" + id);
+//        return true;
+//    }
     public PluginConfig putPluginConfig(String id, PluginConfig route) throws ApisixSDKExcetion {
         Wrap<PluginConfig> rsp = null;
         try {
@@ -501,6 +501,20 @@ public class AdminClient extends BaseClient {
         try {
             //route = resolveUpstream(route);
             String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/stream_routes/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
+
+    public void delSecret(String id) throws ApisixSDKExcetion {
+        Wrap<Secret> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/secrets/" + id);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
@@ -864,10 +878,10 @@ public class AdminClient extends BaseClient {
     }
 
 
-    public boolean deleteService(String id) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/services/" + id);
-        return true;
-    }
+//    public boolean deleteService(String id) throws ApisixSDKExcetion {
+//        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/services/" + id);
+//        return true;
+//    }
 
 
     public Service putService(String id, Service service) throws ApisixSDKExcetion {
@@ -941,10 +955,10 @@ public class AdminClient extends BaseClient {
     }
 
 
-    public boolean deleteUpstream(String id) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/upstreams/" + id);
-        return true;
-    }
+//    public boolean deleteUpstream(String id) throws ApisixSDKExcetion {
+//        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/upstreams/" + id);
+//        return true;
+//    }
 
 
     public Upstream putUpstream(String id, Upstream upstream) throws ApisixSDKExcetion {
@@ -1014,10 +1028,10 @@ public class AdminClient extends BaseClient {
     }
 
 
-    public boolean deleteConsumer(String username) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/consumers/" + username);
-        return true;
-    }
+//    public boolean deleteConsumer(String username) throws ApisixSDKExcetion {
+//        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/consumers/" + username);
+//        return true;
+//    }
 
 
     public Consumer putConsumer(String username, Consumer consumer) throws ApisixSDKExcetion {
@@ -1139,10 +1153,10 @@ public class AdminClient extends BaseClient {
     }
 
 
-    public boolean deleteSSL(String id) throws ApisixSDKExcetion {
-        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/ssls/" + id);
-        return true;
-    }
+//    public boolean deleteSSL(String id) throws ApisixSDKExcetion {
+//        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/ssls/" + id);
+//        return true;
+//    }
 
 
     public SSL putSSL(String id, SSL ssl) throws ApisixSDKExcetion {
@@ -1206,4 +1220,17 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public void delSSL(String id) throws ApisixSDKExcetion {
+        Wrap<SSL> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/ssls/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
 }
