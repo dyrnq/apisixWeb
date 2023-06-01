@@ -67,6 +67,7 @@ public class SSLTest extends BaseJunit{
             }
         }
         ssl.setSnis(sni);
+        ssl.setStatus(1);
         client.putSSL("1", ssl);
     }
 }

@@ -8,6 +8,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.plugins.Gzip;
 import com.dyrnq.apisix.plugins.Headers;
+import com.dyrnq.apisix.plugins.Redirect;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
 import org.junit.Test;
 
@@ -28,7 +29,11 @@ public class StaticFileResponse extends BaseJunit{
         headers.set =  new HashMap<>();
         headers.set.put("Content-Type","text/html; charset=utf-8");
         responseRewrite.headers = headers;
+
+        Redirect redirect = new Redirect();
+        redirect.httpToHttps =true;
         map.put("response-rewrite",responseRewrite);
+        map.put("redirect",redirect);
         Gzip gzip = new Gzip();
         gzip.types="*";
         map.put("gzip",gzip);
