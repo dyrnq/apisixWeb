@@ -10,7 +10,9 @@ import com.apiseven.apisix.common.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.*;
 import com.dyrnq.dso.InstMapper;
+import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.Inst;
+import com.dyrnq.model.User;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -31,7 +33,8 @@ public class ApiController extends BaseController {
 
     @Inject
     InstMapper instMapper;
-
+    @Inject
+    UserMapper userMapper;
     @Mapping("inst")
     public PageResult inst(Context ctx,int page,int limit) {
         try {
@@ -60,6 +63,58 @@ public class ApiController extends BaseController {
             for(int  i = 0; i < id.length; i++){
                 instMapper.deleteById(id[i]);
             }
+            return Result.succeed("ok");
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("user")
+    public PageResult user(Context ctx,int page,int limit) {
+        try {
+            int start = PageUtil.getStart(page-1,limit);
+            IPage<User> p = userMapper.selectPage(start,limit,null);
+            return PageResult.succeed(p.getList(),new Integer(Long.toString(p.getTotal())));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("add/user")
+    public Result addUser(Context ctx,User user){
+        try {
+            userMapper.insert(user,true);
+            return Result.succeed("ok");
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("del/user")
+    public Result delUser(Context ctx, String... id ){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                userMapper.deleteById(id[i]);
+            }
+            return Result.succeed("ok");
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("get/user")
+    public Result getUser(Context ctx,String id){
+        try {
+            User user = userMapper.selectById(id);
+            return Result.succeed(user);
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("update/user")
+    public Result updateUser(Context ctx,User user){
+        try {
+            userMapper.updateById(user,true);
             return Result.succeed("ok");
         }catch (Exception e) {
             return Result.failure(e.getMessage());

@@ -46,6 +46,13 @@ public class AdminController {
         model.put("message", "你好 world!");
         return model;
     }
+    @Mapping("user")
+    public Object user() {
+        ModelAndView model = new ModelAndView("admin/user.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
 
     @Mapping("about")
     public Object about() {
