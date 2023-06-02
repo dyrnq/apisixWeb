@@ -284,6 +284,14 @@ docker run -d --name postgres12 \
 -v $HOME/var/lib/postgresql/data:/var/lib/postgresql/data postgres:12.14
 
 docker run -d --name=adminer --restart always --network mynet -p 18080:8080 adminer:4.8.1
+
+
+for num in {1..7}; do
+name="w${num}"
+port=$((6680+num-1))
+docker rm -f "${name}" &>/dev/null || true ;
+docker run -d --name "${name}" --restart always --network mynet -p "${port}":80 containous/whoami:latest;
+done
 }
 
 fun_add_mynet
