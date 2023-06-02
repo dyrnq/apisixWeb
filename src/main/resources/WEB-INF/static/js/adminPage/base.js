@@ -96,10 +96,12 @@ function gohref(url) {
 
 // 退出登录
 function loginOut() {
-	if (confirm(baseStr.exit)) {
-		window.localStorage.removeItem("adminId");
-		location.href = ctx + "/adminPage/login/loginOut";
-	}
+	//if (confirm(baseStr.exit)) {
+		//window.localStorage.removeItem("adminId");
+		var cname="TOKEN"
+		document.cookie = cname + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+		location.href = ctx + "/admin/login";
+	//}
 }
 
 // 日期格式化
