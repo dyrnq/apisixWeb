@@ -27,22 +27,22 @@
 
                     <form class="layui-form" action="">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">用户名</label>
+                            <label class="layui-form-label">${i18n.get("loginStr.name")}</label>
                             <div class="layui-input-block">
-                                <input type="text" name="name" id="name" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input">
+                                <input type="text" name="name" id="name" lay-verify="title" autocomplete="off" placeholder="请输入用户名" class="layui-input" autofocus />
                             </div>
                         </div>
 
                         <div class="layui-form-item">
-                            <label class="layui-form-label">密码</label>
+                            <label class="layui-form-label">${i18n.get("loginStr.pass")}</label>
                             <div class="layui-input-block">
-                                <input type="text" name="pass" id="pass" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input">
+                                <input type="password" name="pass" id="pass" lay-verify="title" autocomplete="off" placeholder="请输入密码" class="layui-input" onkeyup="getKeyCode()" />
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <div class="layui-input-block">
-                                <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="login()">立即提交</button>
+                                <button type="button" class="layui-btn" lay-submit="" lay-filter="demo1" onclick="login()">${i18n.get("loginStr.login")}</button>
                                 <button type="button" class="layui-btn layui-btn-primary">重置</button>
                             </div>
                         </div>
@@ -94,7 +94,7 @@ function login() {
 
               var cname="TOKEN"
               var cvalue=data.data
-              //alert(cvalue)
+              //console.log(cvalue)
               var exdays=1
 //function setCookie(cname, cvalue, exdays) {
               const d = new Date();
@@ -106,8 +106,8 @@ function login() {
 
 				location.href = ctx + "/admin?";
 			} else {
-			    alert("登陆失败");
-				//layer.msg(data.msg);
+			    //alert("登陆失败");
+				layer.msg("登陆失败");
 				//refreshCode('codeImg');
 			}
 
@@ -119,6 +119,12 @@ function login() {
 		}
 	});
 
+}
+
+function getKeyCode() {
+	if (event.keyCode == 13) {
+		login();
+	}
 }
 
 </script>
