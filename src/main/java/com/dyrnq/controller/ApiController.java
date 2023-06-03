@@ -68,6 +68,27 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @Mapping("get/inst")
+    public Result getInst(Context ctx,String id){
+        try {
+            Inst inst = instMapper.selectById(id);
+            return Result.succeed(inst);
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("update/inst")
+    public Result updateInst(Context ctx,Inst inst){
+        try {
+            instMapper.updateById(inst,true);
+            return Result.succeed("ok");
+        }catch (Exception e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
+
     @Mapping("user")
     public PageResult user(Context ctx,int page,int limit) {
         try {
