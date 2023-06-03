@@ -732,7 +732,7 @@ public class AdminClient extends BaseClient {
         Wrap<GlobalRule> rsp = null;
         try {
             //route = resolveUpstream(route);
-            Type type = new TypeToken<Wrap<PluginConfig>>(){}.getType();
+            Type type = new TypeToken<Wrap<GlobalRule>>(){}.getType();
             rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/global_rules/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
