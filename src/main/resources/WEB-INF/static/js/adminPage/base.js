@@ -97,10 +97,14 @@ function gohref(url) {
 // 退出登录
 function loginOut() {
 	//if (confirm(baseStr.exit)) {
-		//window.localStorage.removeItem("adminId");
-		var cname="TOKEN"
-		document.cookie = cname + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-		location.href = ctx + "/admin/login";
+    var cname="TOKEN"
+    var cvalue=''
+    //console.log(cvalue)
+    var now = new Date();
+    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
+    let expires = "expires="+ now.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    location.href = ctx + "/admin/login";
 	//}
 }
 
