@@ -6,8 +6,17 @@
 			<a href="javascript:" style="color: white;">${i18n.get("commonStr.currentUser")}: ${admin.name}</a>
 		</li>
 	
+<!--		<li class="layui-nav-item">-->
+<!--			<a href="javascript:changeLang()">${langType}</a>-->
+<!--		</li>-->
+
 		<li class="layui-nav-item">
-			<a href="javascript:changeLang()">${langType}</a>
+			<a href="javascript:;">${langType}</a>
+			<dl class="layui-nav-child">
+				<dd><a href="">菜单1</a></dd>
+				<dd><a href="">菜单2</a></dd>
+				<dd><a href="">菜单3</a></dd>
+			</dl>
 		</li>
 		
 		<li class="layui-nav-item">
@@ -15,11 +24,11 @@
 		</li>
 		
 		
-		<li class="layui-nav-item">
-			<#if hasNewVersion == 1 && newVersion != null>
-				<a href="javascript:showUpdate('${newVersion.version}','${newVersion.url}','${newVersion.docker}','${newVersion.update}')"  style="font-weight: bold;color: red;">${commonStr.newVersion} ${newVersion.version}</a>
-			</#if>
-		</li>
+<!--		<li class="layui-nav-item">-->
+<!--			<#if hasNewVersion == 1 && newVersion != null>-->
+<!--				<a href="javascript:showUpdate('${newVersion.version}','${newVersion.url}','${newVersion.docker}','${newVersion.update}')"  style="font-weight: bold;color: red;">${commonStr.newVersion} ${newVersion.version}</a>-->
+<!--			</#if>-->
+<!--		</li>-->
 		
 		
 		<li class="layui-nav-item">

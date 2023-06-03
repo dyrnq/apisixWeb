@@ -2,10 +2,12 @@ package com.dyrnq;
 
 import com.cym.utils.VersionUtils;
 import com.dyrnq.dso.UserMapper;
+import com.dyrnq.service.BusinessLogic;
 import com.palm.easy.util.Captcha;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.snack.ONode;
 import org.noear.solon.Solon;
 import org.noear.solon.Utils;
@@ -78,23 +80,21 @@ public class WebApp {
     @Component
     public static class JwtInterceptor implements RouterInterceptor {
 
-        @Inject
-        UserMapper userMapper;
 
         private Claims getClaimsFromToken(String token) {
             return JwtUtils.parseJwt(token);
         }
 
-        public String getUserIdFromToken(String token) throws TokenExpiredException {
-            String userId = null;
-            try {
-                Claims claims = getClaimsFromToken(token);
-                userId = claims.getId();
-            } catch (ExpiredJwtException e) {
-                throw new TokenExpiredException("令牌过期");
-            }
-            return userId;
-        }
+//        public String getUserIdFromToken(String token) throws TokenExpiredException {
+//            String userId = null;
+//            try {
+//                Claims claims = getClaimsFromToken(token);
+//                userId = claims.getId();
+//            } catch (ExpiredJwtException e) {
+//                throw new TokenExpiredException("令牌过期");
+//            }
+//            return userId;
+//        }
 
         public String getUsernameFromToken(String token) throws TokenExpiredException {
             String username = null;
@@ -102,15 +102,22 @@ public class WebApp {
                 Claims claims = getClaimsFromToken(token);
                 username = claims.getSubject();
             } catch (ExpiredJwtException e) {
-                e.getMessage();
+                logger.error(e.getMessage());
                 throw new TokenExpiredException("令牌过期");
             }
             return username;
         }
 
         public Boolean validateToken(String token, String name) throws Exception {
+            if(StringUtils.isBlank(token)) return false;
             String username = getUsernameFromToken(token);
-            return (username.equals(name) && !isTokenExpired(token));
+            logger.info("username="+username);
+            com.dyrnq.model.User user = businessLogic.findByName(username);
+            if (user==null) return false;
+            Context.current().attrSet("admin", user);
+            Context.current().attrSet("langType","语言切换");
+            return (username.equals(user.getName()) && !isTokenExpired(token));
+//            return (username.equals(name) && !isTokenExpired(token));
         }
         public Boolean isTokenExpired(String token) throws Exception {
             try {
@@ -118,48 +125,33 @@ public class WebApp {
                 Date expiration = claims.getExpiration();
                 return expiration.before(new Date());
             } catch (Exception e) {
-                e.getMessage();
+                logger.error(e.getMessage());
                 new Throwable(e);
             }
             return true;
         }
 
-
+        @Inject
+        BusinessLogic businessLogic;
         @Override
         public void doIntercept(Context ctx, Handler mainHandler, RouterInterceptorChain chain) throws Throwable {
             //如果是登录页则不处理
-            if(
-                ctx.path().startsWith("/admin/") &&
-                "/admin/".equals(ctx.path()) == false &&
-                "/admin/login".equals(ctx.path()) == false
-
-            ) {
+            logger.info("ctx.path()="+ctx.path());
+            if((ctx.path().startsWith("/admin") && ! ctx.path().startsWith("/admin/login") ) || ( ctx.path().startsWith("/api") )  ) {
                 String token = ctx.cookie("TOKEN");
-                System.out.println(token);
-
-//                String userId = null;
-//                try {
-//                    userId = getUserIdFromToken(token);
-//                } catch (TokenExpiredException e) {
-//                    return;
-//                } catch (MalformedJwtException e) {
-//                    return;
-//                }
-//                if(userId!=null){
-//                    com.dyrnq.model.User user = userMapper.selectById(userId);
-//                    if (user!=null){
-//                        validateToken(token,user.getName());
-//                    }
-//
-//                }
-
-
-//                String user_name = ctx.session("user_name", "");
-//                if (Utils.isEmpty(user_name)) {
-//                    //说明未登录，则终止处理
-//                    ctx.status(401);
-//                    return;
-//                }
+                logger.info("TOKEN="+token);
+//                String session_username = ctx.session("user_name", "");
+//                logger.info("session_username="+session_username);
+                boolean validateToken = validateToken(token,null);
+                if(validateToken){
+                }else{
+                    if(ctx.path().startsWith("/api")) {
+                        ctx.status(401);
+                    }else {
+                        ctx.redirect("/admin/login", 302);
+                    }
+                    return;
+                }
             }
 
             chain.doIntercept(ctx, mainHandler);

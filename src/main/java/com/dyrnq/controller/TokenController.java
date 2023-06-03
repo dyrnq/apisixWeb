@@ -5,10 +5,13 @@ import com.apiseven.apisix.common.profile.Credential;
 import com.apiseven.apisix.common.profile.DefaultCredential;
 import com.apiseven.apisix.common.profile.DefaultProfile;
 import com.apiseven.apisix.common.profile.Profile;
-import com.cym.utils.JsonResult;
 import com.dyrnq.apisix.AdminClient;
+import com.dyrnq.dso.UserMapper;
+import com.dyrnq.model.User;
+import com.dyrnq.service.BusinessLogic;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
@@ -23,6 +26,8 @@ import java.util.Map;
 public class TokenController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(TokenController.class);
 
+    @Inject
+    BusinessLogic businessLogic;
     /**
      * 获取Token
      *
@@ -32,6 +37,7 @@ public class TokenController extends BaseController {
     @Mapping("getToken")
     public Result getToken(Context ctx,String name, String pass) {
 
+        User user = businessLogic.login(name,pass);
 //        //用户名密码
 //        Admin admin = adminService.login(name, pass);
 //        if (admin == null) {
@@ -41,9 +47,8 @@ public class TokenController extends BaseController {
 //            return renderError(m.get("loginStr.backError7")); // 无接口权限
 //        }
 
-        if ("admin".equals(name)) {
-            ctx.sessionSet(Claims.SUBJECT, name);
-            ctx.sessionSet(Claims.ID, 1);
+        if(user!=null){
+            ctx.sessionSet(Claims.SUBJECT, user.getName());
             return Result.succeed(ctx.sessionState().sessionToken());
         } else {
             return Result.failure();

@@ -242,40 +242,40 @@ public class AdminController {
         return model;
     }
 
-    private Claims getClaimsFromToken(String token) {
-        return JwtUtils.parseJwt(token);
-    }
-
-    public String getUserIdFromToken(String token) throws TokenExpiredException {
-        String userId = null;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            userId = claims.getId();
-        } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException("令牌过期");
-        }
-        return userId;
-    }
-
-    public String getUsernameFromToken(String token) throws TokenExpiredException {
-        String username = null;
-        try {
-            Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
-        } catch (ExpiredJwtException e) {
-            throw new TokenExpiredException("令牌过期");
-        }
-        return username;
-    }
+//    private Claims getClaimsFromToken(String token) {
+//        return JwtUtils.parseJwt(token);
+//    }
+//
+//    public String getUserIdFromToken(String token) throws TokenExpiredException {
+//        String userId = null;
+//        try {
+//            Claims claims = getClaimsFromToken(token);
+//            userId = claims.getId();
+//        } catch (ExpiredJwtException e) {
+//            throw new TokenExpiredException("令牌过期");
+//        }
+//        return userId;
+//    }
+//
+//    public String getUsernameFromToken(String token) throws TokenExpiredException {
+//        String username = null;
+//        try {
+//            Claims claims = getClaimsFromToken(token);
+//            username = claims.getSubject();
+//        } catch (ExpiredJwtException e) {
+//            throw new TokenExpiredException("令牌过期");
+//        }
+//        return username;
+//    }
 
 
     @Mapping("")
     public Object index(Context ctx) {
 
         String token = ctx.cookie("TOKEN");
-        System.out.println(token);
-
-        String user_name = ctx.session("user_name", "");
+//        System.out.println(token);
+//
+//        String user_name = ctx.session("user_name", "");
         if (Utils.isEmpty(token)) {
             ModelAndView model = new ModelAndView("admin/index-noauth.html");
             model.put("title", "dock");
