@@ -68,16 +68,23 @@
             <!--            <input type="hidden" name="id" id="id">-->
 
             <div class="layui-form-item">
-                <label class="layui-form-label">username</label>
+                <label class="layui-form-label">id</label>
                 <div class="layui-input-block">
                     <input type="text" name="id" id="id" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item">
+                <label class="layui-form-label">username</label>
+                <div class="layui-input-block">
+                    <input type="text" name="name" id="name" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
                 <label class="layui-form-label">password</label>
                 <div class="layui-input-block">
-                    <textarea  name="rawData" id="rawData" class="layui-textarea" ></textarea>
+                    <input type="text" name="pass" id="pass" class="layui-input">
                 </div>
             </div>
 
@@ -281,6 +288,7 @@
                     //location.reload();
                     layer.closeAll();
                     layer.msg("新增成功");
+                    table.reload();
                 } else {
                     layer.msg(data.description);
                 }
@@ -320,6 +328,7 @@
         }
         if (addLink.length > 0) {
             return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="javascript:void(0)" lay-event="edit">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+            table.reload()
         }
     }
 
@@ -423,6 +432,7 @@
             if(layEvent === 'detail'){ //查看
                 //do something
             } else if(layEvent === 'del'){ //删除
+                var layer = layui.layer;
                 layer.confirm('真的删除行么', function(index){
                     //alert(obj.data.id);
                     //向服务端发送删除指令
@@ -435,6 +445,7 @@
                             //alert(data.code)
                             if(data.code=='200'){
                                 layer.msg('删除成功');
+                                table.reload("user")
                                 //table.reload('idTest',{});
                             }else{
                                 layer.msg(data.description);
@@ -470,6 +481,7 @@
                         $('#addForm2 input[name="id"]').val(data.data.id);
                         $('#addForm2 input[name="name"]').val(data.data.name);
                         $('#addForm2 input[name="pass"]').val(data.data.pass);
+                        table.reload();
 
 
                     },
