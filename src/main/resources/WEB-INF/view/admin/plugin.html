@@ -224,7 +224,7 @@ function addLink(d) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=plugin&id='+addLink+'" lay-event="link">' + addLink + '</a>&nbsp;&nbsp;&nbsp;' + '<a class="layui-table-link" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">帮助</a>';
+        return '<a class="layui-table-link" href="${ctx}/admin/editor?cls=plugin&id='+addLink+'" lay-event="link">' + addLink + '</a>&nbsp;&nbsp;&nbsp;' + '<a class="layui-table-link" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
    }
 }
 
