@@ -93,6 +93,25 @@ function gohref(url) {
 	location.href = url;
 
 }
+function i18n(lang){
+    console.log(lang);
+    var cname="SOLON.LOCALE"
+//    var now = new Date();
+//    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
+//    let expires = "expires="+ now.toUTCString();
+    document.cookie = cname + "=" + lang + ";path=/";
+    location.reload();
+
+//     $.ajax({
+//            type : 'POST',
+//            url : '/token/i18n',
+//            data : {l:lang},
+//            dataType : 'json',
+//            success : function(data) {
+//                //location.reload();
+//            }
+//        });
+}
 
 // 退出登录
 function loginOut() {

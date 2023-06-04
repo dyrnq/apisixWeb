@@ -15,6 +15,7 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
+import org.noear.solon.i18n.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +54,14 @@ public class TokenController extends BaseController {
         } else {
             return Result.failure();
         }
+    }
+
+    @Mapping("/i18n")
+    public Result changeLocale(Context ctx,String l) {
+        ctx.cookieSet("SOLON.LOCALE",l);
+//        java.util.Locale locale = I18nUtil.getLocaleResolver().getLocale(ctx);
+//        logger.info(locale.getDisplayLanguage());
+        return Result.succeed("ok");
     }
 
 
