@@ -3,12 +3,18 @@ package com.apiseven.apisix.common.http;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-import com.squareup.okhttp.Headers;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
+//import com.squareup.okhttp.OkHttpClient;
+//import com.squareup.okhttp.Request;
+//import com.squareup.okhttp.Response;
+//import com.squareup.okhttp.Headers;
+//import com.squareup.okhttp.MediaType;
+//import com.squareup.okhttp.RequestBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
 import com.apiseven.apisix.common.profile.Profile;
@@ -20,12 +26,18 @@ public class Connection {
     private OkHttpClient client;
 
     public Connection(Integer connTimeout, Integer readTimeout, Integer writeTimeout, Profile profile) {
-        this.client = new OkHttpClient();
-        this.client.setConnectTimeout(connTimeout, TimeUnit.SECONDS);
-        this.client.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-        this.client.setWriteTimeout(writeTimeout, TimeUnit.SECONDS);
-        this.client.setRetryOnConnectionFailure(true);
-        this.client.interceptors().add(new RetryInterceptor(3, profile));
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(connTimeout,TimeUnit.SECONDS)
+                .readTimeout(readTimeout,TimeUnit.SECONDS)
+                .writeTimeout(writeTimeout,TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .addInterceptor(new RetryInterceptor(3, profile))
+                .build();
+//        this.client.setConnectTimeout(connTimeout, TimeUnit.SECONDS);
+//        this.client.setReadTimeout(readTimeout, TimeUnit.SECONDS);
+//        this.client.setWriteTimeout(writeTimeout, TimeUnit.SECONDS);
+//        this.client.setRetryOnConnectionFailure(true);
+//        this.client.interceptors().add(new RetryInterceptor(3, profile));
     }
 
     public Response doRequest(Request request) throws ApisixSDKExcetion {
