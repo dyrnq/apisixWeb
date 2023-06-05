@@ -2,14 +2,14 @@ package com.dyrnq.service;
 
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
-import org.noear.solon.annotation.ProxyComponent;
+import org.noear.solon.annotation.Component;
 import org.noear.wood.MapperWhereQ;
 import org.noear.wood.annotation.Db;
 import org.noear.wood.ext.Act1;
 
 import java.util.List;
 
-@ProxyComponent
+@Component
 public class BusinessLogic {
     @Db
     UserMapper userMapper;
