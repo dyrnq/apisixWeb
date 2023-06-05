@@ -1,7 +1,7 @@
-import com.apiseven.apisix.common.profile.Credential;
-import com.apiseven.apisix.common.profile.DefaultCredential;
-import com.apiseven.apisix.common.profile.DefaultProfile;
-import com.apiseven.apisix.common.profile.Profile;
+import com.dyrnq.apisix.profile.Credential;
+import com.dyrnq.apisix.profile.DefaultCredential;
+import com.dyrnq.apisix.profile.DefaultProfile;
+import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import org.junit.Before;
 

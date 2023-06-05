@@ -1,4 +1,4 @@
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
+import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
 import com.dyrnq.apisix.plugins.Echo;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import java.util.List;
 public class ApisixClientTest extends BaseJunit {
 
     @Test
-    public void test_putStreamRoute() throws ApisixSDKExcetion {
+    public void test_putStreamRoute() throws ApisixSDKException {
 
         for (int i = 1; i < 51; i++) {
             StreamRoute r = new StreamRoute();
@@ -35,7 +35,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putRoute() throws ApisixSDKExcetion {
+    public void test_putRoute() throws ApisixSDKException {
 
         for (int i = 1; i < 51; i++) {
             Route r = new Route();
@@ -60,7 +60,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putUpstream() throws ApisixSDKExcetion {
+    public void test_putUpstream() throws ApisixSDKException {
         for (int i = 1; i < 51; i++) {
 
             Upstream upstream = new Upstream();
@@ -80,7 +80,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putService() throws ApisixSDKExcetion {
+    public void test_putService() throws ApisixSDKException {
         for (int i = 1; i < 51; i++) {
             Service service = new Service();
             service.setName("test" + i);
@@ -105,7 +105,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putSecret() throws ApisixSDKExcetion {
+    public void test_putSecret() throws ApisixSDKException {
 
         for (int i = 1; i < 51; i++) {
             Secret secret = new Secret();
@@ -118,7 +118,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putConsumer() throws ApisixSDKExcetion {
+    public void test_putConsumer() throws ApisixSDKException {
         for (int i = 1; i < 51; i++) {
             Consumer consumer = new Consumer();
             consumer.setUsername(i + "");
@@ -129,7 +129,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putConsumerGroup() throws ApisixSDKExcetion {
+    public void test_putConsumerGroup() throws ApisixSDKException {
         for (int i = 1; i < 51; i++) {
             ConsumerGroup consumer = new ConsumerGroup();
             consumer.setDesc(i + "");
@@ -145,7 +145,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putPluginConfig() throws ApisixSDKExcetion {
+    public void test_putPluginConfig() throws ApisixSDKException {
         for (int i = 1; i < 51; i++) {
             PluginConfig pluginConfig = new PluginConfig();
             pluginConfig.setDesc(i + "");
@@ -159,7 +159,7 @@ public class ApisixClientTest extends BaseJunit {
     }
 
     @Test
-    public void test_putGlobalRule() throws ApisixSDKExcetion {
+    public void test_putGlobalRule() throws ApisixSDKException {
         for (int i = 1; i < 20; i++) {
             GlobalRule globalRule = new GlobalRule();
             java.util.Map map = new HashMap();

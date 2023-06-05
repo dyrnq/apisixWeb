@@ -1,26 +1,22 @@
 package com.dyrnq.controller;
 
 import cn.hutool.core.util.PageUtil;
-import com.apiseven.apisix.admin.model.response.Multi;
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
-import com.apiseven.apisix.common.profile.Credential;
-import com.apiseven.apisix.common.profile.DefaultCredential;
-import com.apiseven.apisix.common.profile.DefaultProfile;
-import com.apiseven.apisix.common.profile.Profile;
+import com.dyrnq.apisix.ApisixSDKException;
+import com.dyrnq.apisix.response.Multi;
+import com.dyrnq.apisix.profile.Credential;
+import com.dyrnq.apisix.profile.DefaultCredential;
+import com.dyrnq.apisix.profile.DefaultProfile;
+import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.*;
 import com.dyrnq.dso.InstMapper;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.Inst;
 import com.dyrnq.model.User;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.*;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
-import org.noear.solon.annotation.Path;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
@@ -153,7 +149,7 @@ public class ApiController extends BaseController {
     public Result plugin(Context ctx) {
         try {
             return Result.succeed(getAdminClient().listPlugins());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -166,7 +162,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delRoute(routeId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -179,7 +175,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delStreamRoute(StreamRouteId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -192,7 +188,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delUpstream(UpstreamId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -205,7 +201,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delService(serviceId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -217,7 +213,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delConsumer(consumerId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -229,7 +225,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delConsumerGroup(consumerGroupId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -241,7 +237,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delGlobalRule(GlobalRuleId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -253,7 +249,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delPluginConfig(PluginConfigId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -266,7 +262,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delSSL(SSLId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -279,7 +275,7 @@ public class ApiController extends BaseController {
                 getAdminClient().delSecret(SecretId);
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -288,7 +284,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putSSLRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -299,7 +295,7 @@ public class ApiController extends BaseController {
                 getAdminClient().patchSSLRaw(i, "{\"status\":1}");
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -310,7 +306,7 @@ public class ApiController extends BaseController {
                 getAdminClient().patchSSLRaw(i, "{\"status\":0}");
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -319,7 +315,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putRouteRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -329,7 +325,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putPluginMetadataRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -341,7 +337,7 @@ public class ApiController extends BaseController {
                 getAdminClient().patchRouteRaw(i, "{\"status\":1}");
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -352,7 +348,7 @@ public class ApiController extends BaseController {
                 getAdminClient().patchRouteRaw(i, "{\"status\":0}");
             }
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -361,7 +357,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putStreamRouteRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -370,7 +366,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putUpstreamRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -380,7 +376,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putServiceRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -389,7 +385,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putConsumerRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -398,7 +394,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putConsumerGroupRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -407,7 +403,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putGlobalRuleRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -416,7 +412,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putPluginConfigRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -426,7 +422,7 @@ public class ApiController extends BaseController {
         try {
             getAdminClient().putSecretRaw(id,rawData);
             return Result.succeed("ok");
-        }catch (ApisixSDKExcetion e) {
+        }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -437,7 +433,7 @@ public class ApiController extends BaseController {
             Multi<Route> rsp= getAdminClient().queryRoutes(page,limit);
             List<Route> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -448,7 +444,7 @@ public class ApiController extends BaseController {
     public Result updateRoute(Context ctx) {
         try {
             return Result.succeed(getAdminClient().listRoutes());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -458,7 +454,7 @@ public class ApiController extends BaseController {
             Multi<StreamRoute> rsp= getAdminClient().queryStreamRoutes(page,limit);
             List<StreamRoute> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -469,7 +465,7 @@ public class ApiController extends BaseController {
             Multi<ConsumerGroup> rsp= getAdminClient().queryConsumerGroups(page,limit);
             List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -480,7 +476,7 @@ public class ApiController extends BaseController {
             Multi<Upstream> rsp= getAdminClient().queryUpstreams(page,limit);
             List<Upstream> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -492,7 +488,7 @@ public class ApiController extends BaseController {
             Multi<Secret> rsp= getAdminClient().querySecrets(page,limit);
             List<Secret> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -504,7 +500,7 @@ public class ApiController extends BaseController {
             Multi<Service> rsp= getAdminClient().queryServices(page,limit);
             List<Service> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -515,7 +511,7 @@ public class ApiController extends BaseController {
             Multi<SSL> rsp= getAdminClient().querySSLs(page,limit);
             List<SSL> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -526,7 +522,7 @@ public class ApiController extends BaseController {
             Multi<GlobalRule> rsp= getAdminClient().queryGlobalRules(page,limit);
             List<GlobalRule> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -537,7 +533,7 @@ public class ApiController extends BaseController {
             Multi<Consumer> rsp= getAdminClient().queryConsumers(page,limit);
             List<Consumer> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -549,7 +545,7 @@ public class ApiController extends BaseController {
             Multi<PluginConfig> rsp= getAdminClient().queryPluginConfigs(page,limit);
             List<PluginConfig> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
-        } catch (ApisixSDKExcetion e) {
+        } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
         }
@@ -568,20 +564,25 @@ public class ApiController extends BaseController {
     public Result getObj(Context ctx, String cls, String id) {
 
         String jsonStr = "{}";
-        Gson gson = new GsonBuilder().setPrettyPrinting().setExclusionStrategies(new ExclusionStrategy() {
-            @Override
-            public boolean shouldSkipField(FieldAttributes f) {
-                if ("id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName())) {
-                    return true; // 如果是特殊字段，则排除
-                }
-                return false; // 其他字段都保留
-            }
+        Gson gson = new GsonBuilder()
+                .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .setPrettyPrinting()
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        if ("id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName())) {
+                            return true; // 如果是特殊字段，则排除
+                        }
+                        return false; // 其他字段都保留
+                    }
 
-            @Override
-            public boolean shouldSkipClass(Class<?> clazz) {
-                return false;
-            }
-        }).create();
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
+                .create();
 
         //Type type = new TypeToken<Wrap<Route>>(){}.getType();
         try {
@@ -625,11 +626,8 @@ public class ApiController extends BaseController {
                 default:
                     jsonStr = gson.toJson(getAdminClient().getRoute(id));
             }
-        } catch (ApisixSDKExcetion apisixSDKExcetion) {
-//            logger.error(apisixSDKExcetion.getErrorCode(), apisixSDKExcetion);
-//            apisixSDKExcetion.printStackTrace();
+        } catch (ApisixSDKException apisixSDKException) {
         } catch (NullPointerException nullPointerException) {
-            logger.error(nullPointerException.getMessage(), nullPointerException);
         }
         Map map = new HashMap();
         map.put("id", id);

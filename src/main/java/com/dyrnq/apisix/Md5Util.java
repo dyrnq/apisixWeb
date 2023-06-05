@@ -1,4 +1,4 @@
-package com.apiseven.apisix.common.utils;
+package com.dyrnq.apisix;
 
 
 import java.security.MessageDigest;

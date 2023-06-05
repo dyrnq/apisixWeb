@@ -5,7 +5,7 @@ import org.flywaydb.core.Flyway;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.i18n.I18nUtil;
+
 import org.noear.solon.i18n.LocaleResolver;
 import org.noear.solon.i18n.impl.LocaleResolverCookie;
 

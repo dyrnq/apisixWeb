@@ -1,12 +1,5 @@
 package com.dyrnq.controller;
 
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
-import com.apiseven.apisix.common.profile.Credential;
-import com.apiseven.apisix.common.profile.DefaultCredential;
-import com.apiseven.apisix.common.profile.DefaultProfile;
-import com.apiseven.apisix.common.profile.Profile;
-import com.dyrnq.apisix.AdminClient;
-import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
 import io.jsonwebtoken.Claims;
@@ -15,12 +8,8 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
-import org.noear.solon.i18n.I18nUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Mapping("token")
 @Controller

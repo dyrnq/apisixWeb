@@ -1,4 +1,4 @@
-package com.apiseven.apisix.common.profile;
+package com.dyrnq.apisix.profile;
 
 public class HttpProfile {
 

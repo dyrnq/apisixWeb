@@ -1,14 +1,5 @@
 import cn.hutool.core.io.FileUtil;
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
-import com.apiseven.apisix.common.profile.Credential;
-import com.apiseven.apisix.common.profile.DefaultCredential;
-import com.apiseven.apisix.common.profile.DefaultProfile;
-import com.apiseven.apisix.common.profile.Profile;
-import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.SSL;
-import org.bouncycastle.asn1.x500.RDN;
-import org.bouncycastle.asn1.x500.style.BCStyle;
-import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.junit.Test;
 
 import javax.naming.ldap.LdapName;

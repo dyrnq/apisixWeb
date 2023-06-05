@@ -1,36 +1,23 @@
 package com.dyrnq.controller;
 
-import com.apiseven.apisix.admin.model.response.Wrap;
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
-import com.apiseven.apisix.common.profile.Credential;
-import com.apiseven.apisix.common.profile.DefaultCredential;
-import com.apiseven.apisix.common.profile.DefaultProfile;
-import com.apiseven.apisix.common.profile.Profile;
-import com.dyrnq.TokenExpiredException;
+import com.dyrnq.apisix.ApisixSDKException;
+import com.dyrnq.apisix.profile.Credential;
+import com.dyrnq.apisix.profile.DefaultCredential;
+import com.dyrnq.apisix.profile.DefaultProfile;
+import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.AdminClient;
-import com.dyrnq.apisix.domain.Route;
-import com.dyrnq.dso.InstMapper;
-import com.dyrnq.model.User;
 import com.google.gson.ExclusionStrategy;
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
 import org.noear.solon.Utils;
-import org.noear.solon.annotation.Before;
 import org.noear.solon.annotation.Controller;
-import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
 import org.noear.solon.i18n.annotation.I18n;
-import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.Type;
 
 
 @Mapping("admin")
@@ -228,9 +215,8 @@ public class AdminController {
 
 
 
-        } catch (ApisixSDKExcetion apisixSDKExcetion) {
-            logger.error(apisixSDKExcetion.getErrorCode(),apisixSDKExcetion);
-//            apisixSDKExcetion.printStackTrace();
+        } catch (ApisixSDKException apisixSDKException) {
+            logger.error(apisixSDKException.getErrorCode(), apisixSDKException);
         } catch (java.lang.NullPointerException nullPointerException){
             logger.error(nullPointerException.getMessage(),nullPointerException);
         }
@@ -241,31 +227,7 @@ public class AdminController {
         return model;
     }
 
-//    private Claims getClaimsFromToken(String token) {
-//        return JwtUtils.parseJwt(token);
-//    }
-//
-//    public String getUserIdFromToken(String token) throws TokenExpiredException {
-//        String userId = null;
-//        try {
-//            Claims claims = getClaimsFromToken(token);
-//            userId = claims.getId();
-//        } catch (ExpiredJwtException e) {
-//            throw new TokenExpiredException("令牌过期");
-//        }
-//        return userId;
-//    }
-//
-//    public String getUsernameFromToken(String token) throws TokenExpiredException {
-//        String username = null;
-//        try {
-//            Claims claims = getClaimsFromToken(token);
-//            username = claims.getSubject();
-//        } catch (ExpiredJwtException e) {
-//            throw new TokenExpiredException("令牌过期");
-//        }
-//        return username;
-//    }
+
 
 
     @Mapping("")

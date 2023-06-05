@@ -1,4 +1,4 @@
-package com.apiseven.apisix.common.profile;
+package com.dyrnq.apisix.profile;
 
 import org.slf4j.Logger;
 

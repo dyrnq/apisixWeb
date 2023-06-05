@@ -1,4 +1,4 @@
-package com.apiseven.apisix.admin.model.response;
+package com.dyrnq.apisix.response;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

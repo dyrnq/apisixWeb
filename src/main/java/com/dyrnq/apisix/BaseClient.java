@@ -1,31 +1,23 @@
 package com.dyrnq.apisix;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-//import com.dyrnq.WebApp;
+import com.dyrnq.apisix.profile.Credential;
+import com.dyrnq.apisix.profile.Endpoint;
+import com.dyrnq.apisix.profile.HttpProfile;
+import com.dyrnq.apisix.profile.Profile;
+import com.dyrnq.apisix.response.Item;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-//import com.squareup.okhttp.Headers;
-//import com.squareup.okhttp.Headers.Builder;
-//import com.squareup.okhttp.Response;
+import com.google.gson.ToNumberPolicy;
 import okhttp3.Headers;
 import okhttp3.Headers.Builder;
 import okhttp3.Response;
-
-
-import com.apiseven.apisix.admin.model.response.Item;
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
-import com.apiseven.apisix.common.http.Connection;
-import com.apiseven.apisix.common.profile.Credential;
-import com.apiseven.apisix.common.profile.Endpoint;
-import com.apiseven.apisix.common.profile.HttpProfile;
-import com.apiseven.apisix.common.profile.Profile;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class BaseClient {
     static Logger logger = LoggerFactory.getLogger(AdminClient.class);
@@ -45,7 +37,10 @@ public abstract class BaseClient {
         this.profile = profile;
         this.sdkVersion = BaseClient.SDK_VERSION;
         this.apiVersion = profile.getVersion();
-        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .create();
     }
 
     public Profile getProfile() {
@@ -53,27 +48,27 @@ public abstract class BaseClient {
     }
 
 
-    protected String doRequest(String reqMethod, String path)  throws ApisixSDKExcetion {
+    protected String doRequest(String reqMethod, String path)  throws ApisixSDKException {
         Response okRsp = doRequest(reqMethod, path, "");
         String strResp = null;
         try {
             strResp = okRsp.body().string();
         } catch (IOException e) {
-            throw new ApisixSDKExcetion(e.getClass().getName() + "-" + e.getMessage());
+            throw new ApisixSDKException(e.getClass().getName() + "-" + e.getMessage());
         }
 
         if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
-            throw new ApisixSDKExcetion(strResp, String.valueOf(okRsp.code()));
+            throw new ApisixSDKException(strResp, String.valueOf(okRsp.code()));
         }
         logger.info(strResp);
         return strResp;
     }
 
-    protected String doRequest(Object model, String reqMethod, String path)  throws ApisixSDKExcetion {
+    protected String doRequest(Object model, String reqMethod, String path)  throws ApisixSDKException {
             return doRequest(model,reqMethod,path,null);
     }
 
-    protected String doRequest(Object model, String reqMethod, String path,String param)  throws ApisixSDKExcetion {
+    protected String doRequest(Object model, String reqMethod, String path,String param)  throws ApisixSDKException {
         String strParam = model!=null ?gson.toJson(model):param;
 
         logger.info(strParam);
@@ -83,11 +78,11 @@ public abstract class BaseClient {
         try {
             strResp = okRsp.body().string();
         } catch (IOException e) {
-            throw new ApisixSDKExcetion(e.getClass().getName() + "-" + e.getMessage());
+            throw new ApisixSDKException(e.getClass().getName() + "-" + e.getMessage());
         }
 
         if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
-            throw new ApisixSDKExcetion(strResp, String.valueOf(okRsp.code()));
+            throw new ApisixSDKException(strResp, String.valueOf(okRsp.code()));
         }
         strResp=StringUtils.replace(strResp,"\"list\":{}","\"list\":[]");
         logger.info(strResp);
@@ -95,7 +90,7 @@ public abstract class BaseClient {
     }
 
     private Response doRequest(String reqMethod, String path, String param)
-            throws ApisixSDKExcetion {
+            throws ApisixSDKException {
 
         String contentType = "application/json; charset=utf-8";
 
@@ -108,7 +103,7 @@ public abstract class BaseClient {
 
         Endpoint currentEndpoint = this.profile.getCurrentEndpoint();
         if(currentEndpoint == null){
-            throw new ApisixSDKExcetion("none endpoint alive");
+            throw new ApisixSDKException("none endpoint alive");
         }
 
         String url = this.profile.getHttpProfile().getProtocol() + currentEndpoint.getDomain() + path;
@@ -138,7 +133,7 @@ public abstract class BaseClient {
         }else if (reqMethod.equals(HttpProfile.REQ_PATCH)) {
             return conn.patchRequest(url, param, headers);
         } else {
-            throw new ApisixSDKExcetion("Method only support (GET, POST, PUT, DELETE)");
+            throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE)");
         }
     }
 

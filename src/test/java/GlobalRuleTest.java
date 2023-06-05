@@ -1,15 +1,13 @@
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
+import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.GlobalRule;
-import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.plugins.*;
 import org.junit.Test;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class GlobalRuleTest extends BaseJunit{
     @Test
-    public void test_GlobalRule() throws ApisixSDKExcetion {
+    public void test_GlobalRule() throws ApisixSDKException {
         GlobalRule globalRule = new GlobalRule();
         java.util.Map map = new HashMap();
         Echo e = new Echo();
