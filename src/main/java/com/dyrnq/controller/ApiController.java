@@ -265,6 +265,19 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @Mapping("del/secret")
+    public Result delSecret(Context ctx, String... id ){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String SecretId = id[i];
+                getAdminClient().delSecret(SecretId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
     @Mapping("add/ssl")
     public Result addSSLRaw(Context ctx,String id , String rawData){
         try {
@@ -392,6 +405,16 @@ public class ApiController extends BaseController {
         }
     }
 
+    @Mapping("add/secret")
+    public Result addSecretRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putSecretRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @Mapping("route")
     public PageResult route(Context ctx,String page,String limit) {
         try {
@@ -448,11 +471,14 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("secret")
-    public Result secret(Context ctx) {
+    public PageResult secret(Context ctx,String page,String limit) {
         try {
-            return Result.succeed(getAdminClient().listSecrets());
+            Multi<Secret> rsp= getAdminClient().querySecrets(page,limit);
+            List<Secret> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKExcetion e) {
-            return Result.failure(e.getMessage());
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
         }
     }
 

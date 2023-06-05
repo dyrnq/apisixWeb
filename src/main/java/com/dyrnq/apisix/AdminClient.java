@@ -101,6 +101,24 @@ public class AdminClient extends BaseClient {
         return rsp;
     }
 
+    public Multi<Secret> querySecrets(String page,String page_size) throws ApisixSDKExcetion {
+        Multi<Secret> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<Secret>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/secrets",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
     public Multi<Service> queryServices(String page,String page_size) throws ApisixSDKExcetion {
         Multi<Service> rsp = null;
         try {
@@ -764,6 +782,22 @@ public class AdminClient extends BaseClient {
             //route = resolveUpstream(route);
             Type type = new TypeToken<Wrap<SSL>>(){}.getType();
             rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/ssls/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Secret putSecretRaw(String id , String rawData) throws ApisixSDKExcetion {
+        Wrap<Secret> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<Secret>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/secrets/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKExcetion e) {
             if(e instanceof ApisixSDKExcetion){
                 throw e;
