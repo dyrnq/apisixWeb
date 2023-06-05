@@ -73,14 +73,14 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">username</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" id="name" class="layui-input">
+                    <input type="text" name="name" id="name" class="layui-input" readonly>
                 </div>
             </div>
 
             <div class="layui-form-item">
                 <label class="layui-form-label">password</label>
                 <div class="layui-input-block">
-                    <input type="text" name="pass" id="pass" class="layui-input">
+                    <input type="password" name="pass" id="pass" class="layui-input">
                 </div>
             </div>
 
@@ -111,7 +111,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">password</label>
                 <div class="layui-input-block">
-                    <input type="text" name="pass"  class="layui-input">
+                    <input type="password" name="pass"  class="layui-input">
                 </div>
             </div>
 
@@ -239,7 +239,6 @@
                 {type: 'checkbox', fixed: 'left'}
                 ,{field: 'id', title: 'ID', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
                 ,{field: 'name', title: 'name', width:80}
-                ,{field: 'pass', title: 'pass', width: 90, sort: true, totalRow: true}
                 , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
             ]]
             ,response: {
@@ -271,7 +270,12 @@
                             console.log(dataX)
                             for (let i = 0; i < dataX.length; i++) {
                                 const val = dataX[i];
-                                allId.push(val.id)
+                                if(val.id == "1"){
+                                    continue;//在id=1的情况下跳过剩余循环，直接进入id=2的循环。
+                                }else{
+                                    allId.push(val.id)
+                                }
+
 
 
 
