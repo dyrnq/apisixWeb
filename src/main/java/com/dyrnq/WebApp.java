@@ -1,9 +1,9 @@
 package com.dyrnq;
 
 import com.dyrnq.service.BusinessLogic;
-import com.palm.easy.util.Captcha;
+
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
+
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack.ONode;
 import org.noear.solon.Solon;
@@ -12,6 +12,7 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.*;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
+import org.noear.solon.i18n.I18nUtil;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
 import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.noear.wood.WoodConfig;
@@ -35,7 +36,7 @@ public class WebApp {
                 }
                 c.pathNew(path);
             });
-            app.add("captcha", MethodType.GET, ctx -> Captcha.captcha(ctx));
+
             app.onEvent(freemarker.template.Configuration.class, cfg -> {
                 cfg.setSetting("classic_compatible", "true");
                 cfg.setSetting("number_format", "0.##");
@@ -99,22 +100,24 @@ public class WebApp {
     @Component
     public static class I18nFilter implements Filter {
 
-        @Inject
-        MessageUtil m;
+//        @Inject
+//        MessageUtil m;
 
         @Override
         public void doFilter(Context ctx, FilterChain chain) throws Throwable {
-            // 读取配置文件
-            Properties properties = null;
-            String l = ctx.param("l");
-//		if (StrUtil.isNotEmpty(l) && l.equals("en_US") || settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
+
+//        Properties properties = null;
+//        String l = ctx.param("l");
+//		  if (StrUtil.isNotEmpty(l) && l.equals("en_US") || settingService.get("lang") != null && settingService.get("lang").equals("en_US")) {
 //            settingService.set("lang", "en_US");
 //            properties = m.getPropertiesEN();
 //        } else {
 //            settingService.set("lang", "");
 //            properties = m.getProperties();
 //        }
-            properties=m.getProperties();
+//            properties=m.getProperties();
+
+            Properties properties = I18nUtil.getMessageBundle().toProps();
 
             // js国际化
             Set<String> messageHeaders = new HashSet<>();
@@ -180,7 +183,7 @@ public class WebApp {
 //            return username;
 //        }
 
-        private Boolean validateToken(String token, String name) {
+        private Boolean validateToken(Context ctx ,String token, String name) {
             if (StringUtils.isBlank(token)) return false;
 
             Claims claims = JwtUtils.parseJwt(token);
@@ -188,8 +191,8 @@ public class WebApp {
             logger.info("username=" + username);
             com.dyrnq.model.User user = businessLogic.findByName(username);
             if (user == null) return false;
-            Context.current().attrSet("admin", user);
-            Context.current().attrSet("langType", "语言切换");
+            ctx.attrSet("admin", user);
+            ctx.attrSet("langType", "语言切换");
 
             Date expiration = claims.getExpiration();
 //            return expiration.before(new Date());
@@ -223,7 +226,7 @@ public class WebApp {
 //                logger.info("session_username="+session_username);
                 boolean validateToken =false;
                 try {
-                    validateToken = validateToken(token, null);
+                    validateToken = validateToken(ctx,token, null);
                 } finally {
                     if (!validateToken) {
                         if (ctx.path().startsWith("/api")) {
