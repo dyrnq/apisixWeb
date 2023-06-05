@@ -73,7 +73,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">username</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name" id="name" class="layui-input" readonly>
+                    <input type="text" name="name" id="name" class="layui-input" >
                 </div>
             </div>
 
@@ -104,7 +104,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">username</label>
                 <div class="layui-input-block">
-                    <input type="text" name="name"  class="layui-input">
+                    <input type="text" name="name"  class="layui-input" readonly>
                 </div>
             </div>
 
@@ -321,31 +321,35 @@
                 //do something
             } else if(layEvent === 'del'){ //删除
                 var layer = layui.layer;
-                layer.confirm('真的删除行么', function(index){
-                    //alert(obj.data.id);
-                    //向服务端发送删除指令
-                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                    $.ajax({
-                        url: '/api/del/user',
-                        type:'post',
-                        data:"id="+obj.data.id,
-                        success:function (data,statusText) {
-                            //alert(data.code)
-                            if(data.code=='200'){
-                                layer.msg('删除成功');
-                                table.reload("user")
-                                //table.reload('idTest',{});
-                            }else{
-                                layer.msg(data.description);
+                if(obj.data.id == "1") {
+                    layer.msg("该账号不可删除！")
+                }else{
+                    layer.confirm('真的删除行么', function (index) {
+                        //alert(obj.data.id);
+                        //向服务端发送删除指令
+                        obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                        $.ajax({
+                            url: '/api/del/user',
+                            type: 'post',
+                            data: "id=" + obj.data.id,
+                            success: function (data, statusText) {
+                                //alert(data.code)
+                                if (data.code == '200') {
+                                    layer.msg('删除成功');
+                                    table.reload("user")
+                                    //table.reload('idTest',{});
+                                } else {
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error': function () {
+                                layer.msg('系统错误');
                             }
-                        },
-                        'error':function () {
-                            layer.msg('系统错误');
-                        }
-                    });
+                        });
 
-                    layer.close(index);
-                });
+                        layer.close(index);
+                    });
+                }
                 // } else if(layEvent === 'edit'){ //编辑
                 //     //do something
                 //
