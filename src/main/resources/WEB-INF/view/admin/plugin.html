@@ -60,6 +60,28 @@ input[name='param']{
 <div style="height: 0px; width: 0px; overflow: hidden;">
     <!-- 弹出框 -->
     <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
+        <form id="addForm1">
+            <input type="hidden" name="id" id="id">
+
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">${i18n.get("commonStr.name")}</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <input type="text" name="id" class="layui-input">-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>
+                <div class="layui-input-block">
+                    <textarea  name="rawData" class="layui-textarea" ></textarea>
+                </div>
+            </div>
+
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+        </form>
 
     </div>
 
@@ -76,6 +98,28 @@ input[name='param']{
 
 <script>
 
+function addOver() {
+    layui.use(['layer', 'form'], function(){
+        $.ajax({
+            type : 'POST',
+            url : '/api/add/pluginMetadata',
+            data : $('#addForm1').serialize(),
+            dataType : 'json',
+            success : function(data) {
+                if(data.code=='200'){
+                    //location.reload();
+                    layer.closeAll();
+                    layer.msg("新增成功");
+                } else {
+                    layer.msg(data.description);
+                }
+            },
+            error : function() {
+                layer.alert("系统错误");
+            }
+        });
+    });
+}
 
 function schema(d) {
 　　var addLink = d.id;
@@ -83,7 +127,7 @@ function schema(d) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" lay-event="detail" href="javascript:void(0);">view</a>&nbsp;&nbsp;&nbsp;' + '<a class="layui-table-link" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
+        return '<a class="layui-table-link" lay-event="detail" href="javascript:void(0);">view</a>&nbsp;&nbsp;&nbsp; <a class="layui-table-link" lay-event="setting" href="javascript:void(0);">setting</a>&nbsp;&nbsp;&nbsp;' + '<a class="layui-table-link" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
    }
 }
 function consumer_schema(d) {
@@ -126,10 +170,10 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,url: '/api/plugin' //数据接口
     ,title: '用户表'
     ,page: false //开启分页
-    ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,toolbar: false
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
-      ,{field: 'id', title: 'ID', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
+       {field: 'id', title: 'ID', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
       ,{field: 'name', title: 'name', width:200}
       ,{field: 'type', title: 'type', width: 90, sort: true, totalRow: true}
       ,{field: 'version', title: 'version', width: 150}
@@ -176,6 +220,37 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
             layer.alert(JSON.stringify(data.consumer_schema));
         } else if (layEvent === 'detail_metadata_schema'){
             layer.alert(JSON.stringify(data.metadata_schema));
+        } else if (layEvent === 'setting'){
+            $('#addForm1 input[name="id"]').val("");
+            $('#addForm1 textarea[name="rawData"]').val("");
+            $.ajax({
+                    url: '/api/raw/pluginMetadata/'+obj.data.id,
+                    type:'post',
+                    //contentType: 'application/json',
+                    //data:JSON.stringify({id:obj.data.id}),
+                    success:function (data,statusText) {
+                        console.log(data);
+                        //var element =
+                        if(data.code=='200'){
+                            $('#addForm1 input[name="id"]').val(obj.data.id);
+                            $('#addForm1 textarea[name="rawData"]').val(data.data.rawData);
+                            //layer.msg(data.description);
+                            layer.open({
+                                type: 1,
+                                area: ['800px', '600px'],
+                                title: '修改插件Metadata',
+                                content : $('#windowDiv')
+                            });
+                        }else{
+                             layer.msg(data.description);
+                        }
+                    },
+                    'error':function () {
+                        layer.msg('系统错误');
+                    }
+                });
+
+
         }
     });
 

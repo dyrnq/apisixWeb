@@ -13,18 +13,23 @@ import com.dyrnq.dso.InstMapper;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.Inst;
 import com.dyrnq.model.User;
-import io.jsonwebtoken.Claims;
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.annotation.Path;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mapping("api")
 @Controller
@@ -318,6 +323,17 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @Mapping("add/pluginMetadata")
+    public Result addPluginMetadataRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putPluginMetadataRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKExcetion e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+
     @Mapping("enable/route")
     public Result patchRouteRawOn(Context ctx,String... id){
         try {
@@ -548,5 +564,77 @@ public class ApiController extends BaseController {
         return client;
     }
 
+    @Mapping("raw/{cls}/{id}")
+    public Result getObj(Context ctx, String cls, String id) {
+
+        String jsonStr = "{}";
+        Gson gson = new GsonBuilder().setPrettyPrinting().setExclusionStrategies(new ExclusionStrategy() {
+            @Override
+            public boolean shouldSkipField(FieldAttributes f) {
+                if ("id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName())) {
+                    return true; // 如果是特殊字段，则排除
+                }
+                return false; // 其他字段都保留
+            }
+
+            @Override
+            public boolean shouldSkipClass(Class<?> clazz) {
+                return false;
+            }
+        }).create();
+
+        //Type type = new TypeToken<Wrap<Route>>(){}.getType();
+        try {
+            switch (cls) {
+                case "route":
+                    jsonStr = gson.toJson(getAdminClient().getRoute(id));
+                    break;
+                case "upstream":
+                    jsonStr = gson.toJson(getAdminClient().getUpstream(id));
+                    break;
+                case "ssl":
+                    jsonStr = gson.toJson(getAdminClient().getSSL(id));
+                    break;
+                case "service":
+                    jsonStr = gson.toJson(getAdminClient().getService(id));
+                    break;
+                case "streamRoute":
+                    jsonStr = gson.toJson(getAdminClient().getStreamRoute(id));
+                    break;
+                case "secret":
+                    jsonStr = gson.toJson(getAdminClient().getSecret(id));
+                    break;
+                case "consumer":
+                    jsonStr = gson.toJson(getAdminClient().getConsumer(id));
+                    break;
+                case "globalRule":
+                    jsonStr = gson.toJson(getAdminClient().getGlobalRule(id));
+                    break;
+                case "pluginConfig":
+                    jsonStr = gson.toJson(getAdminClient().getPluginConfig(id));
+                    break;
+                case "pluginMetadata":
+                    jsonStr = gson.toJson(getAdminClient().getPluginMetadata(id));
+                    break;
+                case "consumerGroup":
+                    jsonStr = gson.toJson(getAdminClient().getConsumerGroup(id));
+                    break;
+                case "plugin":
+                    jsonStr = gson.toJson(getAdminClient().getPlugin(id));
+                    break;
+                default:
+                    jsonStr = gson.toJson(getAdminClient().getRoute(id));
+            }
+        } catch (ApisixSDKExcetion apisixSDKExcetion) {
+//            logger.error(apisixSDKExcetion.getErrorCode(), apisixSDKExcetion);
+//            apisixSDKExcetion.printStackTrace();
+        } catch (NullPointerException nullPointerException) {
+            logger.error(nullPointerException.getMessage(), nullPointerException);
+        }
+        Map map = new HashMap();
+        map.put("id", id);
+        map.put("rawData", jsonStr);
+        return Result.succeed(map);
+    }
 
 }

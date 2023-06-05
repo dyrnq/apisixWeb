@@ -1,34 +1,24 @@
 package com.dyrnq.apisix;
 
 
+import com.apiseven.apisix.admin.model.response.Multi;
+import com.apiseven.apisix.admin.model.response.Wrap;
+import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
+import com.apiseven.apisix.common.profile.HttpProfile;
+import com.apiseven.apisix.common.profile.Profile;
+import com.dyrnq.apisix.domain.*;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.apiseven.apisix.common.utils.Md5Util;
-import com.dyrnq.apisix.domain.*;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
-
-//import com.apiseven.apisix.admin.model.Route;
-//import com.apiseven.apisix.admin.model.Upstream;
-//import com.apiseven.apisix.admin.model.Service;
-//import com.apiseven.apisix.admin.model.Consumer;
-//import com.apiseven.apisix.admin.model.SSL;
-//import com.apiseven.apisix.admin.model.K8sDeploymentInfo;
-
-import com.apiseven.apisix.admin.model.response.Item;
-import com.apiseven.apisix.admin.model.response.Multi;
-import com.apiseven.apisix.admin.model.response.Wrap;
-import com.apiseven.apisix.common.exception.ApisixSDKExcetion;
-import com.apiseven.apisix.common.profile.HttpProfile;
-import com.apiseven.apisix.common.profile.Profile;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 
 
 public class AdminClient extends BaseClient {
@@ -622,6 +612,20 @@ public class AdminClient extends BaseClient {
         }
     }
 
+    public void delPluginMetadata(String id) throws ApisixSDKExcetion {
+        Wrap<PluginMetadata> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/plugin_metadata/" + id);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+    }
+
     public Route patchRouteRaw(String id , String rawData) throws ApisixSDKExcetion {
         Wrap<Route> rsp = null;
         try {
@@ -941,6 +945,36 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public Map getPluginMetadata(String id) throws ApisixSDKExcetion {
+        Wrap<Map> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Map>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/plugin_metadata/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public PluginMetadata putPluginMetadata(String id, Map map) throws ApisixSDKExcetion {
+        Wrap<PluginMetadata> rsp = null;
+        try {
+            //service = resolveUpstream(service);
+            Type type = new TypeToken<Wrap<PluginMetadata>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(map, HttpProfile.REQ_PUT, "/apisix/admin/plugin_metadata/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
 
 //    public boolean deleteService(String id) throws ApisixSDKExcetion {
 //        this.doRequest(HttpProfile.REQ_DELETE, "/apisix/admin/services/" + id);
@@ -1297,4 +1331,21 @@ public class AdminClient extends BaseClient {
             }
         }
     }
+
+    public PluginMetadata putPluginMetadataRaw(String plugin_name , String rawData) throws ApisixSDKExcetion {
+        Wrap<PluginMetadata> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            Type type = new TypeToken<Wrap<PluginMetadata>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/plugin_metadata/" + plugin_name, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKExcetion e) {
+            if(e instanceof ApisixSDKExcetion){
+                throw e;
+            }else {
+                throw new ApisixSDKExcetion(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
 }
