@@ -14,7 +14,7 @@ public class GlobalRuleTest extends BaseJunit{
         e.headers = new HashMap<String, String>();
         e.headers.put("hello", "world");
         e.afterBody = "<!-- 111 apisix-HTML-mark -->";
-        map.put("echo", e);
+        map.put(Echo.PLUGIN_NAME, e);
         ProxyRewrite proxyRewrite = new ProxyRewrite();
         proxyRewrite.headers = new Headers();
         proxyRewrite.headers.set = new HashMap<>();
@@ -25,7 +25,7 @@ public class GlobalRuleTest extends BaseJunit{
         proxyRewrite.headers.set.put( "X-Test-3","test3");
         proxyRewrite.headers.set.put( "X-Test-4","test4");
 
-        map.put("proxy-rewrite",proxyRewrite);
+        map.put(ProxyRewrite.PLUGIN_NAME,proxyRewrite);
         globalRule.setPlugins(map);
         //consumer.setGroupId(i+"");
         client.putGlobalRule("1", globalRule);

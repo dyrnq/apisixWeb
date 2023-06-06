@@ -26,8 +26,8 @@ public class StaticFileResponse extends BaseJunit{
 
         Redirect redirect = new Redirect();
         redirect.httpToHttps =true;
-        map.put("response-rewrite",responseRewrite);
-        map.put("redirect",redirect);
+        map.put(ResponseRewrite.PLUGIN_NAME,responseRewrite);
+        map.put(Redirect.PLUGIN_NAME,redirect);
         Gzip gzip = new Gzip();
         gzip.types="*";
         map.put("gzip",gzip);
