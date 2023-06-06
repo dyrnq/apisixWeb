@@ -1,10 +1,9 @@
 package com.dyrnq.controller;
 
-import com.dyrnq.dso.UserMapper;
-import com.dyrnq.model.User;
+
 import org.noear.solon.annotation.Controller;
-import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
 import org.noear.solon.i18n.annotation.I18n;
 import org.slf4j.Logger;
@@ -14,26 +13,10 @@ import org.slf4j.LoggerFactory;
 @I18n
 public class IndexController {
     static Logger logger = LoggerFactory.getLogger(IndexController.class);
-    @Inject
-    UserMapper userMapper;
+
     @Mapping("/")
-    public Object index() {
+    public Object index(Context ctx) {
         ModelAndView model = new ModelAndView("index.html");
-        model.put("title","dock");
-        model.put("message","你好 world!");
-        User user = userMapper.selectById("1");
-        System.out.println(user.getName());
         return model;
     }
-
-    @Mapping("/test")
-    public Object test() {
-        ModelAndView model = new ModelAndView("login.html");
-        model.put("title","dock");
-        model.put("message","你好 world!");
-//        User user = userMapper.selectById("1");
-//        System.out.println(user.getName());
-        return model;
-    }
-
 }
