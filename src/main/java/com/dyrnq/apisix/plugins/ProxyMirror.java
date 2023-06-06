@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // proxy-mirror
 public class ProxyMirror { 
+
+public static final String PLUGIN_NAME = "proxy-mirror";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // echo
 public class Echo { 
+
+public static final String PLUGIN_NAME = "echo";
 // _meta
 @SerializedName("_meta")
 @Expose

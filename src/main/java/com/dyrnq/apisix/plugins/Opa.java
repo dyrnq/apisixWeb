@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // opa
 public class Opa { 
+
+public static final String PLUGIN_NAME = "opa";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // zipkin
 public class Zipkin { 
+
+public static final String PLUGIN_NAME = "zipkin";
 // _meta
 @SerializedName("_meta")
 @Expose

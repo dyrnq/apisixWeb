@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // body-transformer
 public class BodyTransformer { 
+
+public static final String PLUGIN_NAME = "body-transformer";
 // _meta
 @SerializedName("_meta")
 @Expose

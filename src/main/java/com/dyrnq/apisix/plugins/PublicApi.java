@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // public-api
 public class PublicApi { 
+
+public static final String PLUGIN_NAME = "public-api";
 // uri
 @SerializedName("uri")
 @Expose

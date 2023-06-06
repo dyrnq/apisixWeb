@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // grpc-transcode
 public class GrpcTranscode { 
+
+public static final String PLUGIN_NAME = "grpc-transcode";
 // method
 @SerializedName("method")
 @Expose

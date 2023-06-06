@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // kafka-logger
 public class KafkaLogger { 
+
+public static final String PLUGIN_NAME = "kafka-logger";
 // broker_list
 @SerializedName("broker_list")
 @Expose

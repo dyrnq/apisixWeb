@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // http-logger
 public class HttpLogger { 
+
+public static final String PLUGIN_NAME = "http-logger";
 // max_retry_count
 @SerializedName("max_retry_count")
 @Expose

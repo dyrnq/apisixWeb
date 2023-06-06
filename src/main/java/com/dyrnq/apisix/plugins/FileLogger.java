@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // file-logger
 public class FileLogger { 
+
+public static final String PLUGIN_NAME = "file-logger";
 // _meta
 @SerializedName("_meta")
 @Expose

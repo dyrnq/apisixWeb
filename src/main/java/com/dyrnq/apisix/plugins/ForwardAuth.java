@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // forward-auth
 public class ForwardAuth { 
+
+public static final String PLUGIN_NAME = "forward-auth";
 // _meta
 @SerializedName("_meta")
 @Expose

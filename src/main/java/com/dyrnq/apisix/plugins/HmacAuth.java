@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // hmac-auth
 public class HmacAuth { 
+
+public static final String PLUGIN_NAME = "hmac-auth";
 // _meta
 @SerializedName("_meta")
 @Expose

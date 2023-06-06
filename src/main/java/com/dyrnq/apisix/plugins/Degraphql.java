@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // degraphql
 public class Degraphql { 
+
+public static final String PLUGIN_NAME = "degraphql";
 // query
 @SerializedName("query")
 @Expose

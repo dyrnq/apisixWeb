@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // wolf-rbac
 public class WolfRbac { 
+
+public static final String PLUGIN_NAME = "wolf-rbac";
 // appid
 @SerializedName("appid")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // request-id
 public class RequestId { 
+
+public static final String PLUGIN_NAME = "request-id";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // authz-keycloak
 public class AuthzKeycloak { 
+
+public static final String PLUGIN_NAME = "authz-keycloak";
 // _meta
 @SerializedName("_meta")
 @Expose

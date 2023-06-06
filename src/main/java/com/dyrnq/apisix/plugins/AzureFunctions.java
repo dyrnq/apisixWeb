@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // azure-functions
 public class AzureFunctions { 
+
+public static final String PLUGIN_NAME = "azure-functions";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // kafka-proxy
 public class KafkaProxy { 
+
+public static final String PLUGIN_NAME = "kafka-proxy";
 // _meta
 @SerializedName("_meta")
 @Expose

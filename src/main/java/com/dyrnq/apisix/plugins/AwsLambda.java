@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // aws-lambda
 public class AwsLambda { 
+
+public static final String PLUGIN_NAME = "aws-lambda";
 // _meta
 @SerializedName("_meta")
 @Expose

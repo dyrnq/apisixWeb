@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // request-validation
 public class RequestValidation { 
+
+public static final String PLUGIN_NAME = "request-validation";
 // _meta
 @SerializedName("_meta")
 @Expose

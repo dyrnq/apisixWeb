@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // proxy-rewrite
 public class ProxyRewrite { 
+
+public static final String PLUGIN_NAME = "proxy-rewrite";
 // regex_uri
 @SerializedName("regex_uri")
 @Expose

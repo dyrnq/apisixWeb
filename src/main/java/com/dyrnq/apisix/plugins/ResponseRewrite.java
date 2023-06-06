@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.List; 
 // response-rewrite
 public class ResponseRewrite { 
+
+public static final String PLUGIN_NAME = "response-rewrite";
 // body_base64
 @SerializedName("body_base64")
 @Expose

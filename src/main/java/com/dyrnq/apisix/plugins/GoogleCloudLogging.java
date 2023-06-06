@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // google-cloud-logging
 public class GoogleCloudLogging { 
+
+public static final String PLUGIN_NAME = "google-cloud-logging";
 // auth_config
 @SerializedName("auth_config")
 @Expose

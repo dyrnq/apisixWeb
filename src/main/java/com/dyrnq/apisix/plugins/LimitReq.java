@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // limit-req
 public class LimitReq { 
+
+public static final String PLUGIN_NAME = "limit-req";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // redirect
 public class Redirect { 
+
+public static final String PLUGIN_NAME = "redirect";
 // regex_uri
 @SerializedName("regex_uri")
 @Expose

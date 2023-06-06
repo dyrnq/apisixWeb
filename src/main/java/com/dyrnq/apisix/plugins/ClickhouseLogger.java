@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // clickhouse-logger
 public class ClickhouseLogger { 
+
+public static final String PLUGIN_NAME = "clickhouse-logger";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // jwt-auth
 public class JwtAuth { 
+
+public static final String PLUGIN_NAME = "jwt-auth";
 // query
 @SerializedName("query")
 @Expose

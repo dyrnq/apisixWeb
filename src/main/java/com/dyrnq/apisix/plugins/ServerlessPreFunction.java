@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // serverless-pre-function
 public class ServerlessPreFunction { 
+
+public static final String PLUGIN_NAME = "serverless-pre-function";
 // _meta
 @SerializedName("_meta")
 @Expose

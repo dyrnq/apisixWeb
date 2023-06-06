@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // limit-count
 public class LimitCount { 
+
+public static final String PLUGIN_NAME = "limit-count";
 // _meta
 @SerializedName("_meta")
 @Expose

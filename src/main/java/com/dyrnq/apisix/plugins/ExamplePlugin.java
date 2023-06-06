@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // example-plugin
 public class ExamplePlugin { 
+
+public static final String PLUGIN_NAME = "example-plugin";
 // _meta
 @SerializedName("_meta")
 @Expose

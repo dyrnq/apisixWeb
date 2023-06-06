@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // client-control
 public class ClientControl { 
+
+public static final String PLUGIN_NAME = "client-control";
 // _meta
 @SerializedName("_meta")
 @Expose

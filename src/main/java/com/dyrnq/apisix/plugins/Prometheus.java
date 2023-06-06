@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // prometheus
 public class Prometheus { 
+
+public static final String PLUGIN_NAME = "prometheus";
 // _meta
 @SerializedName("_meta")
 @Expose

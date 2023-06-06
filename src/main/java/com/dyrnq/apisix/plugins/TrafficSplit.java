@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // traffic-split
 public class TrafficSplit { 
+
+public static final String PLUGIN_NAME = "traffic-split";
 // _meta
 @SerializedName("_meta")
 @Expose

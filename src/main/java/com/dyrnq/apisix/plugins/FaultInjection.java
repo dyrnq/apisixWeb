@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // fault-injection
 public class FaultInjection { 
+
+public static final String PLUGIN_NAME = "fault-injection";
 // delay
 @SerializedName("delay")
 @Expose

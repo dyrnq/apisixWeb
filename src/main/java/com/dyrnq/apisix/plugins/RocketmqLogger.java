@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // rocketmq-logger
 public class RocketmqLogger { 
+
+public static final String PLUGIN_NAME = "rocketmq-logger";
 // _meta
 @SerializedName("_meta")
 @Expose

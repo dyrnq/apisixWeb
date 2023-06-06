@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // csrf
 public class Csrf { 
+
+public static final String PLUGIN_NAME = "csrf";
 // _meta
 @SerializedName("_meta")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // limit-conn
 public class LimitConn { 
+
+public static final String PLUGIN_NAME = "limit-conn";
 // _meta
 @SerializedName("_meta")
 @Expose

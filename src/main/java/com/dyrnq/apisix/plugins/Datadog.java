@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // datadog
 public class Datadog { 
+
+public static final String PLUGIN_NAME = "datadog";
 // max_retry_count
 @SerializedName("max_retry_count")
 @Expose

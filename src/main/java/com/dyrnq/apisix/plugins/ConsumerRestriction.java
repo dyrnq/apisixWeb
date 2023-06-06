@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // consumer-restriction
 public class ConsumerRestriction { 
+
+public static final String PLUGIN_NAME = "consumer-restriction";
 // _meta
 @SerializedName("_meta")
 @Expose

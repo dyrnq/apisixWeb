@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // skywalking-logger
 public class SkywalkingLogger { 
+
+public static final String PLUGIN_NAME = "skywalking-logger";
 // max_retry_count
 @SerializedName("max_retry_count")
 @Expose

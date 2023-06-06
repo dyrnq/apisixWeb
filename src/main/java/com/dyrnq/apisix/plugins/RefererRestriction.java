@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // referer-restriction
 public class RefererRestriction { 
+
+public static final String PLUGIN_NAME = "referer-restriction";
 // _meta
 @SerializedName("_meta")
 @Expose

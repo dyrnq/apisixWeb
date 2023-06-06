@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // cas-auth
 public class CasAuth { 
+
+public static final String PLUGIN_NAME = "cas-auth";
 // cas_callback_uri
 @SerializedName("cas_callback_uri")
 @Expose

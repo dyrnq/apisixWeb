@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // ip-restriction
 public class IpRestriction { 
+
+public static final String PLUGIN_NAME = "ip-restriction";
 // _meta
 @SerializedName("_meta")
 @Expose

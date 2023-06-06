@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // udp-logger
 public class UdpLogger { 
+
+public static final String PLUGIN_NAME = "udp-logger";
 // max_retry_count
 @SerializedName("max_retry_count")
 @Expose

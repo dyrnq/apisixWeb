@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // uri-blocker
 public class UriBlocker { 
+
+public static final String PLUGIN_NAME = "uri-blocker";
 // case_insensitive
 @SerializedName("case_insensitive")
 @Expose

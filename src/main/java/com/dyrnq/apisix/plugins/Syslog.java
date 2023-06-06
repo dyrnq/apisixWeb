@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // syslog
 public class Syslog { 
+
+public static final String PLUGIN_NAME = "syslog";
 // _meta
 @SerializedName("_meta")
 @Expose

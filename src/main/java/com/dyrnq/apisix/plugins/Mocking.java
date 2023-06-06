@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // mocking
 public class Mocking { 
+
+public static final String PLUGIN_NAME = "mocking";
 // delay
 @SerializedName("delay")
 @Expose

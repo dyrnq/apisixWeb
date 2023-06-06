@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // gzip
 public class Gzip { 
+
+public static final String PLUGIN_NAME = "gzip";
 // _meta
 @SerializedName("_meta")
 @Expose

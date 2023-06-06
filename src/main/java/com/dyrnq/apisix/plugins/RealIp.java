@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // real-ip
 public class RealIp { 
+
+public static final String PLUGIN_NAME = "real-ip";
 // _meta
 @SerializedName("_meta")
 @Expose

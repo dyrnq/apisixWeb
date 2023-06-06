@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // grpc-web
 public class GrpcWeb { 
+
+public static final String PLUGIN_NAME = "grpc-web";
 // _meta
 @SerializedName("_meta")
 @Expose

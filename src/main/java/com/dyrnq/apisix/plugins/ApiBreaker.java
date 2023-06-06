@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // api-breaker
 public class ApiBreaker { 
+
+public static final String PLUGIN_NAME = "api-breaker";
 // max_breaker_sec
 @SerializedName("max_breaker_sec")
 @Expose

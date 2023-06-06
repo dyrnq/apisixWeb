@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // tcp-logger
 public class TcpLogger { 
+
+public static final String PLUGIN_NAME = "tcp-logger";
 // max_retry_count
 @SerializedName("max_retry_count")
 @Expose

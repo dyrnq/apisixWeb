@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // authz-casbin
 public class AuthzCasbin { 
+
+public static final String PLUGIN_NAME = "authz-casbin";
 // _meta
 @SerializedName("_meta")
 @Expose

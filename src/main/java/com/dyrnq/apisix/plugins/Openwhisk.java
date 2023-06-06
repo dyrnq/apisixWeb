@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // openwhisk
 public class Openwhisk { 
+
+public static final String PLUGIN_NAME = "openwhisk";
 // _meta
 @SerializedName("_meta")
 @Expose

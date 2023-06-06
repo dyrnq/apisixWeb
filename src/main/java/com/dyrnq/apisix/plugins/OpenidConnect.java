@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // openid-connect
 public class OpenidConnect { 
+
+public static final String PLUGIN_NAME = "openid-connect";
 // bearer_only
 @SerializedName("bearer_only")
 @Expose

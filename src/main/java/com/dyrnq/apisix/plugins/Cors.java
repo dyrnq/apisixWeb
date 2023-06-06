@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // cors
 public class Cors { 
+
+public static final String PLUGIN_NAME = "cors";
 // allow_headers
 @SerializedName("allow_headers")
 @Expose

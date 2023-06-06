@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // proxy-cache
 public class ProxyCache { 
+
+public static final String PLUGIN_NAME = "proxy-cache";
 // cache_control
 @SerializedName("cache_control")
 @Expose

@@ -4,6 +4,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Map; 
 // proxy-control
 public class ProxyControl { 
+
+public static final String PLUGIN_NAME = "proxy-control";
 // _meta
 @SerializedName("_meta")
 @Expose
