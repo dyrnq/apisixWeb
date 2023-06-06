@@ -9,11 +9,11 @@ public static final String PLUGIN_NAME = "fault-injection";
 // delay
 @SerializedName("delay")
 @Expose
-public Object delay;
+public Delay delay;
 // abort
 @SerializedName("abort")
 @Expose
-public Object abort;
+public Abort abort;
 // _meta
 @SerializedName("_meta")
 @Expose
