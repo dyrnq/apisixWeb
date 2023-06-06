@@ -4,17 +4,17 @@ import org.noear.solon.annotation.Note;
 import org.noear.solon.core.handle.Result;
 
 public class PageResult<T> extends Result<T> {
-    private int total;
+    private Number total;
 
-    public int getTotal() {
+    public Number getTotal() {
         return total;
     }
 
-    public void setTotal(int total) {
+    public void setTotal(Number total) {
         this.total = total;
     }
 
-    public PageResult(T data,int total) {
+    public PageResult(T data,Number total) {
         super(data);
         this.total = total;
     }
@@ -38,7 +38,7 @@ public class PageResult<T> extends Result<T> {
 
 
     @Note("成功的结果")
-    public static <T> PageResult<T> succeed(T data,int total) {
+    public static <T> PageResult<T> succeed(T data,Number total) {
         return new PageResult<>(data,total);
     }
 
