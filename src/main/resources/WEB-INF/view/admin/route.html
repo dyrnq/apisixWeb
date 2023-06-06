@@ -177,7 +177,19 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
     //向世界问个好
     //layer.msg('Hello World');
+// 读取本地存储的设置
+    var isChecked = localStorage.getItem('isChecked') === 'true';
 
+    layui.use(['form'], function(){
+        var form = layui.form;
+
+
+        // 监听开关按钮的变化事件
+        form.on('page(limited)', function(data){
+            // 将开关状态保存到本地存储中
+            localStorage.setItem('isChecked', data.elem.checked);
+        });
+    });
 
     //执行一个 table 实例
     table.render({
