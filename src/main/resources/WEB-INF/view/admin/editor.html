@@ -12,12 +12,12 @@
 
     #editor {
         margin: 0;
-        position: absolute;
-        top: 20;
+        top: 0;
         bottom: 0;
         left: 0;
         right: 0;
-        height: 80%;
+        width: 100%;
+        height: 300px;
     }
 </style>
 </head>
@@ -29,13 +29,14 @@
 
     <div class="layui-body">
 
-        <div>
-            <button class="layui-btn layui-btn-sm" lay-filter="save" id="save">保存</button>
-            <button class="layui-btn layui-btn-sm" lay-event="getCheckData">获取选中行数据</button>
-        </div>
-        <div style="padding: 25px">
 
-<pre id="editor"></pre>
+        <div style="padding: 25px">
+            <pre id="editor"></pre>
+
+            <div style="margin-top: 10px;">
+                <button class="layui-btn layui-btn-md" lay-filter="save" id="save">保存</button>
+                <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display:none">获取选中行数据</button>
+            </div>
         </div>
     </div>
 </div>
@@ -48,6 +49,11 @@
     editor.setTheme("ace/theme/twilight");
     editor.session.setMode("ace/mode/json");
     editor.setFontSize(16);
+    editor.setOptions({
+        minLines: 10,
+        maxLines: Infinity
+    });
+    editor.resize();
 </script>
 <script type="text/javascript" >
 
