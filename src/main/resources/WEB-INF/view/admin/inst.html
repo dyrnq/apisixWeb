@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <#include "admin/common.html"/>
-    <style type="text/css">
+<#include "admin/common.html"/>
+<style type="text/css">
 
 .long{
 	width: 210px;
@@ -20,8 +20,8 @@ input[name='param']{
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
 
-    <#include "admin/header.html"/>
-    <#include "admin/menu.html"/>
+<#include "admin/header.html"/>
+<#include "admin/menu.html"/>
 
     <div class="layui-body">
 
@@ -254,10 +254,7 @@ input[name='param']{
         }
     }
 
-// function helper(){
-//         var html = 'https://apisix.apache.org/zh/docs/apisix/admin-api/#route'
-//     location.href=html
-//     }
+
 
 layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
     //得到各种内置组件
@@ -268,6 +265,13 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
     //向世界问个好
     //layer.msg('Hello World');
 
+    var default_limt = localStorage.getItem('pageLimit');
+
+    if ('' == default_limt || null == default_limt || undefined == default_limt) {
+        default_limt = cfg.pageLimit;
+    }
+    //console.log("default_limt="+default_limt)
+
 
     //执行一个 table 实例
     table.render({
@@ -276,6 +280,8 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
         , url: '/api/inst' //数据接口
         , title: '用户表'
         , page: true //开启分页
+        , limit: default_limt
+        , limits: cfg.pageLimits
         , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
         , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
             title: '提示'
@@ -291,6 +297,30 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
             , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
 
         ]]
+        , done: function (res, curr, count){
+            //如果是异步请求数据方式，res即为你接口返回的信息。
+            //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+            console.log(res);
+            //得到当前页码
+            console.log(curr);
+            //得到数据总量
+            console.log(count);
+
+
+            // 获取配置项
+            var thisOptions = table.getOptions('demo');
+            console.log(thisOptions);
+            localStorage.setItem('pageLimit', thisOptions.limit);
+
+
+            if(res.data.length == 0){
+                if(curr>1){
+                    toPage=curr-1;
+                    console.log(toPage);
+                    table.reload('demo',{page: {curr:toPage}});
+                }
+            }
+        }
         , response: {
             statusCode: 200
         }

@@ -1,5 +1,6 @@
 package com.dyrnq;
 
+import cn.hutool.core.util.StrUtil;
 import com.dyrnq.service.BusinessLogic;
 
 import io.jsonwebtoken.Claims;
@@ -62,15 +63,49 @@ public class WebApp {
         });
     }
 
+    static String getCtxStr(Context context) {
+        String httpHost = context.header("X-Forwarded-Host");
+        String realPort = context.header("X-Forwarded-Port");
+        String host = context.header("Host");
+
+        String ctx = "//";
+        if (StrUtil.isNotEmpty(httpHost)) {
+            ctx += httpHost;
+        } else if (StrUtil.isNotEmpty(host)) {
+            ctx += host;
+            if (!host.contains(":") && StrUtil.isNotEmpty(realPort)) {
+                ctx += ":" + realPort;
+            }
+        } else {
+            host = context.url().split("/")[2];
+            ctx += host;
+            if (!host.contains(":") && StrUtil.isNotEmpty(realPort)) {
+                ctx += ":" + realPort;
+            }
+        }
+        return ctx;
+    }
+
     @Component
     public static class AppFilter implements Filter {
         Logger logger = LoggerFactory.getLogger(this.getClass());
         @Inject("${solon.app.name}")
         String projectName;
 
+//        @Inject("${solon.app.cfg}")
+//        Map<String,Object> map;
+
+//        Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+//                .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+//                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+//                .create();
+
+
         @Override
         public void doFilter(Context ctx, FilterChain chain) throws Throwable {
             ctx.attrSet("projectName", projectName);
+            ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,50,100]}");
+            ctx.attrSet("ctx", getCtxStr(ctx));
             chain.doFilter(ctx);
         }
     }

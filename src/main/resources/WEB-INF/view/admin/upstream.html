@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <#include "admin/common.html"/>
-    <style type="text/css">
+<#include "admin/common.html"/>
+<style type="text/css">
 
 .long{
 	width: 210px;
@@ -20,8 +20,8 @@ input[name='param']{
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
 
-    <#include "admin/header.html"/>
-    <#include "admin/menu.html"/>
+<#include "admin/header.html"/>
+<#include "admin/menu.html"/>
 
     <div class="layui-body">
 
@@ -276,8 +276,15 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
   ,laypage = layui.laypage //分页
   ,table = layui.table //表格
 
-  //向世界问个好
-  //layer.msg('Hello World');
+    //向世界问个好
+    //layer.msg('Hello World');
+
+    var default_limt = localStorage.getItem('pageLimit');
+
+    if ('' == default_limt || null == default_limt || undefined == default_limt) {
+        default_limt = cfg.pageLimit;
+    }
+    //console.log("default_limt="+default_limt)
 
 
   //执行一个 table 实例
@@ -287,6 +294,8 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,url: '/api/upstream' //数据接口
     ,title: '用户表'
     ,page: true //开启分页
+    , limit: default_limt
+    , limits: cfg.pageLimits
     ,toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
@@ -307,6 +316,14 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
           console.log(curr);
           //得到数据总量
           console.log(count);
+
+
+        // 获取配置项
+        var thisOptions = table.getOptions('demo');
+        console.log(thisOptions);
+        localStorage.setItem('pageLimit', thisOptions.limit);
+
+
           if(res.data.length == 0){
               if(curr>1){
                   toPage=curr-1;
