@@ -1,15 +1,6 @@
 package com.dyrnq.controller;
 
-import com.dyrnq.apisix.ApisixSDKException;
-import com.dyrnq.apisix.profile.Credential;
-import com.dyrnq.apisix.profile.DefaultCredential;
-import com.dyrnq.apisix.profile.DefaultProfile;
-import com.dyrnq.apisix.profile.Profile;
-import com.dyrnq.apisix.AdminClient;
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
@@ -144,86 +135,13 @@ public class AdminController {
         return model;
     }
 
-    private AdminClient getAdminClient(){
-        String url ="192.168.66.100:9180";
-        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
-        Profile p = DefaultProfile.getProfile (url ,"", c);
-        AdminClient client =new AdminClient(p);
-        return client;
-    }
+
 
     @Mapping("editor")
     public Object editor(Context ctx,String cls,String id) {
         ModelAndView model = new ModelAndView("admin/editor.html");
-        model.put("title", "dock");
-        String jsonObj = "{}";
-        Gson gson = new GsonBuilder().setPrettyPrinting().setExclusionStrategies(new ExclusionStrategy() {
-                    @Override
-                    public boolean shouldSkipField(FieldAttributes f){
-                        if ("id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName()) ) {
-                            return true; // 如果是特殊字段，则排除
-                        }
-                        return false; // 其他字段都保留
-                    }
-
-                    @Override
-                    public boolean shouldSkipClass(Class<?> clazz) {
-                        return false;
-                    }
-                }).create();
-
-        //Type type = new TypeToken<Wrap<Route>>(){}.getType();
-        try {
-            switch(cls){
-                case "route" :
-                    jsonObj = gson.toJson(getAdminClient().getRoute(id));
-                    break;
-                case "upstream" :
-                    jsonObj = gson.toJson(getAdminClient().getUpstream(id));
-                    break;
-                case "ssl" :
-                    jsonObj = gson.toJson(getAdminClient().getSSL(id));
-                    break;
-                case "service" :
-                    jsonObj = gson.toJson(getAdminClient().getService(id));
-                    break;
-                case "streamRoute" :
-                    jsonObj = gson.toJson(getAdminClient().getStreamRoute(id));
-                    break;
-                case "secret" :
-                    jsonObj = gson.toJson(getAdminClient().getSecret(id));
-                    break;
-                case "consumer" :
-                    jsonObj = gson.toJson(getAdminClient().getConsumer(id));
-                    break;
-                case "globalRule":
-                    jsonObj = gson.toJson(getAdminClient().getGlobalRule(id));
-                    break;
-                case "pluginConfig":
-                    jsonObj = gson.toJson(getAdminClient().getPluginConfig(id));
-                    break;
-                case "consumerGroup":
-                    jsonObj = gson.toJson(getAdminClient().getConsumerGroup(id));
-                    break;
-                case "plugin":
-                    jsonObj = gson.toJson(getAdminClient().getPlugin(id));
-                    break;
-
-                default :
-                    jsonObj = gson.toJson(getAdminClient().getRoute(id));
-            }
-
-
-
-        } catch (ApisixSDKException apisixSDKException) {
-            logger.error(apisixSDKException.getErrorCode(), apisixSDKException);
-        } catch (java.lang.NullPointerException nullPointerException){
-            logger.error(nullPointerException.getMessage(),nullPointerException);
-        }
-        model.put("json", jsonObj  );
         model.put("id",id);
         model.put("cls",cls);
-
         return model;
     }
 

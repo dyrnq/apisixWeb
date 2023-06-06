@@ -35,7 +35,7 @@
         </div>
         <div style="padding: 25px">
 
-<pre id="editor">${json}</pre>
+<pre id="editor"></pre>
         </div>
     </div>
 </div>
@@ -50,6 +50,26 @@
     editor.setFontSize(16);
 </script>
 <script type="text/javascript" >
+
+    $.ajax({
+        url: '/api/raw/'+cls+'/'+id,
+        type:'post',
+        success:function (data,statusText) {
+            console.log(data);
+            //var element =
+            if(data.code=='200'){
+                editor.setValue(data.data.rawData,-1);
+            }else{
+                editor.setValue("",-1);
+                layer.msg(data.description);
+            }
+        },
+        'error':function () {
+            layer.msg('系统错误');
+        }
+    });
+
+
     $("#save").click(function(){
         //保存当前JSON文本的方法体。
         var editor = ace.edit("editor");
