@@ -56,10 +56,12 @@
     editor.resize();
 </script>
 <script type="text/javascript" >
-
+    console.log(encodeURI(id));
     $.ajax({
-        url: '/api/raw/'+cls+'/'+id,
+        url: '/api/raw',
         type:'post',
+        contentType: 'application/json',
+        data: JSON.stringify({id: id,cls:cls}),
         success:function (data,statusText) {
             console.log(data);
             //var element =

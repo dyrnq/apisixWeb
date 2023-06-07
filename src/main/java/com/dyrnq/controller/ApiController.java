@@ -560,7 +560,7 @@ public class ApiController extends BaseController {
         return client;
     }
 
-    @Mapping("raw/{cls}/{id}")
+    @Mapping("raw")
     public Result getObj(Context ctx, String cls, String id) {
 
         String jsonStr = "{}";

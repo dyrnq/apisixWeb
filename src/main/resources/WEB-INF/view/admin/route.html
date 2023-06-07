@@ -477,8 +477,10 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
         }else if (layEvent === 'edit'){
             cleanData(true);
             $.ajax({
-                    url: '/api/raw/route/'+obj.data.id,
+                    url: '/api/raw',
                     type:'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id: obj.data.id,cls: 'route'}),
                     success:function (data,statusText) {
                         console.log(data);
                         if(data.code=='200'){
