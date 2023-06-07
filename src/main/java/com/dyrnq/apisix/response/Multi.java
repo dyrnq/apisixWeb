@@ -19,12 +19,12 @@ public class Multi<T> {
 	}
 	@SerializedName("total")
 	@Expose
-	private int total;
+	private Number total;
 
-	public void setTotal(int total){
+	public void setTotal(Number total){
 		this.total=total;
 	}
-	public int getTotal(){
+	public Number getTotal(){
 		return this.total;
 	}
 

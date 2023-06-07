@@ -432,7 +432,7 @@ public class ApiController extends BaseController {
         try {
             Multi<Route> rsp= getAdminClient().queryRoutes(page,limit);
             List<Route> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -453,7 +453,7 @@ public class ApiController extends BaseController {
         try {
             Multi<StreamRoute> rsp= getAdminClient().queryStreamRoutes(page,limit);
             List<StreamRoute> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -464,7 +464,7 @@ public class ApiController extends BaseController {
         try {
             Multi<ConsumerGroup> rsp= getAdminClient().queryConsumerGroups(page,limit);
             List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -475,7 +475,7 @@ public class ApiController extends BaseController {
         try {
             Multi<Upstream> rsp= getAdminClient().queryUpstreams(page,limit);
             List<Upstream> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -487,7 +487,7 @@ public class ApiController extends BaseController {
         try {
             Multi<Secret> rsp= getAdminClient().querySecrets(page,limit);
             List<Secret> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -499,7 +499,7 @@ public class ApiController extends BaseController {
         try {
             Multi<Service> rsp= getAdminClient().queryServices(page,limit);
             List<Service> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -510,7 +510,7 @@ public class ApiController extends BaseController {
         try {
             Multi<SSL> rsp= getAdminClient().querySSLs(page,limit);
             List<SSL> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
         }
@@ -521,7 +521,7 @@ public class ApiController extends BaseController {
         try {
             Multi<GlobalRule> rsp= getAdminClient().queryGlobalRules(page,limit);
             List<GlobalRule> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -532,7 +532,7 @@ public class ApiController extends BaseController {
         try {
             Multi<Consumer> rsp= getAdminClient().queryConsumers(page,limit);
             List<Consumer> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -544,7 +544,7 @@ public class ApiController extends BaseController {
         try {
             Multi<PluginConfig> rsp= getAdminClient().queryPluginConfigs(page,limit);
             List<PluginConfig> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result,Integer.valueOf(rsp.getTotal()));
+            return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
