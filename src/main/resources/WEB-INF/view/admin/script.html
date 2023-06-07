@@ -6,6 +6,7 @@
 <script src="${ctx}/lib/ztree/js/jquery.ztree.excheck.js" type="text/javascript"></script>
 
 <script src="${ctx}/lib/echarts/echarts.min.js" type="text/javascript"></script>
+<script src="${ctx}/lib/ace-builds/src-noconflict/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
 	//根路径
 	var ctx = '${ctx}';
@@ -19,5 +20,16 @@
 
 	var cfg = ${cfg};
 
+    if (document.getElementById("editor")) {
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/twilight");
+        editor.session.setMode("ace/mode/json");
+        editor.setFontSize(16);
+        editor.setOptions({
+            minLines: 10,
+            maxLines: Infinity
+        });
+        editor.resize();
+    }
 </script>
 

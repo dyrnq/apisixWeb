@@ -38,6 +38,7 @@ public abstract class BaseClient {
         this.sdkVersion = BaseClient.SDK_VERSION;
         this.apiVersion = profile.getVersion();
         this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+                .disableHtmlEscaping()
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .create();

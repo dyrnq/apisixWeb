@@ -70,12 +70,14 @@ input[name='param']{
 <!--                </div>-->
 <!--            </div>-->
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>
-                <div class="layui-input-block">
-                    <textarea  name="rawData" class="layui-textarea" ></textarea>
-                </div>
-            </div>
+<!--            <div class="layui-form-item">-->
+<!--                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>-->
+<!--                <div class="layui-input-block">-->
+<!--                    <textarea  name="rawData" class="layui-textarea" ></textarea>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <pre id="editor1" class=".json-editor"></pre>
 
             <div class="layui-form-item center">
                 <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${i18n.get("commonStr.submit")}</button>
@@ -86,7 +88,7 @@ input[name='param']{
     </div>
 
     <div class="layui-form" id="guideDiv" style="padding: 15px; display: none;">
-
+        <pre id="editor" class=".json-editor"></pre>
     </div>
 
 </div>
@@ -98,12 +100,29 @@ input[name='param']{
 
 <script>
 
+var editor1 = ace.edit("editor1");
+editor1.setTheme("ace/theme/twilight");
+editor1.session.setMode("ace/mode/json");
+editor1.setFontSize(16);
+editor1.setOptions({
+    minLines: 10,
+    maxLines: Infinity
+});
+editor1.resize();
+
 function addOver() {
     layui.use(['layer', 'form'], function(){
+
+        var id = $('#addForm1 input[name="id"]').val();
+        console.log(id);
+        var text = editor1.getValue();
+        console.log(text);
+
         $.ajax({
             type : 'POST',
             url : '/api/add/pluginMetadata',
-            data : $('#addForm1').serialize(),
+            contentType: 'application/json',
+            data: JSON.stringify({id: id,rawData:text}),
             dataType : 'json',
             success : function(data) {
                 if(data.code=='200'){
@@ -183,22 +202,6 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
       ,{field: 'schema', title: 'schema', width: 500 ,templet: schema}
 
     ]]
-      , done: function (res, curr, count){
-          //如果是异步请求数据方式，res即为你接口返回的信息。
-          //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-          console.log(res);
-          //得到当前页码
-          console.log(curr);
-          //得到数据总量
-          console.log(count);
-          if(res.data.length == 0){
-              if(curr>1){
-                  toPage=curr-1;
-                  console.log(toPage);
-                  table.reload('demo',{page: {curr:toPage}});
-              }
-          }
-      }
     ,response: {
         statusCode: 200
     }
@@ -225,7 +228,21 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
 
         if (layEvent === 'detail'){ //查看
             //do something
-            layer.alert(JSON.stringify(data.schema),{ area: ['600px']});
+            //layer.alert(JSON.stringify(data.schema),{ area: ['600px']});
+            editor.setValue("",-1);
+            editor.setValue(JSON.stringify(data.schema,null, '\t'),-1);
+            layer.open({
+                type: 1,
+                area: ['500px', '300px'],
+                title: 'schema',
+                content : $('#guideDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
         } else if(layEvent === 'del'){ //删除
 
         } else if(layEvent === 'LAYTABLE_TIPS'){
@@ -233,12 +250,40 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
         } else if (layEvent === 'edit'){//编辑,暂无方法体
 
         } else if (layEvent === 'detail_consumer_schema'){
-            layer.alert(JSON.stringify(data.consumer_schema));
+            //layer.alert(JSON.stringify(data.consumer_schema));
+            editor.setValue("",-1);
+            editor.setValue(JSON.stringify(data.consumer_schema,null, '\t'),-1);
+            layer.open({
+                type: 1,
+                area: ['500px', '300px'],
+                title: 'metadata_schema',
+                content : $('#guideDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
         } else if (layEvent === 'detail_metadata_schema'){
-            layer.alert(JSON.stringify(data.metadata_schema));
+            //layer.alert(JSON.stringify(data.metadata_schema));
+            editor.setValue("",-1);
+            editor.setValue(JSON.stringify(data.metadata_schema,null, '\t'),-1);
+            layer.open({
+                type: 1,
+                area: ['500px', '300px'],
+                title: 'metadata_schema',
+                content : $('#guideDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
         } else if (layEvent === 'setting'){
             $('#addForm1 input[name="id"]').val("");
-            $('#addForm1 textarea[name="rawData"]').val("");
+            //$('#addForm1 textarea[name="rawData"]').val("");
             $.ajax({
                     url: '/api/raw/pluginMetadata/'+obj.data.id,
                     type:'post',
@@ -249,14 +294,30 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                         //var element =
                         if(data.code=='200'){
                             $('#addForm1 input[name="id"]').val(obj.data.id);
-                            $('#addForm1 textarea[name="rawData"]').val(data.data.rawData);
+                            //$('#addForm1 textarea[name="rawData"]').val(data.data.rawData);
                             //layer.msg(data.description);
+                            //layer.open({
+                            //    type: 1,
+                            //    area: ['800px', '600px'],
+                            //    title: '修改插件Metadata',
+                            //    content : $('#windowDiv')
+                            //});
+
+                            editor1.setValue("",-1);
+                            editor1.setValue(data.data.rawData);
                             layer.open({
                                 type: 1,
-                                area: ['800px', '600px'],
-                                title: '修改插件Metadata',
-                                content : $('#windowDiv')
+                                area: ['500px', '300px'],
+                                title: 'modify metadata',
+                                content : $('#windowDiv'),
+                                anim: 'slideRight',
+                                shade: 0.6, // 遮罩透明度
+                                shadeClose: true, // 点击遮罩区域，关闭弹层
+                                maxmin: true, // 允许全屏最小化
+                                skin: 'layui-layer-win10'
                             });
+
+
                         }else{
                              layer.msg(data.description);
                         }
