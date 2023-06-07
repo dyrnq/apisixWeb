@@ -105,7 +105,7 @@ editor1.setTheme("ace/theme/twilight");
 editor1.session.setMode("ace/mode/json");
 editor1.setFontSize(16);
 editor1.setOptions({
-    minLines: 10,
+    minLines: 20,
     maxLines: Infinity
 });
 editor1.resize();
@@ -140,13 +140,23 @@ function addOver() {
     });
 }
 
+function plugin_metadata(d){
+　　var addLink = d.id;
+   if ('' == addLink || null == addLink || undefined == addLink) {
+        return '';
+   }
+   if (addLink.length > 0) {
+        return '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="setting" >'+commonStr.setting+'</button>&nbsp;<a class="layui-btn layui-btn-normal layui-btn-xs" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
+   }
+}
+
 function schema(d) {
 　　var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
    }
    if (addLink.length > 0) {
-        return '<a class="layui-table-link" lay-event="detail" href="javascript:void(0);">view</a>&nbsp;&nbsp;&nbsp; <a class="layui-table-link" lay-event="setting" href="javascript:void(0);">setting</a>&nbsp;&nbsp;&nbsp;' + '<a class="layui-table-link" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
+        return '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">'+commonStr.view+'</button>';
    }
 }
 function consumer_schema(d) {
@@ -154,7 +164,7 @@ function consumer_schema(d) {
    if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
    }
-    return '<a class="layui-table-link" lay-event="detail_consumer_schema" href="javascript:void(0);">view</a>';
+    return '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail_consumer_schema">'+commonStr.view+'</button>';
 }
 
 function metadata_schema(d) {
@@ -167,7 +177,7 @@ function metadata_schema(d) {
    if ('' == p || null == p || undefined == p || JSON.stringify(p) === '{}') {
         return '';
    }
-   return '<a class="layui-table-link" lay-event="detail_metadata_schema" href="javascript:void(0);">view</a>';
+   return '<button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail_metadata_schema">'+commonStr.view+'</button>';
 }
 
 
@@ -193,14 +203,13 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
        {field: 'id', title: 'ID', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'name', title: 'name', width:200}
       ,{field: 'type', title: 'type', width: 90, sort: true, totalRow: true}
       ,{field: 'version', title: 'version', width: 150}
       ,{field: 'priority', title: 'priority', width: 200 ,sort: true}
-      ,{field: 'consumer_schema', title: 'consumer_schema', width: 200,templet: consumer_schema}
-      ,{field: 'metadata_schema', title: 'metadata_schema', width: 200,templet: metadata_schema}
-      ,{field: 'schema', title: 'schema', width: 500 ,templet: schema}
-
+      ,{field: 'consumer_schema', title: 'consumer_schema', width: 150,templet: consumer_schema}
+      ,{field: 'metadata_schema', title: 'metadata_schema', width: 150,templet: metadata_schema}
+      ,{field: 'schema', title: 'schema', templet: schema, width: 150}
+      ,{field: 'plugin_metadata', title: 'plugin_metadata', width: 150 ,templet: plugin_metadata}
     ]]
     ,response: {
         statusCode: 200
@@ -233,7 +242,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
             editor.setValue(JSON.stringify(data.schema,null, '\t'),-1);
             layer.open({
                 type: 1,
-                area: ['500px', '300px'],
+                area: ['800px', '600px'],
                 title: 'schema',
                 content : $('#guideDiv'),
                 anim: 'slideRight',
@@ -255,8 +264,8 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
             editor.setValue(JSON.stringify(data.consumer_schema,null, '\t'),-1);
             layer.open({
                 type: 1,
-                area: ['500px', '300px'],
-                title: 'metadata_schema',
+                area: ['800px', '600px'],
+                title: 'consumer_schema',
                 content : $('#guideDiv'),
                 anim: 'slideRight',
                 shade: 0.6, // 遮罩透明度
@@ -271,7 +280,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
             editor.setValue(JSON.stringify(data.metadata_schema,null, '\t'),-1);
             layer.open({
                 type: 1,
-                area: ['500px', '300px'],
+                area: ['800px', '600px'],
                 title: 'metadata_schema',
                 content : $('#guideDiv'),
                 anim: 'slideRight',
@@ -285,10 +294,10 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
             $('#addForm1 input[name="id"]').val("");
             //$('#addForm1 textarea[name="rawData"]').val("");
             $.ajax({
-                    url: '/api/raw/pluginMetadata/'+obj.data.id,
-                    type:'post',
-                    //contentType: 'application/json',
-                    //data:JSON.stringify({id:obj.data.id}),
+                    url: '/api/raw',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data:JSON.stringify({id:obj.data.id,cls:'pluginMetadata'}),
                     success:function (data,statusText) {
                         console.log(data);
                         //var element =
@@ -304,11 +313,11 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                             //});
 
                             editor1.setValue("",-1);
-                            editor1.setValue(data.data.rawData);
+                            editor1.setValue(data.data.rawData,-1);
                             layer.open({
                                 type: 1,
-                                area: ['500px', '300px'],
-                                title: 'modify metadata',
+                                area: ['800px', '600px'],
+                                title: 'setting plugin_metadata',
                                 content : $('#windowDiv'),
                                 anim: 'slideRight',
                                 shade: 0.6, // 遮罩透明度
