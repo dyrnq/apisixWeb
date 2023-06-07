@@ -1,6 +1,6 @@
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.X509Certificate;
@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cn.hutool.core.io.file.FileWriter;
+import com.dyrnq.utils.CertUtils;
+import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -18,8 +19,6 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.openssl.PEMWriter;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.junit.Test;
@@ -94,34 +93,7 @@ public class SelfSignedCertPEM {
         X509CertificateHolder certificateHolder = certBuilder.build(sigGen);
         X509Certificate cert = new JcaX509CertificateConverter().setProvider(BC).getCertificate(certificateHolder);
 
-//        ContentSigner signer = new JcaContentSignerBuilder("SHA256withRSA").build(keyPair.getPrivate());
-//        X509Certificate cert = new JcaX509CertificateConverter().getCertificate(certBuilder.build(signer));
-
-        // Save the certificate and private key to files in PEM format
-        StringWriter sw = new StringWriter();
-        CertUtils.pemWriter(cert,privKey,"server");
-//        JcaPEMWriter pemWriter = new JcaPEMWriter(sw);
-//        pemWriter.writeObject(cert);
-//        pemWriter.close();
-//
-//        String certPem = sw.toString();
-//        System.out.println(certPem);
-//
-//        FileOutputStream out = new FileOutputStream("cert.pem");
-//        out.write(certPem.getBytes());
-//        out.close();
-//
-//        sw = new StringWriter();
-//        pemWriter = new JcaPEMWriter(sw);
-//        pemWriter.writeObject(privKey);
-//        pemWriter.flush();
-//        pemWriter.close();
-//
-//        String keyPem = sw.toString();
-//        System.out.println(keyPem);
-//
-//        out = new FileOutputStream("key.pem");
-//        out.write(keyPem.getBytes());
-//        out.close();
+        IOUtils.write(CertUtils.content(cert),new FileOutputStream(new File("src/test/resources/example.crt")));
+        IOUtils.write(CertUtils.content(privKey),new FileOutputStream(new File("src/test/resources/example.key")));
     }
 }

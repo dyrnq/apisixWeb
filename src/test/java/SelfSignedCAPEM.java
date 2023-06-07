@@ -1,12 +1,15 @@
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.math.BigInteger;
+import java.nio.file.Files;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
+import com.dyrnq.utils.CertUtils;
+import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x500.X500NameBuilder;
 import org.bouncycastle.asn1.x500.style.BCStyle;
@@ -17,8 +20,6 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.bouncycastle.openssl.PEMWriter;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
@@ -70,37 +71,8 @@ public class SelfSignedCAPEM {
         certConverter.setProvider(BC);
 
         X509Certificate caCert = certConverter.getCertificate(certificateHolder);
-
-
-        CertUtils.pemWriter(caCert,privKey,"ca");
-//        StringWriter sw = new StringWriter();
-//        JcaPEMWriter pemWriter = new JcaPEMWriter(sw);
-//        pemWriter.writeObject(caCert);
-//        pemWriter.flush();
-//        pemWriter.close();
-//
-//        String certPem = sw.toString();
-//        System.out.println(certPem);
-//
-//        FileOutputStream out = new FileOutputStream("ca.crt");
-//        out.write(certPem.getBytes());
-//        out.close();
-//
-//
-//        sw = new StringWriter();
-//        pemWriter = new JcaPEMWriter(sw);
-//        pemWriter.writeObject(privKey);
-//        pemWriter.flush();
-//        pemWriter.close();
-//
-//        String keyPem = sw.toString();
-//        System.out.println(keyPem);
-//
-//        out = new FileOutputStream("ca.key");
-//        out.write(keyPem.getBytes());
-//        out.close();
-
-
+        IOUtils.write(CertUtils.content(caCert), Files.newOutputStream(new File("src/test/resources/ca.crt").toPath()));
+        IOUtils.write(CertUtils.content(privKey), Files.newOutputStream(new File("src/test/resources/ca.key").toPath()));
     }
 }
 

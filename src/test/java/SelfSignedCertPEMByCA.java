@@ -1,26 +1,19 @@
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.security.*;
-import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+import com.dyrnq.utils.CertUtils;
+import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x500.X500NameBuilder;
-import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
-import org.bouncycastle.openssl.PEMKeyPair;
-import org.bouncycastle.openssl.PEMParser;
-import org.bouncycastle.openssl.PEMWriter;
-import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
-import org.bouncycastle.openssl.jcajce.JcaPEMWriter;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
@@ -40,10 +33,10 @@ public class SelfSignedCertPEMByCA {
 
 
         // 加载 CA 证书
-        X509Certificate caCert = CertUtils.loadCertificate("ca.crt");
+        X509Certificate caCert = CertUtils.loadCertificate(new File("src/test/resources/ca.crt"));
 
         // 加载 CA 密钥
-        PrivateKey caKey = CertUtils.loadPrivateKey("ca.key");
+        PrivateKey caKey = CertUtils.load(new File("src/test/resources/ca.key"));
 
 
         // Generate the key pair
@@ -81,7 +74,9 @@ public class SelfSignedCertPEMByCA {
         JcaX509CertificateConverter converter = new JcaX509CertificateConverter();
         converter.setProvider(org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME);
         X509Certificate newCert = converter.getCertificate(certHolder);
-        CertUtils.pemWriter(newCert,privKey,"cert-by-ca");
+        IOUtils.write(CertUtils.content(newCert),new FileOutputStream(new File("src/test/resources/cert-by-ca.crt")));
+        IOUtils.write(CertUtils.content(privKey),new FileOutputStream(new File("src/test/resources/cert-by-ca.key")));
+
     }
 
 }
