@@ -284,7 +284,7 @@ public class ApiController extends BaseController {
         try {
             for(int  i = 0; i < id.length; i++){
                 String ProtoId = id[i];
-                getAdminClient().delSecret(ProtoId);
+                getAdminClient().delProto(ProtoId);
             }
             return Result.succeed("ok");
         }catch (ApisixSDKException e) {

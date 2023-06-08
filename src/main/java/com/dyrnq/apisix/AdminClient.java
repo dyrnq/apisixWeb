@@ -522,6 +522,19 @@ public class AdminClient extends BaseClient {
             }
         }
     }
+    public void delProto(String id) throws ApisixSDKException {
+        Wrap<Proto> rsp = null;
+        try {
+            //route = resolveUpstream(route);
+            String s = this.doRequest(null, HttpProfile.REQ_DELETE, "/apisix/admin/protos/" + id);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if(e instanceof ApisixSDKException){
+                throw e;
+            }else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+    }
 
     public void delUpstream(String id) throws ApisixSDKException {
         Wrap<Upstream> rsp = null;
