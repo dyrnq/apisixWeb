@@ -1294,11 +1294,11 @@ public class AdminClient extends BaseClient {
         return rsp;
     }
 
-    public Proto putProto(String id,String manager, Proto proto) throws ApisixSDKException {
+    public Proto putProto(String id,Proto proto) throws ApisixSDKException {
         Wrap<Proto> rsp = null;
         try {
             Type type = new TypeToken<Wrap<Proto>>(){}.getType();
-            rsp  = gson.fromJson(this.doRequest(proto, HttpProfile.REQ_PUT, "/apisix/admin/protos/"+manager+"/" + id), type);
+            rsp  = gson.fromJson(this.doRequest(proto, HttpProfile.REQ_PUT, "/apisix/admin/protos/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if(e instanceof ApisixSDKException){
                 throw e;

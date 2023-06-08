@@ -44,6 +44,7 @@ public class WebApp {
                 cfg.setSetting("default_encoding", "UTF-8");
                 cfg.setSetting("template_update_delay", "0");
                 cfg.setSetting("cache_storage", "soft:1");
+                //cfg.setSetting("strict_syntax","false");
 
             });
 

@@ -14,6 +14,8 @@ import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -82,8 +84,19 @@ public abstract class BaseClient {
             throw new ApisixSDKException(e.getClass().getName() + "-" + e.getMessage());
         }
 
-        if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
-            throw new ApisixSDKException(strResp, String.valueOf(okRsp.code()));
+        if (okRsp.code() == BaseClient.HTTP_NOT_OK) {
+            if(strResp !=null) {
+                Pattern pattern = Pattern.compile("\"error_msg\":\"([^\"]*)\"");
+                Matcher matcher = pattern.matcher(strResp);
+
+                if (matcher.find()) {
+                    String errorMsg = matcher.group(1);
+                    throw new ApisixSDKException(errorMsg, String.valueOf(okRsp.code()));
+                }
+            }
+        }else if (okRsp.code() > BaseClient.HTTP_NOT_OK) {
+            logger.error(strResp);
+            throw new ApisixSDKException(String.valueOf(okRsp.code()), String.valueOf(okRsp.code()));
         }
         strResp=StringUtils.replace(strResp,"\"list\":{}","\"list\":[]");
         logger.info(strResp);
