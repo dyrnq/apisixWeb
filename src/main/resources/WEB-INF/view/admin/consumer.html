@@ -30,7 +30,7 @@ input[name='param']{
         <!-- 内容主体区域 -->
         <div style="padding: 15px">
             <fieldset class="layui-elem-field layui-field-title">
-                <legend>${i18n.get("menuStr.http")}</legend>
+                <legend>${i18n.get("menu.consumer")}</legend>
             </fieldset>
 
             <form action="${ctx}/adminPage/http" id="searchForm" method="post">
@@ -478,7 +478,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                     console.log(data);
                     if(data.code=='200'){
                         $('#addForm1 input[name="id"]').val(obj.data.username);
-                        editor.setValue(data.data.rawData);
+                        editor.setValue(data.data.rawData,-1);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],

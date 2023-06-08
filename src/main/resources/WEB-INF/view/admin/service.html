@@ -30,7 +30,7 @@ input[name='param']{
         <!-- 内容主体区域 -->
         <div style="padding: 15px">
             <fieldset class="layui-elem-field layui-field-title">
-                <legend>${i18n.get("menuStr.http")}</legend>
+                <legend>${i18n.get("menu.service")}</legend>
             </fieldset>
 
             <form action="${ctx}/adminPage/http" id="searchForm" method="post">
@@ -337,7 +337,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'ID', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'id', title: 'id', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
       ,{field: 'name', title: 'name', width:80}
       ,{field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
       ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
@@ -490,7 +490,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                     console.log(data);
                     if(data.code=='200'){
                         $('#addForm1 input[name="id"]').val(obj.data.id);
-                        editor.setValue(data.data.rawData);
+                        editor.setValue(data.data.rawData,-1);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],

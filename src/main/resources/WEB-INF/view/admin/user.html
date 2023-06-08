@@ -212,7 +212,7 @@
             return '';
         }
         if (addLink.length > 0) {
-            return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="javascript:void(0)" lay-event="edit">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+            return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>';
         }
     }
 
@@ -246,7 +246,7 @@
             ,totalRow: false //开启合计行
             ,cols: [[ //表头
                 {type: 'checkbox', fixed: 'left'}
-                ,{field: 'id', title: 'ID', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
+                ,{field: 'id', title: 'id', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
                 ,{field: 'name', title: 'name', width:80}
                 , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
             ]]
