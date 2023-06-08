@@ -40,6 +40,10 @@ public class SSL{
     //@Expose
     //private String client.depth;
 
+    //@SerializedName("client.skip_mtls_uri_regex")
+    //@Expose
+    //private String client.skipMtlsUriRegex;
+
     @SerializedName("create_time")
     @Expose
     private Long createTime;

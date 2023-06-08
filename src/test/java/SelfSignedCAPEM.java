@@ -27,45 +27,55 @@ import org.junit.Test;
 
 public class SelfSignedCAPEM {
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
+    static{
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
 
     @Test
-    public void test_createCA() throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException {
-        Security.addProvider(new BouncyCastleProvider());
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(2048);
+    public void test_createCA() throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException, NoSuchProviderException {
+        // Generate the key pair
+        KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", BC);
+        kpGen.initialize(2048);
 
-        KeyPair caKeyPair = keyPairGenerator.generateKeyPair();
-        PrivateKey privKey = caKeyPair.getPrivate();
-        PublicKey publicKey = caKeyPair.getPublic();
+        KeyPair pair = kpGen.generateKeyPair();
+        PrivateKey privKey = pair.getPrivate();
+        PublicKey publicKey = pair.getPublic();
 
         X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
-        nameBuilder.addRDN(BCStyle.CN, "My CA");
+        nameBuilder.addRDN(BCStyle.ST, "GD");
+        nameBuilder.addRDN(BCStyle.C, "My CA");
+        nameBuilder.addRDN(BCStyle.L, "SZ");
+        nameBuilder.addRDN(BCStyle.O,"vihoo");
+        nameBuilder.addRDN(BCStyle.OU,"dev");
+        nameBuilder.addRDN(BCStyle.CN,"test.com");
+        nameBuilder.addRDN(BCStyle.EmailAddress,"yy@vivo.com");
 
+        // Build the X500Name object
         X500Name issuer = nameBuilder.build();
 
-        ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption")
-                .setProvider(BC).build(privKey);
 
+        Date notBefore = new Date(System.currentTimeMillis() - 1000L * 60 * 60 * 24); // 证书有效期从一天前开始
+        Date notAfter = new Date(notBefore.getTime() + 3650L * 24L * 60L * 60L * 1000L); // 10 years validity
+        // Create the certificate
         X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
                 issuer,
                 BigInteger.valueOf(System.currentTimeMillis()),
-                new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000),
-                new Date(System.currentTimeMillis() + 365 * 24 * 60 * 60 * 1000),
+                notBefore,
+                notAfter,
                 issuer,
                 publicKey);
 
 
-        BasicConstraints basicConstraints = new BasicConstraints(true); // CA flag is true
-        certBuilder.addExtension(new Extension(Extension.basicConstraints, true, basicConstraints.getEncoded()));
+
+        certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(true)); // CA flag is true
         SubjectKeyIdentifier subjectKeyIdentifier = new JcaX509ExtensionUtils().createSubjectKeyIdentifier(publicKey);
         certBuilder.addExtension(Extension.subjectKeyIdentifier, false, subjectKeyIdentifier);
         KeyUsage keyUsage = new KeyUsage(KeyUsage.cRLSign | KeyUsage.keyCertSign);
         certBuilder.addExtension(Extension.keyUsage,true,keyUsage.getEncoded());
 
+
+        ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider(BC).build(privKey);
         X509CertificateHolder certificateHolder = certBuilder.build(signer);
-
-
-
 
         JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
         certConverter.setProvider(BC);

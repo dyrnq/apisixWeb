@@ -1,8 +1,10 @@
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.math.BigInteger;
 import java.security.*;
+import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,51 +22,47 @@ import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.junit.Test;
 
 public class SelfSignedCertPEM {
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
+    static{
+        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
 
     @Test
-    public void test_createCert() throws Exception {
-        Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
-
+    public void test_createCert() throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException, NoSuchProviderException {
         // Generate the key pair
         KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", BC);
         kpGen.initialize(2048);
+
         KeyPair pair = kpGen.generateKeyPair();
         PrivateKey privKey = pair.getPrivate();
         PublicKey publicKey = pair.getPublic();
 
-        // Set the DN information
-        //X500Name dnName = new X500Name("CN=test.com");
-//        X500Name issuer = new X500Name("CN=My Issuer");
-//        X500Name subject = new X500Name("CN=test.com");
-
-        // Set the state and country fields
-        // /C=CN/ST=GD/L=SZ/O=vihoo/OU=dev/CN=reg.domain.com/emailAddress=yy@vivo.com
-        X500NameBuilder builder = new X500NameBuilder(BCStyle.INSTANCE);
-        builder.addRDN(BCStyle.ST, "GD");
-        builder.addRDN(BCStyle.C, "CN");
-        builder.addRDN(BCStyle.L, "SZ");
-        builder.addRDN(BCStyle.O,"vihoo");
-        builder.addRDN(BCStyle.OU,"dev");
-        builder.addRDN(BCStyle.CN,"test.com");
-        builder.addRDN(BCStyle.EmailAddress,"yy@vivo.com");
+        X500NameBuilder nameBuilder = new X500NameBuilder(BCStyle.INSTANCE);
+        nameBuilder.addRDN(BCStyle.ST, "GD");
+        nameBuilder.addRDN(BCStyle.C, "CN");
+        nameBuilder.addRDN(BCStyle.L, "SZ");
+        nameBuilder.addRDN(BCStyle.O,"vihoo");
+        nameBuilder.addRDN(BCStyle.OU,"dev");
+        nameBuilder.addRDN(BCStyle.CN,"test.com");
+        nameBuilder.addRDN(BCStyle.EmailAddress,"yy@vivo.com");
 
         // Build the X500Name object
-        X500Name subject = builder.build();
+        X500Name subject = nameBuilder.build();
 
 
-        Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + 3650L * 24L * 60L * 60L * 1000L); // 10 years validity
+        Date notBefore = new Date(System.currentTimeMillis() - 1000L * 60 * 60 * 24); // 证书有效期从一天前开始
+        Date notAfter = new Date(notBefore.getTime() + 3650L * 24L * 60L * 60L * 1000L); // 10 years validity
         // Create the certificate
         X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
                 subject,
                 new BigInteger(64, new SecureRandom()),
-                now,
-                expiryDate,
+                notBefore,
+                notAfter,
                 subject,
                 publicKey);
 

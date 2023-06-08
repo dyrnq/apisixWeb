@@ -92,6 +92,8 @@ public abstract class BaseClient {
                 if (matcher.find()) {
                     String errorMsg = matcher.group(1);
                     throw new ApisixSDKException(errorMsg, String.valueOf(okRsp.code()));
+                }else{
+                    throw new ApisixSDKException(strResp, String.valueOf(okRsp.code()));
                 }
             }
         }else if (okRsp.code() > BaseClient.HTTP_NOT_OK) {

@@ -30,7 +30,7 @@ public class StaticFileResponse extends BaseJunit{
         map.put(Redirect.PLUGIN_NAME,redirect);
         Gzip gzip = new Gzip();
         gzip.types="*";
-        map.put("gzip",gzip);
+        map.put(Gzip.PLUGIN_NAME,gzip);
 
         r.setPlugins(map);
 
