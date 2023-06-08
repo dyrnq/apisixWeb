@@ -279,10 +279,31 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+    @Mapping("del/proto")
+    public Result delProto(Context ctx, String... id ){
+        try {
+            for(int  i = 0; i < id.length; i++){
+                String ProtoId = id[i];
+                getAdminClient().delSecret(ProtoId);
+            }
+            return Result.succeed("ok");
+        }catch (ApisixSDKException e) {
+            return Result.failure(e.getMessage());
+        }
+    }
     @Mapping("add/ssl")
     public Result addSSLRaw(Context ctx,String id , String rawData){
         try {
             getAdminClient().putSSLRaw(id,rawData);
+            return Result.succeed("ok");
+        }catch (ApisixSDKException e) {
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("add/proto")
+    public Result addProtoRaw(Context ctx,String id , String rawData){
+        try {
+            getAdminClient().putProtoRaw(id,rawData);
             return Result.succeed("ok");
         }catch (ApisixSDKException e) {
             return Result.failure(e.getMessage());
@@ -544,6 +565,17 @@ public class ApiController extends BaseController {
         try {
             Multi<PluginConfig> rsp= getAdminClient().queryPluginConfigs(page,limit);
             List<PluginConfig> result = getAdminClient().arrangeMulti(rsp.getNodes());
+            return PageResult.succeed(result,rsp.getTotal());
+        } catch (ApisixSDKException e) {
+            logger.error(e.getMessage());
+            return PageResult.failure(e.getMessage());
+        }
+    }
+    @Mapping("proto")
+    public PageResult proto(Context ctx,String page,String limit) {
+        try {
+            Multi<Proto> rsp= getAdminClient().queryProtos(page,limit);
+            List<Proto> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result,rsp.getTotal());
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());

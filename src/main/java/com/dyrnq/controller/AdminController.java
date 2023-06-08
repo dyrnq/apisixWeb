@@ -144,6 +144,13 @@ public class AdminController {
         model.put("cls",cls);
         return model;
     }
+    @Mapping("proto")
+    public Object proto() {
+        ModelAndView model = new ModelAndView("admin/proto.html");
+        model.put("title", "dock");
+        model.put("message", "你好 world!");
+        return model;
+    }
 
 
 
