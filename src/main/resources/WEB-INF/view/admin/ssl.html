@@ -98,126 +98,53 @@ input[name='param']{
     </div>
 
     <div class="layui-form" id="guideDiv" style="padding: 15px; display: none;">
-        <form id="addForm">
+        <form id="addForm2">
+
             <div class="layui-form-item">
-                <label class="layui-form-label long">keepalive_timeout</label>
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">snis</label>
+                <div class="layui-input-block">
+                    <input type="text" name="snis" class="layui-input" >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">cert file</label>
+<!--                <div class="layui-input-block">-->
+<!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>-->
+<!--                </div>-->
                 <div class="layui-input-inline short">
-                    <input type="text" name="param" id="keepalive_timeout" class="layui-input" value="75" lang="s">
+                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>
                 </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.second}，${httpStr.timeout}</div>
+                <div class="layui-form-mid layui-word-aux"><span class="layui-inline layui-upload-choose" id="layui-upload-choose-cert"></span></div>
+
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label long">gzip</label>
+                <label class="layui-form-label">key file</label>
+
                 <div class="layui-input-inline short">
-                    <input type="checkbox" name="param" id="gzip" lay-skin="primary" checked lang="">
+                    <button type="button" class="layui-btn layui-btn-normal" id="upload-key">key file</button>
                 </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.gzip}</div>
+                <div class="layui-form-mid layui-word-aux"><span class="layui-inline layui-upload-choose" id="layui-upload-choose-key"></span></div>
+
+<!--                <div class="layui-input-block">-->
+<!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-key">key file</button>-->
+<!--                </div>-->
+
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label long">gzip_min_length</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="gzip_min_length" class="layui-input" value="4" lang="k">
-                </div>
-                <div class="layui-form-mid layui-word-aux">KB，${httpStr.gzipMinLength}</div>
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver2()">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label long">gzip_comp_level</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="gzip_comp_level" class="layui-input" value="4" lang="">
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.gzipCompLevel}</div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">gzip_types</label>
-                <div class="layui-input-inline" style="width: 140px;">
-                    <input type="checkbox" name="type" value="js" lay-skin="primary" checked title="js&nbsp;&nbsp;&nbsp;&nbsp;">
-                    <input type="checkbox" name="type" value="css" lay-skin="primary" checked title="css">
-                    <input type="checkbox" name="type" value="json" lay-skin="primary" checked title="json">
-                    <input type="checkbox" name="type" value="xml" lay-skin="primary" checked title="xml">
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.gzipType}</div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">client_max_body_size</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="client_max_body_size" class="layui-input" value="1024" lang="m">
-                </div>
-                <div class="layui-form-mid layui-word-aux">MB，${httpStr.maxBodySize}</div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">client_header_buffer_size</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="client_header_buffer_size" class="layui-input" value="32" lang="k">
-                </div>
-                <div class="layui-form-mid layui-word-aux">KB，${httpStr.headerBufferSize}</div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">client_body_buffer_size</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="client_body_buffer_size" class="layui-input" value="8" lang="m">
-                </div>
-                <div class="layui-form-mid layui-word-aux">MB，${httpStr.bodyBufferSize}</div>
-            </div>
-
-
-
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">server_names_hash_bucket_size</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="server_names_hash_bucket_size" class="layui-input" value="512" lang="">
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.serverNamesHash}</div>
-            </div>
-
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">proxy_headers_hash_max_size</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="proxy_headers_hash_max_size" class="layui-input" value="51200" lang="">
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.proxyHeadersMax}</div>
-            </div>
-
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">proxy_headers_hash_bucket_size</label>
-                <div class="layui-input-inline short">
-                    <input type="text" name="param" id="proxy_headers_hash_bucket_size" class="layui-input" value="6400" lang="">
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.proxyHeadersHash}</div>
-            </div>
-
-
-
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">${httpStr.logStatus}</label>
-                <div class="layui-input-inline short">
-                    <input type="checkbox" name="logStatus" id="logStatus" value="on" lay-skin="primary" >
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.logStatusTips}</div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label long">${httpStr.webSocket}</label>
-                <div class="layui-input-inline short">
-                    <input type="checkbox" name="webSocket" id="webSocket" value="on" lay-skin="primary" >
-                </div>
-                <div class="layui-form-mid layui-word-aux">${httpStr.webSocketTips}</div>
-            </div>
-
-            <div class="layui-form-item center" style="margin-bottom:0px;">
-                <button type="button" class="layui-btn layui-btn-normal" onclick="addGiudeOver()">${commonStr.submit}</button>
-                <button type="button" class="layui-btn" onclick="layer.closeAll()">${commonStr.close}</button>
-            </div>
         </form>
     </div>
 
@@ -237,6 +164,9 @@ input[name='param']{
 </script>
 
 <script>
+var certFile;
+var keyFile;
+
     function cleanData(d){
         if( d === true ){
             $("#div_id").hide();
@@ -263,6 +193,120 @@ input[name='param']{
                 shadeClose: true, // 点击遮罩区域，关闭弹层
                 maxmin: true, // 允许全屏最小化
                 skin: 'layui-layer-win10'
+            });
+
+        });
+    }
+    function guide() {
+        certFile = {};
+        keyFile = {};
+        $('#addForm2 input[name="id"]').val("");
+        $('#addForm2 input[name="snis"]').val("");
+        $("#layui-upload-choose-cert").html("")
+        $("#layui-upload-choose-key").html("");
+
+        layui.use(['layer', 'form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: 'Add SSL',
+                content : $('#guideDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
+        });
+    }
+
+layui.use(['upload','layer'],function () {
+    var upload = layui.upload;
+    var layer = layui.layer;
+
+    upload.render({
+        elem: '#upload-cert'
+        ,auto: false
+        ,accept: "file"
+        ,multiple: false
+        ,before: function(res){
+            console.log(res);
+        }
+        ,size: 5210
+        //,done: function(res, index, upload){
+        //}
+        ,choose: (obj) => {
+            //certFile = obj.pushFile();
+            obj.preview(function(index, file, result){
+                    certFile=file;
+                    console.log(index); // 得到文件索引
+                    //console.log(file); // 得到文件对象
+                    //console.log(result); // 得到文件base64编码，比如图片
+                    $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
+            });
+        }
+        ,error: function(index, upload){
+          console.log(index);
+        }
+    });
+
+    upload.render({
+        elem: '#upload-key'
+        ,auto: false
+        ,accept: "file"
+        ,multiple: false
+        ,before: function(res){
+            console.log(res);
+        }
+        ,size: 5210
+        //,done: function(res, index, upload){
+        //}
+        ,choose: (obj) => {
+
+            obj.preview(function(index, file, result){
+                    keyFile=file;
+                    console.log(index); // 得到文件索引
+                    //console.log(file); // 得到文件对象
+                    //console.log(result); // 得到文件base64编码，比如图片
+                    $("#layui-upload-choose-key").html("<p>"+file.name+"</p>");
+            });
+        }
+        ,error: function(index, upload){
+          console.log(index);
+        }
+    });
+
+
+})
+
+    function addOver2() {
+        layui.use(['layer'], function(){
+            var formData = new FormData();
+            formData.append("certFile",certFile);
+            formData.append("keyFile",keyFile);
+            formData.append("id",$('#addForm2 input[name="id"]').val());
+            formData.append("snis",$('#addForm2 input[name="snis"]').val());
+            $.ajax({
+                type:'POST',
+                url: "/api/add/ssl-upload",
+                data: formData,
+                processData: false,
+                contentType: false,
+                async: false,
+                dataType: "json",
+                success:function (data,statusText) {
+                    if(data.code=='200'){
+                        layer.msg('ok');
+                    }else{
+                        layer.msg(data.description);
+                    }
+                },
+                error:function () {
+                        layer.msg('系统错误');
+                }
             });
 
         });

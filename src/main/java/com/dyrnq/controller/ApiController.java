@@ -13,7 +13,10 @@ import com.dyrnq.dso.InstMapper;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.Inst;
 import com.dyrnq.model.User;
+import com.dyrnq.utils.CertUtils;
 import com.google.gson.*;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -23,9 +26,13 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
+import java.io.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.*;
 
 @Mapping("api")
 @Controller
@@ -670,5 +677,47 @@ public class ApiController extends BaseController {
         map.put("rawData", jsonStr);
         return Result.succeed(map);
     }
+    @Mapping("add/ssl-upload")
+    public Result addSSLFile(Context ctx, org.noear.solon.core.handle.UploadedFile certFile, org.noear.solon.core.handle.UploadedFile keyFile, String id , String snis){
+        try {
+            SSL ssl = new SSL();
+            byte[] byteCert = IOUtils.toByteArray(certFile.getContent());
+            byte[] byteKey = IOUtils.toByteArray(keyFile.getContent());
+            ssl.setCert(IOUtils.toString(byteCert));
+            ssl.setKey(IOUtils.toString(byteKey));
 
+            if(StringUtils.isNotBlank(snis)){
+                String[] strArray = StringUtils.splitByWholeSeparator(snis,",");
+                List<String> listStr = Arrays.asList(strArray);
+                ssl.setSnis(listStr);
+            }else{
+                X509Certificate x509Cert = CertUtils.loadCertificate(new ByteArrayInputStream((byteCert)));
+                String subjectName = x509Cert.getSubjectX500Principal().getName();
+                LdapName ldapName = new LdapName(subjectName);
+                String cnValue=null;
+                for (Rdn rdn : ldapName.getRdns()) {
+                    if (rdn.getType().equalsIgnoreCase("CN")) {
+                        cnValue = rdn.getValue().toString();
+                        // Do something with the CN value
+                        break;
+                    }
+                }
+                List<String> sni = new ArrayList<String>();
+                sni.add(cnValue);
+
+                Collection<?> altNames = x509Cert.getSubjectAlternativeNames();
+                if (altNames != null) {
+                    for (Object altName : altNames) {
+                        sni.add(altName+"");
+                    }
+                }
+                ssl.setSnis(sni);
+            }
+            getAdminClient().putSSL(id,ssl);
+            return Result.succeed("ok");
+        }catch (ApisixSDKException | InvalidNameException |CertificateException | IOException e  ) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
 }
