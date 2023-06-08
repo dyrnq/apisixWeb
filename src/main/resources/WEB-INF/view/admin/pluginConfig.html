@@ -67,18 +67,27 @@ input[name='param']{
         <form id="addForm1">
             <!--            <input type="hidden" name="id" id="id">-->
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">${i18n.get("commonStr.name")}</label>
-                <div class="layui-input-block">
-                    <input type="text" name="id" id="id" class="layui-input">
-                </div>
+            <!--            <div class="layui-form-item">-->
+            <!--                <label class="layui-form-label">${i18n.get("commonStr.name")}</label>-->
+            <!--                <div class="layui-input-block">-->
+            <!--                    <input type="text" name="id" id="id" class="layui-input">-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <!--            <div class="layui-form-item">-->
+            <!--                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>-->
+            <!--                <div class="layui-input-block">-->
+            <!--                    <textarea  name="rawData" id="rawData" class="layui-textarea" ></textarea>-->
+            <!--                    <pre id="editor1" class=".json-editor"></pre>-->
+            <!--                </div>-->
+            <!--            </div>-->
+
+            <div class="layui-form-item" id="div_id">
+                <input type="text" name="id" id="id" class="layui-input" placeholder="id">
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">${i18n.get("commonStr.value")}</label>
-                <div class="layui-input-block">
-                    <textarea  name="rawData" id="rawData" class="layui-textarea" ></textarea>
-                </div>
+                <pre id="editor" class=".json-editor"></pre>
             </div>
 
             <div class="layui-form-item center">
@@ -226,37 +235,63 @@ input[name='param']{
 </script>
 
 <script>
+    function cleanData(d){
+        if( d === true ){
+            $("#div_id").hide();
+        }else{
+            $("#div_id").show();
+        }
+
+        $('#addForm1 input[name="id"]').val("");
+        editor.setValue("",-1);
+    }
 
     function add() {
         layui.use(['layer', 'form'], function(){
             var layer = layui.layer;
             var form = layui.form;
+            cleanData(false);
             layer.open({
                 type: 1,
                 area: ['800px', '600px'],
-                title: '添加http路径',
-                content : $('#windowDiv')
+                title: 'Add PluginConfig',
+                content : $('#windowDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
             });
+
         });
     }
 
     function addOver() {
-        $.ajax({
-            type : 'POST',
-            url : '/api/add/pluginConfig',
-            data : $('#addForm1').serialize(),
-            dataType : 'json',
-            success : function(data) {
-                if(data.code=='200'){
-                    //location.reload();
-                    layer.msg("新增成功");
-                } else {
-                    layer.msg(data.description);
+        layui.use(['layer', 'form'], function(){
+            var id = $('#addForm1 input[name="id"]').val();
+            console.log(id);
+            var text = editor.getValue();
+            console.log(text);
+
+            $.ajax({
+                type : 'POST',
+                url : '/api/add/pluginConfig',
+                contentType: 'application/json',
+                data: JSON.stringify({id: id,rawData:text}),
+                dataType : 'json',
+                success : function(data) {
+                    if(data.code=='200'){
+                        //location.reload();
+                        layer.closeAll();
+                        layer.msg("新增成功");
+                    } else {
+                        layer.msg(data.description);
+                    }
+                },
+                error : function() {
+                    layer.alert("系统错误");
                 }
-            },
-            error : function() {
-                layer.alert("系统错误");
-            }
+            });
         });
     }
 
@@ -266,7 +301,7 @@ input[name='param']{
             return '';
         }
         if (addLink.length > 0) {
-            return '<a class="layui-btn   layui-btn-normal  layui-btn-xs " href="/admin/editor?cls=pluginConfig&id=' +addLink+ '" lay-event="link">' +'编辑' + '</a> '+'| <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>';
+            return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>';
         }
     }
 
@@ -431,12 +466,35 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                 layer.close(index);
             });
         } else if(layEvent === 'edit'){ //编辑
-            //do something
-
-            //同步更新缓存对应的值
-            obj.update({
-                username: '123'
-                ,title: 'xxx'
+            cleanData(true);
+            $.ajax({
+                url: '/api/raw',
+                type:'post',
+                contentType: 'application/json',
+                data: JSON.stringify({id: obj.data.id,cls: 'pluginConfig'}),
+                success:function (data,statusText) {
+                    console.log(data);
+                    if(data.code=='200'){
+                        $('#addForm1 input[name="id"]').val(obj.data.id);
+                        editor.setValue(data.data.rawData);
+                        layer.open({
+                            type: 1,
+                            area: ['800px', '600px'],
+                            title: 'Edit PluginConfig',
+                            content : $('#windowDiv'),
+                            anim: 'slideRight',
+                            shade: 0.6, // 遮罩透明度
+                            shadeClose: true, // 点击遮罩区域，关闭弹层
+                            maxmin: true, // 允许全屏最小化
+                            skin: 'layui-layer-win10'
+                        });
+                    }else{
+                        layer.msg(data.description);
+                    }
+                },
+                'error':function () {
+                    layer.msg('系统错误');
+                }
             });
         } else if(layEvent === 'LAYTABLE_TIPS'){
             layer.alert('Hi，头部工具栏扩展的右侧图标。');
