@@ -1276,4 +1276,87 @@ public class AdminClient extends BaseClient {
         return rsp.getValue();
     }
 
+    public Multi<Proto> queryProtos(String page,String page_size) throws ApisixSDKException {
+        Multi<Proto> rsp = null;
+        try {
+            Map<String,String> paramsMap= new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE,page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE,page_size);
+            Type type = new TypeToken<Multi<Proto>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null,HttpProfile.REQ_GET, "/apisix/admin/protos",mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if(e instanceof ApisixSDKException){
+                throw e;
+            }else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
+    public Proto putProto(String id,String manager, Proto proto) throws ApisixSDKException {
+        Wrap<Proto> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Proto>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(proto, HttpProfile.REQ_PUT, "/apisix/admin/protos/"+manager+"/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if(e instanceof ApisixSDKException){
+                throw e;
+            }else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Proto getProto(String id) throws ApisixSDKException {
+        Wrap<Proto> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Proto>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/protos/" + id), type);
+        } catch (ApisixSDKException | JsonSyntaxException e) {
+            if(e instanceof ApisixSDKException){
+                throw e;
+            }else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+
+    public Proto putProtoRaw(String id , String rawData) throws ApisixSDKException {
+        Wrap<Proto> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Proto>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, "/apisix/admin/protos/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if(e instanceof ApisixSDKException){
+                throw e;
+            }else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+
+    public List<Proto> listProtos() throws ApisixSDKException {
+        Multi<Proto> rsp = null;
+        try {
+            Type type = new TypeToken<Multi<Proto>>(){}.getType();
+            rsp  = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, "/apisix/admin/protos"), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if(e instanceof ApisixSDKException){
+                throw e;
+            }else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+
+
+        List<Proto> result = this.arrangeMulti(rsp.getNodes());
+
+        return result;
+    }
 }

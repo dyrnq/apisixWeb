@@ -624,6 +624,9 @@ public class ApiController extends BaseController {
                 case "plugin":
                     jsonStr = gson.toJson(getAdminClient().getPlugin(id));
                     break;
+                case "proto":
+                    jsonStr = gson.toJson(getAdminClient().getProto(id));
+                    break;
                 default:
                     jsonStr = gson.toJson(getAdminClient().getRoute(id));
             }
