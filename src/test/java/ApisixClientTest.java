@@ -1,8 +1,13 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
 import com.dyrnq.apisix.plugins.Echo;
+import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -175,4 +180,14 @@ public class ApisixClientTest extends BaseJunit {
 
 
     }
+    @Test
+    public void test_putProto() throws ApisixSDKException, IOException {
+        for (int i = 1; i < 20; i++) {
+            Proto proto = new Proto();
+            proto.setContent(IOUtils.toString(new FileInputStream(new File("src/test/resources/demo.proto")),"UTF-8" ));
+            client.putProto("" + i, proto);
+        }
+    }
+
+
 }
