@@ -2,6 +2,7 @@ package com.dyrnq.utils;
 
 import com.google.common.net.InetAddresses;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.*;
@@ -23,27 +24,67 @@ import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
+import javax.naming.ldap.Rdn;
 import java.io.*;
 import java.math.BigInteger;
 import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
+import java.security.cert.CertificateParsingException;
 import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class CertUtils {
 
     private static final int DEFAULT_KEY_SIZE = 4096;
-    private static final int DEFAULT_DAYS = 100*365;
+    private static final int DEFAULT_DAYS = 100 * 365;
 
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
 
     static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
+    }
+
+    public static String[] extractSNI(X509Certificate x509Cert) throws InvalidNameException, CertificateParsingException {
+        Map<String, String> sniMap = _extractSNI(x509Cert);
+        List<String> sni = new ArrayList<>();
+        for (Map.Entry<String, String> entry : sniMap.entrySet()) {
+            String key = entry.getKey();
+            sni.add(key);
+        }
+        return sni.toArray(new String[sni.size()]);
+    }
+
+    private static Map<String, String> _extractSNI(X509Certificate x509Cert) throws InvalidNameException, CertificateParsingException {
+
+        Map<String, String> sniMap = new HashMap<>();
+        String subjectName = x509Cert.getSubjectX500Principal().getName();
+        LdapName ldapName = new LdapName(subjectName);
+        String cnValue = null;
+        for (Rdn rdn : ldapName.getRdns()) {
+            if (rdn.getType().equalsIgnoreCase("CN")) {
+                cnValue = rdn.getValue().toString();
+                // Do something with the CN value
+                break;
+            }
+        }
+        if (StringUtils.isNotBlank(cnValue)) {
+            sniMap.put(cnValue, cnValue);
+        }
+        Collection<List<?>> altNames = x509Cert.getSubjectAlternativeNames();
+        if (altNames != null) {
+            for (List<?> altName : altNames) {
+                if (altName.get(1) != null) {
+                    String altNameStr = String.valueOf(altName.get(1));
+                    sniMap.put(altNameStr, altNameStr);
+                }
+            }
+        }
+        return sniMap;
     }
 
     public static X509Certificate loadCertificate(String content) throws IOException, CertificateException {
@@ -73,9 +114,9 @@ public class CertUtils {
                 // 将 PEM 密钥对转换为 JCE 格式的密钥对
                 KeyPair keyPair = new JcaPEMKeyConverter().setProvider(BC).getKeyPair((PEMKeyPair) obj);
                 return keyPair.getPrivate();
-            } else if (obj instanceof PrivateKeyInfo){
+            } else if (obj instanceof PrivateKeyInfo) {
                 return new JcaPEMKeyConverter().setProvider(BC).getPrivateKey((PrivateKeyInfo) obj);
-            }else {
+            } else {
                 throw new IllegalArgumentException("Unsupported PEM object.");
             }
         } finally {
@@ -96,7 +137,7 @@ public class CertUtils {
                 // 将 PEM 密钥对转换为 JCE 格式的密钥对
                 KeyPair keyPair = new JcaPEMKeyConverter().setProvider(BC).getKeyPair((PEMKeyPair) obj);
                 return keyPair.getPrivate();
-            } else if (obj instanceof PrivateKeyInfo){
+            } else if (obj instanceof PrivateKeyInfo) {
                 return new JcaPEMKeyConverter().setProvider(BC).getPrivateKey((PrivateKeyInfo) obj);
             } else {
                 throw new IllegalArgumentException("Unsupported PEM object.");
@@ -106,7 +147,6 @@ public class CertUtils {
         }
 
     }
-
 
 
     public static PrivateKey load(InputStream in) throws IOException, CertificateException {
@@ -119,7 +159,7 @@ public class CertUtils {
                 // 将 PEM 密钥对转换为 JCE 格式的密钥对
                 KeyPair keyPair = new JcaPEMKeyConverter().setProvider(BC).getKeyPair((PEMKeyPair) obj);
                 return keyPair.getPrivate();
-            } else if (obj instanceof PrivateKeyInfo){
+            } else if (obj instanceof PrivateKeyInfo) {
                 return new JcaPEMKeyConverter().setProvider(BC).getPrivateKey((PrivateKeyInfo) obj);
             } else {
                 throw new IllegalArgumentException("Unsupported PEM object.");
@@ -149,23 +189,24 @@ public class CertUtils {
     }
 
     public static X509Holder gen(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,false,DEFAULT_DAYS,DEFAULT_KEY_SIZE,null);
+        return gen(subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null);
     }
 
-    public static X509Holder gen(String subjectDN,String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,false,DEFAULT_DAYS,DEFAULT_KEY_SIZE,sni);
+    public static X509Holder gen(String subjectDN, String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
+        return gen(subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni);
     }
 
     public static X509Holder genCA(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,true,DEFAULT_DAYS,DEFAULT_KEY_SIZE,null);
+        return gen(subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null);
     }
-    public static X509Holder genCA(String subjectDN,int days) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,true,days,DEFAULT_KEY_SIZE,null);
+
+    public static X509Holder genCA(String subjectDN, int days) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
+        return gen(subjectDN, true, days, DEFAULT_KEY_SIZE, null);
     }
 
 
-    public static X509Holder gen(String subjectDN,String[] sni,X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,false,DEFAULT_DAYS,DEFAULT_KEY_SIZE,sni,issuerCA,issuerCAKey);
+    public static X509Holder gen(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
+        return gen(subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
     }
 
     public static X509Holder gen(
@@ -202,7 +243,7 @@ public class CertUtils {
         ContentSigner signer;
         X509v3CertificateBuilder certBuilder;
 
-        if(issuerCA==null) {
+        if (issuerCA == null) {
             signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider(BC).build(privKey);
             certBuilder = new JcaX509v3CertificateBuilder(
                     issuer,
@@ -211,7 +252,7 @@ public class CertUtils {
                     notAfter,
                     issuer,
                     publicKey);
-        }else{
+        } else {
             // 构造 X.509 证书请求
             PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
                     new X500Name(subjectDN), // 填写主题名称
@@ -232,22 +273,22 @@ public class CertUtils {
             );
         }
 
-        certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(issuerCA!=null?false:true)); // CA flag is true
+        certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(issuerCA != null ? false : true)); // CA flag is true
         SubjectKeyIdentifier subjectKeyIdentifier = new JcaX509ExtensionUtils().createSubjectKeyIdentifier(publicKey);
         certBuilder.addExtension(Extension.subjectKeyIdentifier, false, subjectKeyIdentifier);
         KeyUsage keyUsage = new KeyUsage(KeyUsage.cRLSign | KeyUsage.keyCertSign);
         certBuilder.addExtension(Extension.keyUsage, true, keyUsage.getEncoded());
 
-        if (sni != null && sni.length>0){
+        if (sni != null && sni.length > 0) {
             // Add additional domain names as Subject Alternative Names (SANs)
             List<GeneralName> sanList = new ArrayList<>();
-                for(String i : sni){
-                    if (InetAddresses.isInetAddress(i)){
-                        sanList.add(new GeneralName(GeneralName.iPAddress, i));
-                    }else{
-                        sanList.add(new GeneralName(GeneralName.dNSName, i));
-                    }
+            for (String i : sni) {
+                if (InetAddresses.isInetAddress(i)) {
+                    sanList.add(new GeneralName(GeneralName.iPAddress, i));
+                } else {
+                    sanList.add(new GeneralName(GeneralName.dNSName, i));
                 }
+            }
             GeneralNames subjectAltNames = new GeneralNames(sanList.toArray(new GeneralName[0]));
             certBuilder.addExtension(Extension.subjectAlternativeName, false, subjectAltNames);
         }
@@ -278,7 +319,6 @@ public class CertUtils {
 //    PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
 //    PrivateKeyInfo pki = PrivateKeyInfo.getInstance(spec.getEncoded());
 //    PemObject pemObject = new PemObject("PRIVATE KEY", pki.toASN1Primitive().getEncoded());
-
 
 
     public static String toPKCS8(PrivateKey pkcs1PrivateKey) throws NoSuchAlgorithmException, IOException {

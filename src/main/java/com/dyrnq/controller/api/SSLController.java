@@ -15,13 +15,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
-import javax.naming.ldap.Rdn;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 @Mapping("api/ssl")
 @Controller
@@ -105,36 +104,8 @@ public class SSLController extends ApiController {
                 ssl.setSnis(listStr);
             } else {
                 X509Certificate x509Cert = CertUtils.loadCertificate(new ByteArrayInputStream((byteCert)));
-                String subjectName = x509Cert.getSubjectX500Principal().getName();
-                LdapName ldapName = new LdapName(subjectName);
-                String cnValue = null;
-                for (Rdn rdn : ldapName.getRdns()) {
-                    if (rdn.getType().equalsIgnoreCase("CN")) {
-                        cnValue = rdn.getValue().toString();
-                        // Do something with the CN value
-                        break;
-                    }
-                }
-                Map<String, String> sniMap = new HashMap<>();
-                if (cnValue != null) {
-                    sniMap.put(cnValue, cnValue);
-                }
-
-                Collection<List<?>> altNames = x509Cert.getSubjectAlternativeNames();
-                if (altNames != null) {
-                    for (List<?> altName : altNames) {
-                        if (altName.get(1) != null) {
-                            String altNameStr = String.valueOf(altName.get(1));
-                            sniMap.put(altNameStr, altNameStr);
-                        }
-                    }
-                }
-                List<String> sni = new ArrayList<String>();
-                for (Iterator<String> it = sniMap.keySet().iterator(); it.hasNext(); ) {
-                    String m = it.next();
-                    sni.add(m);
-                }
-                ssl.setSnis(sni);
+                String[] sniArray = CertUtils.extractSNI(x509Cert);
+                ssl.setSnis(Arrays.asList(sniArray));
             }
             getAdminClient().putSSL(id, ssl);
             return Result.succeed("ok");
