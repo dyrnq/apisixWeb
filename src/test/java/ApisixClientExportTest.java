@@ -1,4 +1,4 @@
-import cn.hutool.core.util.ZipUtil;
+
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
 import com.google.gson.Gson;
@@ -9,8 +9,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.plexus.archiver.tar.TarEntry;
-import org.codehaus.plexus.archiver.tar.TarInputStream;
 import org.junit.Test;
 
 import java.io.*;
@@ -20,8 +18,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class ApisixClientExportTest extends BaseJunit {
     static final String pathString = "C:\\Users\\ash\\Desktop\\export";
