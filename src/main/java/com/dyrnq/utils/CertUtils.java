@@ -20,6 +20,8 @@ import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
+import org.bouncycastle.util.io.pem.PemObject;
+import org.bouncycastle.util.io.pem.PemWriter;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -27,11 +29,16 @@ import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class CertUtils {
+
+    private static final int DEFAULT_KEY_SIZE = 4096;
+    private static final int DEFAULT_DAYS = 100*365;
 
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
 
@@ -89,6 +96,8 @@ public class CertUtils {
                 // 将 PEM 密钥对转换为 JCE 格式的密钥对
                 KeyPair keyPair = new JcaPEMKeyConverter().setProvider(BC).getKeyPair((PEMKeyPair) obj);
                 return keyPair.getPrivate();
+            } else if (obj instanceof PrivateKeyInfo){
+                return new JcaPEMKeyConverter().setProvider(BC).getPrivateKey((PrivateKeyInfo) obj);
             } else {
                 throw new IllegalArgumentException("Unsupported PEM object.");
             }
@@ -110,6 +119,8 @@ public class CertUtils {
                 // 将 PEM 密钥对转换为 JCE 格式的密钥对
                 KeyPair keyPair = new JcaPEMKeyConverter().setProvider(BC).getKeyPair((PEMKeyPair) obj);
                 return keyPair.getPrivate();
+            } else if (obj instanceof PrivateKeyInfo){
+                return new JcaPEMKeyConverter().setProvider(BC).getPrivateKey((PrivateKeyInfo) obj);
             } else {
                 throw new IllegalArgumentException("Unsupported PEM object.");
             }
@@ -138,23 +149,23 @@ public class CertUtils {
     }
 
     public static X509Holder gen(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,false,365*100,4096,null);
+        return gen(subjectDN,false,DEFAULT_DAYS,DEFAULT_KEY_SIZE,null);
     }
 
     public static X509Holder gen(String subjectDN,String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,false,365*100,4096,sni);
+        return gen(subjectDN,false,DEFAULT_DAYS,DEFAULT_KEY_SIZE,sni);
     }
 
     public static X509Holder genCA(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,true,365*100,4096,null);
+        return gen(subjectDN,true,DEFAULT_DAYS,DEFAULT_KEY_SIZE,null);
     }
     public static X509Holder genCA(String subjectDN,int days) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,true,days,4096,null);
+        return gen(subjectDN,true,days,DEFAULT_KEY_SIZE,null);
     }
 
 
     public static X509Holder gen(String subjectDN,String[] sni,X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN,false,365*100,4096,sni,issuerCA,issuerCAKey);
+        return gen(subjectDN,false,DEFAULT_DAYS,DEFAULT_KEY_SIZE,sni,issuerCA,issuerCAKey);
     }
 
     public static X509Holder gen(
@@ -178,9 +189,9 @@ public class CertUtils {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
         keyPairGenerator.initialize(keySize);
 
-        KeyPair caKeyPair = keyPairGenerator.generateKeyPair();
-        PrivateKey privKey = caKeyPair.getPrivate();
-        PublicKey publicKey = caKeyPair.getPublic();
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        PrivateKey privKey = keyPair.getPrivate();
+        PublicKey publicKey = keyPair.getPublic();
 
         X500Name issuer = new X500Name(subjectDN);
 
@@ -247,14 +258,66 @@ public class CertUtils {
 
         X509Certificate caCert = certConverter.getCertificate(certificateHolder);
 
+//        //将PKCS#1私钥转换为PKCS#8格式
+//        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
+//        PrivateKeyInfo pkInfo = PrivateKeyInfo.getInstance(converter.getPrivateKey((PrivateKey) privKey).getEncoded());
+//        PrivateKey privateKey = new JcaPEMKeyConverter().setProvider("BC").getPrivateKey(pkInfo);
+//
+//        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
+//        PKCS8EncodedKeySpec pkcs8Spec = converter.getPrivateKey(privKey);
+//        PrivateKey privateKey = KeyFactory.getInstance("RSA", "BC").generatePrivate(pkcs8Spec);
+
+
         holder.setCert(CertUtils.content(caCert));
-        holder.setKey(CertUtils.content(privKey));
+        holder.setKey(CertUtils.toPKCS8(privKey));
 
         return holder;
     }
 
 
+//    PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(privateKeyBytes);
+//    PrivateKeyInfo pki = PrivateKeyInfo.getInstance(spec.getEncoded());
+//    PemObject pemObject = new PemObject("PRIVATE KEY", pki.toASN1Primitive().getEncoded());
 
+
+
+    public static String toPKCS8(PrivateKey pkcs1PrivateKey) throws NoSuchAlgorithmException, IOException {
+        // Get the encoded bytes of the private key
+        byte[] encodedPrivateKey = pkcs1PrivateKey.getEncoded();
+
+        // Convert the key to PKCS#8 format
+        PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(encodedPrivateKey);
+
+        // Get an instance of a key factory that can parse PKCS#8 encoded keys
+        KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+
+        // Parse the PKCS#8 encoded key
+        PrivateKey pkcs8PrivateKey = null;
+        try {
+            pkcs8PrivateKey = keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+        } catch (InvalidKeySpecException e) {
+            throw new RuntimeException(e);
+        }
+
+//        byte[] pkcs8Bytes = pkcs8PrivateKey.getEncoded();
+//        String pkcs8String = Base64.getEncoder().encodeToString(pkcs8Bytes);
+//        PrivateKeyInfo pki = PrivateKeyInfo.getInstance(pkcs8EncodedKeySpec.getEncoded());
+//        PemObject pemObject = new PemObject("PRIVATE KEY", pki.toASN1Primitive().getEncoded());
+
+        PemObject pemObject = new PemObject("PRIVATE KEY", pkcs8PrivateKey.getEncoded());
+        StringWriter stringWriter = new StringWriter();
+        try (PemWriter pemWriter = new JcaPEMWriter(stringWriter)) {
+            pemWriter.writeObject(pemObject);
+        }
+        //byte[] pkcs8PrivateKeyBytes = stringWriter.toString().getBytes();
+
+        return stringWriter.toString();
+
+        // Now we can get the Base64 encoded string of the PKCS#8 key
+//        byte[] pkcs8Bytes = pkcs8PrivateKey.getEncoded();
+//        String pkcs8String = Base64.getEncoder().encodeToString(pkcs8Bytes);
+//        return pkcs8String;
+    }
 
 
 }

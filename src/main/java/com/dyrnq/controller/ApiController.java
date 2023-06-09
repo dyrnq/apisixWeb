@@ -702,14 +702,24 @@ public class ApiController extends BaseController {
                         break;
                     }
                 }
-                List<String> sni = new ArrayList<String>();
-                sni.add(cnValue);
+                Map<String,String> sniMap = new HashMap<>();
+                if(cnValue!=null){
+                    sniMap.put(cnValue,cnValue);
+                }
 
-                Collection<?> altNames = x509Cert.getSubjectAlternativeNames();
+                Collection<List<?>> altNames = x509Cert.getSubjectAlternativeNames();
                 if (altNames != null) {
-                    for (Object altName : altNames) {
-                        sni.add(altName+"");
+                    for (List<?> altName : altNames) {
+                        if(altName.get(1)!=null){
+                            String altNameStr = altName.get(1)+"";
+                            sniMap.put(altNameStr,altNameStr);
+                        }
                     }
+                }
+                List<String> sni = new ArrayList<String>();
+                for (Iterator<String> it = sniMap.keySet().iterator(); it.hasNext(); ) {
+                    String m = it.next();
+                    sni.add(m);
                 }
                 ssl.setSnis(sni);
             }

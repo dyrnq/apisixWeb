@@ -32,10 +32,12 @@ public class SSLTest extends BaseJunit{
     public void test_CreateSSL() throws Exception {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
+        String file="src/test/resources/example-domain";
+        //file="src/test/resources/server";
         SSL ssl = new SSL();
-        ssl.setCert(FileUtil.readString(new File("cert-by-ca.crt"), Charset.forName("UTF-8")) );
-        ssl.setKey(FileUtil.readString(new File("cert-by-ca.key"), Charset.forName("UTF-8")) );
-        X509Certificate x509Cert = loadCertificate("cert-by-ca.crt");
+        ssl.setCert(FileUtil.readString(new File(file+".crt"), Charset.forName("UTF-8")) );
+        ssl.setKey(FileUtil.readString(new File(file+".key"), Charset.forName("UTF-8")) );
+        X509Certificate x509Cert = loadCertificate(file+".crt");
         String subjectName = x509Cert.getSubjectX500Principal().getName();
         LdapName ldapName = new LdapName(subjectName);
         String cnValue=null;
@@ -50,11 +52,13 @@ public class SSLTest extends BaseJunit{
         List<String> sni = new ArrayList<String>();
         sni.add(cnValue);
 
-        Collection<?> altNames = x509Cert.getSubjectAlternativeNames();
+        Collection<List<?>> altNames = x509Cert.getSubjectAlternativeNames();
         if (altNames != null) {
-            for (Object altName : altNames) {
-                System.out.println("SNI: " + altName);
-                sni.add(altName+"");
+            for (List<?> altName : altNames) {
+                if(altName.get(1)!=null){
+                    System.out.println("SNI: " + altName.get(1));
+                    sni.add(altName.get(1)+"");
+                }
             }
         }
         ssl.setSnis(sni);

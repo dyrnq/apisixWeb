@@ -44,6 +44,10 @@ public class CertUtilsTest {
         PrivateKey privateKey = CertUtils.load(new File("src/test/resources/server.key"));
         String contentPrivateKey = CertUtils.content(privateKey);
         System.out.println(contentPrivateKey);
+
+        PrivateKey privateKey_CA = CertUtils.load(new File("src/test/resources/example-ca.key"));
+        String contentPrivateKey_CA = CertUtils.content(privateKey_CA);
+        System.out.println(contentPrivateKey_CA);
     }
 
     @Test
@@ -54,18 +58,22 @@ public class CertUtilsTest {
     }
 
     @Test
-    public void test_gen() throws Exception {
+    public void test_genCA() throws Exception {
         X509Holder holder = CertUtils.genCA("CN=My CN", 365 * 2 * 100);
         IOUtils.write(holder.getCert(), new FileOutputStream(new File("src/test/resources/example-ca.crt")));
         IOUtils.write(holder.getKey(), new FileOutputStream(new File("src/test/resources/example-ca.key")));
 
-        X509Holder holderDomain = CertUtils.gen("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com","hello.com","127.0.0.1","192.168.100.22"});
+        processShell("openssl x509 -in src/test/resources/example-ca.crt -text -noout");
+    }
+
+    @Test
+    public void test_gen() throws Exception {
+        X509Holder holderDomain = CertUtils.gen("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com","www.hello.com","127.0.0.1","192.168.100.22"});
         IOUtils.write(holderDomain.getCert(), new FileOutputStream(new File("src/test/resources/example-domain.crt")));
         IOUtils.write(holderDomain.getKey(), new FileOutputStream(new File("src/test/resources/example-domain.key")));
 
 
 
-        processShell("openssl x509 -in src/test/resources/example-ca.crt -text -noout");
         processShell("openssl x509 -in src/test/resources/example-domain.crt -text -noout");
         processShell("openssl x509 -in src/test/resources/server.crt -text -noout");
     }
@@ -73,10 +81,23 @@ public class CertUtilsTest {
     public void test_genByCa() throws Exception {
         X509Certificate caCert = CertUtils.loadCertificate(new File("src/test/resources/example-ca.crt"));
         PrivateKey caKey = CertUtils.load(new File("src/test/resources/example-ca.key"));
-        X509Holder domain = CertUtils.gen("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com","hello.com","127.0.0.1","192.168.100.22"},caCert,caKey);
+        X509Holder domain = CertUtils.gen("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com","www.hello.com","127.0.0.1","192.168.100.22"},caCert,caKey);
         IOUtils.write(domain.getCert(), new FileOutputStream(new File("src/test/resources/example-domain-by-ca.crt")));
         IOUtils.write(domain.getKey(), new FileOutputStream(new File("src/test/resources/example-domain-by-ca.key")));
         processShell("openssl x509 -in src/test/resources/example-domain-by-ca.crt -text -noout");
+    }
+    @Test
+    public void test_renew() throws Exception {
+        test_genCA();
+        test_genByCa();
+        test_gen();
+    }
+
+
+    @Test
+    public void test_convert() throws Exception {
+        PrivateKey privateKey_CA = CertUtils.load(new File("src/test/resources/example-ca.key"));
+        CertUtils.toPKCS8(privateKey_CA);
     }
 
     public static void processShell(String command) throws IOException, InterruptedException {
@@ -108,7 +129,7 @@ public class CertUtilsTest {
         }
 
         InputStream errorStream = process.getErrorStream();
-        BufferedReader readerError = new BufferedReader(new InputStreamReader(inputStream));
+        BufferedReader readerError = new BufferedReader(new InputStreamReader(errorStream));
         String lineError;
         while ((lineError = readerError.readLine()) != null) {
             System.out.println(lineError);
