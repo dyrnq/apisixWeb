@@ -124,7 +124,7 @@ public class SSLController extends ApiController {
                 if (altNames != null) {
                     for (List<?> altName : altNames) {
                         if (altName.get(1) != null) {
-                            String altNameStr = altName.get(1) + "";
+                            String altNameStr = String.valueOf(altName.get(1));
                             sniMap.put(altNameStr, altNameStr);
                         }
                     }

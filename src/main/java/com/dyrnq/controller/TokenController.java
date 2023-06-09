@@ -18,6 +18,7 @@ public class TokenController extends BaseController {
 
     @Inject
     BusinessLogic businessLogic;
+
     /**
      * 获取Token
      *
@@ -25,19 +26,10 @@ public class TokenController extends BaseController {
      * @param pass 密码
      */
     @Mapping("getToken")
-    public Result getToken(Context ctx,String name, String pass) {
+    public Result getToken(Context ctx, String name, String pass) {
 
-        User user = businessLogic.login(name,pass);
-//        //用户名密码
-//        Admin admin = adminService.login(name, pass);
-//        if (admin == null) {
-//            return renderError(m.get("loginStr.backError2")); // 用户名密码错误
-//        }
-//        if (!admin.getApi()) {
-//            return renderError(m.get("loginStr.backError7")); // 无接口权限
-//        }
-
-        if(user!=null){
+        User user = businessLogic.login(name, pass);
+        if (user != null) {
             ctx.sessionSet(Claims.SUBJECT, user.getName());
             return Result.succeed(ctx.sessionState().sessionToken());
         } else {
@@ -46,10 +38,8 @@ public class TokenController extends BaseController {
     }
 
     @Mapping("/i18n")
-    public Result changeLocale(Context ctx,String l) {
-        ctx.cookieSet("SOLON.LOCALE",l);
-//        java.util.Locale locale = I18nUtil.getLocaleResolver().getLocale(ctx);
-//        logger.info(locale.getDisplayLanguage());
+    public Result changeLocale(Context ctx, String l) {
+        ctx.cookieSet("SOLON.LOCALE", l);
         return Result.succeed("ok");
     }
 
