@@ -142,6 +142,7 @@ layui.use(['layer', 'form', 'table'], function(){
                 data : {cls:cls},
                 dataType : 'json',
                 success : function(data) {
+                    layer.closeAll();
                     table.reload('demo',{});
                 }
             });

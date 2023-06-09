@@ -782,7 +782,7 @@ public class ApiController extends BaseController {
                     break;
                 case "consumer":
                     for(Consumer r: getAdminClient().listConsumers()){
-                        getAdminClient().delConsumer(r.getId());
+                        getAdminClient().delConsumer(r.getUsername());
                     }
                     break;
                 case "globalRule":
