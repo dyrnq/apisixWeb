@@ -1,5 +1,6 @@
 package com.dyrnq.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.PageUtil;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.response.Multi;
@@ -13,6 +14,7 @@ import com.dyrnq.dso.InstMapper;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.Inst;
 import com.dyrnq.model.User;
+import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.utils.CertUtils;
 import com.google.gson.*;
 import org.apache.commons.io.IOUtils;
@@ -21,6 +23,7 @@ import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
+import org.noear.solon.core.handle.DownloadedFile;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
 import org.slf4j.Logger;
@@ -597,6 +600,17 @@ public class ApiController extends BaseController {
         Profile p = DefaultProfile.getProfile (url ,"", c);
         AdminClient client =new AdminClient(p);
         return client;
+    }
+
+    @Inject
+    BusinessLogic businessLogic;
+    @Mapping("/export")
+    public void export(Context ctx) throws IOException, ApisixSDKException {
+        long currentTimeMillis = System.currentTimeMillis();
+        byte[] b = businessLogic.export(currentTimeMillis);
+        String fileName="export-"+currentTimeMillis+".tar.gz";
+        DownloadedFile file =new DownloadedFile("application/octet-stream",b,fileName);
+        ctx.outputAsFile(file);
     }
 
     @Mapping("raw")
