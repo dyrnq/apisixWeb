@@ -120,7 +120,7 @@ function addOver() {
 
         $.ajax({
             type : 'POST',
-            url : '/api/add/pluginMetadata',
+            url : '/api/pluginMetadata/put',
             contentType: 'application/json',
             data: JSON.stringify({id: id,rawData:text}),
             dataType : 'json',

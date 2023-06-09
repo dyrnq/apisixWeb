@@ -166,7 +166,7 @@ function addOver() {
 
         $.ajax({
             type : 'POST',
-            url : '/api/add/route',
+            url : '/api/route/put',
             contentType: 'application/json',
             data: JSON.stringify({id: id,rawData:text}),
             dataType : 'json',
@@ -323,7 +323,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                         }
 
                         $.ajax({
-                            url: '/api/del/route',
+                            url: '/api/route/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
@@ -366,7 +366,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/enable/route',
+                            url: '/api/route/enable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -407,7 +407,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/disable/route',
+                            url: '/api/route/disable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -451,7 +451,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 //向服务端发送删除指令
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
-                    url: '/api/del/route',
+                    url: '/api/route/del',
                     type:'post',
                     data:"id="+obj.data.id,
                          success:function (data,statusText) {
@@ -508,29 +508,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
         }
     });
-  //监听status切换
-  // table.on('switch(status)',function (obj){
-  //     var status = obj.data.status;
-  //     $.ajax({
-  //         url: '/api/status/route',
-  //         type:'post',
-  //         data:JSON.stringify({id: obj.data.id,rawData:status}),
-  //         success:function (data,statusText) {
-  //             //alert(data.code)
-  //             if(data.code=='200'){
-  //                 layer.msg('切换成功');
-  //                 //table.reload('idTest',{});
-  //             }else{
-  //                 layer.msg(data.description);
-  //             }
-  //         },
-  //         'error':function () {
-  //             // layer.msg('系统错误');
-  //         }
-  //     });
-  //     // layer.msg('切换成功');
-  //     }
-  // )
+
   //监听Tab切换
   element.on('tab(demo)', function(data){
     layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {

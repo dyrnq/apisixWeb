@@ -275,7 +275,7 @@ input[name='param']{
 
             $.ajax({
                 type : 'POST',
-                url : '/api/add/globalRule',
+                url : '/api/globalRule/put',
                 contentType: 'application/json',
                 data: JSON.stringify({id: id,rawData:text}),
                 dataType : 'json',
@@ -399,7 +399,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
 
                         }
                         $.ajax({
-                            url: '/api/del/globalRule',
+                            url: '/api/globalRule/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
@@ -442,7 +442,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                 //向服务端发送删除指令
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
-                    url: '/api/del/globalRule',
+                    url: '/api/globalRule/del',
                     type:'post',
                     data:"id="+obj.data.id,
                     success:function (data,statusText) {

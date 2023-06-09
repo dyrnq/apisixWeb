@@ -151,7 +151,7 @@
 
             $.ajax({
                 type : 'POST',
-                url : '/api/add/proto',
+                url : '/api/proto/put',
                 contentType: 'application/json',
                 data: JSON.stringify({id: id,rawData:text}),
                 dataType : 'json',
@@ -300,7 +300,7 @@
                             }
 
                             $.ajax({
-                                url: '/api/del/proto',
+                                url: '/api/proto/del',
                                 type: 'post',
                                 contentType: 'application/json',
                                 data: JSON.stringify({id: allId}),
@@ -343,7 +343,7 @@
                     //向服务端发送删除指令
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     $.ajax({
-                        url: '/api/del/proto',
+                        url: '/api/proto/del',
                         type:'post',
                         data:"id="+obj.data.id,
                         success:function (data,statusText) {

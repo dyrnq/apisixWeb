@@ -196,7 +196,7 @@ input[name='param']{
 
         $.ajax({
             type : 'POST',
-            url : '/api/add/inst',
+            url : '/api/inst/add',
             data : $('#addForm1').serialize(),
             dataType : 'json',
             success : function(data) {
@@ -222,7 +222,7 @@ input[name='param']{
         var table = layui.table //表格
         $.ajax({
             type : 'POST',
-            url : '/api/update/inst',
+            url : '/api/inst/update',
             data : $('#addForm2').serialize(),
             dataType : 'json',
             success : function(data) {
@@ -364,7 +364,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                         }
 
                         $.ajax({
-                            url: '/api/del/inst',
+                            url: '/api/inst/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
@@ -407,7 +407,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/enable/route',
+                            url: '/api/route/enable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -448,7 +448,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/disable/route',
+                            url: '/api/route/disable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -493,7 +493,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 //向服务端发送删除指令
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
-                    url: '/api/del/inst',
+                    url: '/api/inst/del',
                     type:'post',
                     data:"id="+obj.data.id,
                          success:function (data,statusText) {
@@ -527,7 +527,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 var form = layui.form;
                 console.log(obj.data.id);
                 $.ajax({
-                    url: '/api/get/inst',
+                    url: '/api/inst/get',
                     type:'post',
                     contentType: 'application/json',
                     data:JSON.stringify({id:obj.data.id}),
@@ -557,29 +557,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 });
             }
     });
-  //监听status切换
-  // table.on('switch(status)',function (obj){
-  //     var status = obj.data.status;
-  //     $.ajax({
-  //         url: '/api/status/route',
-  //         type:'post',
-  //         data:JSON.stringify({id: obj.data.id,rawData:status}),
-  //         success:function (data,statusText) {
-  //             //alert(data.code)
-  //             if(data.code=='200'){
-  //                 layer.msg('切换成功');
-  //                 //table.reload('idTest',{});
-  //             }else{
-  //                 layer.msg(data.description);
-  //             }
-  //         },
-  //         'error':function () {
-  //             // layer.msg('系统错误');
-  //         }
-  //     });
-  //     // layer.msg('切换成功');
-  //     }
-  // )
+
   //监听Tab切换
   element.on('tab(demo)', function(data){
     layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {

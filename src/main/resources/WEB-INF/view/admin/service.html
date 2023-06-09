@@ -276,7 +276,7 @@ input[name='param']{
 
             $.ajax({
                 type : 'POST',
-                url : '/api/add/service',
+                url : '/api/service/put',
                 contentType: 'application/json',
                 data: JSON.stringify({id: id,rawData:text}),
                 dataType : 'json',
@@ -405,7 +405,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
 
                         }
                         $.ajax({
-                            url: '/api/del/service',
+                            url: '/api/service/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
@@ -449,7 +449,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
                 //向服务端发送删除指令
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
-                    url: '/api/del/service',
+                    url: '/api/service/del',
                     type:'post',
                     data:"id="+obj.data.id,
                     success:function (data,statusText) {
