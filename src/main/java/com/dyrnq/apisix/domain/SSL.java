@@ -140,6 +140,18 @@ public class SSL{
         return this.updateTime;
     }
 
+    @SerializedName("client")
+    @Expose
+    private Client client;
+
+    public void setClient(Client client){
+        this.client=client;
+    }
+
+    public Client getClient(){
+        return this.client;
+    }
+
     @SerializedName("id")
     @Expose
     private String id;
