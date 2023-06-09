@@ -138,8 +138,7 @@ layui.use(['layer', 'form', 'table'], function(){
 
          $.ajax({
                 type : 'POST',
-                url : '/api/drop',
-                data : {cls:cls},
+                url : '/api/'+cls+'/drop',
                 dataType : 'json',
                 success : function(data) {
                     layer.closeAll();

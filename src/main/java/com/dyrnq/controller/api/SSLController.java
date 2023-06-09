@@ -4,6 +4,7 @@ import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.SSL;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
+import com.dyrnq.service.op.Factory;
 import com.dyrnq.utils.CertUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -30,9 +31,7 @@ public class SSLController extends ApiController {
     @Mapping("del")
     public Result del(Context ctx, String... id) {
         try {
-            for (String i : id) {
-                getAdminClient().delSSL(i);
-            }
+            Factory.create(SSL.class).del(getAdminClient(), id);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());

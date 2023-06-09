@@ -4,6 +4,7 @@ import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
+import com.dyrnq.service.op.Factory;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
@@ -21,9 +22,7 @@ public class RouteController extends ApiController {
     @Mapping("del")
     public Result del(Context ctx, String... id) {
         try {
-            for (String i : id) {
-                getAdminClient().delRoute(i);
-            }
+            Factory.create(Route.class).del(getAdminClient(), id);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage());

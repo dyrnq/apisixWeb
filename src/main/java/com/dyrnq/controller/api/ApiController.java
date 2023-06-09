@@ -2,17 +2,19 @@ package com.dyrnq.controller.api;
 
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
-import com.dyrnq.apisix.domain.*;
 import com.dyrnq.apisix.profile.Credential;
 import com.dyrnq.apisix.profile.DefaultCredential;
 import com.dyrnq.apisix.profile.DefaultProfile;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.controller.BaseController;
 import com.dyrnq.service.BusinessLogic;
+import com.dyrnq.service.op.Factory;
+import com.dyrnq.service.op.Sample;
 import com.google.gson.*;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
+import org.noear.solon.annotation.Path;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.DownloadedFile;
 import org.noear.solon.core.handle.Result;
@@ -47,10 +49,7 @@ public class ApiController extends BaseController {
         ctx.outputAsFile(file);
     }
 
-    @Mapping("raw")
-    public Result getRaw(Context ctx, String cls, String id) {
-
-        String jsonStr = "{}";
+    private Gson g() {
         Gson gson = new GsonBuilder()
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
@@ -59,10 +58,8 @@ public class ApiController extends BaseController {
                 .setExclusionStrategies(new ExclusionStrategy() {
                     @Override
                     public boolean shouldSkipField(FieldAttributes f) {
-                        if ("id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName())) {
-                            return true; // 如果是特殊字段，则排除
-                        }
-                        return false; // 其他字段都保留
+                        return "id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName()); // 如果是特殊字段，则排除
+// 其他字段都保留
                     }
 
                     @Override
@@ -71,50 +68,14 @@ public class ApiController extends BaseController {
                     }
                 })
                 .create();
+        return gson;
+    }
 
+    @Mapping("raw")
+    public Result raw(Context ctx, String cls, String id) {
+        String jsonStr = "{}";
         try {
-            switch (cls) {
-                case "route":
-                    jsonStr = gson.toJson(getAdminClient().getRoute(id));
-                    break;
-                case "upstream":
-                    jsonStr = gson.toJson(getAdminClient().getUpstream(id));
-                    break;
-                case "ssl":
-                    jsonStr = gson.toJson(getAdminClient().getSSL(id));
-                    break;
-                case "service":
-                    jsonStr = gson.toJson(getAdminClient().getService(id));
-                    break;
-                case "streamRoute":
-                    jsonStr = gson.toJson(getAdminClient().getStreamRoute(id));
-                    break;
-                case "secret":
-                    jsonStr = gson.toJson(getAdminClient().getSecret(id));
-                    break;
-                case "consumer":
-                    jsonStr = gson.toJson(getAdminClient().getConsumer(id));
-                    break;
-                case "globalRule":
-                    jsonStr = gson.toJson(getAdminClient().getGlobalRule(id));
-                    break;
-                case "pluginConfig":
-                    jsonStr = gson.toJson(getAdminClient().getPluginConfig(id));
-                    break;
-                case "pluginMetadata":
-                    jsonStr = gson.toJson(getAdminClient().getPluginMetadata(id));
-                    break;
-                case "consumerGroup":
-                    jsonStr = gson.toJson(getAdminClient().getConsumerGroup(id));
-                    break;
-                case "plugin":
-                    jsonStr = gson.toJson(getAdminClient().getPlugin(id));
-                    break;
-                case "proto":
-                    jsonStr = gson.toJson(getAdminClient().getProto(id));
-                    break;
-
-            }
+            jsonStr = g().toJson(Factory.create(cls).get(getAdminClient(), id));
         } catch (Exception Exception) {
         }
         Map map = new HashMap();
@@ -124,71 +85,25 @@ public class ApiController extends BaseController {
     }
 
 
-    @Mapping("drop")
-    public Result drop(Context ctx, String cls) {
-
+    @Mapping("{cls}/drop")
+    public Result drop(Context ctx, @Path("cls") String cls) {
         try {
-            switch (cls) {
-                case "route":
-                    for (Route r : getAdminClient().listRoutes()) {
-                        getAdminClient().delRoute(r.getId());
-                    }
-                    break;
-                case "upstream":
-                    for (Upstream r : getAdminClient().listUpstreams()) {
-                        getAdminClient().delUpstream(r.getId());
-                    }
-                    break;
-                case "ssl":
-                    for (SSL r : getAdminClient().listSSLs()) {
-                        getAdminClient().delSSL(r.getId());
-                    }
-                    break;
-                case "service":
-                    for (Service r : getAdminClient().listServices()) {
-                        getAdminClient().delService(r.getId());
-                    }
-                    break;
-                case "streamRoute":
-                    for (StreamRoute r : getAdminClient().listStreamRoutes()) {
-                        getAdminClient().delStreamRoute(r.getId());
-                    }
-                    break;
-                case "secret":
-                    for (Secret r : getAdminClient().listSecrets()) {
-                        getAdminClient().delSecret(r.getId());
-                    }
-                    break;
-                case "consumer":
-                    for (Consumer r : getAdminClient().listConsumers()) {
-                        getAdminClient().delConsumer(r.getUsername());
-                    }
-                    break;
-                case "globalRule":
-                    for (GlobalRule r : getAdminClient().listGlobalRules()) {
-                        getAdminClient().delGlobalRule(r.getId());
-                    }
-                    break;
-                case "pluginConfig":
-                    for (PluginConfig r : getAdminClient().listPluginConfigs()) {
-                        getAdminClient().delPluginConfig(r.getId());
-                    }
-                    break;
-                case "consumerGroup":
-                    for (ConsumerGroup r : getAdminClient().listConsumerGroups()) {
-                        getAdminClient().delConsumerGroup(r.getId());
-                    }
-                    break;
-                case "proto":
-                    for (Proto r : getAdminClient().listProtos()) {
-                        getAdminClient().delProto(r.getId());
-                    }
-                    break;
-            }
+            Factory.create(cls).drop(getAdminClient());
         } catch (Exception Exception) {
         }
-
         return Result.succeed("ok");
     }
+
+
+    @Mapping("{cls}/sample")
+    public Result sample(Context ctx, @Path("cls") String cls) {
+        String jsonStr = "{}";
+        Sample sample = Factory.createSample(cls);
+        jsonStr = g().toJson(sample.sample());
+        Map map = new HashMap();
+        map.put("rawData", jsonStr);
+        return Result.succeed(map);
+    }
+
 
 }
