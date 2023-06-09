@@ -1,6 +1,7 @@
 
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
+import com.dyrnq.utils.TarUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
@@ -36,200 +37,84 @@ public class ApisixClientExportTest extends BaseJunit {
     public void test_export() throws ApisixSDKException, IOException {
         Gson gson = new Gson();//创建gson对象，含有转化的toJson方法
         createDir("export","C:\\Users\\ash\\Desktop");
-        //1.route队列
-        String folderName1 = "route";
-        createDir(folderName1, pathString);
-        List<Route> routes = client.listRoutes();
-        for (Route obj : routes) {
-            File file = new File(pathString + "/" + folderName1 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-        }
-        //2.streamRoute队列
-        String folderName2 = "streamRoute";
-        createDir(folderName2, pathString);
-        List<StreamRoute> streamRoute = client.listStreamRoutes();
-        for (StreamRoute obj : streamRoute) {
-            File file = new File(pathString + "/" + folderName2 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-        }
 
-        //3.service队列
-        String folderName3 = "service";
-        createDir(folderName3, pathString);
-        List<Service> services = client.listServices();
-        for (Service obj : services) {
-            File file = new File(pathString + "/" + folderName3 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
+        //1，设立一个含有所有队列信息的数组
+        String [] clss = {"route","streamRoute","upstream","service","ssl","secret","consumer","consumerGroup","globalRule","pluginConfig","proto"};
+        List<?> list = null;
+        //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
+        for(String obj: clss) {
+            switch (obj) {
+                case "route":
+                    list = client.listRoutes();
+                    break;
 
+                case "StreamRoute":
+                    list = client.listStreamRoutes();
+                    break;
 
-        }
-        //4.pluginConfig队列
-        String folderName4 = "pluginConfig";
-        createDir(folderName4, pathString);
-        List<PluginConfig> pluginConfigs = client.listPluginConfigs();
-        for (PluginConfig obj : pluginConfigs) {
-            File file = new File(pathString + "/" + folderName4 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
+                case "upstream":
+                    list = client.listUpstreams();
+                    break;
 
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
+                case "service":
+                    list = client.listServices();
+                    break;
 
-
-        }
-        //5.consumer队列
-        String folderName5 = "consumer";
-        createDir(folderName5, pathString);
-        List<Consumer> consumers = client.listConsumers();
-        for (Consumer obj : consumers) {
-            File file = new File(pathString + "/" + folderName5 + "/" + obj.getUsername() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-        //6.consumerGroup队列
-        String folderName6 = "consumerGroup";
-        createDir(folderName6, pathString);
-        List<ConsumerGroup> consumerGroups = client.listConsumerGroups();
-        for (ConsumerGroup obj : consumerGroups) {
-            File file = new File(pathString + "/" + folderName6 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-        //7.secret队列
-        String folderName7 = "secret";
-        createDir(folderName7, pathString);
-        List<Secret> secrets = client.listSecrets();
-        for (Secret obj : secrets) {
-            String encodeId = URLEncoder.encode(obj.getId(), "UTF-8");
-            File file = new File(pathString + "/" + folderName7 + "/" + encodeId + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-        //8.globalRule队列
-        String folderName8 = "globalRule";
-        createDir(folderName8, pathString);
-        List<GlobalRule> globalRules = client.listGlobalRules();
-        for (GlobalRule obj : globalRules) {
-            File file = new File(pathString + "/" + folderName8 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-        //9.upstream队列
-        String folderName9 = "upstream";
-        createDir(folderName9, pathString);
-        List<Upstream> upstreams = client.listUpstreams();
-        for (Upstream obj : upstreams) {
-            File file = new File(pathString + "/" + folderName9 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-
-        //10.ssl队列
-        String folderName10 = "ssl";
-        createDir(folderName10, pathString);
-        List<SSL> ssls = client.listSSLs();
-        for (SSL obj : ssls) {
-            File file = new File(pathString + "/" + folderName10 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-        //11.proto队列
-        String folderName11 = "proto";
-        createDir(folderName11, pathString);
-        List<Proto> protos = client.listProtos();
-        for (Proto obj : protos) {
-            File file = new File(pathString + "/" + folderName11 + "/" + obj.getId() + ".json");//创建file文件地址对象，作为载体
-            FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-            String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-            writer.write(json);//执行写入方法。
-            writer.close();//关闭写入方法。
-
-
-        }
-
-
-        String sourceDirPath = "C:\\Users\\ash\\Desktop\\export";
-        String targetFilePath = "C:\\Users\\ash\\Desktop\\jar.tar.gz";
-        tarGz(sourceDirPath,targetFilePath);
-    }
-
-    private static void tarGz(String sourceDirPath, String targetFilePath) throws IOException {
-
-
-        FileOutputStream fileOutputStream = new FileOutputStream(targetFilePath);
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-        GzipCompressorOutputStream gzipOutputStream = new GzipCompressorOutputStream(bufferedOutputStream);
-        TarArchiveOutputStream tarArchiveOutputStream = new TarArchiveOutputStream(gzipOutputStream);
-
-        File sourceDir = new File(sourceDirPath);
-        for (File file : sourceDir.listFiles()) {
-            addFileToTarGz(tarArchiveOutputStream, "", file);
-        }
-
-        tarArchiveOutputStream.close();
-        gzipOutputStream.close();
-        bufferedOutputStream.close();
-        fileOutputStream.close();
-    }
-
-    private static void addFileToTarGz(TarArchiveOutputStream tarArchiveOutputStream, String base, File file) throws IOException {
-        String entryName = base + file.getName();
-        TarArchiveEntry tarEntry = new TarArchiveEntry(file, entryName);
-        tarArchiveOutputStream.putArchiveEntry(tarEntry);
-
-        if (file.isFile()) {
-            try (BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file))) {
-                byte[] buffer = new byte[1024];
-                int count;
-                while ((count = inputStream.read(buffer)) != -1) {
-                    tarArchiveOutputStream.write(buffer, 0, count);
-                }
+                case "ssl":
+                    list = client.listSSLs();
+                    break;
+                case "secret":
+                    list = client.listSecrets();
+                    break;
+                case "consumer":
+                    list = client.listConsumers();
+                    break;
+                case "consumerGroup":
+                    list = client.listConsumerGroups();
+                    break;
+                case "globalRule":
+                    list = client.listGlobalRules();
+                    break;
+                case "pluginConfig":
+                    list = client.listPluginConfigs();
+                    break;
+                case "proto":
+                    list = client.listProtos();
+                    break;
+                default:
+                    break;
             }
-            tarArchiveOutputStream.closeArchiveEntry();
-        } else if (file.isDirectory()) {
-            tarArchiveOutputStream.closeArchiveEntry();
-            for (File childFile : file.listFiles()) {
-                String childBase = entryName + "/";
-                addFileToTarGz(tarArchiveOutputStream, childBase, childFile);
+            //3，根据不同情况进行不同的文件名创建
+            String folderName = obj;
+            createDir(obj,pathString);
+
+            for (Object obj1 : list) {
+                String id ="";
+                if (obj1 instanceof Route) { id = ((Route) obj1).getId();}
+                else if( obj1 instanceof Consumer) {id =((Consumer) obj1).getUsername();}
+                else if( obj1 instanceof StreamRoute) {id = ((StreamRoute) obj1).getId();}
+                else if( obj1 instanceof Upstream) {id = ((Upstream) obj1).getId();}
+                else if( obj1 instanceof Service) {id = ((Service) obj1).getId();}
+                else if( obj1 instanceof ConsumerGroup) {id = ((ConsumerGroup) obj1).getId();}
+                else if( obj1 instanceof GlobalRule) {id = ((GlobalRule) obj1).getId();}
+                else if( obj1 instanceof PluginConfig) {id = ((PluginConfig) obj1).getId();}
+                else if( obj1 instanceof Proto) {id = ((Proto) obj1).getId();}
+                else if( obj1 instanceof SSL) {id = ((SSL) obj1).getId();}
+                else if( obj1 instanceof Secret) {id = URLEncoder.encode(((Secret) obj1).getId(),"UTF-8");}
+
+                File file = new File(pathString + "/" + obj + "/" + id + ".json");//创建file文件地址对象，作为载体
+                FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
+                String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
+                writer.write(json);//执行写入方法。
+                writer.close();//关闭写入方法。
             }
+            String sourceDirPath = "C:\\Users\\ash\\Desktop\\export";
+            String targetFilePath = "C:\\Users\\ash\\Desktop\\jar.tar.gz";
+            TarUtils.tarGz(sourceDirPath,targetFilePath);
+
+
         }
+
     }
 
 
