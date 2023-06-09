@@ -61,4 +61,58 @@ public class ApisixClientDelTest extends BaseJunit{
             client.delSSL(rr.getId());
         }
     }
+
+    @Test
+    public void test_cleanProto() throws Exception{
+        List<Proto> listObj = client.listProtos();
+        for (Proto rr : listObj) {
+            client.delProto(rr.getId());
+        }
+    }
+
+    @Test
+    public void test_cleanGlobalRule() throws Exception{
+        List<GlobalRule> listObj = client.listGlobalRules();
+        for (GlobalRule rr : listObj) {
+            client.delGlobalRule(rr.getId());
+        }
+    }
+    @Test
+    public void test_cleanConsumer() throws Exception{
+        List<Consumer> listObj = client.listConsumers();
+        for (Consumer rr : listObj) {
+            client.delConsumer(rr.getUsername());
+        }
+    }
+
+    @Test
+    public void test_cleanConsumerGroup() throws Exception{
+        List<ConsumerGroup> listObj = client.listConsumerGroups();
+        for (ConsumerGroup rr : listObj) {
+            client.delConsumerGroup(rr.getId());
+        }
+    }
+    @Test
+    public void test_cleanPluginConfig() throws Exception{
+        List<PluginConfig> listObj = client.listPluginConfigs();
+        for (PluginConfig rr : listObj) {
+            client.delPluginConfig(rr.getId());
+        }
+    }
+
+
+    @Test
+    public void test_cleanAll() throws Exception{
+        this.test_cleanSSL();
+        this.test_cleanRoute();
+        this.test_cleanStreamRoute();
+        this.test_cleanGlobalRule();
+        this.test_cleanConsumer();
+        this.test_cleanConsumerGroup();
+        this.test_cleanProto();
+        this.test_cleanService();
+        this.test_cleanSecret();
+        this.test_cleanUpstream();
+        this.test_cleanPluginConfig();
+    }
 }
