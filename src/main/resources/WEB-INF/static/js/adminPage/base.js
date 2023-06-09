@@ -127,6 +127,33 @@ function loginOut() {
 	//}
 }
 
+function drop(cls){
+
+layui.use(['layer', 'form', 'table'], function(){
+    var layer = layui.layer;
+    var form = layui.form;
+    var table = layui.table;
+
+    layer.confirm('确定删除选中的数据吗？', function(index) {
+
+         $.ajax({
+                type : 'POST',
+                url : '/api/drop',
+                data : {cls:cls},
+                dataType : 'json',
+                success : function(data) {
+                    table.reload('demo',{});
+                }
+            });
+
+    });
+
+
+
+ });
+
+}
+
 // 日期格式化
 Date.prototype.format = function(format) {
 	var date = {

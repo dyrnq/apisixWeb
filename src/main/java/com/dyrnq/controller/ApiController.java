@@ -680,8 +680,8 @@ public class ApiController extends BaseController {
                 case "proto":
                     jsonStr = gson.toJson(getAdminClient().getProto(id));
                     break;
-                default:
-                    jsonStr = gson.toJson(getAdminClient().getRoute(id));
+//                default:
+//                    jsonStr = gson.toJson(getAdminClient().getRoute(id));
             }
         } catch (ApisixSDKException apisixSDKException) {
         } catch (NullPointerException nullPointerException) {
@@ -744,4 +744,73 @@ public class ApiController extends BaseController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @Mapping("drop")
+    public Result drop(Context ctx, String cls) {
+
+        try {
+            switch (cls) {
+                case "route":
+                    for(Route r: getAdminClient().listRoutes()){
+                        getAdminClient().delRoute(r.getId());
+                    }
+                    break;
+                case "upstream":
+                    for(Upstream r: getAdminClient().listUpstreams()){
+                        getAdminClient().delUpstream(r.getId());
+                    }
+                    break;
+                case "ssl":
+                    for(SSL r: getAdminClient().listSSLs()){
+                        getAdminClient().delSSL(r.getId());
+                    }
+                    break;
+                case "service":
+                    for(Service r: getAdminClient().listServices()){
+                        getAdminClient().delService(r.getId());
+                    }
+                    break;
+                case "streamRoute":
+                    for(StreamRoute r: getAdminClient().listStreamRoutes()){
+                        getAdminClient().delStreamRoute(r.getId());
+                    }
+                    break;
+                case "secret":
+                    for(Secret r: getAdminClient().listSecrets()){
+                        getAdminClient().delSecret(r.getId());
+                    }
+                    break;
+                case "consumer":
+                    for(Consumer r: getAdminClient().listConsumers()){
+                        getAdminClient().delConsumer(r.getId());
+                    }
+                    break;
+                case "globalRule":
+                    for(GlobalRule r: getAdminClient().listGlobalRules()){
+                        getAdminClient().delGlobalRule(r.getId());
+                    }
+                    break;
+                case "pluginConfig":
+                    for(PluginConfig r: getAdminClient().listPluginConfigs()){
+                        getAdminClient().delPluginConfig(r.getId());
+                    }
+                    break;
+                case "consumerGroup":
+                    for(ConsumerGroup r: getAdminClient().listConsumerGroups()){
+                        getAdminClient().delConsumerGroup(r.getId());
+                    }
+                    break;
+                case "proto":
+                    for(Proto r: getAdminClient().listProtos()){
+                        getAdminClient().delProto(r.getId());
+                    }
+                    break;
+            }
+        } catch (ApisixSDKException apisixSDKException) {
+        } catch (NullPointerException nullPointerException) {
+        }
+
+        return Result.succeed("ok");
+    }
+
 }
