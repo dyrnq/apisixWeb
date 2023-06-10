@@ -1,15 +1,3 @@
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import com.dyrnq.utils.CertUtils;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -26,9 +14,21 @@ import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 public class SelfSignedCertPEM {
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
-    static{
+
+    static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
@@ -46,10 +46,10 @@ public class SelfSignedCertPEM {
         nameBuilder.addRDN(BCStyle.ST, "GD");
         nameBuilder.addRDN(BCStyle.C, "CN");
         nameBuilder.addRDN(BCStyle.L, "SZ");
-        nameBuilder.addRDN(BCStyle.O,"vihoo");
-        nameBuilder.addRDN(BCStyle.OU,"dev");
-        nameBuilder.addRDN(BCStyle.CN,"test.com");
-        nameBuilder.addRDN(BCStyle.EmailAddress,"yy@vivo.com");
+        nameBuilder.addRDN(BCStyle.O, "vihoo");
+        nameBuilder.addRDN(BCStyle.OU, "dev");
+        nameBuilder.addRDN(BCStyle.CN, "test.com");
+        nameBuilder.addRDN(BCStyle.EmailAddress, "yy@vivo.com");
 
         // Build the X500Name object
         X500Name subject = nameBuilder.build();
@@ -91,7 +91,7 @@ public class SelfSignedCertPEM {
         X509CertificateHolder certificateHolder = certBuilder.build(sigGen);
         X509Certificate cert = new JcaX509CertificateConverter().setProvider(BC).getCertificate(certificateHolder);
 
-        IOUtils.write(CertUtils.content(cert),new FileOutputStream(new File("src/test/resources/example.crt")));
-        IOUtils.write(CertUtils.content(privKey),new FileOutputStream(new File("src/test/resources/example.key")));
+        IOUtils.write(CertUtils.content(cert), new FileOutputStream(new File("src/test/resources/example.crt")));
+        IOUtils.write(CertUtils.content(privKey), new FileOutputStream(new File("src/test/resources/example.key")));
     }
 }

@@ -1,14 +1,8 @@
-import java.io.File;
-import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.X509Certificate;
-import java.util.Date;
-
 import com.dyrnq.utils.CertUtils;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
-import org.bouncycastle.asn1.x509.*;
+import org.bouncycastle.asn1.x509.BasicConstraints;
+import org.bouncycastle.asn1.x509.Extension;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
@@ -21,9 +15,17 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.X509Certificate;
+import java.util.Date;
+
 public class SelfSignedCertPEMByCA {
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
-    static{
+
+    static {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
     }
 
@@ -72,8 +74,8 @@ public class SelfSignedCertPEMByCA {
         JcaX509CertificateConverter converter = new JcaX509CertificateConverter();
         converter.setProvider(org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME);
         X509Certificate newCert = converter.getCertificate(certHolder);
-        IOUtils.write(CertUtils.content(newCert),new FileOutputStream(new File("src/test/resources/cert-by-ca.crt")));
-        IOUtils.write(CertUtils.content(privKey),new FileOutputStream(new File("src/test/resources/cert-by-ca.key")));
+        IOUtils.write(CertUtils.content(newCert), new FileOutputStream(new File("src/test/resources/cert-by-ca.crt")));
+        IOUtils.write(CertUtils.content(privKey), new FileOutputStream(new File("src/test/resources/cert-by-ca.key")));
 
     }
 

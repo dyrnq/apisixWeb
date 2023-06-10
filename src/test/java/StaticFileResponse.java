@@ -6,34 +6,35 @@ import com.dyrnq.apisix.plugins.Redirect;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-public class StaticFileResponse extends BaseJunit{
+public class StaticFileResponse extends BaseJunit {
 
     @Test
     public void test_StaticFileResponse() throws ApisixSDKException {
-        Route r =new Route();
+        Route r = new Route();
         r.setName("StaticFileResponse");
         r.setUri("/test/index.html");
         Map<String, Object> map = new HashMap<>();
         ResponseRewrite responseRewrite = new ResponseRewrite();
-        responseRewrite.body="<html>Jenkins，中文测试</html>";
-        responseRewrite.statusCode=200;
-        Headers headers= new Headers();
-        headers.set =  new HashMap<>();
-        headers.set.put("Content-Type","text/html; charset=utf-8");
+        responseRewrite.body = "<html>Jenkins，中文测试</html>";
+        responseRewrite.statusCode = 200;
+        Headers headers = new Headers();
+        headers.set = new HashMap<>();
+        headers.set.put("Content-Type", "text/html; charset=utf-8");
         responseRewrite.headers = headers;
 
         Redirect redirect = new Redirect();
-        redirect.httpToHttps =true;
-        map.put(ResponseRewrite.PLUGIN_NAME,responseRewrite);
-        map.put(Redirect.PLUGIN_NAME,redirect);
+        redirect.httpToHttps = true;
+        map.put(ResponseRewrite.PLUGIN_NAME, responseRewrite);
+        map.put(Redirect.PLUGIN_NAME, redirect);
         Gzip gzip = new Gzip();
-        gzip.types="*";
-        map.put(Gzip.PLUGIN_NAME,gzip);
+        gzip.types = "*";
+        map.put(Gzip.PLUGIN_NAME, gzip);
 
         r.setPlugins(map);
 
-        client.putRoute("5000",r);
+        client.putRoute("5000", r);
     }
 }

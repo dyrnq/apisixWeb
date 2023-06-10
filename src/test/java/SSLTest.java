@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 
@@ -18,8 +19,8 @@ public class SSLTest extends BaseJunit {
         String file = "src/test/resources/example-domain";
         //file = "src/test/resources/server";
         SSL ssl = new SSL();
-        ssl.setCert(FileUtil.readString(new File(file + ".crt"), Charset.forName("UTF-8")));
-        ssl.setKey(FileUtil.readString(new File(file + ".key"), Charset.forName("UTF-8")));
+        ssl.setCert(FileUtil.readString(new File(file + ".crt"), StandardCharsets.UTF_8));
+        ssl.setKey(FileUtil.readString(new File(file + ".key"), StandardCharsets.UTF_8));
         X509Certificate x509Cert = CertUtils.loadCertificate(new File(file + ".crt"));
         String[] sniArray = CertUtils.extractSNI(x509Cert);
         ssl.setSnis(Arrays.asList(sniArray));
@@ -33,11 +34,11 @@ public class SSLTest extends BaseJunit {
         String file = "src/test/resources/example-domain";
         file = "src/test/resources/server";
         SSL ssl = new SSL();
-        ssl.setCert(FileUtil.readString(new File(file + ".crt"), Charset.forName("UTF-8")));
-        ssl.setKey(FileUtil.readString(new File(file + ".key"), Charset.forName("UTF-8")));
+        ssl.setCert(FileUtil.readString(new File(file + ".crt"), StandardCharsets.UTF_8));
+        ssl.setKey(FileUtil.readString(new File(file + ".key"), StandardCharsets.UTF_8));
 
         Client c = new Client();
-        c.setCa(FileUtil.readString(new File(file + ".crt"), Charset.forName("UTF-8")));
+        c.setCa(FileUtil.readString(new File(file + ".crt"), StandardCharsets.UTF_8));
         c.setDepth(1);
         c.setSkipMtlsUriRegex(new String[]{"/aa", "/b"});
         ssl.setClient(c);

@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-public class ApisixClientListTest extends BaseJunit{
+public class ApisixClientListTest extends BaseJunit {
 
     @Test
     public void test_listPlugins() throws ApisixSDKException {
@@ -16,6 +16,7 @@ public class ApisixClientListTest extends BaseJunit{
     public void test_listSSLs() throws ApisixSDKException {
         client.listSSLs();
     }
+
     @Test
     public void test_listPluginConfigs() throws ApisixSDKException {
         client.listPluginConfigs();
@@ -30,10 +31,12 @@ public class ApisixClientListTest extends BaseJunit{
     public void test_listConsumers() throws ApisixSDKException {
         client.listConsumers();
     }
+
     @Test
     public void test_listConsumerGroups() throws ApisixSDKException {
         client.listConsumerGroups();
     }
+
     @Test
     public void test_listRoutes() throws ApisixSDKException {
         List<Route> listRoute = client.listRoutes();
@@ -60,6 +63,16 @@ public class ApisixClientListTest extends BaseJunit{
         for (Upstream rr : listRoute) {
             System.out.println(rr.getName());
         }
+    }
+
+    @Test
+    public void test_listProtos() throws ApisixSDKException {
+        List<Proto> listRoute = client.listProtos();
+    }
+
+    @Test
+    public void test_listServices() throws ApisixSDKException {
+        List<Service> listRoute = client.listServices();
     }
 
 }

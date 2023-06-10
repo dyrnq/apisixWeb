@@ -1,10 +1,16 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import java.util.List;
 
-public class ApisixClientDelTest extends BaseJunit{
+//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+
+@FixMethodOrder(MethodSorters.JVM)
+public class ApisixClientDelTest extends BaseJunit {
+
 
     @Test
     public void test_delRoute() throws ApisixSDKException {
@@ -12,7 +18,7 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanRoute() throws Exception{
+    public void test_cleanRoute() throws Exception {
         List<Route> listObj = client.listRoutes();
 
         for (Route rr : listObj) {
@@ -21,7 +27,7 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanStreamRoute() throws Exception{
+    public void test_cleanStreamRoute() throws Exception {
         List<StreamRoute> listObj = client.listStreamRoutes();
 
         for (StreamRoute rr : listObj) {
@@ -30,7 +36,7 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanUpstream() throws Exception{
+    public void test_cleanUpstream() throws Exception {
         List<Upstream> listObj = client.listUpstreams();
 
         for (Upstream rr : listObj) {
@@ -39,7 +45,7 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanService() throws Exception{
+    public void test_cleanService() throws Exception {
         List<Service> listObj = client.listServices();
 
         for (Service rr : listObj) {
@@ -48,14 +54,15 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanSecret() throws Exception{
+    public void test_cleanSecret() throws Exception {
         List<Secret> listObj = client.listSecrets();
         for (Secret rr : listObj) {
             client.delSecret(rr.getId());
         }
     }
+
     @Test
-    public void test_cleanSSL() throws Exception{
+    public void test_cleanSSL() throws Exception {
         List<SSL> listObj = client.listSSLs();
         for (SSL rr : listObj) {
             client.delSSL(rr.getId());
@@ -63,7 +70,7 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanProto() throws Exception{
+    public void test_cleanProto() throws Exception {
         List<Proto> listObj = client.listProtos();
         for (Proto rr : listObj) {
             client.delProto(rr.getId());
@@ -71,14 +78,15 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanGlobalRule() throws Exception{
+    public void test_cleanGlobalRule() throws Exception {
         List<GlobalRule> listObj = client.listGlobalRules();
         for (GlobalRule rr : listObj) {
             client.delGlobalRule(rr.getId());
         }
     }
+
     @Test
-    public void test_cleanConsumer() throws Exception{
+    public void test_cleanConsumer() throws Exception {
         List<Consumer> listObj = client.listConsumers();
         for (Consumer rr : listObj) {
             client.delConsumer(rr.getUsername());
@@ -86,14 +94,15 @@ public class ApisixClientDelTest extends BaseJunit{
     }
 
     @Test
-    public void test_cleanConsumerGroup() throws Exception{
+    public void test_cleanConsumerGroup() throws Exception {
         List<ConsumerGroup> listObj = client.listConsumerGroups();
         for (ConsumerGroup rr : listObj) {
             client.delConsumerGroup(rr.getId());
         }
     }
+
     @Test
-    public void test_cleanPluginConfig() throws Exception{
+    public void test_cleanPluginConfig() throws Exception {
         List<PluginConfig> listObj = client.listPluginConfigs();
         for (PluginConfig rr : listObj) {
             client.delPluginConfig(rr.getId());
@@ -102,7 +111,7 @@ public class ApisixClientDelTest extends BaseJunit{
 
 
     @Test
-    public void test_cleanAll() throws Exception{
+    public void test_cleanAll() throws Exception {
         this.test_cleanSSL();
         this.test_cleanRoute();
         this.test_cleanStreamRoute();

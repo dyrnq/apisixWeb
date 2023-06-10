@@ -1,11 +1,13 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.GlobalRule;
-import com.dyrnq.apisix.plugins.*;
+import com.dyrnq.apisix.plugins.Echo;
+import com.dyrnq.apisix.plugins.Headers;
+import com.dyrnq.apisix.plugins.ProxyRewrite;
 import org.junit.Test;
 
 import java.util.HashMap;
 
-public class GlobalRuleTest extends BaseJunit{
+public class GlobalRuleTest extends BaseJunit {
     @Test
     public void test_GlobalRule() throws ApisixSDKException {
         GlobalRule globalRule = new GlobalRule();
@@ -18,14 +20,14 @@ public class GlobalRuleTest extends BaseJunit{
         ProxyRewrite proxyRewrite = new ProxyRewrite();
         proxyRewrite.headers = new Headers();
         proxyRewrite.headers.set = new HashMap<>();
-        proxyRewrite.headers.set.put( "X-Real-IP","$remote_addr");
-        proxyRewrite.headers.set.put( "X-Forwarded-For","$proxy_add_x_forwarded_for");
-        proxyRewrite.headers.set.put( "X-Test-1","test1");
-        proxyRewrite.headers.set.put( "X-Test-2","test2");
-        proxyRewrite.headers.set.put( "X-Test-3","test3");
-        proxyRewrite.headers.set.put( "X-Test-4","test4");
+        proxyRewrite.headers.set.put("X-Real-IP", "$remote_addr");
+        proxyRewrite.headers.set.put("X-Forwarded-For", "$proxy_add_x_forwarded_for");
+        proxyRewrite.headers.set.put("X-Test-1", "test1");
+        proxyRewrite.headers.set.put("X-Test-2", "test2");
+        proxyRewrite.headers.set.put("X-Test-3", "test3");
+        proxyRewrite.headers.set.put("X-Test-4", "test4");
 
-        map.put(ProxyRewrite.PLUGIN_NAME,proxyRewrite);
+        map.put(ProxyRewrite.PLUGIN_NAME, proxyRewrite);
         globalRule.setPlugins(map);
         //consumer.setGroupId(i+"");
         client.putGlobalRule("1", globalRule);

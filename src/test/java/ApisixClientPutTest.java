@@ -10,7 +10,6 @@ import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.Security;
 import java.security.cert.CertificateException;
@@ -20,7 +19,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class ApisixClientTest extends BaseJunit {
+public class ApisixClientPutTest extends BaseJunit {
 
     @Test
     public void test_putStreamRoute() throws ApisixSDKException {
@@ -191,7 +190,7 @@ public class ApisixClientTest extends BaseJunit {
 
     @Test
     public void test_putProto() throws ApisixSDKException, IOException {
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i < 105; i++) {
             Proto proto = new Proto();
             proto.setContent(IOUtils.toString(new FileInputStream(new File("src/test/resources/demo.proto")), StandardCharsets.UTF_8));
             client.putProto(String.valueOf(i), proto);
