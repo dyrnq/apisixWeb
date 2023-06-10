@@ -32,7 +32,7 @@ public class RetryInterceptor implements Interceptor {
             while (!response.isSuccessful() && retryCount <= this.retryCount) {
                 String url = request.url().toString();
                 for (Endpoint ep : endpoints) {
-                    if (!url.contains(ep.getAddress()) && ep.isAlive()) {
+                    if (!url.contains(ep.getAddress())) {
                         //替换
                         url = url.replace(endpoint.getAddress(), ep.getAddress());
                         //设置为当前
@@ -49,7 +49,7 @@ public class RetryInterceptor implements Interceptor {
         } catch (Exception e) {
             String url = request.url().toString();
             for (Endpoint ep : endpoints) {
-                if (!url.contains(ep.getAddress()) && ep.isAlive()) {
+                if (!url.contains(ep.getAddress())) {
                     //替换
                     url = url.replace(endpoint.getAddress(), ep.getAddress());
                     //设置为当前
@@ -57,7 +57,7 @@ public class RetryInterceptor implements Interceptor {
                 }
             }
             Request newRequest = request.newBuilder().url(url).build();
-            retryCount++;
+            //retryCount++;
             // retry the request
             Response response = chain.proceed(newRequest);
 
