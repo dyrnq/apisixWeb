@@ -1,4 +1,4 @@
-package com.dyrnq.apisix;
+package com.dyrnq.utils;
 
 
 import java.security.MessageDigest;
