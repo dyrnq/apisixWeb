@@ -10,13 +10,13 @@ import java.util.concurrent.TimeUnit;
 
 public class Connection {
 
-    private OkHttpClient client;
+    private final OkHttpClient client;
 
     public Connection(Integer connTimeout, Integer readTimeout, Integer writeTimeout, Profile profile) {
         this.client = new OkHttpClient.Builder()
-                .connectTimeout(connTimeout,TimeUnit.SECONDS)
-                .readTimeout(readTimeout,TimeUnit.SECONDS)
-                .writeTimeout(writeTimeout,TimeUnit.SECONDS)
+                .connectTimeout(connTimeout, TimeUnit.SECONDS)
+                .readTimeout(readTimeout, TimeUnit.SECONDS)
+                .writeTimeout(writeTimeout, TimeUnit.SECONDS)
                 .retryOnConnectionFailure(true)
                 .addInterceptor(new RetryInterceptor(3, profile))
                 .build();
@@ -32,7 +32,7 @@ public class Connection {
         try {
             response = this.client.newCall(request).execute();
         } catch (IOException e) {
-        	
+
             throw new ApisixSDKException(e.getClass().getName() + "-" + e.getMessage());
         }
         return response;

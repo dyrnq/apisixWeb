@@ -3,7 +3,7 @@ package com.dyrnq.apisix;
 public class ApisixSDKException extends Exception {
     private static final long serialVersionUID = 1L;
 
-    private String errorCode;
+    private final String errorCode;
 
     public ApisixSDKException(String message) {
         this(message, "");

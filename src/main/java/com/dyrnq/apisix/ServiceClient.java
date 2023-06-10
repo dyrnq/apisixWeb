@@ -1,0 +1,154 @@
+package com.dyrnq.apisix;
+
+
+import com.dyrnq.apisix.domain.Service;
+import com.dyrnq.apisix.profile.HttpProfile;
+import com.dyrnq.apisix.profile.Profile;
+import com.dyrnq.apisix.response.Multi;
+import com.dyrnq.apisix.response.Wrap;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ServiceClient extends BaseClient implements Stub<Service> {
+
+    public static final String PATH = "/apisix/admin/services";
+
+    public ServiceClient(Profile profile) {
+        super(profile);
+    }
+
+    public Service get(String id) throws ApisixSDKException {
+        Wrap<Service> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, PATH + "/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Multi<Service> query(String page, String page_size) throws ApisixSDKException {
+        Multi<Service> rsp = null;
+        try {
+            Map<String, String> paramsMap = new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE, page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE, page_size);
+            Type type = new TypeToken<Multi<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
+    public void del(String id) throws ApisixSDKException {
+        Wrap<Service> rsp = null;
+        try {
+            this.doRequest(null, HttpProfile.REQ_DELETE, PATH + "/" + id);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+    }
+
+    public List<Service> list() throws ApisixSDKException {
+        Multi<Service> rsp = null;
+        try {
+            Type type = new TypeToken<Multi<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, PATH), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        List<Service> result = this.arrangeMulti(rsp.getNodes());
+        return result;
+    }
+
+    public Service put(String id, Service obj) throws ApisixSDKException {
+        Wrap<Service> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(obj, HttpProfile.REQ_PUT, PATH + "/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Service putRaw(String id, String rawData) throws ApisixSDKException {
+        Wrap<Service> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, PATH + "/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Service patchRaw(String id, String rawData) throws ApisixSDKException {
+        Wrap<Service> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PATCH, PATH + "/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Service post(Service obj) throws ApisixSDKException {
+        Wrap<Service> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Service>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(obj, HttpProfile.REQ_POST, PATH + "/"), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+}

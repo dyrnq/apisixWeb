@@ -12,25 +12,30 @@ import okhttp3.Headers;
 import okhttp3.Headers.Builder;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 public abstract class BaseClient {
-    static Logger logger = LoggerFactory.getLogger(AdminClient.class);
     public static final int HTTP_OK = 200;
     public static final int HTTP_NOT_OK = 400;
     public static final String SDK_VERSION = "0.1.0";
-
-    private Profile profile;
-    private Credential credential;
-    private String sdkVersion;
-    private String apiVersion;
+    public static final String QUERY_PARAMS_PAGE = "page";
+    public static final String QUERY_PARAMS_PAGE_SIZE = "page_size";
+    static Logger logger = LoggerFactory.getLogger(AdminClient.class);
+    private final Profile profile;
+    private final Credential credential;
+    private final String sdkVersion;
+    private final String apiVersion;
     public Gson gson;
 
 
@@ -46,12 +51,19 @@ public abstract class BaseClient {
                 .create();
     }
 
+    protected static String mapToQueryString(Map<String, String> params) {
+        List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        }
+        return URLEncodedUtils.format(nameValuePairs, StandardCharsets.UTF_8);
+    }
+
     public Profile getProfile() {
         return this.profile;
     }
 
-
-    protected String doRequest(String reqMethod, String path)  throws ApisixSDKException {
+    protected String doRequest(String reqMethod, String path) throws ApisixSDKException {
         Response okRsp = doRequest(reqMethod, path, "");
         String strResp = null;
         try {
@@ -67,12 +79,12 @@ public abstract class BaseClient {
         return strResp;
     }
 
-    protected String doRequest(Object model, String reqMethod, String path)  throws ApisixSDKException {
-            return doRequest(model,reqMethod,path,null);
+    protected String doRequest(Object model, String reqMethod, String path) throws ApisixSDKException {
+        return doRequest(model, reqMethod, path, null);
     }
 
-    protected String doRequest(Object model, String reqMethod, String path,String param)  throws ApisixSDKException {
-        String strParam = model!=null ?gson.toJson(model):param;
+    protected String doRequest(Object model, String reqMethod, String path, String param) throws ApisixSDKException {
+        String strParam = model != null ? gson.toJson(model) : param;
 
         logger.info(strParam);
         Response okRsp = doRequest(reqMethod, path, strParam);
@@ -85,22 +97,22 @@ public abstract class BaseClient {
         }
 
         if (okRsp.code() == BaseClient.HTTP_NOT_OK) {
-            if(strResp !=null) {
+            if (strResp != null) {
                 Pattern pattern = Pattern.compile("\"error_msg\":\"([^\"]*)\"");
                 Matcher matcher = pattern.matcher(strResp);
 
                 if (matcher.find()) {
                     String errorMsg = matcher.group(1);
                     throw new ApisixSDKException(errorMsg, String.valueOf(okRsp.code()));
-                }else{
+                } else {
                     throw new ApisixSDKException(strResp, String.valueOf(okRsp.code()));
                 }
             }
-        }else if (okRsp.code() > BaseClient.HTTP_NOT_OK) {
+        } else if (okRsp.code() > BaseClient.HTTP_NOT_OK) {
             logger.error(strResp);
             throw new ApisixSDKException(String.valueOf(okRsp.code()), String.valueOf(okRsp.code()));
         }
-        strResp=StringUtils.replace(strResp,"\"list\":{}","\"list\":[]");
+        strResp = StringUtils.replace(strResp, "\"list\":{}", "\"list\":[]");
         logger.info(strResp);
         return strResp;
     }
@@ -118,7 +130,7 @@ public abstract class BaseClient {
                         this.profile);
 
         Endpoint currentEndpoint = this.profile.getCurrentEndpoint();
-        if(currentEndpoint == null){
+        if (currentEndpoint == null) {
             throw new ApisixSDKException("none endpoint alive");
         }
 
@@ -146,20 +158,20 @@ public abstract class BaseClient {
             return conn.deleteRequest(url, headers);
         } else if (reqMethod.equals(HttpProfile.REQ_PUT)) {
             return conn.putRequest(url, param, headers);
-        }else if (reqMethod.equals(HttpProfile.REQ_PATCH)) {
+        } else if (reqMethod.equals(HttpProfile.REQ_PATCH)) {
             return conn.patchRequest(url, param, headers);
         } else {
             throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE)");
         }
     }
 
-    public <T extends Object> List<T> arrangeMulti(List<Item<T>> list){
+    public <T extends Object> List<T> arrangeMulti(List<Item<T>> list) {
         Item<T> item;
         T model;
         List<T> result = new ArrayList<>();
 
-        if(list!=null){
-            for(int i=0; i<list.size();i++){
+        if (list != null) {
+            for (int i = 0; i < list.size(); i++) {
                 item = list.get(i);
                 model = item.getValue();
                 result.add(model);
@@ -168,7 +180,5 @@ public abstract class BaseClient {
 
         return result;
     }
-
-
 }
 

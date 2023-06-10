@@ -1,0 +1,154 @@
+package com.dyrnq.apisix;
+
+
+import com.dyrnq.apisix.domain.GlobalRule;
+import com.dyrnq.apisix.profile.HttpProfile;
+import com.dyrnq.apisix.profile.Profile;
+import com.dyrnq.apisix.response.Multi;
+import com.dyrnq.apisix.response.Wrap;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
+
+    public static final String PATH = "/apisix/admin/global_rules";
+
+    public GlobalRuleClient(Profile profile) {
+        super(profile);
+    }
+
+    public GlobalRule get(String id) throws ApisixSDKException {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, PATH + "/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Multi<GlobalRule> query(String page, String page_size) throws ApisixSDKException {
+        Multi<GlobalRule> rsp = null;
+        try {
+            Map<String, String> paramsMap = new HashMap<String, String>();
+            paramsMap.put(QUERY_PARAMS_PAGE, page);
+            paramsMap.put(QUERY_PARAMS_PAGE_SIZE, page_size);
+            Type type = new TypeToken<Multi<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp;
+    }
+
+    public void del(String id) throws ApisixSDKException {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            this.doRequest(null, HttpProfile.REQ_DELETE, PATH + "/" + id);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+    }
+
+    public List<GlobalRule> list() throws ApisixSDKException {
+        Multi<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Multi<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, PATH), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        List<GlobalRule> result = this.arrangeMulti(rsp.getNodes());
+        return result;
+    }
+
+    public GlobalRule put(String id, GlobalRule obj) throws ApisixSDKException {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(obj, HttpProfile.REQ_PUT, PATH + "/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public GlobalRule putRaw(String id, String rawData) throws ApisixSDKException {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PUT, PATH + "/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public GlobalRule patchRaw(String id, String rawData) throws ApisixSDKException {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_PATCH, PATH + "/" + id, rawData), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public GlobalRule post(GlobalRule obj) throws ApisixSDKException {
+        Wrap<GlobalRule> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<GlobalRule>>() {
+            }.getType();
+            rsp = gson.fromJson(this.doRequest(obj, HttpProfile.REQ_POST, PATH + "/"), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+}
