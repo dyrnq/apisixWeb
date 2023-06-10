@@ -6,13 +6,22 @@ import java.util.List;
 
 public interface Profile {
     Credential getCredential();
-    HttpProfile getHttpProfile();
+
+    Timeout timeout();
+
     Logger getLogger();
+
     void setLogger(Logger logger);
+
     String getVersion();
+
     String getEndpoint();
-    public void setCurrentEndpoint(Endpoint ep);
-    public Endpoint getCurrentEndpoint();
-    public List<Endpoint> getEndpoints();
-    public void setEndpoints(List<Endpoint> endpoints);
+
+    Endpoint getCurrentEndpoint();
+
+    void setCurrentEndpoint(Endpoint ep);
+
+    List<Endpoint> getEndpoints();
+
+    void setEndpoints(List<Endpoint> endpoints);
 }

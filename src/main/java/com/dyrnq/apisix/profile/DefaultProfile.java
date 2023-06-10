@@ -6,27 +6,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DefaultProfile implements Profile {
-    private String endpoint;
-    private Credential credential;
+    private final String endpoint;
+    private final Credential credential;
+    private final String version;
+    private final Timeout timeOut;
     private Logger logger;
-    private String version;
-    private HttpProfile httpProfile;
-    private  Endpoint currentEndpoint;
+    private Endpoint currentEndpoint;
     private List<Endpoint> endpoints = new ArrayList<>();
 
     private DefaultProfile(String endpoint, String version, Credential credential) {
         this.credential = credential;
-        this.endpoint   = endpoint;
+        this.endpoint = endpoint;
         this.version = version;
-        this.httpProfile = new HttpProfile();
+        this.timeOut = new Timeout(10,10,30);
 
-        String[] domains = endpoint.split(",");
+        String[] address = endpoint.split(",");
         Endpoint ep;
-        for (String domain : domains){
+        for (String ad : address) {
             ep = new Endpoint();
-            ep.setDomain(domain);
+
+            if (ad.matches("(?i)^http.*")) {
+                ep.setAddress(ad);
+            } else {
+                ep.setAddress("http://" + ad);
+            }
             this.endpoints.add(ep);
-            if(this.currentEndpoint == null){
+            if (this.currentEndpoint == null) {
                 this.currentEndpoint = ep;
             }
         }
@@ -41,15 +46,15 @@ public class DefaultProfile implements Profile {
         return this.credential;
     }
 
-    public void setCurrentEndpoint(Endpoint ep){
-        this.currentEndpoint = ep;
-    }
-
-    public Endpoint getCurrentEndpoint(){
+    public Endpoint getCurrentEndpoint() {
         return this.currentEndpoint;
     }
 
-    public List<Endpoint> getEndpoints(){
+    public void setCurrentEndpoint(Endpoint ep) {
+        this.currentEndpoint = ep;
+    }
+
+    public List<Endpoint> getEndpoints() {
         return this.endpoints;
     }
 
@@ -65,16 +70,16 @@ public class DefaultProfile implements Profile {
         this.logger = logger;
     }
 
-    public String getVersion(){
+    public String getVersion() {
         return this.version;
     }
 
-    public String getEndpoint(){
+    public String getEndpoint() {
         return this.endpoint;
     }
 
-    public HttpProfile getHttpProfile(){
-        return this.httpProfile;
+    public Timeout timeout() {
+        return this.timeOut;
     }
 
 }

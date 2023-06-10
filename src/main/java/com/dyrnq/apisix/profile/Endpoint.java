@@ -1,16 +1,24 @@
 package com.dyrnq.apisix.profile;
 
 public class Endpoint {
-    private String domain;
+    private String address;
     private boolean alive = true;
     private int lastFailureTime = 0;
 
-    public String getDomain() {
-        return domain;
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public int getLastFailureTime() {
         return lastFailureTime;
+    }
+
+    public void setLastFailureTime(int lastFailureTime) {
+        this.lastFailureTime = lastFailureTime;
     }
 
     public boolean isAlive() {
@@ -19,13 +27,5 @@ public class Endpoint {
 
     public void setAlive(boolean alive) {
         this.alive = alive;
-    }
-
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
-    public void setLastFailureTime(int lastFailureTime) {
-        this.lastFailureTime = lastFailureTime;
     }
 }

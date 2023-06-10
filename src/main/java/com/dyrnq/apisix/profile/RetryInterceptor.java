@@ -7,7 +7,7 @@ import okhttp3.Response;
 import java.io.IOException;
 import java.util.List;
 
-public class RetryInterceptor implements Interceptor{
+public class RetryInterceptor implements Interceptor {
     int retryCount;
     Profile profile;
 
@@ -26,15 +26,15 @@ public class RetryInterceptor implements Interceptor{
         try {
             Response response = chain.proceed(request);
             //有结果就认为是成功了，只有连接不上或者超时才重试其他IP
-            if(response != null && response.code() > 0){
+            if (response != null && response.code() > 0) {
                 return response;
             }
             while (!response.isSuccessful() && retryCount <= this.retryCount) {
                 String url = request.url().toString();
                 for (Endpoint ep : endpoints) {
-                    if(!url.contains(ep.getDomain()) && ep.isAlive()){
+                    if (!url.contains(ep.getAddress()) && ep.isAlive()) {
                         //替换
-                        url = url.replace(endpoint.getDomain(), ep.getDomain());
+                        url = url.replace(endpoint.getAddress(), ep.getAddress());
                         //设置为当前
                         this.profile.setCurrentEndpoint(ep);
                     }
@@ -46,12 +46,12 @@ public class RetryInterceptor implements Interceptor{
             }
 
             return response;
-        }catch (Exception e){
+        } catch (Exception e) {
             String url = request.url().toString();
             for (Endpoint ep : endpoints) {
-                if(!url.contains(ep.getDomain()) && ep.isAlive()){
+                if (!url.contains(ep.getAddress()) && ep.isAlive()) {
                     //替换
-                    url = url.replace(endpoint.getDomain(), ep.getDomain());
+                    url = url.replace(endpoint.getAddress(), ep.getAddress());
                     //设置为当前
                     this.profile.setCurrentEndpoint(ep);
                 }

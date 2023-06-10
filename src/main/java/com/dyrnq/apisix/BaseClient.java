@@ -124,9 +124,9 @@ public abstract class BaseClient {
 
         Connection conn =
                 new Connection(
-                        this.profile.getHttpProfile().getConnTimeout(),
-                        this.profile.getHttpProfile().getReadTimeout(),
-                        this.profile.getHttpProfile().getWriteTimeout(),
+                        this.profile.timeout().getConn(),
+                        this.profile.timeout().getRead(),
+                        this.profile.timeout().getWrite(),
                         this.profile);
 
         Endpoint currentEndpoint = this.profile.getCurrentEndpoint();
@@ -134,11 +134,10 @@ public abstract class BaseClient {
             throw new ApisixSDKException("none endpoint alive");
         }
 
-        String url = this.profile.getHttpProfile().getProtocol() + currentEndpoint.getDomain() + path;
+        String url = currentEndpoint.getAddress() + path;
 
         Builder hb = new Builder();
         hb.add("Content-Type", contentType)
-                .add("Host", currentEndpoint.getDomain())
                 .add("X-API-Version", this.apiVersion)
                 .add("X-SDK-RequestClient", this.sdkVersion);
 
@@ -161,7 +160,7 @@ public abstract class BaseClient {
         } else if (reqMethod.equals(HttpProfile.REQ_PATCH)) {
             return conn.patchRequest(url, param, headers);
         } else {
-            throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE)");
+            throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE, PATCH)");
         }
     }
 
