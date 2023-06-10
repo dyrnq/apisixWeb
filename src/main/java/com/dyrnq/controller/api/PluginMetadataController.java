@@ -8,6 +8,10 @@ import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 @Mapping("api/pluginMetadata")
 @Controller
 public class PluginMetadataController extends ApiController {
@@ -23,4 +27,41 @@ public class PluginMetadataController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @Mapping("")
+    public Result list(Context ctx) {
+        try {
+            List<Map> list = getAdminClient().listPlugins();
+
+            Map<String, Boolean> pluginMetadata = new HashMap<String, Boolean>();
+
+            for (Map map : list) {
+                String id = String.valueOf(map.get("id"));
+                try {
+                    getAdminClient().getPluginMetadata(id);
+                    pluginMetadata.put(id, true);
+                } catch (Exception e) {
+                    pluginMetadata.put(id, false);
+                }
+            }
+
+
+            return Result.succeed(pluginMetadata);
+        } catch (ApisixSDKException e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("has")
+    public Result has(Context ctx, String id) {
+        try {
+            getAdminClient().getPluginMetadata(id);
+            return Result.succeed(true);
+        } catch (Exception e) {
+            return Result.succeed(false);
+        }
+    }
+
+
 }

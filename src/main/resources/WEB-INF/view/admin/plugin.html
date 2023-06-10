@@ -139,6 +139,28 @@ function addOver() {
         });
     });
 }
+var pluginMetadata={};
+try {
+    $.ajax({
+        type : 'POST',
+        url : '/api/pluginMetadata',
+        contentType: 'application/json',
+        dataType : 'json',
+        async: false,
+        success : function(data) {
+            if(data.code=='200'){
+                console.log(data);
+                pluginMetadata=data.data;
+            } else {
+            }
+        },
+        error : function() {
+        }
+    });
+} catch(error) {
+   // 处理错误的代码
+}
+
 
 function plugin_metadata(d){
 　　var addLink = d.id;
@@ -146,7 +168,20 @@ function plugin_metadata(d){
         return '';
    }
    if (addLink.length > 0) {
-        return '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="setting" >'+commonStr.setting+'</button>&nbsp;<a class="layui-btn layui-btn-normal layui-btn-xs" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
+        let propertyValue = false;
+        let badge='';
+        try {
+            propertyValue = pluginMetadata[d.id];
+            if(propertyValue == true){
+                badge = '<span class="layui-badge-dot layui-bg-blue"></span>&nbsp;&nbsp;'
+            }else{
+                badge = '&nbsp;&nbsp;&nbsp;&nbsp;'
+            }
+        } catch(error) {
+            // 处理错误的代码
+        }
+
+        return badge + '<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="setting" >'+commonStr.setting+'</button>&nbsp;<a class="layui-btn layui-btn-normal layui-btn-xs" href="https://apisix.apache.org/zh/docs/apisix/plugins/'+addLink+'/" target="_blank">${i18n.get("commonStr.help")}</a>';
    }
 }
 
@@ -195,7 +230,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
   //执行一个 table 实例
   table.render({
     elem: '#demo'
-    ,height: 1620
+    ,height: 'auto'
     ,url: '/api/plugin' //数据接口
     ,title: '用户表'
     ,page: false //开启分页
