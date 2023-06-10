@@ -4,7 +4,9 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Proto;
 
-public class ProtoOp implements Op, Sample {
+import java.util.List;
+
+public class ProtoOp implements Op<Proto>, Sample {
 
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
@@ -21,8 +23,18 @@ public class ProtoOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public Proto get(AdminClient client, String id) throws ApisixSDKException {
         return client.getProto(id);
+    }
+
+    @Override
+    public List<Proto> list(AdminClient client) throws ApisixSDKException {
+        return client.listProtos();
+    }
+
+    @Override
+    public String encodeId(Proto obj) {
+        return obj.getId();
     }
 
     @Override

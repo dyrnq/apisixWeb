@@ -4,7 +4,9 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Upstream;
 
-public class UpstreamOp implements Op, Sample {
+import java.util.List;
+
+public class UpstreamOp implements Op<Upstream>, Sample {
 
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
@@ -21,8 +23,18 @@ public class UpstreamOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public Upstream get(AdminClient client, String id) throws ApisixSDKException {
         return client.getUpstream(id);
+    }
+
+    @Override
+    public List<Upstream> list(AdminClient client) throws ApisixSDKException {
+        return client.listUpstreams();
+    }
+
+    @Override
+    public String encodeId(Upstream obj) {
+        return obj.getId();
     }
 
     @Override

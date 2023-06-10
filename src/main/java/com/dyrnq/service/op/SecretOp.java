@@ -4,7 +4,11 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Secret;
 
-public class SecretOp implements Op, Sample {
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.List;
+
+public class SecretOp implements Op<Secret>, Sample {
 
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
@@ -21,8 +25,22 @@ public class SecretOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public Secret get(AdminClient client, String id) throws ApisixSDKException {
         return client.getSecret(id);
+    }
+
+    @Override
+    public List<Secret> list(AdminClient client) throws ApisixSDKException {
+        return client.listSecrets();
+    }
+
+    @Override
+    public String encodeId(Secret obj) {
+        try {
+            return URLEncoder.encode(obj.getId(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

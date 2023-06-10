@@ -4,7 +4,9 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.PluginConfig;
 
-public class PluginConfigOp implements Op, Sample {
+import java.util.List;
+
+public class PluginConfigOp implements Op<PluginConfig>, Sample {
 
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
@@ -21,8 +23,18 @@ public class PluginConfigOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public PluginConfig get(AdminClient client, String id) throws ApisixSDKException {
         return client.getPluginConfig(id);
+    }
+
+    @Override
+    public List<PluginConfig> list(AdminClient client) throws ApisixSDKException {
+        return client.listPluginConfigs();
+    }
+
+    @Override
+    public String encodeId(PluginConfig obj) {
+        return obj.getId();
     }
 
     @Override

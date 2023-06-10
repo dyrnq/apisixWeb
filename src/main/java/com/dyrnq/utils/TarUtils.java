@@ -5,6 +5,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
+import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 
@@ -12,25 +13,31 @@ import java.io.*;
 public class TarUtils {
     /**
      * 将目录压缩成一个tar.gz文件
+     *
      * @param sourceDirPath
      * @param targetFilePath
      * @throws IOException
      */
     public static void tarGz(String sourceDirPath, String targetFilePath) throws IOException {
-        FileOutputStream fileOutputStream = new FileOutputStream(targetFilePath);
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
-        GzipCompressorOutputStream gzipOutputStream = new GzipCompressorOutputStream(bufferedOutputStream);
-        TarArchiveOutputStream tarArchiveOutputStream = new TarArchiveOutputStream(gzipOutputStream);
-
-        File sourceDir = new File(sourceDirPath);
-        for (File file : sourceDir.listFiles()) {
-            addFileToTarGz(tarArchiveOutputStream, "", file);
+        FileOutputStream fileOutputStream = null;
+        BufferedOutputStream bufferedOutputStream = null;
+        GzipCompressorOutputStream gzipOutputStream = null;
+        TarArchiveOutputStream tarArchiveOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(targetFilePath);
+            bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
+            gzipOutputStream = new GzipCompressorOutputStream(bufferedOutputStream);
+            tarArchiveOutputStream = new TarArchiveOutputStream(gzipOutputStream);
+            File sourceDir = new File(sourceDirPath);
+            for (File file : sourceDir.listFiles()) {
+                addFileToTarGz(tarArchiveOutputStream, "", file);
+            }
+        } finally {
+            IOUtils.closeQuietly(tarArchiveOutputStream, null);
+            IOUtils.closeQuietly(gzipOutputStream, null);
+            IOUtils.closeQuietly(bufferedOutputStream, null);
+            IOUtils.closeQuietly(fileOutputStream, null);
         }
-
-        tarArchiveOutputStream.close();
-        gzipOutputStream.close();
-        bufferedOutputStream.close();
-        fileOutputStream.close();
     }
 
     private static void addFileToTarGz(TarArchiveOutputStream tarArchiveOutputStream, String base, File file) throws IOException {
@@ -59,6 +66,7 @@ public class TarUtils {
 
     /**
      * 解压缩tar.gz文件
+     *
      * @param tarGzFilepath
      * @param destDirectory
      * @throws IOException

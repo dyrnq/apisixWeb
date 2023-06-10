@@ -10,7 +10,7 @@ import com.dyrnq.apisix.domain.Upstream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RouteOp implements Op, Sample {
+public class RouteOp implements Op<Route>, Sample {
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
         for (String i : id) {
@@ -26,8 +26,18 @@ public class RouteOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public Route get(AdminClient client, String id) throws ApisixSDKException {
         return client.getRoute(id);
+    }
+
+    @Override
+    public List<Route> list(AdminClient client) throws ApisixSDKException {
+        return client.listRoutes();
+    }
+
+    @Override
+    public String encodeId(Route obj) {
+        return obj.getId();
     }
 
     @Override

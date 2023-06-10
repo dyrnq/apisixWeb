@@ -3,7 +3,10 @@ package com.dyrnq.service.op;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 
-public class PluginMetadataOp implements Op, Sample {
+import java.util.List;
+import java.util.Map;
+
+public class PluginMetadataOp implements Op<Map>, Sample {
 
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
@@ -18,8 +21,18 @@ public class PluginMetadataOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public Map get(AdminClient client, String id) throws ApisixSDKException {
         return client.getPluginMetadata(id);
+    }
+
+    @Override
+    public List list(AdminClient client) throws ApisixSDKException {
+        throw new RuntimeException("not support");
+    }
+
+    @Override
+    public String encodeId(Map obj) {
+        throw new RuntimeException("not support");
     }
 
     @Override

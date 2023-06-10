@@ -10,12 +10,11 @@ import com.dyrnq.apisix.profile.DefaultProfile;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
+import com.dyrnq.service.op.Factory;
+import com.dyrnq.service.op.Op;
 import com.dyrnq.utils.TarUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.noear.solon.annotation.Component;
@@ -74,89 +73,35 @@ public class BusinessLogic  {
     public byte[] export(long currentTimeMillis) throws ApisixSDKException, IOException {
         Gson gson = new Gson();//创建gson对象，含有转化的toJson方法
         String rdm = Long.toString(currentTimeMillis);
-        String pathString = homeDir.getTmpAbsolutePath()+File.separator+rdm;
-        String targetFilePath = homeDir.getTmpAbsolutePath()+File.separator+ rdm+".tar.gz";
-        FileUtils.forceMkdir(new File(pathString));
+        String targetFolderPath = homeDir.getTmpAbsolutePath()+File.separator+rdm;
+        String targetTarFile = homeDir.getTmpAbsolutePath()+File.separator+ rdm+".tar.gz";
+        FileUtils.forceMkdir(new File(targetFolderPath));
         //1，设立一个含有所有队列信息的数组
         String [] clss = {"route","streamRoute","upstream","service","ssl","secret","consumer","consumerGroup","globalRule","pluginConfig","proto"};
-        List<?> list = null;
         //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
         AdminClient client = getAdminClient();
 
         for(String obj: clss) {
-            switch (obj) {
-                case "route":
-                    list = client.listRoutes();
-                    break;
-
-                case "StreamRoute":
-                    list = client.listStreamRoutes();
-                    break;
-
-                case "upstream":
-                    list = client.listUpstreams();
-                    break;
-
-                case "service":
-                    list = client.listServices();
-                    break;
-
-                case "ssl":
-                    list = client.listSSLs();
-                    break;
-                case "secret":
-                    list = client.listSecrets();
-                    break;
-                case "consumer":
-                    list = client.listConsumers();
-                    break;
-                case "consumerGroup":
-                    list = client.listConsumerGroups();
-                    break;
-                case "globalRule":
-                    list = client.listGlobalRules();
-                    break;
-                case "pluginConfig":
-                    list = client.listPluginConfigs();
-                    break;
-                case "proto":
-                    list = client.listProtos();
-                    break;
-                default:
-                    break;
-            }
+            Op op = Factory.create(obj);
+            List<?> list = op.list(client);
             //3，根据不同情况进行不同的文件名创建
             String folderName = obj;
-            FileUtils.forceMkdir(new File(pathString+File.separator+folderName));
+            FileUtils.forceMkdir(new File(targetFolderPath+File.separator+folderName));
 
             for (Object obj1 : list) {
-                String id ="";
-                if (obj1 instanceof Route) { id = ((Route) obj1).getId();}
-                else if( obj1 instanceof Consumer) {id =((Consumer) obj1).getUsername();}
-                else if( obj1 instanceof StreamRoute) {id = ((StreamRoute) obj1).getId();}
-                else if( obj1 instanceof Upstream) {id = ((Upstream) obj1).getId();}
-                else if( obj1 instanceof Service) {id = ((Service) obj1).getId();}
-                else if( obj1 instanceof ConsumerGroup) {id = ((ConsumerGroup) obj1).getId();}
-                else if( obj1 instanceof GlobalRule) {id = ((GlobalRule) obj1).getId();}
-                else if( obj1 instanceof PluginConfig) {id = ((PluginConfig) obj1).getId();}
-                else if( obj1 instanceof Proto) {id = ((Proto) obj1).getId();}
-                else if( obj1 instanceof SSL) {id = ((SSL) obj1).getId();}
-                else if( obj1 instanceof Secret) {id = URLEncoder.encode(((Secret) obj1).getId(),"UTF-8");}
-
-                File file = new File(pathString + "/" + obj + "/" + id + ".json");//创建file文件地址对象，作为载体
+                String id = op.encodeId(obj1);
+                File file = new File(targetFolderPath + File.separator + obj + File.separator + id + ".json");//创建file文件地址对象，作为载体
                 FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
                 String json = gson.toJson(obj);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
                 writer.write(json);//执行写入方法。
                 writer.close();//关闭写入方法。
             }
-            TarUtils.tarGz(pathString,targetFilePath);
-
-
+            TarUtils.tarGz(targetFolderPath,targetTarFile);
         }
-        byte[] bytes = FileUtils.readFileToByteArray(new File(targetFilePath));
+        byte[] bytes = FileUtils.readFileToByteArray(new File(targetTarFile));
 
-        FileUtils.forceDelete(new File(pathString));
-        FileUtils.forceDelete(new File(targetFilePath));
+        FileUtils.forceDelete(new File(targetFolderPath));
+        FileUtils.forceDelete(new File(targetTarFile));
 
         return bytes;
     }

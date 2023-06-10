@@ -4,7 +4,9 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.GlobalRule;
 
-public class GlobalRuleOp implements Op, Sample {
+import java.util.List;
+
+public class GlobalRuleOp implements Op<GlobalRule>, Sample {
 
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
@@ -21,8 +23,18 @@ public class GlobalRuleOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public GlobalRule get(AdminClient client, String id) throws ApisixSDKException {
         return client.getGlobalRule(id);
+    }
+
+    @Override
+    public List<GlobalRule> list(AdminClient client) throws ApisixSDKException {
+        return client.listGlobalRules();
+    }
+
+    @Override
+    public String encodeId(GlobalRule obj) {
+        return obj.getId();
     }
 
     @Override

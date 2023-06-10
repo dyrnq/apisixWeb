@@ -4,7 +4,9 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.ConsumerGroup;
 
-public class ConsumerGroupOp implements Op, Sample {
+import java.util.List;
+
+public class ConsumerGroupOp implements Op<ConsumerGroup>, Sample {
     @Override
     public void del(AdminClient client, String... id) throws ApisixSDKException {
         for (String i : id) {
@@ -20,8 +22,18 @@ public class ConsumerGroupOp implements Op, Sample {
     }
 
     @Override
-    public Object get(AdminClient client, String id) throws ApisixSDKException {
+    public ConsumerGroup get(AdminClient client, String id) throws ApisixSDKException {
         return client.getConsumerGroup(id);
+    }
+
+    @Override
+    public List<ConsumerGroup> list(AdminClient client) throws ApisixSDKException {
+        return client.listConsumerGroups();
+    }
+
+    @Override
+    public String encodeId(ConsumerGroup obj) {
+        return obj.getId();
     }
 
     @Override
