@@ -4,7 +4,11 @@ import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.profile.RetryInterceptor;
 import okhttp3.*;
 
+import javax.net.ssl.*;
 import java.io.IOException;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
 
 
@@ -17,14 +21,11 @@ public class Connection {
                 .connectTimeout(connTimeout, TimeUnit.SECONDS)
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+                .sslSocketFactory(createUnsafeSSLSocketFactory(), new TrustAllCerts())
+                .hostnameVerifier(new TrustAllHostnameVerifier())
                 .retryOnConnectionFailure(true)
                 .addInterceptor(new RetryInterceptor(3, profile))
                 .build();
-//        this.client.setConnectTimeout(connTimeout, TimeUnit.SECONDS);
-//        this.client.setReadTimeout(readTimeout, TimeUnit.SECONDS);
-//        this.client.setWriteTimeout(writeTimeout, TimeUnit.SECONDS);
-//        this.client.setRetryOnConnectionFailure(true);
-//        this.client.interceptors().add(new RetryInterceptor(3, profile));
     }
 
     public Response doRequest(Request request) throws ApisixSDKException {
@@ -113,6 +114,52 @@ public class Connection {
         }
 
         return this.doRequest(request);
+    }
+
+
+    private SSLSocketFactory createUnsafeSSLSocketFactory() {
+        try {
+            SSLContext sslContext = SSLContext.getInstance("SSL");
+            sslContext.init(null, new TrustManager[]{new X509TrustManager() {
+                @Override
+                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                @Override
+                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                }
+
+                @Override
+                public X509Certificate[] getAcceptedIssuers() {
+                    return new X509Certificate[0];
+                }
+            }}, new SecureRandom());
+            return sslContext.getSocketFactory();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private class TrustAllCerts implements X509TrustManager {
+        @Override
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+        }
+
+        @Override
+        public X509Certificate[] getAcceptedIssuers() {
+            return new X509Certificate[0];
+        }
+    }
+
+    private class TrustAllHostnameVerifier implements HostnameVerifier {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            return true;
+        }
     }
 
 }
