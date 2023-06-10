@@ -2,7 +2,6 @@ package com.dyrnq.apisix;
 
 
 import com.dyrnq.apisix.domain.Plugin;
-import com.dyrnq.apisix.profile.HttpProfile;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
@@ -28,7 +27,7 @@ public class PluginClient extends BaseClient implements Stub<Map> {
         try {
             Type type = new TypeToken<Wrap<Map>>() {
             }.getType();
-            rsp = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, PATH + "/" + id), type);
+            rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
                 throw e;
@@ -52,7 +51,7 @@ public class PluginClient extends BaseClient implements Stub<Map> {
         try {
             Type type = new TypeToken<Map<String, Map>>() {
             }.getType();
-            rsp = gson.fromJson(this.doRequest(null, HttpProfile.REQ_GET, PluginClient.PATH, "all=true"), type);
+            rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PluginClient.PATH, "all=true"), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
                 throw e;

@@ -2,7 +2,6 @@ package com.dyrnq.apisix;
 
 import com.dyrnq.apisix.profile.Credential;
 import com.dyrnq.apisix.profile.Endpoint;
-import com.dyrnq.apisix.profile.HttpProfile;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Item;
 import com.google.gson.Gson;
@@ -149,15 +148,15 @@ public abstract class BaseClient {
 
         Headers headers = hb.build();
 
-        if (reqMethod.equals(HttpProfile.REQ_GET)) {
+        if (reqMethod.equals(HttpMethod.REQ_GET)) {
             return conn.getRequest(url + "?" + param, headers);
-        } else if (reqMethod.equals(HttpProfile.REQ_POST)) {
+        } else if (reqMethod.equals(HttpMethod.REQ_POST)) {
             return conn.postRequest(url, param, headers);
-        } else if (reqMethod.equals(HttpProfile.REQ_DELETE)) {
+        } else if (reqMethod.equals(HttpMethod.REQ_DELETE)) {
             return conn.deleteRequest(url, headers);
-        } else if (reqMethod.equals(HttpProfile.REQ_PUT)) {
+        } else if (reqMethod.equals(HttpMethod.REQ_PUT)) {
             return conn.putRequest(url, param, headers);
-        } else if (reqMethod.equals(HttpProfile.REQ_PATCH)) {
+        } else if (reqMethod.equals(HttpMethod.REQ_PATCH)) {
             return conn.patchRequest(url, param, headers);
         } else {
             throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE, PATCH)");

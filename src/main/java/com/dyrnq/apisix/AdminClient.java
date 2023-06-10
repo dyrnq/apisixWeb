@@ -2,7 +2,6 @@ package com.dyrnq.apisix;
 
 
 import com.dyrnq.apisix.domain.*;
-import com.dyrnq.apisix.profile.HttpProfile;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
@@ -246,7 +245,7 @@ public class AdminClient extends BaseClient {
         try {
             Type type = new TypeToken<Wrap<Map>>() {
             }.getType();
-            rsp = gson.fromJson(this.doRequest(HttpProfile.REQ_GET, PluginMetadataClient.PATH + "/" + id), type);
+            rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PluginMetadataClient.PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
                 throw e;
@@ -356,7 +355,7 @@ public class AdminClient extends BaseClient {
         try {
             Type type = new TypeToken<Wrap<Secret>>() {
             }.getType();
-            rsp = gson.fromJson(this.doRequest(secret, HttpProfile.REQ_PUT, "/apisix/admin/secrets/" + manager + "/" + id), type);
+            rsp = gson.fromJson(this.doRequest(secret, HttpMethod.REQ_PUT, "/apisix/admin/secrets/" + manager + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
                 throw e;
