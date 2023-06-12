@@ -1,5 +1,6 @@
 package com.dyrnq;
 
+import cn.hutool.core.util.ReUtil;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.io.FileUtils;
@@ -50,22 +51,24 @@ public class DataSourceEmbed {
         }
 
 
-		String h2Path=StringUtils.endsWith(homeAbsolutePath,File.separator)?homeAbsolutePath+"h2":homeAbsolutePath+File.separator+"h2";
-		try {
-			FileUtils.forceMkdir(new File(h2Path));
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
+        String h2Path = StringUtils.endsWith(homeAbsolutePath, File.separator) ? homeAbsolutePath + "h2" : homeAbsolutePath + File.separator + "h2";
+        try {
+            FileUtils.forceMkdir(new File(h2Path));
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
         HikariDataSource ds = null;
-		if(StringUtils.isBlank(databaseType) || StringUtils.equalsIgnoreCase(databaseType,"sqlite") || StringUtils.equalsIgnoreCase(databaseType,"h2") ){
+        String migrationPath=null;
+        if (StringUtils.isBlank(databaseType) || ReUtil.isMatch("(?i)sqlite|h2", databaseType)) {
             HikariConfig dbConfig = new HikariConfig();
             dbConfig.setJdbcUrl("jdbc:h2:" + h2Path + File.separator + "h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE");
             dbConfig.setUsername("sa");
             dbConfig.setPassword("");
             dbConfig.setMaximumPoolSize(1);
-			dbConfig.setDriverClassName(org.h2.Driver.class.getName());
+            dbConfig.setDriverClassName(org.h2.Driver.class.getName());
             ds = new HikariDataSource(dbConfig);
-        } else if (StringUtils.equalsIgnoreCase(databaseType,"mysql")) {
+            migrationPath = "classpath:db/migration/h2";
+        } else if (ReUtil.isMatch("(?i)my(sql)?", databaseType)) {
             HikariConfig dbConfig = new HikariConfig();
             dbConfig.setJdbcUrl(url);
             dbConfig.setUsername(username);
@@ -73,9 +76,20 @@ public class DataSourceEmbed {
             dbConfig.setMaximumPoolSize(1);
             dbConfig.setDriverClassName(com.mysql.cj.jdbc.Driver.class.getName());
             ds = new HikariDataSource(dbConfig);
+            migrationPath = "classpath:db/migration/mysql";
+        } else if (ReUtil.isMatch("(?i)postgres(ql)?|pg(sql)?", databaseType)) {
+            HikariConfig dbConfig = new HikariConfig();
+            dbConfig.setJdbcUrl(url);
+            dbConfig.setUsername(username);
+            dbConfig.setPassword(password);
+            dbConfig.setMaximumPoolSize(1);
+            dbConfig.setDriverClassName(org.postgresql.Driver.class.getName());
+            ds = new HikariDataSource(dbConfig);
+            migrationPath = "classpath:db/migration/postgresql";
         }
 
         Flyway flyway = Flyway.configure()
+                .locations(migrationPath)
                 .baselineOnMigrate(true)
                 .cleanDisabled(true)
                 .dataSource(ds.getJdbcUrl(), ds.getUsername(), ds.getPassword()).load();
