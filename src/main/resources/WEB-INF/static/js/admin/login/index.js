@@ -22,7 +22,7 @@ function login() {
 		dataType: 'json',
 		success: function(data) {
 		    //alert(JSON.stringify(data));
-		    console.log(JSON.stringify(data));
+		    //console.log(data);
 			if (data.code == 200) {
 			//	if($("#remember").prop("checked")){
 			//		window.localStorage.setItem("time", new Date().getTime());
@@ -31,15 +31,17 @@ function login() {
 			//		window.localStorage.removeItem("adminId");
 			//	}
 
-                var cname="TOKEN"
-                var cvalue=data.data
-                //console.log(cvalue)
-                var exdays=1
-                const d = new Date();
-                d.setTime(d.getTime() + (exdays*24*60*60*1000));
-                let expires = "expires="+ d.toUTCString();
-                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-                location.href = ctx + "/admin?";
+                Cookies.set('TOKEN', data.data, { expires: 1, path: '/' })
+
+//                var cname="TOKEN"
+//                var cvalue=data.data
+//                //console.log(cvalue)
+//                var exdays=1
+//                const d = new Date();
+//                d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//                let expires = "expires="+ d.toUTCString();
+//                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+                location.href = ctx + "/admin";
 			} else {
 			    //alert("登陆失败");
 				layer.msg(commonStr.errorInfo);

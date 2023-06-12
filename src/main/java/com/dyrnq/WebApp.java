@@ -1,6 +1,7 @@
 package com.dyrnq;
 
 import cn.hutool.core.util.StrUtil;
+import com.cym.utils.VersionUtils;
 import com.dyrnq.service.BusinessLogic;
 
 import io.jsonwebtoken.Claims;
@@ -13,7 +14,9 @@ import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.*;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
+import org.noear.solon.core.util.LogUtil;
 import org.noear.solon.i18n.I18nUtil;
+import org.noear.solon.logging.utils.LogUtilToSlf4j;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
 import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.noear.wood.WoodConfig;
@@ -28,6 +31,7 @@ public class WebApp {
 
     public static void main(String args[]) {
         Solon.start(WebApp.class, args, app -> {
+            LogUtil.globalSet(new LogUtilToSlf4j());
             app.onError(e -> logger.error(e.getMessage(), e));
 
             app.before(c -> {
@@ -107,6 +111,7 @@ public class WebApp {
             ctx.attrSet("projectName", projectName);
             ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,50,100]}");
             ctx.attrSet("ctx", getCtxStr(ctx));
+            ctx.attrSet("jsrandom", VersionUtils.getVersion());
             chain.doFilter(ctx);
         }
     }
@@ -171,15 +176,15 @@ public class WebApp {
             ctx.attrSet("messages", messages);
 
             // html国际化
-            for (String key : messageHeaders) {
-                Map<String, String> map = new HashMap<>();
-                for (Message message : messages) {
-                    if (message.getKey().split("\\.")[0].equals(key)) {
-                        map.put(message.getKey().split("\\.")[1], message.getValue());
-                    }
-                }
-                ctx.attrSet(key, map);
-            }
+//            for (String key : messageHeaders) {
+//                Map<String, String> map = new HashMap<>();
+//                for (Message message : messages) {
+//                    if (message.getKey().split("\\.")[0].equals(key)) {
+//                        map.put(message.getKey().split("\\.")[1], message.getValue());
+//                    }
+//                }
+//                ctx.attrSet(key, map);
+//            }
             chain.doFilter(ctx);
         }
 

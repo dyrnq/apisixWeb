@@ -53,4 +53,18 @@ public class ProtoController extends ApiController {
         }
     }
 
+    @Mapping("post")
+    public Result post(Context ctx, String id, String content) {
+        try {
+            Proto p =new Proto();
+            p.setId(id);
+            p.setContent(content);
+            getAdminClient().putProto(id,p);
+            return Result.succeed("ok");
+        } catch (ApisixSDKException e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+
 }

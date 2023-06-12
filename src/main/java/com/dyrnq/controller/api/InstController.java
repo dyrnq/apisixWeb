@@ -13,6 +13,8 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 @Mapping("api/inst")
 @Controller
 public class InstController extends ApiController {
@@ -77,5 +79,17 @@ public class InstController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
+
+    @Mapping("list")
+    public Result list(Context ctx) {
+        try {
+            List<Inst> p = instMapper.selectList(null);
+            return Result.succeed(p);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+
 
 }

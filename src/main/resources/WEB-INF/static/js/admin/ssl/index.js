@@ -1,0 +1,510 @@
+var certFile;
+var keyFile;
+
+    function cleanData(d){
+        if( d === true ){
+            $("#div_id").hide();
+        }else{
+            $("#div_id").show();
+        }
+
+        $('#addForm1 input[name="id"]').val("");
+        editor.setValue("",-1);
+    }
+
+    function add() {
+        layui.use(['layer', 'form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            cleanData(false);
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: 'Add SSL',
+                content : $('#windowDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
+        });
+    }
+    function guide() {
+        certFile = {};
+        keyFile = {};
+        $('#addForm2 input[name="id"]').val("");
+        $('#addForm2 input[name="snis"]').val("");
+        $("#layui-upload-choose-cert").html("")
+        $("#layui-upload-choose-key").html("");
+
+        layui.use(['layer', 'form'], function(){
+            var layer = layui.layer;
+            var form = layui.form;
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: 'Add SSL',
+                content : $('#guideDiv'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
+        });
+    }
+
+layui.use(['upload','layer'],function () {
+    var upload = layui.upload;
+    var layer = layui.layer;
+
+    upload.render({
+        elem: '#upload-cert'
+        ,auto: false
+        ,accept: "file"
+        ,multiple: false
+        ,before: function(res){
+            console.log(res);
+        }
+        ,size: 5210
+        //,done: function(res, index, upload){
+        //}
+        ,choose: (obj) => {
+            //certFile = obj.pushFile();
+            obj.preview(function(index, file, result){
+                    certFile=file;
+                    console.log(index); // 得到文件索引
+                    //console.log(file); // 得到文件对象
+                    //console.log(result); // 得到文件base64编码，比如图片
+                    $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
+            });
+        }
+        ,error: function(index, upload){
+          console.log(index);
+        }
+    });
+
+    upload.render({
+        elem: '#upload-key'
+        ,auto: false
+        ,accept: "file"
+        ,multiple: false
+        ,before: function(res){
+            console.log(res);
+        }
+        ,size: 5210
+        //,done: function(res, index, upload){
+        //}
+        ,choose: (obj) => {
+
+            obj.preview(function(index, file, result){
+                    keyFile=file;
+                    console.log(index); // 得到文件索引
+                    //console.log(file); // 得到文件对象
+                    //console.log(result); // 得到文件base64编码，比如图片
+                    $("#layui-upload-choose-key").html("<p>"+file.name+"</p>");
+            });
+        }
+        ,error: function(index, upload){
+          console.log(index);
+        }
+    });
+
+
+})
+
+    function addOver2() {
+        layui.use(['layer'], function(){
+            var formData = new FormData();
+            formData.append("certFile",certFile);
+            formData.append("keyFile",keyFile);
+            formData.append("id",$('#addForm2 input[name="id"]').val());
+            formData.append("snis",$('#addForm2 input[name="snis"]').val());
+            $.ajax({
+                type:'POST',
+                url: "/api/ssl/upload",
+                data: formData,
+                processData: false,
+                contentType: false,
+                async: false,
+                dataType: "json",
+                success:function (data,statusText) {
+                    if(data.code=='200'){
+                        layer.msg('ok');
+                    }else{
+                        layer.msg(data.description);
+                    }
+                },
+                error:function () {
+                        layer.msg('系统错误');
+                }
+            });
+
+        });
+    }
+
+    function addOver() {
+        layui.use(['layer', 'form'], function(){
+            var id = $('#addForm1 input[name="id"]').val();
+            console.log(id);
+            var text = editor.getValue();
+            console.log(text);
+
+            $.ajax({
+                type : 'POST',
+                url : '/api/ssl/put',
+                contentType: 'application/json',
+                data: JSON.stringify({id: id,rawData:text}),
+                dataType : 'json',
+                success : function(data) {
+                    if(data.code=='200'){
+                        //location.reload();
+                        layer.closeAll();
+                        layer.msg("新增成功");
+                    } else {
+                        layer.msg(data.description);
+                    }
+                },
+                error : function() {
+                    layer.alert("系统错误");
+                }
+            });
+        });
+    }
+function addLink(d) {
+　　var addLink = d.id;
+   if ('' == addLink || null == addLink || undefined == addLink) {
+        return '';
+   }
+   if (addLink.length > 0) {
+       return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>';
+   }
+}
+
+layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+  //得到各种内置组件
+  var layer = layui.layer //弹层
+  ,laypage = layui.laypage //分页
+  ,table = layui.table //表格
+
+    //向世界问个好
+    //layer.msg('Hello World');
+
+    var default_limt = localStorage.getItem('pageLimit');
+
+    if ('' == default_limt || null == default_limt || undefined == default_limt) {
+        default_limt = cfg.pageLimit;
+    }
+    //console.log("default_limt="+default_limt)
+
+
+  //执行一个 table 实例
+  table.render({
+    elem: '#demo'
+    ,height: 620
+    ,url: '/api/ssl' //数据接口
+    ,title: '用户表'
+    ,page: true //开启分页
+    , limit: default_limt
+    , limits: cfg.pageLimits
+    ,toolbar: '#toolbarDemo'  //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+    ,totalRow: false //开启合计行
+    ,cols: [[ //表头
+      {type: 'checkbox', fixed: 'left'}
+      ,{field: 'id', title: 'id', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'type', title: 'type', width:80}
+      ,{field: 'snis', title: 'snis', width: 200}
+      ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
+      ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+      ,{field: 'status', title: 'status', width: 200}
+      ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
+
+    ]]
+      , done: function (res, curr, count){
+          //如果是异步请求数据方式，res即为你接口返回的信息。
+          //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
+          console.log(res);
+          //得到当前页码
+          console.log(curr);
+          //得到数据总量
+          console.log(count);
+
+
+        // 获取配置项
+        var thisOptions = table.getOptions('demo');
+        console.log(thisOptions);
+        localStorage.setItem('pageLimit', thisOptions.limit);
+
+
+          if(res.data && res.data.length == 0){
+              if(curr>1){
+                  toPage=curr-1;
+                  console.log(toPage);
+                  table.reload('demo',{page: {curr:toPage}});
+              }
+          }
+      }
+    ,response: {
+        statusCode: 200
+    }
+    ,parseData: function(res){ //将原始数据解析成 table 组件所规定的数据
+      return {
+        "code": res.code, //解析接口状态
+        "msg": res.description, //解析提示文本
+        "count": res.total, //解析数据长度
+        "data": res.data //解析数据列表
+      };
+    }
+  });
+
+    //头部工具条监听事件
+    table.on('toolbar(test)', function (obj) {
+        var checkStatus = table.checkStatus(obj.config.id);
+        switch (obj.event) {
+            case 'getCheckData':
+                var dataX = checkStatus.data;
+                layer.alert(JSON.stringify(dataX));
+                break;
+            case 'deleteAll':
+                var dataX = checkStatus.data;
+                var allId = [];
+                if (dataX.length === 0) {
+                    layer.msg('请选择要删除的数据');
+                } else {
+                    layer.confirm('确定删除选中的数据吗？', function(index) {
+                        // 发送删除请求，并重新加载表格
+                        //console.log(JSON.stringify(dataX));
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            allId.push(val.id);
+
+
+
+                        }
+
+                        $.ajax({
+                            url: '/api/ssl/del',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: allId}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{
+                                        // page: {
+                                        //     curr: page-1 // 重新加载第一页的// 指定重新加载的页码
+                                        // },
+                                    });
+                                    layer.msg('删除成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    //layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                //layer.msg('系统错误');
+                            }
+                        });
+                        $.ajax({
+                            url: '/admin/ssls',
+                            type: 'GET',
+                            data: {
+                                pageNum: 1, // 请求的页码
+                                pageSize: 10 // 每页数据的数量
+                            },
+                            dataType: 'json',
+                            success: function(data){
+                                // 获取后端返回的当前页数据量
+                                var currentPageSize = data.currentPageSize;
+
+
+                            },
+                            error: function(jqXHR, textStatus, errorThrown){
+                                // 处理请求错误
+                            }
+                        });
+
+
+
+                        layer.close(index);
+                    });
+
+                }
+                break;
+            case 'statusAll1':
+                var dataX = checkStatus.data;
+                var Id = [];
+                if(dataX.length === 0){
+                    layer.msg('请勾选需要操作的对象');
+                }else{
+                    layer.confirm('确定全部打开吗？',function (index){
+                        //发送修改请求，重新加载网页
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            Id.push(val.id);
+
+
+
+                        }
+                        $.ajax({
+                            url: '/api/ssl/enable',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: Id}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('切换成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                layer.msg('系统错误');
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+
+                }
+                break;
+            case 'statusAll0':
+                var dataX = checkStatus.data;
+                var Id = [];
+                if(dataX.length === 0){
+                    layer.msg('请勾选需要操作的对象');
+                }else{
+                    layer.confirm('确定全部关闭吗？',function (index){
+                        //发送修改请求，重新加载网页
+                        console.log(dataX)
+                        for (let i = 0; i < dataX.length; i++) {
+                            const val = dataX[i];
+                            Id.push(val.id);
+
+
+
+                        }
+                        $.ajax({
+                            url: '/api/ssl/disable',
+                            type:'post',
+                            contentType: 'application/json',
+                            data: JSON.stringify({id: Id}),
+                            success:function (data,statusText) {
+                                //alert(data.code)
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg('切换成功');
+                                    //table.reload('idTest',{});
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                            },
+                            'error':function () {
+                                layer.msg('系统错误');
+                            }
+                        });
+                        layer.close(index);
+                    });
+
+                }
+                break;
+        }
+
+    })
+
+    //工具条事件
+    table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+        var data = obj.data; //获得当前行数据
+        var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+        var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+
+        if(layEvent === 'detail'){ //查看
+            //do something
+        } else if(layEvent === 'del'){ //删除
+            layer.confirm('真的删除行么', function(index){
+                //alert(obj.data.id);
+                //向服务端发送删除指令
+                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                $.ajax({
+                    url: '/api/ssl/del',
+                    type:'post',
+                    data:"id="+obj.data.id,
+                    success:function (data,statusText) {
+                        //alert(data.code)
+                        if(data.code=='200'){
+                            layer.msg('删除成功');
+                            //table.reload('idTest',{});
+                        }else{
+                            layer.msg(data.description);
+                        }
+                    },
+                    'error':function () {
+                        layer.msg('系统错误');
+                    }
+                });
+
+                layer.close(index);
+                table.reload('demo',{})
+            });
+            // } else if(layEvent === 'edit'){ //编辑
+            //     //do something
+            //
+            //     //同步更新缓存对应的值
+            //     obj.update({
+            //         username: '123'
+            //         ,title: 'xxx'
+            //     });
+        } else if(layEvent === 'LAYTABLE_TIPS'){
+            layer.alert('Hi，头部工具栏扩展的右侧图标。');
+        }else if (layEvent === 'edit'){//编辑,暂无方法体
+
+            cleanData(true);
+            $.ajax({
+                url: '/api/raw',
+                type:'post',
+                contentType: 'application/json',
+                data: JSON.stringify({id: obj.data.id,cls: 'ssl'}),
+                success:function (data,statusText) {
+                    console.log(data);
+                    if(data.code=='200'){
+                        $('#addForm1 input[name="id"]').val(obj.data.id);
+                        editor.setValue(data.data.rawData,-1);
+                        layer.open({
+                            type: 1,
+                            area: ['800px', '600px'],
+                            title: 'Edit SSL',
+                            content : $('#windowDiv'),
+                            anim: 'slideRight',
+                            shade: 0.6, // 遮罩透明度
+                            shadeClose: true, // 点击遮罩区域，关闭弹层
+                            maxmin: true, // 允许全屏最小化
+                            skin: 'layui-layer-win10'
+                        });
+                    }else{
+                        layer.msg(data.description);
+                    }
+                },
+                'error':function () {
+                    layer.msg('系统错误');
+                }
+            });
+        }
+    });
+
+
+
+    //监听Tab切换
+  element.on('tab(demo)', function(data){
+    layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
+      tips: 1
+    });
+  });
+});

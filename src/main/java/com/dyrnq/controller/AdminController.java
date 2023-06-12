@@ -1,14 +1,20 @@
 package com.dyrnq.controller;
 
 
+import cn.hutool.json.JSONUtil;
+import com.dyrnq.service.MonitorService;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Controller;
+import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.ModelAndView;
+import org.noear.solon.core.handle.Result;
 import org.noear.solon.i18n.annotation.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Properties;
 
 
 @Mapping("admin")
@@ -123,6 +129,27 @@ public class AdminController {
         return model;
     }
 
+    @Mapping("monitor")
+    public Object monitor() {
+        ModelAndView model = new ModelAndView("admin/monitor.html");
+        model.put("list", monitorService.getDiskInfo());
+
+        return model;
+    }
+
+
+    @Inject
+    MonitorService monitorService;
+    @Mapping("/monitor/check")
+    public Result check() {
+        com.dyrnq.service.MonitorInfo monitorInfo = monitorService.getMonitorInfoOshi();
+        return new Result(monitorInfo);
+    }
+
+    @Mapping("/monitor/sys")
+    public Result sys() {
+        return new Result(JSONUtil.toJsonPrettyStr(monitorService.getInfo()));
+    }
 
     @Mapping("")
     public Object index(Context ctx) {

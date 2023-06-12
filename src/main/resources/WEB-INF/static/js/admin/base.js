@@ -94,12 +94,13 @@ function gohref(url) {
 
 }
 function i18n(lang){
-    console.log(lang);
-    var cname="SOLON.LOCALE"
-//    var now = new Date();
-//    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
-//    let expires = "expires="+ now.toUTCString();
-    document.cookie = cname + "=" + lang + ";path=/";
+//    console.log(lang);
+//    var cname="SOLON.LOCALE"
+////    var now = new Date();
+////    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
+////    let expires = "expires="+ now.toUTCString();
+//    document.cookie = cname + "=" + lang + ";path=/";
+    Cookies.set('SOLON.LOCALE', lang, { expires: 1, path: '/' })
     location.reload();
 
 //     $.ajax({
@@ -115,16 +116,18 @@ function i18n(lang){
 
 // 退出登录
 function loginOut() {
-	//if (confirm(baseStr.exit)) {
-    var cname="TOKEN"
-    var cvalue=''
-    //console.log(cvalue)
-    var now = new Date();
-    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
-    let expires = "expires="+ now.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+//    var cname="TOKEN"
+//    var cvalue=''
+//    //console.log(cvalue)
+//    var now = new Date();
+//    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
+//    let expires = "expires="+ now.toUTCString();
+//    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+
+    Cookies.remove('TOKEN', { path: '/' }) // removed!
     location.href = ctx + "/admin/login";
-	//}
+
 }
 
 function drop(cls){
@@ -138,7 +141,7 @@ layui.use(['layer', 'form', 'table'], function(){
 
          $.ajax({
                 type : 'POST',
-                url : '/api/'+cls+'/drop',
+                url : ctx + '/api/'+cls+'/drop',
                 dataType : 'json',
                 success : function(data) {
                     layer.closeAll();
@@ -196,8 +199,7 @@ function S4() {
 	return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 }
 function guid() {
-	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4()
-		+ S4() + S4());
+	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
 // 时间字符串转时间戳
@@ -219,8 +221,7 @@ function getQueryString(name) {
 
 // 下载文件
 function downloadFile(url, name) {
-	window.open(ctx + "/downloadFile?url=" + encodeURIComponent(url) + "&name="
-		+ encodeURIComponent(name));
+	window.open(ctx + "/downloadFile?url=" + encodeURIComponent(url) + "&name=" + encodeURIComponent(name));
 }
 
 //function showUpdate(version, url, docker, update) {
@@ -297,24 +298,7 @@ function autoUpdate(url) {
 }
 
 
-function changeLang() {
-	$.ajax({
-		type: 'POST',
-		url: ctx + '/adminPage/main/changeLang',
-		data: $("#adminForm").serialize(),
-		dataType: 'json',
-		success: function(data) {
-			if (data.success) {
-				location.reload();
-			} else {
-				layer.msg(data.msg);
-			}
-		},
-		error: function() {
-			layer.alert(commonStr.errorInfo);
-		}
-	});
-}
+
 
 
 function setParamOrder(id, seq) {
@@ -358,3 +342,29 @@ function showHelp() {
 	// 	}
 	// });
 }
+
+layui.use(['dropdown', 'util', 'layer', 'table'], function(){
+  var dropdown = layui.dropdown
+  ,util = layui.util
+  ,layer = layui.layer
+  ,table = layui.table
+  ,$ = layui.jquery;
+
+
+  //初演示 - 绑定文字
+  dropdown.render({
+    elem: '#demo3'
+    ,data: [{title: '192.168.66.100',id: 1},{title: '192.168.66.101',id: 1111}]
+    ,click: function(obj){
+        console.log(obj.id);
+        console.log(this.elem);
+        this.elem.val(obj.title);
+
+        var cname="instId"
+        var cvalue=obj.id
+        document.cookie = cname + "=" + cvalue + ";path=/";
+        //location.reload();
+
+    }
+  });
+});
