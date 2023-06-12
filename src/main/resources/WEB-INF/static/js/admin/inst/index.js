@@ -468,7 +468,6 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
             var layer = layui.layer;
                 console.log(obj.data.id);
                 window.open('/api/export?id='+obj.data.id);
-                layer.close(index);
 
 
         }
