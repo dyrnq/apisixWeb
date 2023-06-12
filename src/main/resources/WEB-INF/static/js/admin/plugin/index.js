@@ -8,6 +8,36 @@ editor1.setOptions({
 });
 editor1.resize();
 
+
+function del() {
+    layui.use(['layer', 'form'], function(){
+
+        var id = $('#addForm1 input[name="id"]').val();
+        //console.log(id);
+        //var text = editor1.getValue();
+        //console.log(text);
+
+        $.ajax({
+            type : 'POST',
+            url: ctx + '/api/pluginMetadata/del',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id}),
+            dataType : 'json',
+            success : function(data) {
+                if(data.code=='200'){
+                    //location.reload();
+                    layer.closeAll();
+                    //layer.msg("新增成功");
+                } else {
+                    layer.msg(data.description);
+                }
+            },
+            error : function() {
+                layer.alert("系统错误");
+            }
+        });
+    });
+}
 function addOver() {
     layui.use(['layer', 'form'], function(){
 

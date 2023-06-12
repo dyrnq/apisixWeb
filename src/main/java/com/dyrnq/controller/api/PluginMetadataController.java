@@ -1,6 +1,8 @@
 package com.dyrnq.controller.api;
 
 import com.dyrnq.apisix.ApisixSDKException;
+import com.dyrnq.apisix.domain.PluginMetadata;
+import com.dyrnq.service.op.Factory;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
@@ -63,5 +65,15 @@ public class PluginMetadataController extends ApiController {
         }
     }
 
+    @Mapping("del")
+    public Result del(Context ctx, String id) {
+        try {
+            Factory.create(PluginMetadata.class).del(getAdminClient(), id);
+            return Result.succeed("ok");
+        } catch (ApisixSDKException e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
 
 }
