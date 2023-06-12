@@ -38,6 +38,11 @@ public class GlobalRuleOp implements Op<GlobalRule>, Sample {
     }
 
     @Override
+    public GlobalRule putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putGlobalRuleRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

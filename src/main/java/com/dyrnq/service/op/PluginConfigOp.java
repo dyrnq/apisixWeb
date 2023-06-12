@@ -38,6 +38,11 @@ public class PluginConfigOp implements Op<PluginConfig>, Sample {
     }
 
     @Override
+    public PluginConfig putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putPluginConfigRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

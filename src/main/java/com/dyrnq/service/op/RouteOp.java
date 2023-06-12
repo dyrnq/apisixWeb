@@ -41,6 +41,11 @@ public class RouteOp implements Op<Route>, Sample {
     }
 
     @Override
+    public Route putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putRouteRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         Route r = new Route();
         r.setName("demo");

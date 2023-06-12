@@ -28,6 +28,11 @@ public class SSLOp implements Op<SSL>, Sample {
     }
 
     @Override
+    public SSL putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putSSLRaw(id, rawData);
+    }
+
+    @Override
     public List<SSL> list(AdminClient client) throws ApisixSDKException {
         return client.listSSLs();
     }

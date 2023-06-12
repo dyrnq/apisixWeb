@@ -38,6 +38,11 @@ public class ServiceOp implements Op<Service>, Sample {
     }
 
     @Override
+    public Service putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putServiceRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

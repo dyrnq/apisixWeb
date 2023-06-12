@@ -33,6 +33,11 @@ public class UpstreamOp implements Op<Upstream>, Sample {
     }
 
     @Override
+    public Upstream putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putUpstreamRaw(id, rawData);
+    }
+
+    @Override
     public String encodeId(Upstream obj) {
         return obj.getId();
     }

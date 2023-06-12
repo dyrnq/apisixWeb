@@ -17,4 +17,5 @@ public interface Op<T> {
 
     String encodeId(T obj);
 
+    T putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException;
 }

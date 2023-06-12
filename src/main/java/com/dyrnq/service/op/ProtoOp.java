@@ -38,6 +38,11 @@ public class ProtoOp implements Op<Proto>, Sample {
     }
 
     @Override
+    public Proto putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putProtoRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

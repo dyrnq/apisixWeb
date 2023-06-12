@@ -38,6 +38,11 @@ public class ConsumerOp implements Op<Consumer>, Sample {
     }
 
     @Override
+    public Consumer putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putConsumerRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

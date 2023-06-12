@@ -37,6 +37,11 @@ public class ConsumerGroupOp implements Op<ConsumerGroup>, Sample {
     }
 
     @Override
+    public ConsumerGroup putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putConsumerGroupRaw(id, rawData);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

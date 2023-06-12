@@ -33,6 +33,11 @@ public class StreamRouteOp implements Op<StreamRoute>, Sample {
     }
 
     @Override
+    public StreamRoute putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putStreamRouteRaw(id, rawData);
+    }
+
+    @Override
     public String encodeId(StreamRoute obj) {
         return obj.getId();
     }

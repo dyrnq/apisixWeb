@@ -35,6 +35,11 @@ public class SecretOp implements Op<Secret>, Sample {
     }
 
     @Override
+    public Secret putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
+        return client.putSecretRaw(id, rawData);
+    }
+
+    @Override
     public String encodeId(Secret obj) {
         try {
             return URLEncoder.encode(obj.getId(), "UTF-8");
