@@ -32,7 +32,7 @@ public class ScheduleTask {
             long curr = System.currentTimeMillis();
             for (File f : list) {
                 long last = f.lastModified();
-                System.out.println(last);
+
                 if (curr - last > 1L * 60L * 60L * 1000) {
                     FileUtils.forceDelete(f);
                 }
