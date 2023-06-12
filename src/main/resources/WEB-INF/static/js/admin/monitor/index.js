@@ -20,12 +20,12 @@ $(function(){
 //			content : $('#nginxGuideDiv')
 //		});
 //	}
-    setTimeout(function() {
-      load();
-    }, 1000);
+//    setTimeout(function() {
+//      load();
+//    }, 1000);
 	setInterval(() => {
 		load();
-	}, 5000);
+	}, 2000);
 
 	//initEchart();
 	//network();
@@ -36,9 +36,9 @@ $(function(){
 function sys(){
 
     var editor = ace.edit("editor");
-    editor.setTheme("ace/theme/twilight");
+    editor.setTheme("ace/theme/merbivore");
     editor.session.setMode("ace/mode/json");
-    editor.setFontSize(16);
+    editor.setFontSize(13);
     editor.setOptions({
         minLines: 10,
         maxLines: Infinity
@@ -46,7 +46,7 @@ function sys(){
     editor.resize();
 
     $.ajax({
-        url: '/admin/monitor/sys',
+        url: ctx + '/admin/monitor/sys',
         type:'post',
         contentType: 'application/json',
         success:function (data,statusText) {

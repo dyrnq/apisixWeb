@@ -1,17 +1,20 @@
 package com.dyrnq;
 
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.cym.utils.VersionUtils;
+import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
-
 import io.jsonwebtoken.Claims;
-
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack.ONode;
 import org.noear.solon.Solon;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
-import org.noear.solon.core.handle.*;
+import org.noear.solon.core.handle.Context;
+import org.noear.solon.core.handle.Filter;
+import org.noear.solon.core.handle.FilterChain;
+import org.noear.solon.core.handle.Handler;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
 import org.noear.solon.core.util.LogUtil;
@@ -29,7 +32,7 @@ import java.util.*;
 public class WebApp {
     static Logger logger = LoggerFactory.getLogger(WebApp.class);
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Solon.start(WebApp.class, args, app -> {
             LogUtil.globalSet(new LogUtilToSlf4j());
             app.onError(e -> logger.error(e.getMessage(), e));
@@ -105,13 +108,19 @@ public class WebApp {
 //                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
 //                .create();
 
+        @Inject
+        CfgExtractor cfgExtractor;
 
         @Override
         public void doFilter(Context ctx, FilterChain chain) throws Throwable {
+            Map<String,String> cookName=new HashMap<>();
+            cookName.put("token",cfgExtractor.tokenCookieName());
+            cookName.put("instId",CookieName.NAME_INSTID);
             ctx.attrSet("projectName", projectName);
-            ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,50,100]}");
+            ctx.attrSet("cookName", JSONUtil.toJsonStr(cookName));
+            ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100]}");
             ctx.attrSet("ctx", getCtxStr(ctx));
-            ctx.attrSet("jsrandom", VersionUtils.getVersion());
+            ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());
             chain.doFilter(ctx);
         }
     }
@@ -224,22 +233,8 @@ public class WebApp {
 //            return username;
 //        }
 
-        private Boolean validateToken(Context ctx ,String token, String name) {
-            if (StringUtils.isBlank(token)) return false;
-
-            Claims claims = JwtUtils.parseJwt(token);
-            String username = claims.getSubject();
-            logger.info("username=" + username);
-            com.dyrnq.model.User user = businessLogic.findByName(username);
-            if (user == null) return false;
-            ctx.attrSet("admin", user);
-            ctx.attrSet("langType", "语言切换");
-
-            Date expiration = claims.getExpiration();
-//            return expiration.before(new Date());
-            return (username.equals(user.getName()) && ! expiration.before(new Date()));
-//            return (username.equals(name) && !isTokenExpired(token));
-        }
+        @Inject
+        BusinessLogic businessLogic;
 
 //        public Boolean isTokenExpired(String token) throws Exception {
 //            try {
@@ -252,22 +247,38 @@ public class WebApp {
 //            }
 //            return true;
 //        }
-
         @Inject
-        BusinessLogic businessLogic;
+        CfgExtractor cfgExtractor;
+
+        private Boolean validateToken(Context ctx, String token, String name) {
+            if (StringUtils.isBlank(token)) return false;
+
+            Claims claims = JwtUtils.parseJwt(token);
+            String username = claims.getSubject();
+//            logger.info("username=" + username);
+            User user = businessLogic.findByName(username);
+            if (user == null) return false;
+            ctx.attrSet("admin", user);
+            ctx.attrSet("langType", "语言切换");
+
+            Date expiration = claims.getExpiration();
+//            return expiration.before(new Date());
+            return (username.equals(user.getName()) && !expiration.before(new Date()));
+//            return (username.equals(name) && !isTokenExpired(token));
+        }
 
         @Override
         public void doIntercept(Context ctx, Handler mainHandler, RouterInterceptorChain chain) throws Throwable {
             //如果是登录页则不处理
-            logger.info("ctx.path()=" + ctx.path());
+//            logger.info("ctx.path()=" + ctx.path());
             if ((ctx.path().startsWith("/admin") && !ctx.path().startsWith("/admin/login")) || (ctx.path().startsWith("/api"))) {
-                String token = ctx.cookie("TOKEN");
-                logger.info("TOKEN=" + token);
+                String token = ctx.cookie(cfgExtractor.tokenCookieName());
+//                logger.info("TOKEN=" + token);
 //                String session_username = ctx.session("user_name", "");
 //                logger.info("session_username="+session_username);
-                boolean validateToken =false;
+                boolean validateToken = false;
                 try {
-                    validateToken = validateToken(ctx,token, null);
+                    validateToken = validateToken(ctx, token, null);
                 } finally {
                     if (!validateToken) {
                         if (ctx.path().startsWith("/api")) {

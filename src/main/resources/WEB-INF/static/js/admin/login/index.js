@@ -9,15 +9,15 @@ function login() {
 	//var authCode = Base64.encode(Base64.encode($("#authCode").val()));
 
     var salt = bcrypt.genSaltSync(12);
-    var hash = bcrypt.hashSync(pass, salt);
-    //console.log(hash);
+    var hashPass = bcrypt.hashSync(pass, salt);
+    //console.log(hashPass);
 
 	$.ajax({
 		type: 'POST',
 		url: ctx + '/token/getToken',
 		data: {
 			name : name,
-			pass : pass
+			pass : hashPass
 		},
 		dataType: 'json',
 		success: function(data) {
@@ -31,7 +31,7 @@ function login() {
 			//		window.localStorage.removeItem("adminId");
 			//	}
 
-                Cookies.set('TOKEN', data.data, { expires: 1, path: '/' })
+                Cookies.set(COOK_NAME.token, data.data, { expires: 1, path: '/' })
 
 //                var cname="TOKEN"
 //                var cvalue=data.data

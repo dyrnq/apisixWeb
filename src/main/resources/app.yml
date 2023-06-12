@@ -36,13 +36,22 @@ solon:
         maxFileSize: "1 MB"
         maxHistory: "7"
 
-test:
-  db1:
-    jdbcUrl: jdbc:h2:file:~/tmp/h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE
-    #jdbcUrl: jdbc:h2:mem:test_mem
-    driverClassName: "org.h2.Driver"
-    username: "sa"
-    password: ""
+#test:
+#  db1:
+#    jdbcUrl: jdbc:h2:file:~/tmp/h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE
+#    #jdbcUrl: jdbc:h2:mem:test_mem
+#    driverClassName: "org.h2.Driver"
+#    username: "sa"
+#    password: ""
+
+spring:
+  database:
+    type: h2
+  datasource:
+    url:
+    username:
+    password:
+
 #  db2:
 #    schema: rock
 #    jdbcUrl: jdbc:mysql://127.0.0.1:3306/rock?useUnicode=true&characterEncoding=utf8&autoReconnect=true&rewriteBatchedStatements=true

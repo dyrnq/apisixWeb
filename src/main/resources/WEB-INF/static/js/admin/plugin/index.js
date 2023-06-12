@@ -18,7 +18,7 @@ function addOver() {
 
         $.ajax({
             type : 'POST',
-            url : '/api/pluginMetadata/put',
+            url: ctx + '/api/pluginMetadata/put',
             contentType: 'application/json',
             data: JSON.stringify({id: id,rawData:text}),
             dataType : 'json',
@@ -41,7 +41,7 @@ var pluginMetadata={};
 try {
     $.ajax({
         type : 'POST',
-        url : '/api/pluginMetadata',
+        url: ctx + '/api/pluginMetadata',
         contentType: 'application/json',
         dataType : 'json',
         async: false,
@@ -114,21 +114,20 @@ function metadata_schema(d) {
 
 
 
-layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+layui.use(function(){
   //得到各种内置组件
   var layer = layui.layer //弹层
   ,laypage = layui.laypage //分页
   ,table = layui.table //表格
 
-  //向世界问个好
-  //layer.msg('Hello World');
+
 
 
   //执行一个 table 实例
   table.render({
     elem: '#demo'
     ,height: 'auto'
-    ,url: '/api/plugin' //数据接口
+    ,url: ctx + '/api/plugin' //数据接口
     ,title: '用户表'
     ,page: false //开启分页
     ,toolbar: false
@@ -226,7 +225,7 @@ layui.use(function(){ //亦可加载特定模块：layui.use(['layer', 'laydate'
             $('#addForm1 input[name="id"]').val("");
             //$('#addForm1 textarea[name="rawData"]').val("");
             $.ajax({
-                    url: '/api/raw',
+                    url: ctx + '/api/raw',
                     type: 'post',
                     contentType: 'application/json',
                     data:JSON.stringify({id:obj.data.id,cls:'pluginMetadata'}),

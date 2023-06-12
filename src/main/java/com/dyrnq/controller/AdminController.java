@@ -2,6 +2,7 @@ package com.dyrnq.controller;
 
 
 import cn.hutool.json.JSONUtil;
+import com.dyrnq.CfgExtractor;
 import com.dyrnq.service.MonitorService;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Controller;
@@ -14,13 +15,11 @@ import org.noear.solon.i18n.annotation.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Properties;
-
 
 @Mapping("admin")
 @Controller
 @I18n
-public class AdminController {
+public class AdminController extends BaseController{
     static Logger logger = LoggerFactory.getLogger(AdminController.class);
 
     @Mapping("inst")
@@ -151,9 +150,12 @@ public class AdminController {
         return new Result(JSONUtil.toJsonPrettyStr(monitorService.getInfo()));
     }
 
+    @Inject
+    CfgExtractor cfgExtractor;
+
     @Mapping("")
     public Object index(Context ctx) {
-        String token = ctx.cookie("TOKEN");
+        String token = ctx.cookie(cfgExtractor.tokenCookieName());
 
         if (Utils.isEmpty(token)) {
             ModelAndView model = new ModelAndView("admin/index-noauth.html");

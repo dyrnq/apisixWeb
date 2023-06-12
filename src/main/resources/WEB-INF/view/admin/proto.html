@@ -1,21 +1,21 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <#include "admin/common.html"/>
-    <style type="text/css">
+<#include "admin/common.html"/>
+<style type="text/css">
 
-        .long{
-            width: 210px;
-        }
+    .long{
+        width: 210px;
+    }
 
-        .short{
-            width: 110px!important;
-        }
+    .short{
+        width: 110px!important;
+    }
 
-        input[name='param']{
-            width: 100px;
-        }
-    </style>
+    input[name='param']{
+        width: 100px;
+    }
+</style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -103,7 +103,7 @@
 <#include 'admin/script.html'/>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">批量删除</button>
+        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteAll">批量删除</button>
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display: none">获取选中行数据</button>
     </div>
 </script>

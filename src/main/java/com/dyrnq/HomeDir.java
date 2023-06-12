@@ -20,14 +20,14 @@ public class HomeDir implements LifecycleBean {
 
     @Inject("${solon.app.name}")
     String projectName;
-
+    @Inject
+    CfgExtractor cfgExtractor;
     private String homeAbsolutePath;
     private String tmpAbsolutePath;
 
     @Override
     public void start() throws Throwable {
         String systemUserDir = SystemUtils.getUserHome().getAbsolutePath();
-
         if(StringUtils.isBlank(home)){
             homeAbsolutePath=systemUserDir + File.separator+"."+projectName;
         }else{

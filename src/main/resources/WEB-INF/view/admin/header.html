@@ -1,14 +1,19 @@
 <div class="layui-header">
 	<div class="layui-logo">${projectName} ${currentVersion}</div>
 	<ul class="layui-nav layui-layout-right">
-		
+		<li class="layui-nav-item">
+			<div class="layui-inline layui-word-aux layui-font-white">
+				<a href="javascript:;" class="layui-font-blue" id="ID-dropdown-demo-base-text">
+					切换apisix<i class="layui-icon layui-font-12 layui-icon-down"></i>
+				</a>
+			</div>
+		</li>
+
+
 		<li class="layui-nav-item">
 			<a href="javascript:" style="color: white;">${i18n.get("commonStr.currentUser")}: ${admin.name}</a>
 		</li>
-	
-<!--		<li class="layui-nav-item">-->
-<!--			<a href="javascript:changeLang()">${langType}</a>-->
-<!--		</li>-->
+
 
 		<li class="layui-nav-item">
 			<a href="javascript:;">${langType}</a>

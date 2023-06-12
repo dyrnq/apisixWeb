@@ -28,7 +28,7 @@
     <div class="layui-body">
         <div style="padding: 15px">
             <fieldset class="layui-elem-field layui-field-title">
-                <legend>${menuStr.monitor}</legend>
+                <legend>${i18n.get("menuStr.monitor")}</legend>
             </fieldset>
 
 <!--            <input type="hidden" id="isInit" value="${isInit}">-->
@@ -39,27 +39,27 @@
                     <div class="layui-col-md6">
                         <div class="layui-card">
                             <div class="layui-card-header">
-                                ${monitorStr.cpuRatio}&nbsp;&nbsp;<span id="cpuCount" style="color: teal;"></span>
+                                ${i18n.get("monitorStr.cpuRatio")}&nbsp;&nbsp;<span id="cpuCount" style="color: teal;"></span>
                             </div>
 
                             <div class="layui-card-body">
                                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="cpu">
-                                    <div class="layui-progress-bar layui-bg-green" lay-percent="0%"></div>
+                                    <div class="layui-progress-bar layui-bg-green" lay-percent="46.43%"></div>
                                 </div>
                             </div>
 
                             <div class="layui-card-header">
-                                ${monitorStr.memUse}&nbsp;&nbsp;<span id="memContent" style="color: teal;"></span>
+                                ${i18n.get("monitorStr.memUse")}&nbsp;&nbsp;<span id="memContent" style="color: teal;"></span>
                             </div>
 
                             <div class="layui-card-body">
                                 <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="mem">
-                                    <div class="layui-progress-bar layui-bg-blue" lay-percent="0%"></div>
+                                    <div class="layui-progress-bar layui-bg-blue" lay-percent="21.88%"></div>
                                 </div>
                             </div>
 
                             <div class="layui-card-header">
-                                ${monitorStr.diskUse}&nbsp;&nbsp;<span id="diskContent" style="color: teal;"></span>
+                                ${i18n.get("monitorStr.diskUse")}&nbsp;&nbsp;<span id="diskContent" style="color: teal;"></span>
                             </div>
 
                             <div class="layui-card-body">

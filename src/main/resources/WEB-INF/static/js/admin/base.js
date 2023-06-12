@@ -16,23 +16,23 @@ $(function() {
 	form = layui.form;
 	laypage = layui.laypage;
 
-	// 执行一个laypage实例
-	laypage.render({
-		elem: 'pageInfo', // 渲染节点
-		count: page.count, // 总记录数
-		curr: page.curr, // 起始页
-		limit: page.limit, // 每页记录数
-		layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
-		jump: function(obj, first) {
-			// 首次不执行
-			if (!first) {
-				// do something
-				$("input[name='curr']").val(obj.curr);
-				$("input[name='limit']").val(obj.limit);
-				$("#searchForm").submit();
-			}
-		}
-	});
+//	// 执行一个laypage实例
+//	laypage.render({
+//		elem: 'pageInfo', // 渲染节点
+//		count: page.count, // 总记录数
+//		curr: page.curr, // 起始页
+//		limit: page.limit, // 每页记录数
+//		layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
+//		jump: function(obj, first) {
+//			// 首次不执行
+//			if (!first) {
+//				// do something
+//				$("input[name='curr']").val(obj.curr);
+//				$("input[name='limit']").val(obj.limit);
+//				$("#searchForm").submit();
+//			}
+//		}
+//	});
 
 	// 日期控件
 	layui.use('laydate', function() {
@@ -125,7 +125,7 @@ function loginOut() {
 //    let expires = "expires="+ now.toUTCString();
 //    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 
-    Cookies.remove('TOKEN', { path: '/' }) // removed!
+    Cookies.remove(COOK_NAME.token, { path: '/' }) // removed!
     location.href = ctx + "/admin/login";
 
 }
@@ -267,7 +267,7 @@ function autoUpdate(url) {
 		loaded = layer.load();
 		$.ajax({
 			type: 'POST',
-			url: ctx + '/adminPage/main/autoUpdate',
+			url: ctx + '/api/autoUpdate',
 			data: {
 				url: url
 			},
@@ -343,28 +343,37 @@ function showHelp() {
 	// });
 }
 
-layui.use(['dropdown', 'util', 'layer', 'table'], function(){
-  var dropdown = layui.dropdown
-  ,util = layui.util
-  ,layer = layui.layer
-  ,table = layui.table
-  ,$ = layui.jquery;
+if (document.getElementById("ID-dropdown-demo-base-text")) {
+    layui.use(['dropdown', 'util', 'layer', 'table'], function(){
+      var dropdown = layui.dropdown
+      ,util = layui.util
+      ,layer = layui.layer
+      ,table = layui.table
+      ,$ = layui.jquery;
 
 
-  //初演示 - 绑定文字
-  dropdown.render({
-    elem: '#demo3'
-    ,data: [{title: '192.168.66.100',id: 1},{title: '192.168.66.101',id: 1111}]
-    ,click: function(obj){
-        console.log(obj.id);
-        console.log(this.elem);
-        this.elem.val(obj.title);
+     $.ajax({
+        type : 'POST',
+        url : ctx + '/api/inst/dropdown',
+        dataType : 'json',
+        success : function(data) {
+            if (data.code == 200) {
+              //初演示 - 绑定文字
+              dropdown.render({
+                elem: '#ID-dropdown-demo-base-text'
+                ,data: data.data
+                ,click: function(obj){
+                    //console.log(obj.id);
+                    //console.log(this.elem);
+                    //this.elem.val(obj.title);
+                    Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
+                    location.reload();
 
-        var cname="instId"
-        var cvalue=obj.id
-        document.cookie = cname + "=" + cvalue + ";path=/";
-        //location.reload();
+                }
+              });
+            }
+        }
+    });
+    });
 
-    }
-  });
-});
+}

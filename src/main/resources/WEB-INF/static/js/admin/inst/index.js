@@ -18,7 +18,7 @@ layui.use(['upload','layer'],function () {
             //certFile = obj.pushFile();
             obj.preview(function(index, file, result){
                 certFile=file;
-                console.log(index); // 得到文件索引
+                //console.log(index); // 得到文件索引
                 //console.log(file); // 得到文件对象
                 //console.log(result); // 得到文件base64编码，比如图片
                 $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
@@ -28,9 +28,6 @@ layui.use(['upload','layer'],function () {
             console.log(index);
         }
     });
-
-
-
 })
 
 function addOver2() {
@@ -41,7 +38,7 @@ function addOver2() {
         formData.append("id",$('#addForm3 input[name="id"]').val());
         $.ajax({
             type:'POST',
-            url: "/api/import",
+            url: ctx + '/api/tar/import',
             data: formData,
             processData: false,
             contentType: false,
@@ -49,6 +46,7 @@ function addOver2() {
             dataType: "json",
             success:function (data,statusText) {
                 if(data.code=='200'){
+                    layer.closeAll();
                     layer.msg('ok');
                 }else{
                     layer.msg(data.description);
@@ -64,116 +62,121 @@ function addOver2() {
 
 
 
-    function add() {
-        layui.use(['layer', 'form'], function(){
-            var layer = layui.layer;
-            var form = layui.form;
-            // clean data
-            $('#addForm1 input[name="id"]').val("");
-            $('#addForm1 input[name="name"]').val("");
-            $('#addForm1 input[name="url"]').val("");
-            $('#addForm1 input[name="apiKey"]').val("");
+function add() {
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer;
+        var form = layui.form;
+        // clean data
+        $('#addForm1 input[name="id"]').val("");
+        $('#addForm1 input[name="name"]').val("");
+        $('#addForm1 input[name="url"]').val("");
+        $('#addForm1 input[name="apiKey"]').val("");
 
-            layer.open({
-                type: 1,
-                area: ['800px', '600px'],
-                title: '添加新用户',
-                content : $('#windowDiv')
-            });
+        layer.open({
+            type: 1,
+            area: ['800px', '600px'],
+            title: 'Add Inst',
+            content : $('#windowDiv')
         });
-    }
+    });
+}
 
 
-    function addOver() {
-        var layer = layui.layer //弹层
-        var laypage = layui.laypage //分页
-        var table = layui.table //表格
+function addOver() {
+    var layer = layui.layer //弹层
+    var laypage = layui.laypage //分页
+    var table = layui.table //表格
 
-        $.ajax({
-            type : 'POST',
-            url : '/api/inst/add',
-            data : $('#addForm1').serialize(),
-            dataType : 'json',
-            success : function(data) {
-                if(data.code=='200'){
-                    //location.reload();
-                    layer.closeAll();
-                    layer.msg("新增成功");
-                    //location.reload();
-                    table.reload('demo',{});
-                } else {
-                    layer.msg(data.description);
-                }
-            },
-            error : function() {
-                layer.alert("系统错误");
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/inst/add',
+        data : $('#addForm1').serialize(),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                //location.reload();
+                layer.closeAll();
+                layer.msg("新增成功");
+                //location.reload();
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
             }
-        });
-    }
+        },
+        error : function() {
+            layer.alert("系统错误");
+        }
+    });
+}
 
-    function updateOver() {
-        var layer = layui.layer //弹层
-        var laypage = layui.laypage //分页
-        var table = layui.table //表格
-        $.ajax({
-            type : 'POST',
-            url : '/api/inst/update',
-            data : $('#addForm2').serialize(),
-            dataType : 'json',
-            success : function(data) {
-                console.log(data);
-                if(data.code=='200'){
-                    //location.reload();
-                    layer.closeAll();
-                    layer.msg("修改成功");
-                    //location.reload();
-                    table.reload('demo',{});
-                } else {
-                    layer.msg(data.description);
-                }
-            },
-            error : function() {
-                layer.alert("系统错误");
+function updateOver() {
+    var layer = layui.layer //弹层
+    var laypage = layui.laypage //分页
+    var table = layui.table //表格
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/inst/update',
+        data : $('#addForm2').serialize(),
+        dataType : 'json',
+        success : function(data) {
+            console.log(data);
+            if(data.code=='200'){
+                //location.reload();
+                layer.closeAll();
+                layer.msg("修改成功");
+                //location.reload();
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
             }
-        });
-    }
-
-
-    function addLink(d) {
-        var addLink = d.id;
-        if ('' == addLink || null == addLink || undefined == addLink) {
-            return '';
+        },
+        error : function() {
+            layer.alert("系统错误");
         }
-        if (addLink.length > 0) {
-            return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-                +'&nbsp;<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="export"> '+'导出'+'</button>'+'&nbsp;<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="importData"> '+'导入'+'</button>';
-        }
+    });
+}
+
+
+function addLink(d) {
+    var addLink = d.id;
+    if ('' == addLink || null == addLink || undefined == addLink) {
+        return '';
     }
+    if (addLink.length > 0) {
+
+       let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
+       let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
+       let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">'+'drop'+'</button>'
+       let exptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">'+'导出'+'</button>'
+       let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">'+'导入'+'</button>'
+       return editBtn+'&nbsp;'+delBtn+'&nbsp;'+dropBtn+'&nbsp;'+exptBtn+'&nbsp;'+imptBtn ;
+    }
+}
 
 
 
-layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+layui.use(function() {
     //得到各种内置组件
     var layer = layui.layer //弹层
         , laypage = layui.laypage //分页
         , table = layui.table //表格
 
-    //向世界问个好
-    //layer.msg('Hello World');
+
+
 
     var default_limt = localStorage.getItem('pageLimit');
 
     if ('' == default_limt || null == default_limt || undefined == default_limt) {
         default_limt = cfg.pageLimit;
     }
-    //console.log("default_limt="+default_limt)
+
 
 
     //执行一个 table 实例
     table.render({
         elem: '#demo'
         , height: 620
-        , url: '/api/inst' //数据接口
+        , url: ctx + '/api/inst' //数据接口
         , title: '用户表'
         , page: true //开启分页
         , limit: default_limt
@@ -260,7 +263,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                         }
 
                         $.ajax({
-                            url: '/api/inst/del',
+                            url: ctx + '/api/inst/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
@@ -303,7 +306,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/route/enable',
+                            url: ctx + '/api/route/enable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -344,7 +347,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/route/disable',
+                            url: ctx + '/api/route/disable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -389,7 +392,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 //向服务端发送删除指令
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
-                    url: '/api/inst/del',
+                    url: ctx + '/api/inst/del',
                     type:'post',
                     data:"id="+obj.data.id,
                          success:function (data,statusText) {
@@ -423,7 +426,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 var form = layui.form;
                 console.log(obj.data.id);
                 $.ajax({
-                    url: '/api/inst/get',
+                    url: ctx + '/api/inst/get',
                     type:'post',
                     contentType: 'application/json',
                     data:JSON.stringify({id:obj.data.id}),
@@ -440,7 +443,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                             layer.open({
                                 type: 1,
                                 area: ['800px', '600px'],
-                                title: '修改用户',
+                                title: 'Edit Inst',
                                 content : $('#windowDiv2')
                             });
                         }else{
@@ -455,22 +458,47 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
         else if(layEvent === 'importData'){//导入事件
             var layer = layui.layer;
-            console.log(obj.data.id);
+            //console.log(obj.data.id);
             $('#addForm3 input[name="id"]').val(obj.data.id);
+            certFile={}
+            $("#layui-upload-choose-cert").html("");
+
             layer.open({
                 type: 1,
-                area: ['800px', '600px'],
-                title: '修改用户',
+                area: ['500px', '300px'],
+                title: 'import data',
                 content : $('#guideDiv')
             });
         }
         else if(layEvent === 'export'){//导出事件
             var layer = layui.layer;
                 console.log(obj.data.id);
-                window.open('/api/export?id='+obj.data.id);
+                window.open('/api/tar/export?id='+obj.data.id);
+        }
+        else if(layEvent === 'drop'){
+                var layer = layui.layer;
+                layer.confirm('确定删除选中的数据吗？', function(index) {
+                    $.ajax({
+                        url: ctx + '/api/inst/drop',
+                        type:'post',
+                        contentType: 'application/json',
+                        data:JSON.stringify({id:obj.data.id}),
+                        success:function (data,statusText) {
+                            if(data.code=='200'){
+                                layer.msg("OK");
+                            }else{
+                                 layer.msg(data.description);
+                            }
+                        },
+                        'error':function () {
+                            layer.msg('系统错误');
+                        }
+                    });
+                });
 
 
         }
+
     });
 
   //监听Tab切换

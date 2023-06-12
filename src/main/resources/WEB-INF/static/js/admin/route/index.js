@@ -38,7 +38,7 @@ function addOver() {
 
         $.ajax({
             type : 'POST',
-            url : '/api/route/put',
+            url: ctx + '/api/route/put',
             contentType: 'application/json',
             data: JSON.stringify({id: id,rawData:text}),
             dataType : 'json',
@@ -66,34 +66,36 @@ function addLink(d) {
         return '';
     }
     //如果是合法的路径，那么就正常添加，并配备编辑和删除的按键。
-    if (addLink.length > 0) {
-        return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>';
-    }
+   if (addLink.length > 0) {
+       let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
+       let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
+       return editBtn+'&nbsp;'+delBtn;
+   }
 }
 
 
 
-layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate', function(){
+layui.use(function() {
     //得到各种内置组件
     var layer = layui.layer //弹层
         , laypage = layui.laypage //分页
         , table = layui.table //表格
 
-    //向世界问个好
-    //layer.msg('Hello World');
+
+
 
     var default_limt = localStorage.getItem('pageLimit');
 
     if ('' == default_limt || null == default_limt || undefined == default_limt) {
         default_limt = cfg.pageLimit;
     }
-    //console.log("default_limt="+default_limt)
+
 
     //执行一个 table 实例
     table.render({
         elem: '#demo'
         , height: 620
-        , url: '/api/route' //数据接口
+        , url: ctx + '/api/route' //数据接口
         , title: '用户表'
         , page: true //开启分页
         , limit: default_limt
@@ -172,6 +174,9 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
+            case 'LAYTABLE_TIPS':
+                layer.alert(desc.route, { area: ['500px', '300px'] });
+                break;
             case 'getCheckData':
                 var dataX = checkStatus.data;
                 layer.alert(JSON.stringify(dataX));
@@ -195,7 +200,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                         }
 
                         $.ajax({
-                            url: '/api/route/del',
+                            url: ctx + '/api/route/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
@@ -238,7 +243,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/route/enable',
+                            url: ctx + '/api/route/enable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -279,7 +284,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
 
                         }
                         $.ajax({
-                            url: '/api/route/disable',
+                            url: ctx + '/api/route/disable',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
@@ -323,7 +328,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                 //向服务端发送删除指令
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
-                    url: '/api/route/del',
+                    url: ctx + '/api/route/del',
                     type:'post',
                     data:"id="+obj.data.id,
                          success:function (data,statusText) {
@@ -349,7 +354,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
         }else if (layEvent === 'edit'){
             cleanData(true);
             $.ajax({
-                    url: '/api/raw',
+                    url: ctx + '/api/raw',
                     type:'post',
                     contentType: 'application/json',
                     data: JSON.stringify({id: obj.data.id,cls: 'route'}),

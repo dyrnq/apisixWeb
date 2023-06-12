@@ -1,5 +1,6 @@
 package com.dyrnq.service;
 
+import com.dyrnq.CookieName;
 import com.dyrnq.HomeDir;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
@@ -8,54 +9,78 @@ import com.dyrnq.apisix.profile.Credential;
 import com.dyrnq.apisix.profile.DefaultCredential;
 import com.dyrnq.apisix.profile.DefaultProfile;
 import com.dyrnq.apisix.profile.Profile;
-import com.dyrnq.apisix.response.Wrap;
+import com.dyrnq.dso.InstMapper;
 import com.dyrnq.dso.UserMapper;
+import com.dyrnq.model.Inst;
 import com.dyrnq.model.User;
 import com.dyrnq.service.op.Factory;
 import com.dyrnq.service.op.Op;
+import com.dyrnq.utils.BCryptPasswordEncoder;
 import com.dyrnq.utils.TarUtils;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.GsonBuilder;
+import com.google.gson.ToNumberPolicy;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
+import org.noear.solon.core.handle.Context;
 import org.noear.wood.MapperWhereQ;
 import org.noear.wood.annotation.Db;
 import org.noear.wood.ext.Act1;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.lang.reflect.Type;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class BusinessLogic {
+    static Logger logger = LoggerFactory.getLogger(BusinessLogic.class);
     @Db
     UserMapper userMapper;
 
+    @Db
+    InstMapper instMapper;
     @Inject
     HomeDir homeDir;
 
-    private AdminClient getAdminClient() {
-        String url = "192.168.66.100:9180";
-        Credential c = new DefaultCredential("edd1c9f034335f136f87ad84b625c8f1");
-        Profile p = DefaultProfile.getProfile(url, "", c);
-        AdminClient client = new AdminClient(p);
+    public AdminClient getAdminClient() throws ApisixSDKException {
+        String instId = Context.current().cookie(CookieName.NAME_INSTID, "1");
+        return getAdminClient(instId);
+    }
+
+    public AdminClient getAdminClient(String instId) throws ApisixSDKException {
+        AdminClient client = null;
+        try {
+            Inst inst = null;
+            inst = instMapper.selectById(instId);
+            if (inst != null) {
+                String url = inst.getUrl();
+                Credential c = new DefaultCredential(inst.getApiKey());
+                Profile p = DefaultProfile.getProfile(url, "", c);
+                client = new AdminClient(p);
+            }
+        } catch (Exception e) {
+            throw new ApisixSDKException(e.getMessage());
+        }
         return client;
     }
 
     public User login(String name, String pass) {
         Act1<MapperWhereQ> condition = mapperWhereQ -> {
-            mapperWhereQ.whereEq("name", name).andEq("pass", pass);
+            mapperWhereQ.whereEq("name", name);
         };
 
         List<User> list = userMapper.selectList(condition);
         if (list != null && list.size() > 0) {
-            return list.get(0);
+            User user = list.get(0);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+            if (encoder.matches(user.getPass(), pass)) {
+                return user;
+            }
         }
         return null;
     }
@@ -72,30 +97,52 @@ public class BusinessLogic {
         return null;
     }
 
+    public void drop(String instId) throws ApisixSDKException{
+        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
+        AdminClient client = getAdminClient(instId);
+        //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
+        for (Class obj : clss) {
+            Op op = Factory.create(obj);
+            op.drop(client);
+        }
 
-    public byte[] export(long currentTimeMillis) throws ApisixSDKException, IOException {
-        Gson gson = new Gson();//创建gson对象，含有转化的toJson方法
+    }
+
+
+    public byte[] export(String instId, long currentTimeMillis) throws ApisixSDKException, IOException {
+        //创建gson对象，含有转化的toJson方法
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .disableHtmlEscaping()
+                .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .create();
         String rdm = Long.toString(currentTimeMillis);
         String targetFolderPath = homeDir.getTmpAbsolutePath() + File.separator + rdm;
         String targetTarFile = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
         FileUtils.forceMkdir(new File(targetFolderPath));
         //1，设立一个含有所有队列信息的数组
-        String[] clss = {"route", "streamRoute", "upstream", "service", "ssl", "secret", "consumer", "consumerGroup", "globalRule", "pluginConfig", "proto"};
-        //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
-        AdminClient client = getAdminClient();
+        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
 
-        for (String obj : clss) {
+
+        AdminClient client = getAdminClient(instId);
+        //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
+        for (Class obj : clss) {
             Op op = Factory.create(obj);
             List<?> list = op.list(client);
             //3，根据不同情况进行不同的文件名创建
-            String folderName = obj;
-            FileUtils.forceMkdir(new File(targetFolderPath + File.separator + folderName));
+            String simpleName = obj.getSimpleName();
+            simpleName = StringUtils.uncapitalize(simpleName);
+            if (obj == SSL.class) {
+                simpleName = simpleName.toLowerCase();
+            }
+            FileUtils.forceMkdir(new File(targetFolderPath + File.separator + simpleName));
 
-            for (Object obj1 : list) {
-                String id = op.encodeId(obj1);
-                File file = new File(targetFolderPath + File.separator + obj + File.separator + id + ".json");//创建file文件地址对象，作为载体
+            for (Object item : list) {
+                String id = op.encodeId(item);
+                File file = new File(targetFolderPath + File.separator + simpleName + File.separator + id + ".json");//创建file文件地址对象，作为载体
                 FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-                String json = gson.toJson(obj1);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
+                String json = gson.toJson(item);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
                 writer.write(json);//执行写入方法。
                 writer.close();//关闭写入方法。
             }
@@ -110,32 +157,32 @@ public class BusinessLogic {
     }
 
 
-    public void importData(byte[] b,long currentTimeMillis) throws ApisixSDKException, IOException {
+    public void importData(String instId, byte[] b, long currentTimeMillis) throws ApisixSDKException, IOException {
         String rdm = Long.toString(currentTimeMillis);
         String targetFolderPath = homeDir.getTmpAbsolutePath() + File.separator + rdm;
-        //String[] clss = {"route", "streamRoute", "upstream", "service", "ssl", "secret", "consumer", "consumerGroup", "globalRule", "pluginConfig", "proto"};
-        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class,SSL.class,Secret.class,Consumer.class,ConsumerGroup.class,GlobalRule.class,PluginConfig.class,Proto.class};
-        Gson gson = new Gson();
-        AdminClient client = getAdminClient();
-        String tarGzFilepath = homeDir.getTmpAbsolutePath() + File.separator + rdm+".tar.gz";
-        IOUtils.write(b,new FileOutputStream(new File(tarGzFilepath)));
+
+        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
+
+        AdminClient client = getAdminClient(instId);
+        String tarGzFilepath = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
+        IOUtils.write(b, new FileOutputStream(new File(tarGzFilepath)));
         TarUtils.extractTarGz(tarGzFilepath, targetFolderPath);//执行解压方法
 
         for (Class obj : clss) {
             String simpleName = obj.getSimpleName();
             simpleName = StringUtils.uncapitalize(simpleName);
-            if(obj == SSL.class){
+            if (obj == SSL.class) {
                 simpleName = simpleName.toLowerCase();
             }
-            File folder = new File(targetFolderPath + File.separator+ simpleName);
+            File folder = new File(targetFolderPath + File.separator + simpleName);
             Op op = Factory.create(obj);
-            for (File obj1 : folder.listFiles()) {
-                FileReader reader = new FileReader(obj1);
+            for (File item : folder.listFiles()) {
+                FileReader reader = new FileReader(item);
                 String jsonS = IOUtils.toString(reader);
-                String fileName = obj1.getName();
-                String id = StringUtils.removeEnd(fileName,".json");
-                id = URLDecoder.decode(id,"UTF-8");
-                op.putRaw(getAdminClient(), id, jsonS);
+                String fileName = item.getName();
+                String id = StringUtils.removeEnd(fileName, ".json");
+                id = URLDecoder.decode(id, "UTF-8");
+                op.putRaw(client, id, jsonS);
                 reader.close();
             }
         }

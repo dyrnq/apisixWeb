@@ -13,7 +13,10 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mapping("api/inst")
 @Controller
@@ -91,5 +94,33 @@ public class InstController extends ApiController {
         }
     }
 
+    @Mapping("dropdown")
+    public Result dropdown(Context ctx) {
+        try {
+            List<Inst> p = instMapper.selectList(null);
+            List<Map<String,String>> o = new ArrayList<>();
+            for(Inst inst : p){
+                Map<String,String> m= new HashMap<>();
+                m.put("title",inst.getName());
+                m.put("id",inst.getId());
+                o.add(m);
+            }
+            return Result.succeed(o);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("drop")
+    public Result drop(Context ctx, String id) {
+        try {
+            businessLogic.drop(id);
+            return Result.succeed("ok");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
 
 }

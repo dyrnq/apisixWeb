@@ -12,6 +12,7 @@ import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
+import org.noear.solon.core.handle.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +90,7 @@ public class SSLController extends ApiController {
     }
 
     @Mapping("upload")
-    public Result addSSLFile(Context ctx, org.noear.solon.core.handle.UploadedFile certFile, org.noear.solon.core.handle.UploadedFile keyFile, String id, String snis) {
+    public Result addSSLFile(Context ctx, UploadedFile certFile, UploadedFile keyFile, String id, String snis) {
         try {
             SSL ssl = new SSL();
             byte[] byteCert = IOUtils.toByteArray(certFile.getContent());

@@ -1,0 +1,91 @@
+package com.dyrnq;
+
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RegExUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.SystemUtils;
+import org.flywaydb.core.Flyway;
+import org.noear.solon.annotation.Bean;
+import org.noear.solon.annotation.Configuration;
+import org.noear.solon.annotation.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.io.File;
+
+@Configuration
+public class DataSourceEmbed {
+    static Logger logger = LoggerFactory.getLogger(DataSourceEmbed.class);
+    @Inject("${spring.database.type:}")
+    String databaseType;
+    @Inject("${spring.datasource.url}")
+    String url;
+    @Inject("${spring.datasource.username}")
+    String username;
+    @Inject("${spring.datasource.password}")
+    String password;
+    @Inject("${solon.app.name}")
+    private String projectName;
+
+    @Inject("${project.home:}")
+    private String home;
+
+    // typed=true，表示默认数据源。@Db 可不带名字注入
+    @Bean(value = "db1", typed = true)
+    public DataSource getDataSource() {
+
+        String homeAbsolutePath;
+        String systemUserDir = SystemUtils.getUserHome().getAbsolutePath();
+        if (StringUtils.isBlank(home)) {
+            homeAbsolutePath = systemUserDir + File.separator + "." + projectName;
+        } else {
+            if (StringUtils.startsWith(home, "~")) {
+                homeAbsolutePath = RegExUtils.replaceFirst(home, "~", systemUserDir);
+            } else {
+                homeAbsolutePath = home;
+            }
+        }
+
+
+		String h2Path=StringUtils.endsWith(homeAbsolutePath,File.separator)?homeAbsolutePath+"h2":homeAbsolutePath+File.separator+"h2";
+		try {
+			FileUtils.forceMkdir(new File(h2Path));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+		}
+        HikariDataSource ds = null;
+		if(StringUtils.isBlank(databaseType) || StringUtils.equalsIgnoreCase(databaseType,"sqlite") || StringUtils.equalsIgnoreCase(databaseType,"h2") ){
+            HikariConfig dbConfig = new HikariConfig();
+            dbConfig.setJdbcUrl("jdbc:h2:" + h2Path + File.separator + "h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE");
+            dbConfig.setUsername("sa");
+            dbConfig.setPassword("");
+            dbConfig.setMaximumPoolSize(1);
+			dbConfig.setDriverClassName(org.h2.Driver.class.getName());
+            ds = new HikariDataSource(dbConfig);
+        } else if (StringUtils.equalsIgnoreCase(databaseType,"mysql")) {
+            HikariConfig dbConfig = new HikariConfig();
+            dbConfig.setJdbcUrl(url);
+            dbConfig.setUsername(username);
+            dbConfig.setPassword(password);
+            dbConfig.setMaximumPoolSize(1);
+            dbConfig.setDriverClassName(com.mysql.cj.jdbc.Driver.class.getName());
+            ds = new HikariDataSource(dbConfig);
+        }
+
+        Flyway flyway = Flyway.configure()
+                .baselineOnMigrate(true)
+                .cleanDisabled(true)
+                .dataSource(ds.getJdbcUrl(), ds.getUsername(), ds.getPassword()).load();
+        flyway.migrate();
+
+        return ds;
+    }
+
+//	public void setDataSource(DataSource dataSource) {
+//		this.dataSource = dataSource;
+//	}
+
+}
