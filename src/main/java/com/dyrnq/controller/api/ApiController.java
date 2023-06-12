@@ -11,6 +11,8 @@ import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.service.op.Factory;
 import com.dyrnq.service.op.Sample;
 import com.google.gson.*;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -21,7 +23,9 @@ import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,12 +45,24 @@ public class ApiController extends BaseController {
     }
 
     @Mapping("/export")
-    public void export(Context ctx) throws IOException, ApisixSDKException {
+    public void export(Context ctx,String id) throws IOException, ApisixSDKException {
         long currentTimeMillis = System.currentTimeMillis();
         byte[] b = businessLogic.export(currentTimeMillis);
         String fileName = "export-" + currentTimeMillis + ".tar.gz";
         DownloadedFile file = new DownloadedFile("application/octet-stream", b, fileName);
         ctx.outputAsFile(file);
+    }
+    @Mapping("/import")
+    public Result importData(Context ctx, org.noear.solon.core.handle.UploadedFile file ,String id) throws IOException,ApisixSDKException{
+        try {
+            long currentTimeMillis = System.currentTimeMillis();
+            byte[] b = IOUtils.toByteArray(file.getContent());
+            this.businessLogic.importData(b, currentTimeMillis);
+            return Result.succeed("ok");
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return Result.failure();
     }
 
     private Gson g() {

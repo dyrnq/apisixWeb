@@ -141,6 +141,37 @@ input[name='param']{
         </form>
     </div>
 
+    <div class="layui-form" id="guideDiv" style="padding: 15px; display: none;">
+        <form id="addForm3">
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">cert file</label>
+                <!--                <div class="layui-input-block">-->
+                <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>-->
+                <!--                </div>-->
+                <div class="layui-input-inline short">
+                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">file</button>
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span class="layui-inline layui-upload-choose" id="layui-upload-choose-cert"></span></div>
+
+            </div>
+
+
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver2()">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+
+        </form>
+    </div>
 
 </div>
 
@@ -168,6 +199,71 @@ input[name='param']{
 <!--</script>-->
 
 <script>
+var certFile = {}
+layui.use(['upload','layer'],function () {
+    var upload = layui.upload;
+    var layer = layui.layer;
+
+    upload.render({
+        elem: '#upload-cert'
+        ,auto: false
+        ,accept: "file"
+        ,multiple: false
+        ,before: function(res){
+            console.log(res);
+        }
+        ,size: 5210
+        //,done: function(res, index, upload){
+        //}
+        ,choose: (obj) => {
+            //certFile = obj.pushFile();
+            obj.preview(function(index, file, result){
+                certFile=file;
+                console.log(index); // 得到文件索引
+                //console.log(file); // 得到文件对象
+                //console.log(result); // 得到文件base64编码，比如图片
+                $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
+            });
+        }
+        ,error: function(index, upload){
+            console.log(index);
+        }
+    });
+
+
+
+})
+
+function addOver2() {
+    layui.use(['layer'], function(){
+        var formData = new FormData();
+        var layer = layui.layer;
+        formData.append("file",certFile);
+        formData.append("id",$('#addForm3 input[name="id"]').val());
+        $.ajax({
+            type:'POST',
+            url: "/api/import",
+            data: formData,
+            processData: false,
+            contentType: false,
+            async: false,
+            dataType: "json",
+            success:function (data,statusText) {
+                if(data.code=='200'){
+                    layer.msg('ok');
+                }else{
+                    layer.msg(data.description);
+                }
+            },
+            error:function () {
+                layer.msg('系统错误');
+            }
+        });
+
+    });
+}
+
+
 
     function add() {
         layui.use(['layer', 'form'], function(){
@@ -250,7 +346,8 @@ input[name='param']{
             return '';
         }
         if (addLink.length > 0) {
-            return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>';
+            return '<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="edit">' + commonStr.edit + '</button> '+'&nbsp;<button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
+                +'&nbsp;<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="export"> '+'导出'+'</button>'+'&nbsp;<button type="button" class="layui-btn   layui-btn-normal  layui-btn-xs " lay-event="importData"> '+'导入'+'</button>';
         }
     }
 
@@ -294,7 +391,7 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
             , {field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
             , {field: 'name', title: 'name', width: 200}
             , {field: 'url', title: 'url', width: 300, sort: true, totalRow: true}
-            , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
+            , {field: 'upstream', title: 'upstream', width: 300, templet: addLink}
 
         ]]
         , done: function (res, curr, count){
@@ -556,6 +653,26 @@ layui.use(function() { //亦可加载特定模块：layui.use(['layer', 'laydate
                     }
                 });
             }
+
+        else if(layEvent === 'importData'){//导入事件
+            var layer = layui.layer;
+            console.log(obj.data.id);
+            $('#addForm3 input[name="id"]').val(obj.data.id);
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: '修改用户',
+                content : $('#guideDiv')
+            });
+        }
+        else if(layEvent === 'export'){//导出事件
+            var layer = layui.layer;
+                console.log(obj.data.id);
+                window.open('/api/export?id='+obj.data.id);
+                layer.close(index);
+
+
+        }
     });
 
   //监听Tab切换
