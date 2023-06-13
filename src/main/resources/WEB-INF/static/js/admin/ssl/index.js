@@ -164,7 +164,7 @@ function addOver() {
                 if(data.code=='200'){
                     //location.reload();
                     layer.closeAll();
-                    layer.msg("新增成功");
+                    layer.msg(commonStr.success);
                 } else {
                     layer.msg(data.description);
                 }
@@ -321,8 +321,6 @@ layui.use(function(){
                     layer.msg(commonStr.pleaseSelect);
                 }else{
                     layer.confirm(commonStr.confirmBatchEnable,function (index){
-
-
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             Id.push(val.id);
@@ -336,8 +334,7 @@ layui.use(function(){
 
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg('切换成功');
-
+                                    layer.msg(commonStr.batchEnableSuccess);
                                 }else{
                                     layer.msg(data.description);
                                 }
@@ -359,8 +356,6 @@ layui.use(function(){
                     layer.msg(commonStr.pleaseSelect);
                 }else{
                     layer.confirm(commonStr.confirmBatchDisable,function (index){
-
-
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             Id.push(val.id);
@@ -371,11 +366,9 @@ layui.use(function(){
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
                             success:function (data,statusText) {
-
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg('切换成功');
-
+                                    layer.msg(commonStr.batchDisableSuccess);
                                 }else{
                                     layer.msg(data.description);
                                 }

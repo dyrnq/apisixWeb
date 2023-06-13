@@ -39,26 +39,25 @@ $(function() {
         console.log(text);
         //确认表单弹窗
         var layer = layui.layer
-        layer.confirm('确认提交更新吗？', function(index) {
-            $.ajax({
-                url: ctx + '/api/'+cls+'/put',
-                type:'post',
-                contentType: 'application/json',
-                data: JSON.stringify({id: id,rawData: text}),
-                success:function (data,statusText) {
 
-                    if(data.code=='200'){
-                        layer.msg('修改成功');
-                    }else{
-                        layer.msg(data.description);
-                    }
-                },
-                'error':function () {
-                    layer.msg(commonStr.errorInfo);
+        $.ajax({
+            url: ctx + '/api/'+cls+'/put',
+            type:'post',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id,rawData: text}),
+            success:function (data,statusText) {
+
+                if(data.code=='200'){
+                    layer.msg(commonStr.success);
+                }else{
+                    layer.msg(data.description);
                 }
-            });
-
+            },
+            'error':function () {
+                layer.msg(commonStr.errorInfo);
+            }
         });
+
     });
 
 });

@@ -45,7 +45,7 @@
                     if(data.code=='200'){
                         //location.reload();
                         layer.closeAll();
-                        layer.msg("新增成功");
+                        layer.msg(commonStr.success);
                     } else {
                         layer.msg(data.description);
                     }

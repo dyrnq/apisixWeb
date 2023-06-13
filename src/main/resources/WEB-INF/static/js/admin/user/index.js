@@ -30,7 +30,7 @@ function addOver() {
             if(data.code=='200'){
                 //location.reload();
                 layer.closeAll();
-                layer.msg("新增成功");
+                layer.msg(commonStr.success);
                 //location.reload();
                 table.reload('demo',{});
             } else {

@@ -27,7 +27,7 @@ function del() {
                 if(data.code=='200'){
                     
                     layer.closeAll();
-                    layer.msg("新增成功");
+                    layer.msg(commonStr.success);
                 } else {
                     layer.msg(data.description);
                 }
@@ -56,7 +56,7 @@ function addOver() {
                 if(data.code=='200'){
                     
                     layer.closeAll();
-                    layer.msg("新增成功");
+                    layer.msg(commonStr.success);
                 } else {
                     layer.msg(data.description);
                 }
