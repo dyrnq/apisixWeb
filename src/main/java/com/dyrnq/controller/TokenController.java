@@ -2,6 +2,8 @@ package com.dyrnq.controller;
 
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
+import com.wf.captcha.SpecCaptcha;
+import com.wf.captcha.base.Captcha;
 import io.jsonwebtoken.Claims;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -42,6 +44,16 @@ public class TokenController extends BaseController {
         ctx.cookieSet("SOLON.LOCALE", l);
         return Result.succeed("ok");
     }
+    @Mapping("/cap")
+    public void getCode(Context ctx) throws Exception {
+        ctx.headerAdd("Pragma", "No-cache");
+        ctx.headerAdd("Cache-Control", "no-cache");
+        ctx.headerAdd("Expires", "0");
+        ctx.contentType("image/gif");
 
-
+        SpecCaptcha specCaptcha = new SpecCaptcha(100, 40, 4);
+        specCaptcha.setCharType(Captcha.TYPE_ONLY_NUMBER);
+        ctx.sessionSet("captcha", specCaptcha.text().toLowerCase());
+        specCaptcha.out(ctx.outputStream());
+    }
 }

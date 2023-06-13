@@ -1,23 +1,27 @@
-var bcrypt = dcodeIO.bcrypt;
+//var bcrypt = dcodeIO.bcrypt;
 
 function login() {
 	//$("#authCode").val($("#codeInput").val());
 
-	var name = $("#name").val();
-	var pass = $("#pass").val();
+//	var name = $("#name").val();
+//	var pass = $("#pass").val();
+    var name = Base64.encode(Base64.encode($("#name").val()));
+    var pass = Base64.encode(Base64.encode($("#pass").val()));
 	//var code = Base64.encode(Base64.encode($("#code").val()));
 	//var authCode = Base64.encode(Base64.encode($("#authCode").val()));
 
-    var salt = bcrypt.genSaltSync(12);
-    var hashPass = bcrypt.hashSync(pass, salt);
-    //console.log(hashPass);
+//    var salt = bcrypt.genSaltSync(12);
+//    var hashPass = bcrypt.hashSync(pass, salt);
+//    console.log(hashPass);
+
+
 
 	$.ajax({
 		type: 'POST',
 		url: ctx + '/token/getToken',
 		data: {
 			name : name,
-			pass : hashPass
+			pass : pass
 		},
 		dataType: 'json',
 		success: function(data) {
@@ -43,7 +47,6 @@ function login() {
 //                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
                 location.href = ctx + "/admin";
 			} else {
-			    //alert("登陆失败");
 				layer.msg(commonStr.errorInfo);
 				//refreshCode('codeImg');
 			}

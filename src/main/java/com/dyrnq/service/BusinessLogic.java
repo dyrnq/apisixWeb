@@ -1,5 +1,6 @@
 package com.dyrnq.service;
 
+import cn.hutool.core.codec.Base64;
 import com.dyrnq.CookieName;
 import com.dyrnq.HomeDir;
 import com.dyrnq.apisix.AdminClient;
@@ -70,15 +71,17 @@ public class BusinessLogic {
     }
 
     public User login(String name, String pass) {
+        String base64Name = Base64.decodeStr(Base64.decodeStr(name));
+        String base64Pass = Base64.decodeStr(Base64.decodeStr(pass));
         Act1<MapperWhereQ> condition = mapperWhereQ -> {
-            mapperWhereQ.whereEq("name", name);
+            mapperWhereQ.whereEq("name", base64Name);
         };
 
         List<User> list = userMapper.selectList(condition);
         if (list != null && list.size() > 0) {
             User user = list.get(0);
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-            if (encoder.matches(user.getPass(), pass)) {
+            if (encoder.matches(base64Pass, user.getPass())) {
                 return user;
             }
         }

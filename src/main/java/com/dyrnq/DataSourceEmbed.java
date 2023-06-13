@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.io.File;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 
 @Configuration
 public class DataSourceEmbed {
@@ -58,7 +61,7 @@ public class DataSourceEmbed {
             logger.error(e.getMessage());
         }
         HikariDataSource ds = null;
-        String migrationPath=null;
+        String migrationPath = null;
         if (StringUtils.isBlank(databaseType) || ReUtil.isMatch("(?i)sqlite|h2", databaseType)) {
             HikariConfig dbConfig = new HikariConfig();
             dbConfig.setJdbcUrl("jdbc:h2:" + h2Path + File.separator + "h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE");
@@ -87,13 +90,38 @@ public class DataSourceEmbed {
             ds = new HikariDataSource(dbConfig);
             migrationPath = "classpath:db/migration/postgresql";
         }
+        boolean flaywaySkipMysql5 = false;
+        //判断mysql版本，如果是5.多版本则跳过flayway
+        Connection conn = null;
+        try {
+            conn = ds.getConnection();
+            DatabaseMetaData meta = conn.getMetaData();
+            if (ReUtil.isMatch("(?i).*mysql.*", meta.getDriverName()) && ReUtil.isMatch("^(?i)5\\..*", meta.getDatabaseProductVersion())) {
+                flaywaySkipMysql5 = true;
+            }
+            if (meta instanceof DatabaseMetaData) {
 
-        Flyway flyway = Flyway.configure()
-                .locations(migrationPath)
-                .baselineOnMigrate(true)
-                .cleanDisabled(true)
-                .dataSource(ds.getJdbcUrl(), ds.getUsername(), ds.getPassword()).load();
-        flyway.migrate();
+            }
+        } catch (SQLException e) {
+
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+            }
+
+        }
+
+        if (!flaywaySkipMysql5) {
+            Flyway flyway = Flyway.configure()
+                    .locations(migrationPath)
+                    .baselineOnMigrate(true)
+                    .cleanDisabled(true)
+                    .dataSource(ds.getJdbcUrl(), ds.getUsername(), ds.getPassword()).load();
+            flyway.migrate();
+        }
 
         return ds;
     }
