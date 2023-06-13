@@ -261,6 +261,7 @@ done
 
 fun_install_misc(){
 docker rm -f mysql57 2>/dev/null || true
+docker rm -f mysql8 2>/dev/null || true
 docker rm -f postgres12 2>/dev/null || true
 docker rm -f adminer 2>/dev/null || true
 
@@ -273,6 +274,16 @@ docker run -d --name mysql57 \
 -v $HOME/var/lib/mysql:/var/lib/mysql \
 -p 3306:3306 \
 mysql:5.7.41 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00
+
+mkdir -p $HOME/var/lib/mysql8
+docker run -d --name mysql8 \
+--restart always \
+--network mynet \
+-e MYSQL_ROOT_PASSWORD=666666 \
+-v $HOME/var/lib/mysql8:/var/lib/mysql \
+-p 13306:3306 \
+mysql:8.0.23 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00 --innodb-dedicated-server=on
+
 
 mkdir -p $HOME/var/lib/postgresql/data
 
@@ -294,8 +305,16 @@ docker run -d --name "${name}" --restart always --network mynet -p "${port}":80 
 done
 }
 
+fun_initdb(){
+
+docker run -it --rm --network mynet  mysql:5.7.41-debian mysql --host mysql57 --user root --password=666666 --loose-default-character-set=utf8 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;show databases;"
+docker run -it --rm --network mynet  mysql:8.0.23 mysql --host mysql8 --user root --password=666666 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;show databases;"
+
+}
+
 fun_add_mynet
 fun_install_nginx
 fun_install_misc
 fun_install_etcd
 fun_install
+fun_initdb
