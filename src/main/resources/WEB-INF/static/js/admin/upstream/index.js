@@ -153,6 +153,9 @@ layui.use(function(){
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
+            case 'LAYTABLE_TIPS':
+                layer.alert(desc.upstream, { area: ['500px', '300px'] });
+                break;
             case 'deleteAll':
                 var dataX = checkStatus.data;
                 var allId = [];
@@ -166,10 +169,6 @@ layui.use(function(){
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             allId.push(val.id)
-
-
-
-
                         }
                         $.ajax({
                             url: ctx + '/api/upstream/del',
@@ -177,11 +176,11 @@ layui.use(function(){
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
                             success:function (data,statusText) {
-                                //alert(data.code)
+
                                 if(data.code=='200'){
                                     table.reload('demo',{});
                                     layer.msg('删除成功');
-                                    //table.reload('idTest',{});
+
                                 }else{
                                     layer.msg(data.description);
                                 }
@@ -216,13 +215,14 @@ layui.use(function(){
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
                     url: ctx + '/api/upstream/del',
-                    type:'post',
-                    data:"id="+obj.data.id,
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id: [obj.data.id] }),
                     success:function (data,statusText) {
-                        //alert(data.code)
+
                         if(data.code=='200'){
                             layer.msg('删除成功');
-                            //table.reload('idTest',{});
+
                         }else{
                             layer.msg(data.description);
                         }
@@ -234,16 +234,6 @@ layui.use(function(){
 
                 layer.close(index);
             });
-            // } else if(layEvent === 'edit'){ //编辑
-            //     //do something
-            //
-            //     //同步更新缓存对应的值
-            //     obj.update({
-            //         username: '123'
-            //         ,title: 'xxx'
-            //     });
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }else if (layEvent === 'edit'){//编辑,暂无方法体
 
             cleanData(true);

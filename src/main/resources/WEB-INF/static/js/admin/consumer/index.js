@@ -167,10 +167,6 @@ layui.use(function(){
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             allUsername.push(val.username)
-
-
-
-
                         }
                         $.ajax({
                             url: ctx + '/api/consumer/del',
@@ -178,11 +174,11 @@ layui.use(function(){
                             contentType: 'application/json',
                             data: JSON.stringify({id: allUsername}),
                             success:function (data,statusText) {
-                                //alert(data.code)
+
                                 if(data.code=='200'){
                                     table.reload('demo',{});
                                     layer.msg('删除成功');
-                                    //table.reload('idTest',{});
+
                                 }else{
                                     layer.msg(data.description);
                                 }
@@ -217,13 +213,14 @@ layui.use(function(){
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
                     url: ctx + '/api/consumer/del',
-                    type:'post',
-                    data:"id="+obj.data.username,
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id: [obj.data.username] }),
                     success:function (data,statusText) {
-                        //alert(data.code)
+
                         if(data.code=='200'){
                             layer.msg('删除成功');
-                            //table.reload('idTest',{});
+
                         }else{
                             layer.msg(data.description);
 
@@ -274,8 +271,6 @@ layui.use(function(){
             //     username: '123'
             //     ,title: 'xxx'
             // });
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }
     });
 

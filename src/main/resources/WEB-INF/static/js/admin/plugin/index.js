@@ -185,6 +185,15 @@ layui.use(function(){
     }
   });
 
+//头部工具条监听事件
+table.on('toolbar(test)', function (obj) {
+    var checkStatus = table.checkStatus(obj.config.id);
+    switch (obj.event) {
+        case 'LAYTABLE_TIPS':
+            console.log(obj.event);
+            break;
+    }
+});
 
 
 //工具条事件
@@ -215,8 +224,6 @@ layui.use(function(){
 
         } else if(layEvent === 'del'){ //删除
 
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
         } else if (layEvent === 'edit'){//编辑,暂无方法体
 
         } else if (layEvent === 'detail_consumer_schema'){

@@ -46,7 +46,7 @@ $(function() {
                 contentType: 'application/json',
                 data: JSON.stringify({id: id,rawData: text}),
                 success:function (data,statusText) {
-                    //alert(data.code)
+
                     if(data.code=='200'){
                         layer.msg('修改成功');
                     }else{

@@ -76,7 +76,7 @@ upload.render({
         //certFile = obj.pushFile();
         obj.preview(function(index, file, result){
                 certFile=file;
-                console.log(index); // 得到文件索引
+                //console.log(index); // 得到文件索引
                 //console.log(file); // 得到文件对象
                 //console.log(result); // 得到文件base64编码，比如图片
                 $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
@@ -102,14 +102,14 @@ upload.render({
 
         obj.preview(function(index, file, result){
                 keyFile=file;
-                console.log(index); // 得到文件索引
+                //console.log(index); // 得到文件索引
                 //console.log(file); // 得到文件对象
                 //console.log(result); // 得到文件base64编码，比如图片
                 $("#layui-upload-choose-key").html("<p>"+file.name+"</p>");
         });
     }
     ,error: function(index, upload){
-      console.log(index);
+        console.log(index);
     }
 });
 
@@ -133,13 +133,14 @@ function addOver2() {
             dataType: "json",
             success:function (data,statusText) {
                 if(data.code=='200'){
+                    layer.closeAll();
                     layer.msg('ok');
                 }else{
                     layer.msg(data.description);
                 }
             },
             error:function () {
-                    layer.msg('系统错误');
+                layer.msg('系统错误');
             }
         });
 
@@ -271,6 +272,9 @@ layui.use(function(){
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
+            case 'LAYTABLE_TIPS':
+                layer.alert(desc.ssl, { area: ['500px', '300px'] });
+                break;
             case 'getCheckData':
                 var dataX = checkStatus.data;
                 layer.alert(JSON.stringify(dataX));
@@ -288,26 +292,18 @@ layui.use(function(){
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             allId.push(val.id);
-
-
-
                         }
-
                         $.ajax({
                             url: ctx + '/api/ssl/del',
                             type:'post',
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
                             success:function (data,statusText) {
-                                //alert(data.code)
+
                                 if(data.code=='200'){
-                                    table.reload('demo',{
-                                        // page: {
-                                        //     curr: page-1 // 重新加载第一页的// 指定重新加载的页码
-                                        // },
-                                    });
+                                    table.reload('demo',{});
                                     layer.msg('删除成功');
-                                    //table.reload('idTest',{});
+
                                 }else{
                                     //layer.msg(data.description);
                                 }
@@ -333,9 +329,6 @@ layui.use(function(){
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             Id.push(val.id);
-
-
-
                         }
                         $.ajax({
                             url: ctx + '/api/ssl/enable',
@@ -343,11 +336,11 @@ layui.use(function(){
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
                             success:function (data,statusText) {
-                                //alert(data.code)
+
                                 if(data.code=='200'){
                                     table.reload('demo',{});
                                     layer.msg('切换成功');
-                                    //table.reload('idTest',{});
+
                                 }else{
                                     layer.msg(data.description);
                                 }
@@ -374,9 +367,6 @@ layui.use(function(){
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             Id.push(val.id);
-
-
-
                         }
                         $.ajax({
                             url: ctx + '/api/ssl/disable',
@@ -384,11 +374,11 @@ layui.use(function(){
                             contentType: 'application/json',
                             data: JSON.stringify({id: Id}),
                             success:function (data,statusText) {
-                                //alert(data.code)
+
                                 if(data.code=='200'){
                                     table.reload('demo',{});
                                     layer.msg('切换成功');
-                                    //table.reload('idTest',{});
+
                                 }else{
                                     layer.msg(data.description);
                                 }
@@ -421,13 +411,14 @@ layui.use(function(){
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
                     url: ctx + '/api/ssl/del',
-                    type:'post',
-                    data:"id="+obj.data.id,
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id: [obj.data.id] }),
                     success:function (data,statusText) {
-                        //alert(data.code)
+
                         if(data.code=='200'){
                             layer.msg('删除成功');
-                            //table.reload('idTest',{});
+
                         }else{
                             layer.msg(data.description);
                         }
@@ -448,9 +439,7 @@ layui.use(function(){
             //         username: '123'
             //         ,title: 'xxx'
             //     });
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
-        }else if (layEvent === 'edit'){//编辑,暂无方法体
+        } else if (layEvent === 'edit'){//编辑,暂无方法体
 
             cleanData(true);
             $.ajax({

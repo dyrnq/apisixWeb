@@ -191,11 +191,11 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                             contentType: 'application/json',
                             data: JSON.stringify({id: allId}),
                             success:function (data,statusText) {
-                                //alert(data.code)
+
                                 if(data.code=='200'){
                                     table.reload('demo',{});
                                     layer.msg('删除成功');
-                                    //table.reload('idTest',{});
+
                                 }else{
                                     layer.msg(data.description);
                                 }
@@ -235,13 +235,14 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                     $.ajax({
                         url: ctx + '/api/user/del',
                         type: 'post',
-                        data: "id=" + obj.data.id,
+                        contentType: 'application/json',
+                        data: JSON.stringify({id: [obj.data.id] }),
                         success: function (data, statusText) {
-                            //alert(data.code)
+
                             if (data.code == '200') {
                                 layer.msg('删除成功');
-                                table.reload("user")
-                                //table.reload('idTest',{});
+                                table.reload("demo")
+
                             } else {
                                 layer.msg(data.description);
                             }
@@ -254,16 +255,6 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                     layer.close(index);
                 });
             }
-            // } else if(layEvent === 'edit'){ //编辑
-            //     //do something
-            //
-            //     //同步更新缓存对应的值
-            //     obj.update({
-            //         username: '123'
-            //         ,title: 'xxx'
-            //     });
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
         } else if (layEvent === 'edit'){//编辑,暂无方法体
             var layer = layui.layer;
             var form = layui.form;

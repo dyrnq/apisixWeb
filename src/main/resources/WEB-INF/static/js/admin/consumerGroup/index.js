@@ -1,63 +1,62 @@
-
-    function cleanData(d){
-        if( d === true ){
-            $("#div_id").hide();
-        }else{
-            $("#div_id").show();
-        }
-
-        $('#addForm1 input[name="id"]').val("");
-        editor.setValue("",-1);
+function cleanData(d){
+    if( d === true ){
+        $("#div_id").hide();
+    }else{
+        $("#div_id").show();
     }
 
-    function add() {
-        layui.use(['layer', 'form'], function(){
-            var layer = layui.layer;
-            var form = layui.form;
-            cleanData(false);
-            layer.open({
-                type: 1,
-                area: ['800px', '600px'],
-                title: 'Add ConsumerGroup',
-                content : $('#windowDiv'),
-                anim: 'slideRight',
-                shade: 0.6, // 遮罩透明度
-                shadeClose: true, // 点击遮罩区域，关闭弹层
-                maxmin: true, // 允许全屏最小化
-                skin: 'layui-layer-win10'
-            });
+    $('#addForm1 input[name="id"]').val("");
+    editor.setValue("",-1);
+}
 
+function add() {
+    layui.use(['layer', 'form'], function(){
+        var layer = layui.layer;
+        var form = layui.form;
+        cleanData(false);
+        layer.open({
+            type: 1,
+            area: ['800px', '600px'],
+            title: 'Add ConsumerGroup',
+            content : $('#windowDiv'),
+            anim: 'slideRight',
+            shade: 0.6, // 遮罩透明度
+            shadeClose: true, // 点击遮罩区域，关闭弹层
+            maxmin: true, // 允许全屏最小化
+            skin: 'layui-layer-win10'
         });
-    }
 
-    function addOver() {
-        layui.use(['layer', 'form'], function(){
-            var id = $('#addForm1 input[name="id"]').val();
-            console.log(id);
-            var text = editor.getValue();
-            console.log(text);
+    });
+}
 
-            $.ajax({
-                type : 'POST',
-                url : ctx + '/api/consumerGroup/put',
-                contentType: 'application/json',
-                data: JSON.stringify({id: id,rawData:text}),
-                dataType : 'json',
-                success : function(data) {
-                    if(data.code=='200'){
-                        //location.reload();
-                        layer.closeAll();
-                        layer.msg("新增成功");
-                    } else {
-                        layer.msg(data.description);
-                    }
-                },
-                error : function() {
-                    layer.alert("系统错误");
+function addOver() {
+    layui.use(['layer', 'form'], function(){
+        var id = $('#addForm1 input[name="id"]').val();
+        console.log(id);
+        var text = editor.getValue();
+        console.log(text);
+
+        $.ajax({
+            type : 'POST',
+            url : ctx + '/api/consumerGroup/put',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id,rawData:text}),
+            dataType : 'json',
+            success : function(data) {
+                if(data.code=='200'){
+                    //location.reload();
+                    layer.closeAll();
+                    layer.msg("新增成功");
+                } else {
+                    layer.msg(data.description);
                 }
-            });
+            },
+            error : function() {
+                layer.alert("系统错误");
+            }
         });
-    }
+    });
+}
 
 function addLink(d) {
 　　var addLink = d.id;
@@ -148,58 +147,57 @@ layui.use(function(){
     }
   });
 
-    //头部工具条事件
-    table.on('toolbar(test)', function (obj) {
-        var checkStatus = table.checkStatus(obj.config.id);
-        switch (obj.event) {
-            case 'deleteAll':
-                var dataX = checkStatus.data;
-                var allId = [];
-                if (dataX.length === 0) {
-                    layer.msg('请选择要删除的数据');
-                } else {
-                    layer.confirm('确定删除选中的数据吗？', function(index) {
-                        // 发送删除请求，并重新加载表格
-                        //console.log(JSON.stringify(dataX));
-                        console.log(dataX)
-                        for (let i = 0; i < dataX.length; i++) {
-                            const val = dataX[i];
-                            allId.push(val.id)
+//头部工具条事件
+table.on('toolbar(test)', function (obj) {
+    var checkStatus = table.checkStatus(obj.config.id);
+    switch (obj.event) {
+        case 'LAYTABLE_TIPS':
+            layer.alert(desc.consumerGroup, { area: ['500px', '300px'] });
+            break;
+        case 'deleteAll':
+            var dataX = checkStatus.data;
+            var allId = [];
+            if (dataX.length === 0) {
+                layer.msg('请选择要删除的数据');
+            } else {
+                layer.confirm('确定删除选中的数据吗？', function(index) {
+                    // 发送删除请求，并重新加载表格
+                    //console.log(JSON.stringify(dataX));
+                    console.log(dataX)
+                    for (let i = 0; i < dataX.length; i++) {
+                        const val = dataX[i];
+                        allId.push(val.id)
+                    }
+                    $.ajax({
+                        url: ctx + '/api/consumerGroup/del',
+                        type:'post',
+                        contentType: 'application/json',
+                        data: JSON.stringify({id: allId}),
+                        success:function (data,statusText) {
 
+                            if(data.code=='200'){
+                                table.reload('demo',{});
+                                layer.msg('删除成功');
 
-
-
-                        }
-                        $.ajax({
-                            url: ctx + '/api/consumerGroup/del',
-                            type:'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify({id: allId}),
-                            success:function (data,statusText) {
-                                //alert(data.code)
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg('删除成功');
-                                    //table.reload('idTest',{});
-                                }else{
-                                    layer.msg(data.description);
-                                }
-                            },
-                            'error':function () {
-                                //layer.msg('系统错误');
+                            }else{
+                                layer.msg(data.description);
                             }
-                        });
-
-
-                        layer.close(index);
+                        },
+                        'error':function () {
+                            //layer.msg('系统错误');
+                        }
                     });
 
 
-                }
-                break;
+                    layer.close(index);
+                });
 
-        }
-    })
+
+            }
+            break;
+
+    }
+})
 
     //工具条事件
     table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
@@ -216,13 +214,14 @@ layui.use(function(){
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
                     url: ctx + '/api/consumerGroup/del',
-                    type:'post',
-                    data:"id="+obj.data.id,
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id: [obj.data.id] }),
                     success:function (data,statusText) {
-                        //alert(data.code)
+
                         if(data.code=='200'){
                             layer.msg('删除成功');
-                            //table.reload('idTest',{});
+
                         }else{
                             layer.msg(data.description);
                         }
@@ -234,16 +233,6 @@ layui.use(function(){
 
                 layer.close(index);
             });
-            // } else if(layEvent === 'edit'){ //编辑
-            //     //do something
-            //
-            //     //同步更新缓存对应的值
-            //     obj.update({
-            //         username: '123'
-            //         ,title: 'xxx'
-            //     });
-        } else if(layEvent === 'LAYTABLE_TIPS'){
-            layer.alert('Hi，头部工具栏扩展的右侧图标。');
         }else if (layEvent === 'edit'){//编辑,暂无方法体
 
             cleanData(true);
