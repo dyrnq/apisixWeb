@@ -8,21 +8,6 @@ $(function(){
 		  element = layui.element; // Tab的切换功能，切换事件监听等，需要依赖element模块
 	});
 
-//	if($("#isInit").val() == 'false'){
-//		$("#selectForm").show();
-//		$("#addForm").hide();
-//
-//		layer.open({
-//			type : 1,
-//			closeBtn  :0,
-//			title : monitorStr.init,
-//			area : [ '500px', '300px' ], //宽高
-//			content : $('#nginxGuideDiv')
-//		});
-//	}
-//    setTimeout(function() {
-//      load();
-//    }, 1000);
 	setInterval(() => {
 		load();
 	}, 2000);
@@ -50,7 +35,7 @@ function sys(){
         type:'post',
         contentType: 'application/json',
         success:function (data,statusText) {
-            console.log(data);
+
             if(data.code=='200'){
                 editor.setValue(data.data,-1);
             }else{

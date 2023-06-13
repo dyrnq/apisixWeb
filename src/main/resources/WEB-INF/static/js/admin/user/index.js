@@ -38,7 +38,7 @@ function addOver() {
             }
         },
         error : function() {
-            layer.alert("系统错误");
+            layer.alert(commonStr.errorInfo);
         }
     });
 }
@@ -53,7 +53,7 @@ function updateOver() {
         data : $('#addForm2').serialize(),
         dataType : 'json',
         success : function(data) {
-            console.log(data);
+
             if(data.code=='200'){
                 //location.reload();
                 layer.closeAll();
@@ -65,7 +65,7 @@ function updateOver() {
             }
         },
         error : function() {
-            layer.alert("系统错误");
+            layer.alert(commonStr.errorInfo);
         }
     });
 }
@@ -166,12 +166,12 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {
-                    layer.msg('请选择要删除的数据');
+                    layer.msg(commonStr.pleaseSelect);
                 } else {
-                    layer.confirm('确定删除选中的数据吗？', function(index) {
-                        // 发送删除请求，并重新加载表格
-                        //console.log(JSON.stringify(dataX));
-                        console.log(dataX)
+                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
+
+
+
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             if(val.id == "1"){
@@ -194,14 +194,14 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
 
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg('删除成功');
+                                    layer.msg(commonStr.delSuccess);
 
                                 }else{
                                     layer.msg(data.description);
                                 }
                             },
                             'error':function () {
-                                //layer.msg('系统错误');
+                                layer.msg(commonStr.errorInfo);
                             }
                         });
 
@@ -222,15 +222,13 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-            //do something
+
         } else if(layEvent === 'del'){ //删除
             var layer = layui.layer;
             if(obj.data.id == "1") {
                 layer.msg("该账号不可删除！")
             }else{
-                layer.confirm('真的删除行么', function (index) {
-                    //alert(obj.data.id);
-                    //向服务端发送删除指令
+                layer.confirm(commonStr.confirmDel, function (index) {
                     obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                     $.ajax({
                         url: ctx + '/api/user/del',
@@ -240,7 +238,7 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                         success: function (data, statusText) {
 
                             if (data.code == '200') {
-                                layer.msg('删除成功');
+                                layer.msg(commonStr.delSuccess);
                                 table.reload("demo")
 
                             } else {
@@ -248,7 +246,7 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                             }
                         },
                         'error': function () {
-                            layer.msg('系统错误');
+                            layer.msg(commonStr.errorInfo);
                         }
                     });
 
@@ -265,13 +263,10 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                 contentType: 'application/json',
                 data:JSON.stringify({id:obj.data.id}),
                 success:function (data,statusText) {
-                    console.log(data);
-                    //var element =
                     if(data.code=='200'){
                         $('#addForm2 input[name="id"]').val(data.data.id);
                         $('#addForm2 input[name="name"]').val(data.data.name);
                         $('#addForm2 input[name="pass"]').val(data.data.pass);
-                        //layer.msg(data.description);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
@@ -283,7 +278,7 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                     }
                 },
                 'error':function () {
-                    layer.msg('系统错误');
+                    layer.msg(commonStr.errorInfo);
                 }
             });
         }

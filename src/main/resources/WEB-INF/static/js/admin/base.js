@@ -137,7 +137,7 @@ layui.use(['layer', 'form', 'table'], function(){
     var form = layui.form;
     var table = layui.table;
 
-    layer.confirm('确定删除选中的数据吗？', function(index) {
+    layer.confirm(commonStr.confirmClear, function(index) {
 
          $.ajax({
                 type : 'POST',

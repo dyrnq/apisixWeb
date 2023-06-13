@@ -51,7 +51,7 @@
                     }
                 },
                 error : function() {
-                    layer.alert("系统错误");
+                    layer.alert(commonStr.errorInfo);
                 }
             });
         });
@@ -157,12 +157,12 @@ layui.use(function(){
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {
-                    layer.msg('请选择要删除的数据');
+                    layer.msg(commonStr.pleaseSelect);
                 } else {
-                    layer.confirm('确定删除选中的数据吗？', function(index) {
-                        // 发送删除请求，并重新加载表格
-                        //console.log(JSON.stringify(dataX));
-                        //console.log(dataX)
+                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
+
+
+
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             allId.push(val.id)
@@ -176,14 +176,14 @@ layui.use(function(){
 
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg('删除成功');
+                                    layer.msg(commonStr.delSuccess);
 
                                 }else{
                                     layer.msg(data.description);
                                 }
                             },
                             'error':function () {
-                                //layer.msg('系统错误');
+                                layer.msg(commonStr.errorInfo);
                             }
                         });
 
@@ -204,11 +204,11 @@ layui.use(function(){
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-            //do something
+
         } else if(layEvent === 'del'){ //删除
-            layer.confirm('真的删除行么', function(index){
+            layer.confirm(commonStr.confirmDel, function(index){
                 alert(obj.data.id);
-                //向服务端发送删除指令
+
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
                     url: ctx + '/api/secret/del',
@@ -218,7 +218,7 @@ layui.use(function(){
                     success:function (data,statusText) {
 
                         if(data.code=='200'){
-                            layer.msg('删除成功');
+                            layer.msg(commonStr.delSuccess);
 
                         }else{
                             layer.msg(data.description);
@@ -226,7 +226,7 @@ layui.use(function(){
                         }
                     },
                     'error':function () {
-                        layer.msg('系统错误');
+                        layer.msg(commonStr.errorInfo);
                     }
                 });
 
@@ -240,14 +240,14 @@ layui.use(function(){
                 contentType: 'application/json',
                 data: JSON.stringify({id: obj.data.id,cls: 'secret'}),
                 success:function (data,statusText) {
-                    console.log(data);
+
                     if(data.code=='200'){
                         $('#addForm1 input[name="id"]').val(obj.data.id);
                         editor.setValue(data.data.rawData,-1);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
-                            title: 'Edit Service',
+                            title: 'Edit Secret',
                             content : $('#windowDiv'),
                             anim: 'slideRight',
                             shade: 0.6, // 遮罩透明度
@@ -260,7 +260,7 @@ layui.use(function(){
                     }
                 },
                 'error':function () {
-                    layer.msg('系统错误');
+                    layer.msg(commonStr.errorInfo);
                 }
             });
         }

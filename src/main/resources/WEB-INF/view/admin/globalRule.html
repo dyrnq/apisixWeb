@@ -36,16 +36,16 @@ input[name='param']{
             <form action="${ctx}/adminPage/http" id="searchForm" method="post">
                 <div class="layui-form">
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="add()">${i18n.get("httpStr.add")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="add()">${i18n.get("add.globalRule")}</button>
                     </div>
-                    <div class="layui-inline">
+                    <div class="layui-inline" style="display:none">
                         <button type="button" class="layui-btn layui-btn-sm" onclick="guide()">${i18n.get("httpStr.guide")}</button>
                     </div>
-                    <div class="layui-inline">
+                    <div class="layui-inline" style="display:none">
                         <button type="button" class="layui-btn layui-btn-sm" onclick="selectTemplateAsHttp()">${i18n.get("upstreamStr.selectTemplateAsParam")}</button>
                     </div>
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="drop('globalRule')">${i18n.get("commonStr.clear")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" onclick="drop('globalRule')">${i18n.get("commonStr.clear")}</button>
                     </div>
                     <div class="layui-inline">
                         <a href="https://apisix.apache.org/zh/docs/apisix/admin-api/#global-rules" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">${i18n.get("commonStr.help")}</a>
@@ -104,7 +104,7 @@ input[name='param']{
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-danger layui-btn-sm" lay-event="deleteAll">批量删除</button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">${i18n.get("commonStr.batchDelete")}</button>
     </div>
 </script>
 <script src="${ctx}/js/admin/globalRule/index.js?v=${jsrandom}" type="text/javascript"></script>

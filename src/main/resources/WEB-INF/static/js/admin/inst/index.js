@@ -57,7 +57,7 @@ function addOver2() {
                 }
             },
             error:function () {
-                layer.msg('系统错误');
+                layer.msg(commonStr.errorInfo);
             }
         });
 
@@ -108,7 +108,7 @@ function addOver() {
             }
         },
         error : function() {
-            layer.alert("系统错误");
+            layer.alert(commonStr.errorInfo);
         }
     });
 }
@@ -123,7 +123,7 @@ function updateOver() {
         data : $('#addForm2').serialize(),
         dataType : 'json',
         success : function(data) {
-            console.log(data);
+
             if(data.code=='200'){
                 //location.reload();
                 layer.closeAll();
@@ -135,7 +135,7 @@ function updateOver() {
             }
         },
         error : function() {
-            layer.alert("系统错误");
+            layer.alert(commonStr.errorInfo);
         }
     });
 }
@@ -149,10 +149,10 @@ function addLink(d) {
     if (addLink.length > 0) {
 
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
-       let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">'+'drop'+'</button>'
-       let exptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">'+'导出'+'</button>'
-       let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">'+'导入'+'</button>'
+       let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">' + commonStr.del + '</button>'
+       let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">' + commonStr.clear + '</button>'
+       let exptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">' + commonStr.export + '</button>'
+       let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">' + commonStr.import + '</button>'
        return editBtn+'&nbsp;'+delBtn+'&nbsp;'+dropBtn+'&nbsp;'+exptBtn+'&nbsp;'+imptBtn ;
     }
 }
@@ -198,7 +198,7 @@ layui.use(function() {
             , {field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
             , {field: 'name', title: 'name', width: 200}
             , {field: 'url', title: 'url', width: 300, sort: true, totalRow: true}
-            , {field: 'upstream', title: 'upstream', width: 300, templet: addLink}
+            , {field: 'upstream', title: 'upstream', width: 500, templet: addLink}
 
         ]]
         , done: function (res, curr, count){
@@ -253,12 +253,9 @@ layui.use(function() {
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {
-                    layer.msg('请选择要删除的数据');
+                    layer.msg(commonStr.pleaseSelect);
                 } else {
-                    layer.confirm('确定删除选中的数据吗？', function(index) {
-                        // 发送删除请求，并重新加载表格
-                        //console.log(JSON.stringify(dataX));
-                        console.log(dataX)
+                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             if(val.id == "1"){
@@ -276,88 +273,13 @@ layui.use(function() {
                             success:function (data,statusText) {
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg('删除成功');
-                                }else{
-                                    //layer.msg(data.description);
-                                }
-                            },
-                            'error':function () {
-                                //layer.msg('系统错误');
-                            }
-                        });
-                        layer.close(index);
-                    });
-
-                }
-                break;
-            case 'statusAll1':
-                var dataX = checkStatus.data;
-                var Id = [];
-                if(dataX.length === 0){
-                    layer.msg('请勾选需要操作的对象');
-                }else{
-                    layer.confirm('确定全部打开吗？',function (index){
-                        //发送修改请求，重新加载网页
-                        console.log(dataX)
-                        for (let i = 0; i < dataX.length; i++) {
-                            const val = dataX[i];
-                            Id.push(val.id);
-                        }
-                        $.ajax({
-                            url: ctx + '/api/route/enable',
-                            type:'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify({id: Id}),
-                            success:function (data,statusText) {
-
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg('切换成功');
-
+                                    layer.msg(commonStr.delSuccess);
                                 }else{
                                     layer.msg(data.description);
                                 }
                             },
                             'error':function () {
-                                layer.msg('系统错误');
-                            }
-                        });
-                        layer.close(index);
-                    });
-
-
-                    }
-                break;
-            case 'statusAll0':
-                var dataX = checkStatus.data;
-                var Id = [];
-                if(dataX.length === 0){
-                    layer.msg('请勾选需要操作的对象');
-                }else{
-                    layer.confirm('确定全部关闭吗？',function (index){
-                        //发送修改请求，重新加载网页
-                        console.log(dataX)
-                        for (let i = 0; i < dataX.length; i++) {
-                            const val = dataX[i];
-                            Id.push(val.id);
-                        }
-                        $.ajax({
-                            url: ctx + '/api/route/disable',
-                            type:'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify({id: Id}),
-                            success:function (data,statusText) {
-
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg('切换成功');
-
-                                }else{
-                                    layer.msg(data.description);
-                                }
-                            },
-                            'error':function () {
-                                layer.msg('系统错误');
+                                layer.msg(commonStr.errorInfo);
                             }
                         });
                         layer.close(index);
@@ -365,7 +287,9 @@ layui.use(function() {
 
                 }
                 break;
-                }
+
+
+        }
 
 })
 
@@ -379,35 +303,33 @@ layui.use(function() {
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-            //do something
+
         } else if(layEvent === 'del'){ //删除
             var layer = layui.layer;
             if(obj.data.id == "1") {
                 layer.msg("该账号不可删除！")
             }else{
-            layer.confirm('真的删除行么', function(index){
-                //alert(obj.data.id);
-                //向服务端发送删除指令
-                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
-                $.ajax({
-                url: ctx + '/api/inst/del',
-                type: 'post',
-                contentType: 'application/json',
-                data: JSON.stringify({id: [obj.data.id] }),
-                success:function (data,statusText) {
-                     if(data.code=='200'){
-                         layer.msg('删除成功');
+                layer.confirm(commonStr.confirmDel, function(index){
+                    obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                    $.ajax({
+                    url: ctx + '/api/inst/del',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({id: [obj.data.id] }),
+                    success:function (data,statusText) {
+                         if(data.code=='200'){
+                             layer.msg(commonStr.delSuccess);
 
-                     }else{
-                         layer.msg(data.description);
-                     }
-                },
-                'error':function () {
-                    layer.msg('系统错误');
-                }
-                });
+                         }else{
+                             layer.msg(data.description);
+                         }
+                    },
+                    'error':function () {
+                        layer.msg(commonStr.errorInfo);
+                    }
+                    });
 
-                layer.close(index);
+                    layer.close(index);
             });
             }
         }else if (layEvent === 'edit'){//编辑,暂无方法体
@@ -420,15 +342,15 @@ layui.use(function() {
                     contentType: 'application/json',
                     data:JSON.stringify({id:obj.data.id}),
                     success:function (data,statusText) {
-                        console.log(data);
-                        //var element =
+
+
                         if(data.code=='200'){
                             $('#addForm2 input[name="id"]').val(data.data.id);
                             $('#addForm2 input[name="name"]').val(data.data.name);
                             $('#addForm2 input[name="url"]').val(data.data.url);
                             $('#addForm2 input[name="apiKey"]').val(data.data.apiKey);
 
-                            //layer.msg(data.description);
+
                             layer.open({
                                 type: 1,
                                 area: ['800px', '600px'],
@@ -440,34 +362,30 @@ layui.use(function() {
                         }
                     },
                     'error':function () {
-                        layer.msg('系统错误');
+                        layer.msg(commonStr.errorInfo);
                     }
                 });
-            }
+            } else if(layEvent === 'importData'){//导入事件
+                var layer = layui.layer;
+                //console.log(obj.data.id);
+                $('#addForm3 input[name="id"]').val(obj.data.id);
+                certFile={}
+                $("#layui-upload-choose-cert").html("");
+                $("#loading").hide();
 
-        else if(layEvent === 'importData'){//导入事件
-            var layer = layui.layer;
-            //console.log(obj.data.id);
-            $('#addForm3 input[name="id"]').val(obj.data.id);
-            certFile={}
-            $("#layui-upload-choose-cert").html("");
-            $("#loading").hide();
-
-            layer.open({
-                type: 1,
-                area: ['500px', '300px'],
-                title: 'import data',
-                content : $('#guideDiv')
-            });
-        }
-        else if(layEvent === 'export'){//导出事件
+                layer.open({
+                    type: 1,
+                    area: ['500px', '300px'],
+                    title: 'import data',
+                    content : $('#guideDiv')
+                });
+        } else if(layEvent === 'export'){//导出事件
             var layer = layui.layer;
                 console.log(obj.data.id);
                 window.open('/api/tar/export?id='+obj.data.id);
-        }
-        else if(layEvent === 'drop'){
+        } else if(layEvent === 'drop'){
                 var layer = layui.layer;
-                layer.confirm('确定删除选中的数据吗？', function(index) {
+                layer.confirm(commonStr.confirmClear, function(index) {
                     $.ajax({
                         url: ctx + '/api/inst/drop',
                         type:'post',
@@ -481,12 +399,10 @@ layui.use(function() {
                             }
                         },
                         'error':function () {
-                            layer.msg('系统错误');
+                            layer.msg(commonStr.errorInfo);
                         }
                     });
                 });
-
-
         }
 
     });

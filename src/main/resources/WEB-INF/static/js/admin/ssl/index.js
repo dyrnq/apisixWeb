@@ -140,7 +140,7 @@ function addOver2() {
                 }
             },
             error:function () {
-                layer.msg('系统错误');
+                layer.msg(commonStr.errorInfo);
             }
         });
 
@@ -170,7 +170,7 @@ function addOver() {
                 }
             },
             error : function() {
-                layer.alert("系统错误");
+                layer.alert(commonStr.errorInfo);
             }
         });
     });
@@ -283,12 +283,9 @@ layui.use(function(){
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {
-                    layer.msg('请选择要删除的数据');
+                    layer.msg(commonStr.pleaseSelect);
                 } else {
-                    layer.confirm('确定删除选中的数据吗？', function(index) {
-                        // 发送删除请求，并重新加载表格
-                        //console.log(JSON.stringify(dataX));
-                        console.log(dataX)
+                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             allId.push(val.id);
@@ -302,14 +299,14 @@ layui.use(function(){
 
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg('删除成功');
+                                    layer.msg(commonStr.delSuccess);
 
                                 }else{
-                                    //layer.msg(data.description);
+                                    layer.msg(data.description);
                                 }
                             },
                             'error':function () {
-                                //layer.msg('系统错误');
+                                layer.msg(commonStr.errorInfo);
                             }
                         });
                         layer.close(index);
@@ -321,11 +318,11 @@ layui.use(function(){
                 var dataX = checkStatus.data;
                 var Id = [];
                 if(dataX.length === 0){
-                    layer.msg('请勾选需要操作的对象');
+                    layer.msg(commonStr.pleaseSelect);
                 }else{
-                    layer.confirm('确定全部打开吗？',function (index){
-                        //发送修改请求，重新加载网页
-                        console.log(dataX)
+                    layer.confirm(commonStr.confirmBatchEnable,function (index){
+
+
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             Id.push(val.id);
@@ -346,7 +343,7 @@ layui.use(function(){
                                 }
                             },
                             'error':function () {
-                                layer.msg('系统错误');
+                                layer.msg(commonStr.errorInfo);
                             }
                         });
                         layer.close(index);
@@ -359,11 +356,11 @@ layui.use(function(){
                 var dataX = checkStatus.data;
                 var Id = [];
                 if(dataX.length === 0){
-                    layer.msg('请勾选需要操作的对象');
+                    layer.msg(commonStr.pleaseSelect);
                 }else{
-                    layer.confirm('确定全部关闭吗？',function (index){
-                        //发送修改请求，重新加载网页
-                        console.log(dataX)
+                    layer.confirm(commonStr.confirmBatchDisable,function (index){
+
+
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             Id.push(val.id);
@@ -384,7 +381,7 @@ layui.use(function(){
                                 }
                             },
                             'error':function () {
-                                layer.msg('系统错误');
+                                layer.msg(commonStr.errorInfo);
                             }
                         });
                         layer.close(index);
@@ -403,11 +400,9 @@ layui.use(function(){
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-            //do something
+
         } else if(layEvent === 'del'){ //删除
-            layer.confirm('真的删除行么', function(index){
-                //alert(obj.data.id);
-                //向服务端发送删除指令
+            layer.confirm(commonStr.confirmDel, function(index){
                 obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
                 $.ajax({
                     url: ctx + '/api/ssl/del',
@@ -417,28 +412,20 @@ layui.use(function(){
                     success:function (data,statusText) {
 
                         if(data.code=='200'){
-                            layer.msg('删除成功');
-
+                            layer.msg(commonStr.delSuccess);
                         }else{
                             layer.msg(data.description);
                         }
                     },
                     'error':function () {
-                        layer.msg('系统错误');
+                        layer.msg(commonStr.errorInfo);
                     }
                 });
 
                 layer.close(index);
                 table.reload('demo',{})
             });
-            // } else if(layEvent === 'edit'){ //编辑
-            //     //do something
-            //
-            //     //同步更新缓存对应的值
-            //     obj.update({
-            //         username: '123'
-            //         ,title: 'xxx'
-            //     });
+
         } else if (layEvent === 'edit'){//编辑,暂无方法体
 
             cleanData(true);
@@ -448,7 +435,7 @@ layui.use(function(){
                 contentType: 'application/json',
                 data: JSON.stringify({id: obj.data.id,cls: 'ssl'}),
                 success:function (data,statusText) {
-                    console.log(data);
+
                     if(data.code=='200'){
                         $('#addForm1 input[name="id"]').val(obj.data.id);
                         editor.setValue(data.data.rawData,-1);
@@ -468,7 +455,7 @@ layui.use(function(){
                     }
                 },
                 'error':function () {
-                    layer.msg('系统错误');
+                    layer.msg(commonStr.errorInfo);
                 }
             });
         }

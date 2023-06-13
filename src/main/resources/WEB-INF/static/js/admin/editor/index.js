@@ -17,8 +17,8 @@ $(function() {
         contentType: 'application/json',
         data: JSON.stringify({id: id,cls:cls}),
         success:function (data,statusText) {
-            console.log(data);
-            //var element =
+
+
             if(data.code=='200'){
                 editor.setValue(data.data.rawData,-1);
             }else{
@@ -27,7 +27,7 @@ $(function() {
             }
         },
         'error':function () {
-            layer.msg('系统错误');
+            layer.msg(commonStr.errorInfo);
         }
     });
 
@@ -54,7 +54,7 @@ $(function() {
                     }
                 },
                 'error':function () {
-                    layer.msg('系统错误');
+                    layer.msg(commonStr.errorInfo);
                 }
             });
 

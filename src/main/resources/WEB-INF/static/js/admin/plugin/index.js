@@ -25,15 +25,15 @@ function del() {
             dataType : 'json',
             success : function(data) {
                 if(data.code=='200'){
-                    //location.reload();
+                    
                     layer.closeAll();
-                    //layer.msg("新增成功");
+                    layer.msg("新增成功");
                 } else {
                     layer.msg(data.description);
                 }
             },
             error : function() {
-                layer.alert("系统错误");
+                layer.alert(commonStr.errorInfo);
             }
         });
     });
@@ -54,7 +54,7 @@ function addOver() {
             dataType : 'json',
             success : function(data) {
                 if(data.code=='200'){
-                    //location.reload();
+                    
                     layer.closeAll();
                     layer.msg("新增成功");
                 } else {
@@ -62,7 +62,7 @@ function addOver() {
                 }
             },
             error : function() {
-                layer.alert("系统错误");
+                layer.alert(commonStr.errorInfo);
             }
         });
     });
@@ -77,7 +77,7 @@ try {
         async: false,
         success : function(data) {
             if(data.code=='200'){
-                console.log(data);
+
                 pluginMetadata=data.data;
             } else {
             }
@@ -206,8 +206,6 @@ table.on('toolbar(test)', function (obj) {
         var laypage = layui.laypage //分页
 
         if (layEvent === 'detail'){ //查看
-            //do something
-            //layer.alert(JSON.stringify(data.schema),{ area: ['600px']});
             editor.setValue("",-1);
             editor.setValue(JSON.stringify(data.schema,null, '\t'),-1);
             layer.open({
@@ -227,7 +225,6 @@ table.on('toolbar(test)', function (obj) {
         } else if (layEvent === 'edit'){//编辑,暂无方法体
 
         } else if (layEvent === 'detail_consumer_schema'){
-            //layer.alert(JSON.stringify(data.consumer_schema));
             editor.setValue("",-1);
             editor.setValue(JSON.stringify(data.consumer_schema,null, '\t'),-1);
             layer.open({
@@ -243,7 +240,6 @@ table.on('toolbar(test)', function (obj) {
             });
 
         } else if (layEvent === 'detail_metadata_schema'){
-            //layer.alert(JSON.stringify(data.metadata_schema));
             editor.setValue("",-1);
             editor.setValue(JSON.stringify(data.metadata_schema,null, '\t'),-1);
             layer.open({
@@ -267,19 +263,10 @@ table.on('toolbar(test)', function (obj) {
                     contentType: 'application/json',
                     data:JSON.stringify({id:obj.data.id,cls:'pluginMetadata'}),
                     success:function (data,statusText) {
-                        console.log(data);
-                        //var element =
+
+
                         if(data.code=='200'){
                             $('#addForm1 input[name="id"]').val(obj.data.id);
-                            //$('#addForm1 textarea[name="rawData"]').val(data.data.rawData);
-                            //layer.msg(data.description);
-                            //layer.open({
-                            //    type: 1,
-                            //    area: ['800px', '600px'],
-                            //    title: '修改插件Metadata',
-                            //    content : $('#windowDiv')
-                            //});
-
                             editor1.setValue("",-1);
                             editor1.setValue(data.data.rawData,-1);
                             layer.open({
@@ -293,18 +280,14 @@ table.on('toolbar(test)', function (obj) {
                                 maxmin: true, // 允许全屏最小化
                                 skin: 'layui-layer-win10'
                             });
-
-
                         }else{
                              layer.msg(data.description);
                         }
                     },
                     'error':function () {
-                        layer.msg('系统错误');
+                        layer.msg(commonStr.errorInfo);
                     }
                 });
-
-
         }
     });
 
