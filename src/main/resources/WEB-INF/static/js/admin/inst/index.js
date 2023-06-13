@@ -31,6 +31,7 @@ layui.use(['upload','layer'],function () {
 })
 
 function addOver2() {
+
     layui.use(['layer'], function(){
         var formData = new FormData();
         var layer = layui.layer;
@@ -42,8 +43,11 @@ function addOver2() {
             data: formData,
             processData: false,
             contentType: false,
-            async: false,
+            async: true,
             dataType: "json",
+            beforeSend: function (){
+                $('#loading').show();
+            },
             success:function (data,statusText) {
                 if(data.code=='200'){
                     layer.closeAll();
@@ -164,6 +168,7 @@ layui.use(function() {
 
 
 
+
     var default_limt = localStorage.getItem('pageLimit');
 
     if ('' == default_limt || null == default_limt || undefined == default_limt) {
@@ -256,8 +261,11 @@ layui.use(function() {
                         console.log(dataX)
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
-                            allId.push(val.id);
-
+                            if(val.id == "1"){
+                                continue;//在id=1的情况下跳过剩余循环，直接进入id=2的循环。
+                            }else{
+                                allId.push(val.id)
+                            }
 
 
                         }
@@ -387,6 +395,9 @@ layui.use(function() {
             //do something
         } else if(layEvent === 'del'){ //删除
             var layer = layui.layer;
+            if(obj.data.id == "1") {
+                layer.msg("该账号不可删除！")
+            }else{
             layer.confirm('真的删除行么', function(index){
                 //alert(obj.data.id);
                 //向服务端发送删除指令
@@ -411,6 +422,7 @@ layui.use(function() {
 
                 layer.close(index);
             });
+            }
         // } else if(layEvent === 'edit'){ //编辑
         //     //do something
         //
@@ -462,6 +474,7 @@ layui.use(function() {
             $('#addForm3 input[name="id"]').val(obj.data.id);
             certFile={}
             $("#layui-upload-choose-cert").html("");
+            $("#loading").hide();
 
             layer.open({
                 type: 1,
