@@ -1,6 +1,3 @@
-var certFile;
-var keyFile;
-
 function cleanData(d){
     if( d === true ){
         $("#div_id").hide();
@@ -27,121 +24,6 @@ function add() {
             shadeClose: true, // 点击遮罩区域，关闭弹层
             maxmin: true, // 允许全屏最小化
             skin: 'layui-layer-win10'
-        });
-
-    });
-}
-function guide() {
-    certFile = {};
-    keyFile = {};
-    $('#addForm2 input[name="id"]').val("");
-    $('#addForm2 input[name="snis"]').val("");
-    $("#layui-upload-choose-cert").html("")
-    $("#layui-upload-choose-key").html("");
-
-    layui.use(['layer', 'form'], function(){
-        var layer = layui.layer;
-        var form = layui.form;
-        layer.open({
-            type: 1,
-            area: ['800px', '600px'],
-            title: 'Add SSL',
-            content : $('#guideDiv'),
-            anim: 'slideRight',
-            shade: 0.6, // 遮罩透明度
-            shadeClose: true, // 点击遮罩区域，关闭弹层
-            maxmin: true, // 允许全屏最小化
-            skin: 'layui-layer-win10'
-        });
-
-    });
-}
-
-layui.use(['upload','layer'],function () {
-var upload = layui.upload;
-var layer = layui.layer;
-
-upload.render({
-    elem: '#upload-cert'
-    ,auto: false
-    ,accept: "file"
-    ,multiple: false
-    ,before: function(res){
-        console.log(res);
-    }
-    ,size: 5210
-    //,done: function(res, index, upload){
-    //}
-    ,choose: (obj) => {
-        //certFile = obj.pushFile();
-        obj.preview(function(index, file, result){
-                certFile=file;
-                //console.log(index); // 得到文件索引
-                //console.log(file); // 得到文件对象
-                //console.log(result); // 得到文件base64编码，比如图片
-                $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
-        });
-    }
-    ,error: function(index, upload){
-      console.log(index);
-    }
-});
-
-upload.render({
-    elem: '#upload-key'
-    ,auto: false
-    ,accept: "file"
-    ,multiple: false
-    ,before: function(res){
-        console.log(res);
-    }
-    ,size: 5210
-    //,done: function(res, index, upload){
-    //}
-    ,choose: (obj) => {
-
-        obj.preview(function(index, file, result){
-                keyFile=file;
-                //console.log(index); // 得到文件索引
-                //console.log(file); // 得到文件对象
-                //console.log(result); // 得到文件base64编码，比如图片
-                $("#layui-upload-choose-key").html("<p>"+file.name+"</p>");
-        });
-    }
-    ,error: function(index, upload){
-        console.log(index);
-    }
-});
-
-
-})
-
-function addOver2() {
-    layui.use(['layer'], function(){
-        var formData = new FormData();
-        formData.append("certFile",certFile);
-        formData.append("keyFile",keyFile);
-        formData.append("id",$('#addForm2 input[name="id"]').val());
-        formData.append("snis",$('#addForm2 input[name="snis"]').val());
-        $.ajax({
-            type:'POST',
-            url: ctx + '/api/ssl/upload',
-            data: formData,
-            processData: false,
-            contentType: false,
-            async: false,
-            dataType: "json",
-            success:function (data,statusText) {
-                if(data.code=='200'){
-                    layer.closeAll();
-                    layer.msg('ok');
-                }else{
-                    layer.msg(data.description);
-                }
-            },
-            error:function () {
-                layer.msg(commonStr.errorInfo);
-            }
         });
 
     });
@@ -192,8 +74,99 @@ layui.use(function(){
   var layer = layui.layer //弹层
   ,laypage = layui.laypage //分页
   ,table = layui.table //表格
+  , upload = layui.upload
 
 
+var upload_c=upload.render({
+    elem: '#upload-cert'
+    ,auto: false
+    ,accept: "file"
+    ,multiple: false
+    ,before: function(res){
+        console.log(res);
+    }
+    ,field: 'certFile'
+    ,size: 5210
+    ,bindAction: '#ID-upload-demo-action'
+    ,before: function(res){
+    }
+    ,done: function(res, index, upload){
+    }
+    ,error: function(index, upload){
+      console.log(index);
+    }
+});
+
+var upload_k=upload.render({
+    elem: '#upload-key'
+    ,auto: false
+    ,accept: "file"
+    ,multiple: false
+    ,before: function(res){
+        console.log(res);
+    }
+    ,field: 'keyFile'
+    ,size: 5210
+    ,before: function(res){
+    }
+    ,done: function(res, index, upload){
+        console.log(res.code);
+    }
+    ,error: function(index, upload){
+        console.log(index);
+    }
+});
+
+
+$('#ID-upload-demo-action').click(function(){
+    var formData = new FormData();
+    formData.append("certFile",$('#addForm2 input[name="certFile"]')[0].files[0]);
+    formData.append("keyFile",$('#addForm2 input[name="keyFile"]')[0].files[0]);
+    formData.append("id",$('#addForm2 input[name="id"]').val());
+    formData.append("snis",$('#addForm2 input[name="snis"]').val());
+    $.ajax({
+        type:'POST',
+        url: ctx + '/api/ssl/upload',
+        data: formData,
+        processData: false,
+        contentType: false,
+        async: true,
+        dataType: "json",
+        success:function (data,statusText) {
+            if(data.code=='200'){
+                //layer.closeAll();
+                //layer.msg('ok');
+            }else{
+                layer.msg(data.description);
+            }
+        },
+        error:function () {
+            layer.msg(commonStr.errorInfo);
+        }
+    });
+});
+
+
+
+    $('#guide').click(function(){
+        upload_c.reload({});
+        upload_k.reload({});
+        $('#addForm2 input[name="id"]').val("");
+        $('#addForm2 input[name="snis"]').val("");
+
+
+        layer.open({
+            type: 1,
+            area: ['800px', '600px'],
+            title: 'Add SSL',
+            content : $('#guideDiv'),
+            anim: 'slideRight',
+            shade: 0.6, // 遮罩透明度
+            shadeClose: true, // 点击遮罩区域，关闭弹层
+            maxmin: true, // 允许全屏最小化
+            skin: 'layui-layer-win10'
+        });
+    });
 
 
     var default_limt = localStorage.getItem('pageLimit');
