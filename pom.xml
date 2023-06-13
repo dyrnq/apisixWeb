@@ -243,6 +243,12 @@
 			<version>9.16.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+			<version>9.16.0</version>
+		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.shredzone.acme4j/acme4j-client -->
 		<dependency>
 			<groupId>org.shredzone.acme4j</groupId>
