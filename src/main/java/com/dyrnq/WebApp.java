@@ -121,6 +121,15 @@ public class WebApp {
             ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100]}");
             ctx.attrSet("ctx", getCtxStr(ctx));
             ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());
+            try{
+                if(StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(),"English")){
+                    ctx.attrSet("langType", "English");
+                }else if(StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(),"Chinese")){
+                    ctx.attrSet("langType", "简体中文");
+                }
+            }catch (Exception e){
+                ctx.attrSet("langType", "简体中文");
+            }
             chain.doFilter(ctx);
         }
     }
@@ -259,7 +268,7 @@ public class WebApp {
             User user = businessLogic.findByName(username);
             if (user == null) return false;
             ctx.attrSet("admin", user);
-            ctx.attrSet("langType", "语言切换");
+
 
             Date expiration = claims.getExpiration();
 //            return expiration.before(new Date());
