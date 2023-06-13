@@ -153,8 +153,8 @@ public class BusinessLogic {
         }
         byte[] bytes = FileUtils.readFileToByteArray(new File(targetTarFile));
 
-        FileUtils.forceDelete(new File(targetFolderPath));
-        FileUtils.forceDelete(new File(targetTarFile));
+//        FileUtils.forceDelete(new File(targetFolderPath));
+//        FileUtils.forceDelete(new File(targetTarFile));
 
         return bytes;
     }
@@ -189,8 +189,8 @@ public class BusinessLogic {
                 reader.close();
             }
         }
-        FileUtils.forceDelete(new File(targetFolderPath));
-        FileUtils.forceDelete(new File(tarGzFilepath));
+//        FileUtils.forceDelete(new File(targetFolderPath));
+//        FileUtils.forceDelete(new File(tarGzFilepath));
 
     }
 

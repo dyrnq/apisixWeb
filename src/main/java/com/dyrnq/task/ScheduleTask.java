@@ -23,7 +23,7 @@ public class ScheduleTask {
     @Inject
     HomeDir homeDir;
 
-    //清理tmp目录,30s执行一次,清理一小时之前的数据
+    //清理tmp目录,30s执行一次,清理十小时之前的数据
     @Scheduled(cron = "0/30 * * * * ?")
     public void clearTmp(){
         try {
@@ -33,7 +33,7 @@ public class ScheduleTask {
             for (File f : list) {
                 long last = f.lastModified();
 
-                if (curr - last > 1L * 60L * 60L * 1000) {
+                if (curr - last > 10L * 60L * 60L * 1000) {
                     FileUtils.forceDelete(f);
                 }
             }
