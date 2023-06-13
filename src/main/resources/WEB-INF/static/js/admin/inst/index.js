@@ -1,71 +1,3 @@
-var certFile = {}
-layui.use(['upload','layer'],function () {
-    var upload = layui.upload;
-    var layer = layui.layer;
-
-    upload.render({
-        elem: '#upload-cert'
-        ,auto: false
-        ,accept: "file"
-        ,multiple: false
-        ,before: function(res){
-            console.log(res);
-        }
-        ,size: 5210
-        //,done: function(res, index, upload){
-        //}
-        ,choose: (obj) => {
-            //certFile = obj.pushFile();
-            obj.preview(function(index, file, result){
-                certFile=file;
-                //console.log(index); // 得到文件索引
-                //console.log(file); // 得到文件对象
-                //console.log(result); // 得到文件base64编码，比如图片
-                $("#layui-upload-choose-cert").html("<p>"+file.name+"</p>");
-            });
-        }
-        ,error: function(index, upload){
-            console.log(index);
-        }
-    });
-})
-
-function addOver2() {
-
-    layui.use(['layer'], function(){
-        var formData = new FormData();
-        var layer = layui.layer;
-        formData.append("file",certFile);
-        formData.append("id",$('#addForm3 input[name="id"]').val());
-        $.ajax({
-            type:'POST',
-            url: ctx + '/api/tar/import',
-            data: formData,
-            processData: false,
-            contentType: false,
-            async: true,
-            dataType: "json",
-            beforeSend: function (){
-                $('#loading').show();
-            },
-            success:function (data,statusText) {
-                if(data.code=='200'){
-                    layer.closeAll();
-                    layer.msg('ok');
-                }else{
-                    layer.msg(data.description);
-                }
-            },
-            error:function () {
-                layer.msg(commonStr.errorInfo);
-            }
-        });
-
-    });
-}
-
-
-
 function add() {
     layui.use(['layer', 'form'], function(){
         var layer = layui.layer;
@@ -164,9 +96,35 @@ layui.use(function() {
     var layer = layui.layer //弹层
         , laypage = layui.laypage //分页
         , table = layui.table //表格
+        , upload = layui.upload
 
-
-
+    var instUpload = upload.render({
+                    elem: '#upload-cert'
+                    ,auto: false
+                    ,accept: "file"
+                    ,multiple: false
+                    ,url: ctx + '/api/tar/import'
+                    ,size: 5210
+                    ,bindAction: '#ID-upload-demo-action'
+                    ,before: function(res){
+                        //console.log(res);
+                        $('#loading').show();
+                    }
+                    ,done: function(res,index,upload){
+                          //layer.msg('上传成功');
+                          //console.log(res);
+                          if(res.code=='200'){
+                              layer.closeAll();
+                              layer.msg('ok');
+                          }
+                    }
+                    ,progress: function(n, elem, res, index){
+                      var percent = n + '%' // 获取进度百分比
+                    }
+                    ,error: function(index, upload){
+                        console.log(index);
+                    }
+                });
 
 
     var default_limt = localStorage.getItem('pageLimit');
@@ -367,12 +325,9 @@ layui.use(function() {
                 });
             } else if(layEvent === 'importData'){//导入事件
                 var layer = layui.layer;
-                //console.log(obj.data.id);
                 $('#addForm3 input[name="id"]').val(obj.data.id);
-                certFile={}
-                $("#layui-upload-choose-cert").html("");
                 $("#loading").hide();
-
+                instUpload.reload({data: { id: obj.data.id } });
                 layer.open({
                     type: 1,
                     area: ['500px', '300px'],
