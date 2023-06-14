@@ -54,15 +54,16 @@ public class DataSourceEmbed {
         }
 
 
-        String h2Path = StringUtils.endsWith(homeAbsolutePath, File.separator) ? homeAbsolutePath + "h2" : homeAbsolutePath + File.separator + "h2";
-        try {
-            FileUtils.forceMkdir(new File(h2Path));
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
         HikariDataSource ds = null;
         String migrationPath = null;
-        if (StringUtils.isBlank(databaseType) || ReUtil.isMatch("(?i)sqlite|h2", databaseType)) {
+        if (StringUtils.isBlank(databaseType) || ReUtil.isMatch("(?i)h2", databaseType)) {
+            String h2Path = StringUtils.endsWith(homeAbsolutePath, File.separator) ? homeAbsolutePath + "h2" : homeAbsolutePath + File.separator + "h2";
+            try {
+                FileUtils.forceMkdir(new File(h2Path));
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+
             HikariConfig dbConfig = new HikariConfig();
             dbConfig.setJdbcUrl("jdbc:h2:" + h2Path + File.separator + "h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE");
             dbConfig.setUsername("sa");
@@ -71,6 +72,21 @@ public class DataSourceEmbed {
             dbConfig.setDriverClassName(org.h2.Driver.class.getName());
             ds = new HikariDataSource(dbConfig);
             migrationPath = "classpath:db/migration/h2";
+        } else if (ReUtil.isMatch("(?i)sqlite", databaseType)) {
+            String sqlitePath = StringUtils.endsWith(homeAbsolutePath, File.separator) ? homeAbsolutePath + "sqlite" : homeAbsolutePath + File.separator + "sqlite";
+            try {
+                FileUtils.forceMkdir(new File(sqlitePath));
+            } catch (Exception e) {
+                logger.error(e.getMessage());
+            }
+            HikariConfig dbConfig = new HikariConfig();
+            dbConfig.setJdbcUrl("jdbc:sqlite:" + sqlitePath + File.separator + "data.db");
+            dbConfig.setUsername(username);
+            dbConfig.setPassword(password);
+            dbConfig.setMaximumPoolSize(1);
+            dbConfig.setDriverClassName(org.sqlite.JDBC.class.getName());
+            ds = new HikariDataSource(dbConfig);
+            migrationPath = "classpath:db/migration/sqlite";
         } else if (ReUtil.isMatch("(?i)my(sql)?", databaseType)) {
             HikariConfig dbConfig = new HikariConfig();
             dbConfig.setJdbcUrl(url);
