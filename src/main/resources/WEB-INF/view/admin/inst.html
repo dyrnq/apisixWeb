@@ -35,13 +35,13 @@ input[name='param']{
             <form action="${ctx}/adminPage/http" id="searchForm" method="post">
                 <div class="layui-form">
                     <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="add()">${i18n.get("add.inst")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="add">${i18n.get("add.inst")}</button>
                     </div>
                     <div class="layui-inline" style="display:none">
-                        <button type="button" class="layui-btn layui-btn-sm" onclick="guide()">${i18n.get("httpStr.guide")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm" id="guide">${i18n.get("httpStr.guide")}</button>
                     </div>
                     <div class="layui-inline" style="display:none">
-                        <button type="button" class="layui-btn layui-btn-sm" onclick="selectTemplateAsHttp()">${i18n.get("upstreamStr.selectTemplateAsParam")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm">${i18n.get("upstreamStr.selectTemplateAsParam")}</button>
                     </div>
                     <div class="layui-inline" style="display:none">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" onclick="preview(null,'http')">${i18n.get("commonStr.clear")}</button>
@@ -61,50 +61,9 @@ input[name='param']{
     <!-- 弹出框 -->
     <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
         <form id="addForm1">
-<!--            <input type="hidden" name="id" id="id">-->
+            <input type="hidden" name="u">
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">id</label>
-                <div class="layui-input-block">
-                    <input type="text" name="id" id="id" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">name</label>
-                <div class="layui-input-block">
-                    <input type="text" name="name" id="name" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">url</label>
-                <div class="layui-input-block">
-                    <input type="text" name="url" id="url" class="layui-input">
-                </div>
-            </div>
-
-
-            <div class="layui-form-item">
-                <label class="layui-form-label">apiKey</label>
-                <div class="layui-input-block">
-                    <input type="text" name="apiKey" id="apiKey" class="layui-input">
-                </div>
-            </div>
-
-
-            <div class="layui-form-item center">
-                <button type="button" class="layui-btn layui-btn-normal" onclick="addOver()">${i18n.get("commonStr.submit")}</button>
-                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
-            </div>
-        </form>
-    </div>
-
-    <div class="layui-form" id="windowDiv2" style="padding: 15px; display: none">
-        <form id="addForm2">
-            <!--            <input type="hidden" name="id" id="id">-->
-
-            <div class="layui-form-item" style="display: none">
+            <div class="layui-form-item" id="div_id">
                 <label class="layui-form-label">id</label>
                 <div class="layui-input-block">
                     <input type="text" name="id" class="layui-input">
@@ -135,7 +94,7 @@ input[name='param']{
 
 
             <div class="layui-form-item center">
-                <button type="button" class="layui-btn layui-btn-normal" onclick="updateOver()">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn layui-btn-normal" id="addOver">${i18n.get("commonStr.submit")}</button>
                 <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
             </div>
         </form>

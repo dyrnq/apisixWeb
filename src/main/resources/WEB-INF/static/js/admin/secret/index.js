@@ -1,62 +1,13 @@
-    function cleanData(d){
-        if( d === true ){
-            $("#div_id").hide();
-        }else{
-            $("#div_id").show();
-        }
-
-        $('#addForm1 input[name="id"]').val("");
-        editor.setValue("",-1);
-    }
-    function add() {
-        layui.use(['layer', 'form'], function(){
-            var layer = layui.layer;
-            var form = layui.form;
-            cleanData(false);
-            layer.open({
-                type: 1,
-                area: ['800px', '600px'],
-                title: 'Add Secret',
-                content : $('#windowDiv'),
-                anim: 'slideRight',
-                shade: 0.6, // 遮罩透明度
-                shadeClose: true, // 点击遮罩区域，关闭弹层
-                maxmin: true, // 允许全屏最小化
-                skin: 'layui-layer-win10'
-            });
-
-        });
+function cleanData(d){
+    if( d === true ){
+        $("#div_id").hide();
+    }else{
+        $("#div_id").show();
     }
 
-    function addOver() {
-        layui.use(['layer', 'form'], function(){
-            var id = $('#addForm1 input[name="id"]').val();
-            console.log(id);
-            var text = editor.getValue();
-            console.log(text);
-
-            $.ajax({
-                type : 'POST',
-                url: ctx + '/api/secret/put',
-                contentType: 'application/json',
-                data: JSON.stringify({id: id,rawData:text}),
-                dataType : 'json',
-                success : function(data) {
-                    if(data.code=='200'){
-                        //location.reload();
-                        layer.closeAll();
-                        layer.msg(commonStr.success);
-                    } else {
-                        layer.msg(data.description);
-                    }
-                },
-                error : function() {
-                    layer.alert(commonStr.errorInfo);
-                }
-            });
-        });
-    }
-
+    $('#addForm1 input[name="id"]').val("");
+    editor.setValue("",-1);
+}
 function addLink(d) {
 　　var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
@@ -84,6 +35,65 @@ layui.use(function(){
         default_limt = cfg.pageLimit;
     }
 
+
+$('#add').click(function(){
+    cleanData(false);
+    layer.open({
+        type: 1,
+        area: ['800px', '600px'],
+        title: 'Add Secret',
+        content : $('#windowDiv'),
+        anim: 'slideRight',
+        shade: 0.6, // 遮罩透明度
+        shadeClose: true, // 点击遮罩区域，关闭弹层
+        maxmin: true, // 允许全屏最小化
+        skin: 'layui-layer-win10'
+    });
+
+});
+
+$('#addOver').click(function(){
+    var id = $('#addForm1 input[name="id"]').val();
+    var text = editor.getValue();
+
+    $.ajax({
+        type : 'POST',
+        url : ctx + '/api/secret/put',
+        contentType: 'application/json',
+        data: JSON.stringify({id: id,rawData:text}),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+});
+
+$('#dropAll').click(function(){
+    layer.confirm(commonStr.confirmClear, function(index) {
+         $.ajax({
+                type : 'POST',
+                url : ctx + '/api/secret/drop',
+                dataType : 'json',
+                success : function(data) {
+                    if(data.code=='200'){
+                        layer.closeAll();
+                        layer.msg(commonStr.success);
+                        table.reload('demo',{});
+                    } else {
+                        layer.msg(data.description);
+                    }
+                }
+        });
+    });
+});
 
 
   //执行一个 table 实例

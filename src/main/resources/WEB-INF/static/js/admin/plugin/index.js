@@ -38,35 +38,7 @@ function del() {
         });
     });
 }
-function addOver() {
-    layui.use(['layer', 'form'], function(){
 
-        var id = $('#addForm1 input[name="id"]').val();
-        console.log(id);
-        var text = editor1.getValue();
-        console.log(text);
-
-        $.ajax({
-            type : 'POST',
-            url: ctx + '/api/pluginMetadata/put',
-            contentType: 'application/json',
-            data: JSON.stringify({id: id,rawData:text}),
-            dataType : 'json',
-            success : function(data) {
-                if(data.code=='200'){
-                    
-                    layer.closeAll();
-                    layer.msg(commonStr.success);
-                } else {
-                    layer.msg(data.description);
-                }
-            },
-            error : function() {
-                layer.alert(commonStr.errorInfo);
-            }
-        });
-    });
-}
 var pluginMetadata={};
 try {
     $.ajax({
@@ -151,6 +123,29 @@ layui.use(function(){
   ,table = layui.table //表格
 
 
+$('#addOver').click(function(){
+    var id = $('#addForm1 input[name="id"]').val();
+    var text = editor1.getValue();
+
+    $.ajax({
+        type : 'POST',
+        url : ctx + '/api/pluginMetadata/put',
+        contentType: 'application/json',
+        data: JSON.stringify({id: id,rawData:text}),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+});
 
 
   //执行一个 table 实例

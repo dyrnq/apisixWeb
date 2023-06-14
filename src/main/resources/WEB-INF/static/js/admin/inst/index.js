@@ -1,77 +1,17 @@
-function add() {
-    layui.use(['layer', 'form'], function(){
-        var layer = layui.layer;
-        var form = layui.form;
-        // clean data
-        $('#addForm1 input[name="id"]').val("");
-        $('#addForm1 input[name="name"]').val("");
-        $('#addForm1 input[name="url"]').val("");
-        $('#addForm1 input[name="apiKey"]').val("");
+function cleanData(d){
+    if( d === true ){
+        $("#div_id").hide();
+        $('#addForm1 input[name="u"]').val("update");
+    }else{
+        $('#addForm1 input[name="u"]').val("add");
+        $("#div_id").show();
+    }
 
-        layer.open({
-            type: 1,
-            area: ['800px', '600px'],
-            title: 'Add Inst',
-            content : $('#windowDiv')
-        });
-    });
+    $('#addForm1 input[name="id"]').val("");
+    $('#addForm1 input[name="name"]').val("");
+    $('#addForm1 input[name="url"]').val("");
+    $('#addForm1 input[name="apiKey"]').val("");
 }
-
-
-function addOver() {
-    var layer = layui.layer //弹层
-    var laypage = layui.laypage //分页
-    var table = layui.table //表格
-
-    $.ajax({
-        type : 'POST',
-        url: ctx + '/api/inst/add',
-        data : $('#addForm1').serialize(),
-        dataType : 'json',
-        success : function(data) {
-            if(data.code=='200'){
-                //location.reload();
-                layer.closeAll();
-                layer.msg(commonStr.success);
-                //location.reload();
-                table.reload('demo',{});
-            } else {
-                layer.msg(data.description);
-            }
-        },
-        error : function() {
-            layer.alert(commonStr.errorInfo);
-        }
-    });
-}
-
-function updateOver() {
-    var layer = layui.layer //弹层
-    var laypage = layui.laypage //分页
-    var table = layui.table //表格
-    $.ajax({
-        type : 'POST',
-        url: ctx + '/api/inst/update',
-        data : $('#addForm2').serialize(),
-        dataType : 'json',
-        success : function(data) {
-
-            if(data.code=='200'){
-                //location.reload();
-                layer.closeAll();
-                layer.msg("修改成功");
-                //location.reload();
-                table.reload('demo',{});
-            } else {
-                layer.msg(data.description);
-            }
-        },
-        error : function() {
-            layer.alert(commonStr.errorInfo);
-        }
-    });
-}
-
 
 function addLink(d) {
     var addLink = d.id;
@@ -133,6 +73,43 @@ layui.use(function() {
         default_limt = cfg.pageLimit;
     }
 
+$('#add').click(function(){
+    cleanData(false);
+    layer.open({
+        type: 1,
+        area: ['800px', '600px'],
+        title: 'Add Inst',
+        content : $('#windowDiv'),
+        anim: 'slideRight',
+        shade: 0.6, // 遮罩透明度
+        shadeClose: true, // 点击遮罩区域，关闭弹层
+        maxmin: true, // 允许全屏最小化
+        skin: 'layui-layer-win10'
+    });
+
+});
+
+$('#addOver').click(function(){
+    let u = $('#addForm1 input[name="u"]').val();
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/inst/'+u,
+        data : $('#addForm1').serialize(),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+});
 
 
     //执行一个 table 实例
@@ -294,6 +271,7 @@ layui.use(function() {
                 var layer = layui.layer;
                 var form = layui.form;
                 console.log(obj.data.id);
+                cleanData(true);
                 $.ajax({
                     url: ctx + '/api/inst/get',
                     type:'post',
@@ -303,17 +281,22 @@ layui.use(function() {
 
 
                         if(data.code=='200'){
-                            $('#addForm2 input[name="id"]').val(data.data.id);
-                            $('#addForm2 input[name="name"]').val(data.data.name);
-                            $('#addForm2 input[name="url"]').val(data.data.url);
-                            $('#addForm2 input[name="apiKey"]').val(data.data.apiKey);
+                            $('#addForm1 input[name="id"]').val(data.data.id);
+                            $('#addForm1 input[name="name"]').val(data.data.name);
+                            $('#addForm1 input[name="url"]').val(data.data.url);
+                            $('#addForm1 input[name="apiKey"]').val(data.data.apiKey);
 
 
                             layer.open({
                                 type: 1,
                                 area: ['800px', '600px'],
                                 title: 'Edit Inst',
-                                content : $('#windowDiv2')
+                                content : $('#windowDiv'),
+                                anim: 'slideRight',
+                                shade: 0.6, // 遮罩透明度
+                                shadeClose: true, // 点击遮罩区域，关闭弹层
+                                maxmin: true, // 允许全屏最小化
+                                skin: 'layui-layer-win10'
                             });
                         }else{
                              layer.msg(data.description);

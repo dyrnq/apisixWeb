@@ -9,54 +9,6 @@ function cleanData(d){
     editor.setValue("",-1);
 }
 
-function add() {
-    layui.use(['layer', 'form'], function(){
-        var layer = layui.layer;
-        var form = layui.form;
-        cleanData(false);
-        layer.open({
-            type: 1,
-            area: ['800px', '600px'],
-            title: 'Add SSL',
-            content : $('#windowDiv'),
-            anim: 'slideRight',
-            shade: 0.6, // 遮罩透明度
-            shadeClose: true, // 点击遮罩区域，关闭弹层
-            maxmin: true, // 允许全屏最小化
-            skin: 'layui-layer-win10'
-        });
-
-    });
-}
-
-function addOver() {
-    layui.use(['layer', 'form'], function(){
-        var id = $('#addForm1 input[name="id"]').val();
-        console.log(id);
-        var text = editor.getValue();
-        console.log(text);
-
-        $.ajax({
-            type : 'POST',
-            url: ctx + '/api/ssl/put',
-            contentType: 'application/json',
-            data: JSON.stringify({id: id,rawData:text}),
-            dataType : 'json',
-            success : function(data) {
-                if(data.code=='200'){
-                    //location.reload();
-                    layer.closeAll();
-                    layer.msg(commonStr.success);
-                } else {
-                    layer.msg(data.description);
-                }
-            },
-            error : function() {
-                layer.alert(commonStr.errorInfo);
-            }
-        });
-    });
-}
 function addLink(d) {
 　　var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
@@ -85,15 +37,15 @@ var upload_c=upload.render({
     ,before: function(res){
         console.log(res);
     }
+    ,acceptMime: 'text'
     ,field: 'certFile'
     ,size: 5210
-    ,bindAction: '#ID-upload-demo-action'
     ,before: function(res){
     }
     ,done: function(res, index, upload){
     }
     ,error: function(index, upload){
-      console.log(index);
+        console.log(index);
     }
 });
 
@@ -105,20 +57,85 @@ var upload_k=upload.render({
     ,before: function(res){
         console.log(res);
     }
+    ,acceptMime: 'text'
     ,field: 'keyFile'
     ,size: 5210
     ,before: function(res){
     }
     ,done: function(res, index, upload){
-        console.log(res.code);
     }
     ,error: function(index, upload){
         console.log(index);
     }
 });
 
+$('#add').click(function(){
+    cleanData(false);
+    layer.open({
+        type: 1,
+        area: ['800px', '600px'],
+        title: 'Add SSL',
+        content : $('#windowDiv'),
+        anim: 'slideRight',
+        shade: 0.6, // 遮罩透明度
+        shadeClose: true, // 点击遮罩区域，关闭弹层
+        maxmin: true, // 允许全屏最小化
+        skin: 'layui-layer-win10'
+    });
+});
+
+$('#addOver').click(function(){
+    var id = $('#addForm1 input[name="id"]').val();
+    console.log(id);
+    var text = editor.getValue();
+    console.log(text);
+
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/ssl/put',
+        contentType: 'application/json',
+        data: JSON.stringify({id: id,rawData:text}),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+ });
+
+ $('#dropAll').click(function(){
+     layer.confirm(commonStr.confirmClear, function(index) {
+          $.ajax({
+                 type : 'POST',
+                 url : ctx + '/api/ssl/drop',
+                 dataType : 'json',
+                 success : function(data) {
+                     if(data.code=='200'){
+                         layer.closeAll();
+                         layer.msg(commonStr.success);
+                         table.reload('demo',{});
+                     } else {
+                         layer.msg(data.description);
+                     }
+                 }
+         });
+     });
+ });
+
 
 $('#ID-upload-demo-action').click(function(){
+    upload_c.reload({field: 'certFile'});
+    upload_k.reload({field: 'keyFile'});
+
+
     var formData = new FormData();
     formData.append("certFile",$('#addForm2 input[name="certFile"]')[0].files[0]);
     formData.append("keyFile",$('#addForm2 input[name="keyFile"]')[0].files[0]);
@@ -134,8 +151,9 @@ $('#ID-upload-demo-action').click(function(){
         dataType: "json",
         success:function (data,statusText) {
             if(data.code=='200'){
-                //layer.closeAll();
-                //layer.msg('ok');
+                layer.closeAll();
+                layer.msg(commonStr.success);
+                table.reload('demo',{});
             }else{
                 layer.msg(data.description);
             }
@@ -149,10 +167,14 @@ $('#ID-upload-demo-action').click(function(){
 
 
     $('#guide').click(function(){
-        upload_c.reload({});
-        upload_k.reload({});
+        $('#addForm2').find(".layui-upload-choose").each(function(index, element) {
+              //console.log(element);
+              $(element).html("");
+        });
         $('#addForm2 input[name="id"]').val("");
         $('#addForm2 input[name="snis"]').val("");
+        $('#addForm2 input[name="certFile"]').val("");
+        $('#addForm2 input[name="keyFile"]').val("");
 
 
         layer.open({

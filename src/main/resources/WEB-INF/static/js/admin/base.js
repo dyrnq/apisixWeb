@@ -130,32 +130,7 @@ function loginOut() {
 
 }
 
-function drop(cls){
 
-layui.use(['layer', 'form', 'table'], function(){
-    var layer = layui.layer;
-    var form = layui.form;
-    var table = layui.table;
-
-    layer.confirm(commonStr.confirmClear, function(index) {
-
-         $.ajax({
-                type : 'POST',
-                url : ctx + '/api/'+cls+'/drop',
-                dataType : 'json',
-                success : function(data) {
-                    layer.closeAll();
-                    table.reload('demo',{});
-                }
-            });
-
-    });
-
-
-
- });
-
-}
 
 // 日期格式化
 Date.prototype.format = function(format) {

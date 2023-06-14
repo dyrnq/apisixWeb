@@ -1,74 +1,17 @@
-function add() {
-    layui.use(['layer', 'form'], function(){
-        var layer = layui.layer;
-        var form = layui.form;
-        // clean data
-        $('#addForm1 input[name="id"]').val("");
-        $('#addForm1 input[name="name"]').val("");
-        $('#addForm1 input[name="pass"]').val("");
-        layer.open({
-            type: 1,
-            area: ['800px', '600px'],
-            title: '添加新用户',
-            content : $('#windowDiv')
-        });
-    });
+function cleanData(d){
+    if( d === true ){
+        $("#div_id").hide();
+        $('#addForm1 input[name="u"]').val("update");
+    }else{
+        $("#div_id").show();
+        $('#addForm1 input[name="u"]').val("add");
+    }
+
+    $('#addForm1 input[name="id"]').val("");
+    $('#addForm1 input[name="name"]').val("");
+    $('#addForm1 input[name="pass"]').val("");
 }
 
-
-function addOver() {
-    var layer = layui.layer //弹层
-    var laypage = layui.laypage //分页
-    var table = layui.table //表格
-
-    $.ajax({
-        type : 'POST',
-        url: ctx + '/api/user/add',
-        data : $('#addForm1').serialize(),
-        dataType : 'json',
-        success : function(data) {
-            if(data.code=='200'){
-                //location.reload();
-                layer.closeAll();
-                layer.msg(commonStr.success);
-                //location.reload();
-                table.reload('demo',{});
-            } else {
-                layer.msg(data.description);
-            }
-        },
-        error : function() {
-            layer.alert(commonStr.errorInfo);
-        }
-    });
-}
-
-function updateOver() {
-    var layer = layui.layer //弹层
-    var laypage = layui.laypage //分页
-    var table = layui.table //表格
-    $.ajax({
-        type : 'POST',
-        url: ctx + '/api/user/update',
-        data : $('#addForm2').serialize(),
-        dataType : 'json',
-        success : function(data) {
-
-            if(data.code=='200'){
-                //location.reload();
-                layer.closeAll();
-                layer.msg("修改成功");
-                //location.reload();
-                table.reload('demo',{});
-            } else {
-                layer.msg(data.description);
-            }
-        },
-        error : function() {
-            layer.alert(commonStr.errorInfo);
-        }
-    });
-}
 
 function addLink(d) {
     var addLink = d.id;
@@ -97,6 +40,44 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
     default_limt = cfg.pageLimit;
 }
 
+$('#add').click(function(){
+    cleanData(false);
+    layer.open({
+        type: 1,
+        area: ['800px', '600px'],
+        title: 'Add User',
+        content : $('#windowDiv'),
+        anim: 'slideRight',
+        shade: 0.6, // 遮罩透明度
+        shadeClose: true, // 点击遮罩区域，关闭弹层
+        maxmin: true, // 允许全屏最小化
+        skin: 'layui-layer-win10'
+    });
+
+});
+
+
+$('#addOver').click(function(){
+    let u = $('#addForm1 input[name="u"]').val();
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/user/'+u,
+        data : $('#addForm1').serialize(),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+});
 
 
     //执行一个 table 实例
@@ -169,9 +150,6 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                     layer.msg(commonStr.pleaseSelect);
                 } else {
                     layer.confirm(commonStr.confirmBatchDelete, function(index) {
-
-
-
                         for (let i = 0; i < dataX.length; i++) {
                             const val = dataX[i];
                             if(val.id == "1"){
@@ -179,11 +157,6 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                             }else{
                                 allId.push(val.id)
                             }
-
-
-
-
-
                         }
                         $.ajax({
                             url: ctx + '/api/user/del',
@@ -257,6 +230,7 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
             var layer = layui.layer;
             var form = layui.form;
             console.log(obj.data.id);
+            cleanData(true);
             $.ajax({
                 url: ctx + '/api/user/get',
                 type:'post',
@@ -264,14 +238,19 @@ if ('' == default_limt || null == default_limt || undefined == default_limt) {
                 data:JSON.stringify({id:obj.data.id}),
                 success:function (data,statusText) {
                     if(data.code=='200'){
-                        $('#addForm2 input[name="id"]').val(data.data.id);
-                        $('#addForm2 input[name="name"]').val(data.data.name);
-                        $('#addForm2 input[name="pass"]').val(data.data.pass);
+                        $('#addForm1 input[name="id"]').val(data.data.id);
+                        $('#addForm1 input[name="name"]').val(data.data.name);
+                        $('#addForm1 input[name="pass"]').val(data.data.pass);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
-                            title: '修改用户',
-                            content : $('#windowDiv2')
+                            title: 'Edit User',
+                            content : $('#windowDiv'),
+                            anim: 'slideRight',
+                            shade: 0.6, // 遮罩透明度
+                            shadeClose: true, // 点击遮罩区域，关闭弹层
+                            maxmin: true, // 允许全屏最小化
+                            skin: 'layui-layer-win10'
                         });
                     }else{
                          layer.msg(data.description);
