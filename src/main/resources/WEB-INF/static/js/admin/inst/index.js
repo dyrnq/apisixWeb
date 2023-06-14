@@ -31,12 +31,12 @@ function addLink(d) {
 
 
 
-layui.use(function() {
-    //得到各种内置组件
-    var layer = layui.layer //弹层
-        , laypage = layui.laypage //分页
-        , table = layui.table //表格
-        , upload = layui.upload
+layui.use(function(){
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
 
     var instUpload = upload.render({
                     elem: '#upload-cert'
@@ -55,7 +55,7 @@ layui.use(function() {
                           //console.log(res);
                           if(res.code=='200'){
                               layer.closeAll();
-                              layer.msg('ok');
+                              layer.msg(commonStr.success);
                           }
                     }
                     ,progress: function(n, elem, res, index){
@@ -237,10 +237,10 @@ $('#addOver').click(function(){
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
+
         if(layEvent === 'detail'){ //查看
 
         } else if(layEvent === 'del'){ //删除
-            var layer = layui.layer;
             if(obj.data.id == "1") {
                 layer.msg("该账号不可删除！")
             }else{
@@ -265,12 +265,11 @@ $('#addOver').click(function(){
                     });
 
                     layer.close(index);
-            });
+                });
             }
         }else if (layEvent === 'edit'){//编辑,暂无方法体
-                var layer = layui.layer;
-                var form = layui.form;
-                console.log(obj.data.id);
+
+                //console.log(obj.data.id);
                 cleanData(true);
                 $.ajax({
                     url: ctx + '/api/inst/get',
@@ -307,7 +306,6 @@ $('#addOver').click(function(){
                     }
                 });
             } else if(layEvent === 'importData'){//导入事件
-                var layer = layui.layer;
                 $('#addForm3 input[name="id"]').val(obj.data.id);
                 $("#loading").hide();
                 instUpload.reload({data: { id: obj.data.id } });
@@ -318,11 +316,9 @@ $('#addOver').click(function(){
                     content : $('#guideDiv')
                 });
         } else if(layEvent === 'export'){//导出事件
-            var layer = layui.layer;
-                console.log(obj.data.id);
+                //console.log(obj.data.id);
                 window.open('/api/tar/export?id='+obj.data.id);
         } else if(layEvent === 'drop'){
-                var layer = layui.layer;
                 layer.confirm(commonStr.confirmClear, function(index) {
                     $.ajax({
                         url: ctx + '/api/inst/drop',

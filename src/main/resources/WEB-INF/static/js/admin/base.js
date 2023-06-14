@@ -81,6 +81,30 @@ $(function() {
 		//$(".layui-table").attr("lay-size", "sm");
 		//$(".layui-btn").addClass("layui-btn-sm");
 	//}
+
+
+    if (document.getElementById("ID-dropdown-demo-base-text")) {
+        layui.use(['dropdown', 'util', 'layer', 'table'], function(){
+        var dropdown = layui.dropdown;
+            $.ajax({
+            type : 'POST',
+            url : ctx + '/api/inst/dropdown',
+            dataType : 'json',
+            success : function(data) {
+                if (data.code == 200) {
+                    dropdown.render({
+                    elem: '#ID-dropdown-demo-base-text'
+                    ,data: data.data
+                    ,click: function(obj){
+                        Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
+                        location.reload();
+                        }}
+                    );
+                }
+            }
+            });
+        });
+    }
 })
 
 // 关闭AJAX相应的缓存
@@ -318,37 +342,3 @@ function showHelp() {
 	// });
 }
 
-if (document.getElementById("ID-dropdown-demo-base-text")) {
-    layui.use(['dropdown', 'util', 'layer', 'table'], function(){
-      var dropdown = layui.dropdown
-      ,util = layui.util
-      ,layer = layui.layer
-      ,table = layui.table
-      ,$ = layui.jquery;
-
-
-     $.ajax({
-        type : 'POST',
-        url : ctx + '/api/inst/dropdown',
-        dataType : 'json',
-        success : function(data) {
-            if (data.code == 200) {
-              //初演示 - 绑定文字
-              dropdown.render({
-                elem: '#ID-dropdown-demo-base-text'
-                ,data: data.data
-                ,click: function(obj){
-                    //console.log(obj.id);
-                    //console.log(this.elem);
-                    //this.elem.val(obj.title);
-                    Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
-                    location.reload();
-
-                }
-              });
-            }
-        }
-    });
-    });
-
-}

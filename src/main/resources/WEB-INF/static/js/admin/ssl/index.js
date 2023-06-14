@@ -22,11 +22,12 @@ function addLink(d) {
 }
 
 layui.use(function(){
-  //得到各种内置组件
-  var layer = layui.layer //弹层
-  ,laypage = layui.laypage //分页
-  ,table = layui.table //表格
-  , upload = layui.upload
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
+var upload = layui.upload;
 
 
 var upload_c=upload.render({
@@ -37,7 +38,7 @@ var upload_c=upload.render({
     ,before: function(res){
         console.log(res);
     }
-    ,acceptMime: 'text'
+    ,exts: 'crt|key|pem|der|jks|txt'
     ,field: 'certFile'
     ,size: 5210
     ,before: function(res){
@@ -57,7 +58,7 @@ var upload_k=upload.render({
     ,before: function(res){
         console.log(res);
     }
-    ,acceptMime: 'text'
+    ,exts: 'crt|key|pem|der|jks|txt'
     ,field: 'keyFile'
     ,size: 5210
     ,before: function(res){

@@ -24,11 +24,12 @@ function addLink(d) {
    }
 }
 
-layui.use(function() {
-    //得到各种内置组件
-    var layer = layui.layer //弹层
-        , laypage = layui.laypage //分页
-        , table = layui.table //表格
+layui.use(function(){
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
 
 
 

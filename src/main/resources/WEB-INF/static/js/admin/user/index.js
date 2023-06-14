@@ -27,10 +27,11 @@ function addLink(d) {
 }
 
 layui.use(function(){
-                      //得到各种内置组件
-    var layer = layui.layer //弹层
-        ,laypage = layui.laypage //分页
-        ,table = layui.table //表格
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
 
 
 $('#change').click(function () {
@@ -220,7 +221,7 @@ $('#addOver').click(function(){
         if(layEvent === 'detail'){ //查看
 
         } else if(layEvent === 'del'){ //删除
-            var layer = layui.layer;
+
             if(obj.data.id == "1") {
                 layer.msg("该账号不可删除！")
             }else{
@@ -250,9 +251,7 @@ $('#addOver').click(function(){
                 });
             }
         } else if (layEvent === 'edit'){//编辑,暂无方法体
-            var layer = layui.layer;
-            var form = layui.form;
-            console.log(obj.data.id);
+
             cleanData(true);
             $.ajax({
                 url: ctx + '/api/user/get',
@@ -284,7 +283,7 @@ $('#addOver').click(function(){
                 }
             });
         }else if(layEvent == 'changePass'){
-            var layer = layui.layer;
+
             $('#addForm2 input[name="id"]').val(obj.data.id);
             $('#addForm2 input[name="newPass"]').val("");
             $('#addForm2 input[name="confirmPass"]').val("");

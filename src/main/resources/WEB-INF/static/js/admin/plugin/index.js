@@ -8,57 +8,27 @@ editor1.setOptions({
 });
 editor1.resize();
 
-
-function del() {
-    layui.use(['layer', 'form'], function(){
-
-        var id = $('#addForm1 input[name="id"]').val();
-        //console.log(id);
-        //var text = editor1.getValue();
-        //console.log(text);
-
+var pluginMetadata={};
+function init(d){
+    try {
         $.ajax({
             type : 'POST',
-            url: ctx + '/api/pluginMetadata/del',
+            url: ctx + '/api/pluginMetadata',
             contentType: 'application/json',
-            data: JSON.stringify({id: id}),
             dataType : 'json',
+            async: d,
             success : function(data) {
                 if(data.code=='200'){
-                    
-                    layer.closeAll();
-                    layer.msg(commonStr.success);
+                    pluginMetadata=data.data;
                 } else {
-                    layer.msg(data.description);
                 }
             },
             error : function() {
-                layer.alert(commonStr.errorInfo);
             }
         });
-    });
-}
-
-var pluginMetadata={};
-try {
-    $.ajax({
-        type : 'POST',
-        url: ctx + '/api/pluginMetadata',
-        contentType: 'application/json',
-        dataType : 'json',
-        async: false,
-        success : function(data) {
-            if(data.code=='200'){
-
-                pluginMetadata=data.data;
-            } else {
-            }
-        },
-        error : function() {
-        }
-    });
-} catch(error) {
-   // 处理错误的代码
+    } catch(error) {
+       // 处理错误的代码
+    }
 }
 
 
@@ -117,11 +87,14 @@ function metadata_schema(d) {
 
 
 layui.use(function(){
-  //得到各种内置组件
-  var layer = layui.layer //弹层
-  ,laypage = layui.laypage //分页
-  ,table = layui.table //表格
 
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
+
+
+init(true);
 
 $('#addOver').click(function(){
     var id = $('#addForm1 input[name="id"]').val();
@@ -137,6 +110,33 @@ $('#addOver').click(function(){
             if(data.code=='200'){
                 layer.closeAll();
                 layer.msg(commonStr.success);
+                init(false);
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+});
+
+
+$('#del').click(function(){
+    var id = $('#addForm1 input[name="id"]').val();
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/pluginMetadata/del',
+        contentType: 'application/json',
+        data: JSON.stringify({id: id}),
+        dataType : 'json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
+                init(false);
+                table.reload('demo',{});
             } else {
                 layer.msg(data.description);
             }
@@ -197,7 +197,7 @@ table.on('toolbar(test)', function (obj) {
         var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
-        var layer = layui.layer //弹层
+        var layer = layui.layer;
         var laypage = layui.laypage //分页
 
         if (layEvent === 'detail'){ //查看

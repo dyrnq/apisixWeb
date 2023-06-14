@@ -36,9 +36,9 @@ $(function() {
         //保存当前JSON文本的方法体。
         var editor = ace.edit("editor");
         var text = editor.getValue();
-        console.log(text);
+        //console.log(text);
         //确认表单弹窗
-        var layer = layui.layer
+        var layer = layui.layer;
 
         $.ajax({
             url: ctx + '/api/'+cls+'/put',
