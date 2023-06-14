@@ -166,4 +166,10 @@ public class AdminController extends BaseController{
         }
 
     }
+
+    @Mapping("cert")
+    public Object cert() {
+        ModelAndView model = new ModelAndView("admin/cert.html");
+        return model;
+    }
 }
