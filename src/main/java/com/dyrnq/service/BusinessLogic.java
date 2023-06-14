@@ -70,22 +70,44 @@ public class BusinessLogic {
         return client;
     }
 
-    public User login(String name, String pass) {
-        String base64Name = Base64.decodeStr(Base64.decodeStr(name));
-        String base64Pass = Base64.decodeStr(Base64.decodeStr(pass));
+    /**
+     * 使用base64传入用户名和密码进行登录,传入的参数base64Name和base64Pass都被base64过两次，因此这里也要解开两次
+     *
+     * @param base64Name
+     * @param base64Pass
+     * @return
+     */
+    public User login(String base64Name, String base64Pass) {
+        String name = Base64.decodeStr(Base64.decodeStr(base64Name));
+        String pass = Base64.decodeStr(Base64.decodeStr(base64Pass));
         Act1<MapperWhereQ> condition = mapperWhereQ -> {
-            mapperWhereQ.whereEq("name", base64Name);
+            mapperWhereQ.whereEq("name", name);
         };
 
         List<User> list = userMapper.selectList(condition);
         if (list != null && list.size() > 0) {
             User user = list.get(0);
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-            if (encoder.matches(base64Pass, user.getPass())) {
+            if (encoder.matches(pass, user.getPass())) {
                 return user;
             }
         }
         return null;
+    }
+
+    /**
+     * 为某个用户更改密码,传入的密码参数(base64Pass)base64过两次，因此这里也要解开两次
+     *
+     * @param id
+     * @param base64Pass
+     */
+    public void changePass(String id, String base64Pass) {
+        String pass = Base64.decodeStr(Base64.decodeStr(base64Pass));
+        User user = new User();
+        user.setId(id);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+        user.setPass(encoder.encode(pass));
+        userMapper.updateById(user, true);
     }
 
     public User findByName(String name) {
@@ -100,7 +122,7 @@ public class BusinessLogic {
         return null;
     }
 
-    public void drop(String instId) throws ApisixSDKException{
+    public void drop(String instId) throws ApisixSDKException {
         Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
         AdminClient client = getAdminClient(instId);
         //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
