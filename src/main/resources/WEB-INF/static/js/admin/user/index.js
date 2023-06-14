@@ -40,7 +40,7 @@ $('#change').click(function () {
     let confirmPass = Base64.encode(Base64.encode($("#confirmPass").val()));
     let id = $('#addForm2 input[name="id"]').val();
     if (newPass != confirmPass) {
-        layer.msg("两次输入的密码不相同")
+        layer.msg(loginStr.error3)
     } else {
         $.ajax({
             url: ctx + '/api/user/changePass',
@@ -123,9 +123,9 @@ $('#addOver').click(function(){
         ,totalRow: false //开启合计行
         ,cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
-            ,{field: 'id', title: 'id', width:300, sort: true, fixed: 'left', totalRowText: '合计：'}
+            ,{field: 'id', title: 'id', width: 300, sort: true, fixed: 'left', totalRowText: '合计：'}
             ,{field: 'name', title: 'name', width:80}
-            , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
+            , {field: 'upstream', title: 'operation',  templet: addLink}
         ]]
         , done: function (res, curr, count){
             //如果是异步请求数据方式，res即为你接口返回的信息。

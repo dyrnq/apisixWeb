@@ -37,6 +37,7 @@ var layer = layui.layer;
 var laypage = layui.laypage;
 var table = layui.table;
 var form = layui.form;
+var upload = layui.upload;
 
     var instUpload = upload.render({
                     elem: '#upload-cert'
@@ -44,6 +45,7 @@ var form = layui.form;
                     ,accept: "file"
                     ,multiple: false
                     ,url: ctx + '/api/tar/import'
+                    ,exts: 'gz|tar|zip|gzip|tar.gz|'
                     ,size: 5210
                     ,bindAction: '#ID-upload-demo-action'
                     ,before: function(res){
@@ -307,13 +309,23 @@ $('#addOver').click(function(){
                 });
             } else if(layEvent === 'importData'){//导入事件
                 $('#addForm3 input[name="id"]').val(obj.data.id);
+                $('#addForm3').find(".layui-upload-choose").each(function(index, element) {
+                      //console.log(element);
+                      $(element).html("");
+                });
                 $("#loading").hide();
+
                 instUpload.reload({data: { id: obj.data.id } });
                 layer.open({
                     type: 1,
                     area: ['500px', '300px'],
                     title: 'import data',
-                    content : $('#guideDiv')
+                    content : $('#guideDiv'),
+                    anim: 'slideRight',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    skin: 'layui-layer-win10'
                 });
         } else if(layEvent === 'export'){//导出事件
                 //console.log(obj.data.id);

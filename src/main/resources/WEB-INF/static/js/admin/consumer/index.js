@@ -146,11 +146,11 @@ $('#dropAll').click(function(){
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'username', title: 'name', width:80}
+      ,{field: 'username', title: 'username', width:300}
       ,{field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
-      ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
-      ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
-      ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
+      ,{field: 'createTime', title: 'create_time', sort: false , width: 300 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
+      ,{field: 'updateTime', title: 'update_time', sort: true , width: 300 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+      ,{field: 'upstream', title: 'operation', templet: addLink}
 
     ]]
       , done: function (res, curr, count){

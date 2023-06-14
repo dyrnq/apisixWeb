@@ -120,28 +120,15 @@ $('#dropAll').click(function(){
         , totalRow: false //开启合计行
         , cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
-            , {field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
-            , {field: 'priority',title:'priority',width:100,sort: true, fixed: 'left'}
-            , {field: 'name', title: 'name', width: 80}
-            , {field: 'desc', title: 'desc', width: 90, sort: true, totalRow: true}
-            , {
-                field: 'createTime',
-                title: 'create_time',
-                width: 200,
-                sort: false,
-                templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-            }
-            , {
-                field: 'updateTime',
-                title: 'update_time',
-                width: 200,
-                sort: false,
-                templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"
-            }
-            , {field: 'uri', title: 'uri', width: 150}
-            , {field: 'status', title: 'status', width: 200}
-            , {field: 'upstream', title: 'upstream', width: 200, templet: addLink}
-
+            , {field: 'id', title: 'id', width: 300, sort: true, fixed: 'left', totalRowText: '合计：'}
+            , {field: 'priority',title:'priority', width: 80, sort: true, fixed: 'left'}
+            , {field: 'name', title: 'name', width: 200}
+            , {field: 'desc', title: 'desc', width: 200,sort: true, totalRow: true}
+            , {field: 'createTime', title: 'create_time', sort: false , width: 300 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
+            , {field: 'updateTime', title: 'update_time', sort: true , width: 300 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+            , {field: 'uri', title: 'uri', width: 100}
+            , {field: 'status', title: 'status', width: 80}
+            , {field: 'upstream', title: 'upstream', templet: addLink}
         ]]
         , done: function (res, curr, count){
             //如果是异步请求数据方式，res即为你接口返回的信息。

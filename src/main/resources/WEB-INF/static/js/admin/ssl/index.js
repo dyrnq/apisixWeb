@@ -218,13 +218,13 @@ $('#ID-upload-demo-action').click(function(){
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'id', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'id', title: 'id', width: 300, sort: true, fixed: 'left', totalRowText: '合计：'}
       ,{field: 'type', title: 'type', width:80}
       ,{field: 'snis', title: 'snis', width: 200}
-      ,{field: 'createTime', title: 'create_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
-      ,{field: 'updateTime', title: 'update_time', width: 200, sort: false , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+      ,{field: 'createTime', title: 'create_time', sort: false , width: 300 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
+      ,{field: 'updateTime', title: 'update_time', sort: true , width: 300 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
       ,{field: 'status', title: 'status', width: 200}
-      ,{field: 'upstream', title: 'upstream', width: 200 ,templet: addLink}
+      ,{field: 'upstream', title: 'operation', templet: addLink}
 
     ]]
       , done: function (res, curr, count){

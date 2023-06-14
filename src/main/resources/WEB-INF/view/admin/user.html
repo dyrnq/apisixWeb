@@ -4,18 +4,18 @@
 <#include "admin/common.html"/>
 <style type="text/css">
 
-        .long{
-            width: 210px;
-        }
+    .long{
+        width: 210px;
+    }
 
-        .short{
-            width: 110px!important;
-        }
+    .short{
+        width: 110px!important;
+    }
 
-        input[name='param']{
-            width: 100px;
-        }
-    </style>
+    input[name='param']{
+        width: 100px;
+    }
+</style>
 </head>
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
@@ -99,14 +99,14 @@
 
 
             <div class="layui-form-item">
-                <label class="layui-form-label">newPassword</label>
+                <label class="layui-form-label">${i18n.get("loginStr.pass")}</label>
                 <div class="layui-input-block">
                     <input type="password" name="newPass" id="newPass" class="layui-input" lay-affix="eye">
                 </div>
             </div>
 
             <div class="layui-form-item">
-                <label class="layui-form-label">confirmPassword</label>
+                <label class="layui-form-label">${i18n.get("loginStr.repeatPass")}</label>
                 <div class="layui-input-block">
                     <input type="password" name="confirmPass" id="confirmPass" class="layui-input" lay-affix="eye">
                 </div>

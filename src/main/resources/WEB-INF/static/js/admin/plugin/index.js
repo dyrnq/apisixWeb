@@ -158,14 +158,14 @@ $('#del').click(function(){
     ,toolbar: false
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
-       {field: 'id', title: 'id', width:200, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'type', title: 'type', width: 90, sort: true, totalRow: true}
-      ,{field: 'version', title: 'version', width: 150}
-      ,{field: 'priority', title: 'priority', width: 200 ,sort: true}
-      ,{field: 'consumer_schema', title: 'consumer_schema', width: 150,templet: consumer_schema}
-      ,{field: 'metadata_schema', title: 'metadata_schema', width: 150,templet: metadata_schema}
-      ,{field: 'schema', title: 'schema', templet: schema, width: 150}
-      ,{field: 'plugin_metadata', title: 'plugin_metadata', width: 150 ,templet: plugin_metadata}
+       {field: 'id', title: 'id', sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'type', title: 'type', sort: true, totalRow: true}
+      ,{field: 'version', title: 'version'}
+      ,{field: 'priority', title: 'priority', sort: true}
+      ,{field: 'consumer_schema', title: 'consumer_schema', templet: consumer_schema}
+      ,{field: 'metadata_schema', title: 'metadata_schema', templet: metadata_schema}
+      ,{field: 'schema', title: 'schema', templet: schema}
+      ,{field: 'plugin_metadata', title: 'plugin_metadata', templet: plugin_metadata}
     ]]
     ,response: {
         statusCode: 200
