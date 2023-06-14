@@ -21,7 +21,6 @@ import com.dyrnq.utils.TarUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
-import net.hasor.dbvisitor.jdbc.core.JdbcTemplate;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,10 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URLDecoder;
-import java.sql.SQLException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class BusinessLogic {
@@ -51,13 +47,6 @@ public class BusinessLogic {
     InstMapper instMapper;
     @Inject
     HomeDir homeDir;
-
-    @Db("db1")
-    JdbcTemplate jdbcTemplate;
-
-//    @Db("db1")
-//    LambdaTemplate lambdaTemplate;
-
 
     public AdminClient getAdminClient() throws ApisixSDKException {
         String instId = Context.current().cookie(CookieName.NAME_INSTID, "1");
@@ -112,17 +101,13 @@ public class BusinessLogic {
      * @param id
      * @param base64Pass
      */
-    public void changePass(String id, String base64Pass) throws SQLException {
+    public void changePass(String id, String base64Pass) {
         String pass = Base64.decodeStr(Base64.decodeStr(base64Pass));
-//        User user = new User();
-//        user.setId(id);
+        User user = new User();
+        user.setId(id);
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
-//        user.setPass(encoder.encode(pass));
-//        userMapper.updateById(user, true);
-        Map<String, Object> paramMap = new HashMap<>();
-        paramMap.put("id", id);
-        paramMap.put("pass", encoder.encode(pass));
-        jdbcTemplate.executeUpdate("update user set pass=:pass where id=:id", paramMap);
+        user.setPass(encoder.encode(pass));
+        userMapper.updateById(user, true);
     }
 
     public User findByName(String name) {
