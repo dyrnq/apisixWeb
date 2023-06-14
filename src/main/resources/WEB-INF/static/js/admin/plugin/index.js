@@ -158,8 +158,8 @@ $('#del').click(function(){
     ,toolbar: false
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
-       {field: 'id', title: 'id', sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'type', title: 'type', sort: true, totalRow: true}
+       {field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'type', title: 'type', sort: true}
       ,{field: 'version', title: 'version'}
       ,{field: 'priority', title: 'priority', sort: true}
       ,{field: 'consumer_schema', title: 'consumer_schema', templet: consumer_schema}

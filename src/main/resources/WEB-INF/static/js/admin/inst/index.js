@@ -134,8 +134,8 @@ $('#addOver').click(function(){
             {type: 'checkbox', fixed: 'left'}
             , {field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
             , {field: 'name', title: 'name', width: 200}
-            , {field: 'url', title: 'url', width: 300, sort: true, totalRow: true}
-            , {field: 'upstream', title: 'upstream', width: 500, templet: addLink}
+            , {field: 'url', title: 'url', width: 300, sort: true}
+            , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
 
         ]]
         , done: function (res, curr, count){

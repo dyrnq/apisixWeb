@@ -115,11 +115,11 @@ $('#dropAll').click(function(){
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
       {type: 'checkbox', fixed: 'left'}
-      ,{field: 'id', title: 'id', width: 300, sort: true, fixed: 'left', totalRowText: '合计：'}
+      ,{field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
       ,{field: 'createTime', title: 'create_time', sort: false , width: 300 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
       ,{field: 'updateTime', title: 'update_time', sort: true , width: 300 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
       ,{field: 'uri', title: 'uri', width: 150}
-      ,{field: 'upstream', title: 'operation', templet: addLink}
+      ,{field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
 
     ]]
       , done: function (res, curr, count){
