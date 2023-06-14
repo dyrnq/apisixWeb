@@ -29,13 +29,12 @@ public class TokenController extends BaseController {
      */
     @Mapping("getToken")
     public Result getToken(Context ctx, String name, String pass) {
-
-        User user = businessLogic.login(name, pass);
-        if (user != null) {
+        try {
+            User user = businessLogic.login(name, pass);
             ctx.sessionSet(Claims.SUBJECT, user.getName());
             return Result.succeed(ctx.sessionState().sessionToken());
-        } else {
-            return Result.failure();
+        }catch (Exception e){
+            return Result.failure(e.getMessage());
         }
     }
 

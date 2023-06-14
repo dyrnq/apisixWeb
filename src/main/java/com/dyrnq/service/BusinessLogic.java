@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.core.handle.Context;
+import org.noear.solon.i18n.I18nUtil;
 import org.noear.wood.MapperWhereQ;
 import org.noear.wood.annotation.Db;
 import org.noear.wood.ext.Act1;
@@ -90,9 +91,14 @@ public class BusinessLogic {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
             if (encoder.matches(pass, user.getPass())) {
                 return user;
+            }else {
+                throw new RuntimeException(I18nUtil.getMessage("loginStr.backError2"));
             }
+        }else{
+            throw new RuntimeException(I18nUtil.getMessage("loginStr.backError5"));
         }
-        return null;
+
+        //return null;
     }
 
     /**

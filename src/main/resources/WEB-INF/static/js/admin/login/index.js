@@ -14,7 +14,8 @@ function login() {
 //    var hashPass = bcrypt.hashSync(pass, salt);
 //    console.log(hashPass);
 
-
+    let commonStr = {};
+    commonStr.errorInfo="error!";
 
 	$.ajax({
 		type: 'POST',
@@ -29,7 +30,7 @@ function login() {
                 Cookies.set(COOK_NAME.token, data.data, { expires: 1, path: '/' })
                 location.href = ctx + "/admin";
 			} else {
-				layer.msg(commonStr.errorInfo);
+				layer.msg(data.description);
 				//refreshCode('codeImg');
 			}
 		},
