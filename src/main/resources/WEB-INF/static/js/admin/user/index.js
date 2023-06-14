@@ -49,6 +49,7 @@ $('#change').click(function () {
             data: JSON.stringify({id: id, newPass: newPass}),
             success: function (data, statusText) {
                 if (data.code == '200') {
+                    layer.closeAll();
                     layer.msg('OK');
                 } else {
                     layer.msg(data.description);
