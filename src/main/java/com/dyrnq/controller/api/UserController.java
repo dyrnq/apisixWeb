@@ -4,6 +4,7 @@ import cn.hutool.core.util.PageUtil;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
+import com.dyrnq.service.BusinessLogic;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -71,6 +72,16 @@ public class UserController extends ApiController {
     public Result update(Context ctx, User user) {
         try {
             userMapper.updateById(user, true);
+            return Result.succeed("ok");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping("changePass")
+    public Result changePass(Context ctx,String id,String newPass){
+        try {
+            businessLogic.changePass(id, newPass);
             return Result.succeed("ok");
         } catch (Exception e) {
             logger.error(e.getMessage());

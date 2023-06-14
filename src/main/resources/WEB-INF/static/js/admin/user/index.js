@@ -20,8 +20,9 @@ function addLink(d) {
     }
    if (addLink.length > 0) {
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
+       let changePassBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="changePass">' + commonStr.edit + '</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       return editBtn+'&nbsp;'+delBtn;
+       return changePassBtn+'&nbsp;'+delBtn;
    }
 }
 
@@ -32,7 +33,29 @@ layui.use(function(){
         ,table = layui.table //表格
 
 
+$('#change').click(function () {
 
+    let newPass = Base64.encode(Base64.encode($("#newPass").val()));
+    let confirmPass = Base64.encode(Base64.encode($("#confirmPass").val()));
+    let id = $('#addForm2 input[name="id"]').val();
+    if (newPass != confirmPass) {
+        layer.msg("两次输入的密码不相同")
+    } else {
+        $.ajax({
+            url: ctx + '/api/user/changePass',
+            type: 'post',
+            contentType: 'application/json',
+            data: JSON.stringify({id: id, newPass: newPass}),
+            success: function (data, statusText) {
+                if (data.code == '200') {
+                    layer.msg('OK');
+                } else {
+                    layer.msg(data.description);
+                }
+            }
+        });
+    }
+});
 
 var default_limt = localStorage.getItem('pageLimit');
 
@@ -260,6 +283,24 @@ $('#addOver').click(function(){
                     layer.msg(commonStr.errorInfo);
                 }
             });
+        }else if(layEvent == 'changePass'){
+            var layer = layui.layer;
+            $('#addForm2 input[name="id"]').val(obj.data.id);
+            $('#addForm2 input[name="newPass"]').val("");
+            $('#addForm2 input[name="confirmPass"]').val("");
+            layer.open({
+                type: 1,
+                area: ['800px', '600px'],
+                title: 'Change Password',
+                content : $('#changeDiv'),
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
+
+
         }
     });
 
