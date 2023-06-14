@@ -56,6 +56,7 @@ public class WebApp {
             });
 
 
+            WoodConfig.isUsingValueExpression=false;
             if (Solon.cfg().isDebugMode()) {
                 //执行后打印下sql
                 WoodConfig.onExecuteAft(cmd -> {
