@@ -15,8 +15,8 @@ CREATE TABLE `inst` (
 
 CREATE TABLE `ca` (
   `id` varchar(40) NOT NULL ,
-  `cert` varchar(512) DEFAULT NULL ,
-  `private_key` varchar(512) DEFAULT NULL ,
+  `cert` BLOB DEFAULT NULL ,
+  `private_key` BLOB DEFAULT NULL ,
   `not_after` BIGINT DEFAULT NULL ,
   `not_before` BIGINT DEFAULT NULL ,
   `subject` varchar(512) DEFAULT NULL ,
@@ -27,8 +27,8 @@ CREATE TABLE `ca` (
 CREATE TABLE `cert` (
   `id` varchar(40) NOT NULL ,
   `domain` varchar(512) DEFAULT NULL ,
-  `cert` varchar(512) DEFAULT NULL ,
-  `private_key` varchar(512) DEFAULT NULL,
+  `cert` BLOB DEFAULT NULL ,
+  `private_key` BLOB DEFAULT NULL,
   `not_after` BIGINT DEFAULT NULL ,
   `not_before` BIGINT DEFAULT NULL ,
   `subject` varchar(512) DEFAULT NULL ,

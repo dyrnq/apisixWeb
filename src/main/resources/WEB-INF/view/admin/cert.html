@@ -26,17 +26,30 @@ input[name='param']{
     <div class="layui-body">
 
 
-
         <!-- 内容主体区域 -->
         <div style="padding: 15px">
             <fieldset class="layui-elem-field layui-field-title">
-                <legend>${i18n.get("menu.about")}</legend>
+                <legend>${i18n.get("menuStr.cert")}</legend>
             </fieldset>
 
+            <form action="${ctx}/adminPage/http" id="searchForm" method="post">
+                <div class="layui-form">
+                    <div class="layui-inline">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="add">${i18n.get("certStr.add")}</button>
+                    </div>
+                    <div class="layui-inline" style="display:none">
+                        <button type="button" class="layui-btn layui-btn-sm" id="guide">${i18n.get("httpStr.guide")}</button>
+                    </div>
+                    <div class="layui-inline" style="display:none">
+                        <button type="button" class="layui-btn layui-btn-sm">${i18n.get("upstreamStr.selectTemplateAsParam")}</button>
+                    </div>
+                    <div class="layui-inline" style="display:none">
+                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">${i18n.get("commonStr.clear")}</button>
+                    </div>
+                </div>
+            </form>
 
-
-
-
+            <table class="layui-hide" id="demo" lay-filter="test"></table>
 
 
         </div>
@@ -44,8 +57,94 @@ input[name='param']{
 </div>
 
 
+<div style="height: 500px; width: 300px; overflow: hidden;">
+    <!-- 弹出框 -->
+    <div class="layui-form" id="windowDiv" style="padding: 15px; display: none">
+        <form id="addForm1">
+            <input type="hidden" name="u">
+
+            <div class="layui-form-item" id="div_id">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">domain</label>
+                <div class="layui-input-block">
+                    <input type="text" name="domain" class="layui-input">
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">subject</label>
+                <div class="layui-input-block">
+                    <input type="text" name="subject" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">privateKey</label>
+                <div class="layui-input-block">
+                    <input type="text" name="privateKey" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" id="addOver">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="layui-form" id="guideDiv" style="padding: 15px; display: none;">
+        <form id="addForm3">
+
+            <div class="layui-form-item" style="display:none">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item" style="margin-top:20px;margin-bottom:20px">
+                <label class="layui-form-label">tar file</label>
+                <!--                <div class="layui-input-block">-->
+                <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>-->
+                <!--                </div>-->
+                <div class="layui-input-inline short">
+                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">file</button>
+                </div>
+                <div class="layui-form-mid layui-word-aux"><span class="layui-inline layui-upload-choose" id="layui-upload-choose-cert"></span></div>
+
+            </div>
+
+
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" id="ID-upload-demo-action">${i18n.get("commonStr.submit")}
+                    <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" id="loading" style="display: none"></i>
+                </button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
 
 <#include 'admin/script.html'/>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">${i18n.get("commonStr.batchDelete")}</button>
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display: none">获取选中行数据</button>
+        <button class="layui-btn layui-btn-sm" lay-event="statusAll1" style="display: none">${i18n.get("commonStr.batchEnable")}</button>
+        <button class="layui-btn layui-btn-sm" lay-event="statusAll0" style="display: none">${i18n.get("commonStr.batchDisable")}</button>
+    </div>
+</script>
 <script src="${ctx}/js/admin/cert/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>
 </html>
