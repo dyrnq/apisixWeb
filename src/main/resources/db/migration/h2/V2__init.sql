@@ -15,8 +15,8 @@ CREATE TABLE `inst` (
 
 CREATE TABLE `ca` (
   `id` varchar(40) NOT NULL ,
-  `cert` BLOB DEFAULT NULL ,
-  `private_key` BLOB DEFAULT NULL ,
+  `cert` CLOB DEFAULT NULL ,
+  `private_key` CLOB DEFAULT NULL ,
   `not_after` BIGINT DEFAULT NULL ,
   `not_before` BIGINT DEFAULT NULL ,
   `subject` varchar(512) DEFAULT NULL ,
@@ -27,8 +27,8 @@ CREATE TABLE `ca` (
 CREATE TABLE `cert` (
   `id` varchar(40) NOT NULL ,
   `domain` varchar(512) DEFAULT NULL ,
-  `cert` BLOB DEFAULT NULL ,
-  `private_key` BLOB DEFAULT NULL,
+  `cert` CLOB DEFAULT NULL ,
+  `private_key` CLOB DEFAULT NULL,
   `not_after` BIGINT DEFAULT NULL ,
   `not_before` BIGINT DEFAULT NULL ,
   `subject` varchar(512) DEFAULT NULL ,
@@ -38,7 +38,7 @@ CREATE TABLE `cert` (
   `supplier` INT DEFAULT NULL ,
   `encryption` INT DEFAULT NULL ,
   `challenge` INT DEFAULT NULL ,
-  `aux` varchar(512) DEFAULT NULL ,
+  `aux` CLOB DEFAULT NULL ,
   `inst_id` varchar(40) DEFAULT NULL ,
    PRIMARY KEY (`id`)
 );
