@@ -250,7 +250,8 @@ function downloadFile(url, name) {
 
 // form转json
 function form2JsonString(formId) {
-	var paramArray = $('#' + formId).serializeArray();
+	let fm = formId.startsWith('#') ? formId : ('#' + formId);
+	var paramArray = $(fm).serializeArray();
 	/* 请求参数转json对象 */
 	var jsonObj = {};
 	$(paramArray).each(function() {
