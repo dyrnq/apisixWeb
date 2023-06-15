@@ -10,12 +10,11 @@ var jQuery = layui.$;
 
 $(function() {
 
-	// layer变量
-	layer = layui.layer;
-	element = layui.element;
-	form = layui.form;
-	laypage = layui.laypage;
-
+    layer = layui.layer;
+    element = layui.element;
+    form = layui.form;
+    laypage = layui.laypage;
+    dropdown = layui.dropdown;
 //	// 执行一个laypage实例
 //	laypage.render({
 //		elem: 'pageInfo', // 渲染节点
@@ -82,26 +81,27 @@ $(function() {
 		//$(".layui-btn").addClass("layui-btn-sm");
 	//}
 
+    if ($('#ID-dropdown-demo-base-text').length){
+        dropdown.render({
+            elem: '#ID-dropdown-demo-base-text'
+            ,click: function(obj){
+                Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
+                location.reload();
+            }
+       });
 
-    if (document.getElementById("ID-dropdown-demo-base-text")) {
-        layui.use(['dropdown', 'util', 'layer', 'table'], function(){
-        var dropdown = layui.dropdown;
+        $("#ID-dropdown-demo-base-text").click(function(){
             $.ajax({
             type : 'POST',
             url : ctx + '/api/inst/dropdown',
             dataType : 'json',
             success : function(data) {
-                if (data.code == 200) {
-                    dropdown.render({
-                    elem: '#ID-dropdown-demo-base-text'
-                    ,data: data.data
-                    ,click: function(obj){
-                        Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
-                        location.reload();
-                        }}
-                    );
+                    if (data.code == 200) {
+                        dropdown.reloadData('ID-dropdown-demo-base-text', {
+                            data: data.data
+                        })
+                    }
                 }
-            }
             });
         });
     }
