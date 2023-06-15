@@ -1,10 +1,12 @@
 package com.dyrnq.controller.api;
 
+import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.PageUtil;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
+import com.dyrnq.utils.BCryptPasswordEncoder;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -36,6 +38,10 @@ public class UserController extends ApiController {
     @Mapping("add")
     public Result add(Context ctx, User user) {
         try {
+            String base64Pass = user.getPass();
+            String pass = Base64.decodeStr(Base64.decodeStr(base64Pass));
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
+            user.setPass(encoder.encode(pass));
             userMapper.insert(user, true);
             return Result.succeed("ok");
         } catch (Exception e) {

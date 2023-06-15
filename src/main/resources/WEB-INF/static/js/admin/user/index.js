@@ -50,7 +50,7 @@ $('#change').click(function () {
             success: function (data, statusText) {
                 if (data.code == '200') {
                     layer.closeAll();
-                    layer.msg('OK');
+                    layer.msg(commonStr.success);
                 } else {
                     layer.msg(data.description);
                 }
@@ -84,11 +84,19 @@ $('#add').click(function(){
 
 $('#addOver').click(function(){
     let u = $('#addForm1 input[name="u"]').val();
+    var formData = $("#addForm1").serializeArray().reduce(function(obj, item) {
+      obj[item.name] = item.value;
+      return obj;
+    }, {});
+
+    formData['pass']= Base64.encode(Base64.encode($('#addForm1 input[name="pass"]').val()));
+
     $.ajax({
         type : 'POST',
         url: ctx + '/api/user/'+u,
-        data : $('#addForm1').serialize(),
+        data : JSON.stringify(formData),
         dataType : 'json',
+        contentType: 'application/json',
         success : function(data) {
             if(data.code=='200'){
                 layer.closeAll();
