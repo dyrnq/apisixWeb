@@ -260,7 +260,15 @@ $('#addOver').click(function(){
         }
     });
 
-    if(formData['approach'] == 1){
+//    var formData = $("#addForm1").serializeArray().reduce(function(obj, item) {
+//      obj[item.name] = item.value;
+//      return obj;
+//    }, {});
+
+    console.log(formData);
+
+    if($('#addForm1 select[name="approach"]').val() == '1'){
+        console.log("formData.append certFile");
         formData.append("certFile",$('#addForm1 input[name="certFile"]')[0].files[0]);
         formData.append("keyFile",$('#addForm1 input[name="keyFile"]')[0].files[0]);
     }
@@ -362,9 +370,9 @@ $.ajax({
             , {field: 'supplier', title: 'supplier', width: 100}
             , {field: 'encryption', title: 'encryption', width: 100}
             , {field: 'challenge', title: 'challenge', width: 100}
-            , {field: 'subject', title: 'subject', width: 300, sort: true}
-            , {field: 'not_before', title: 'not_before', width: 150, sort: true}
-            , {field: 'not_after', title: 'not_after', width: 150, sort: true}
+            , {field: 'subject', title: 'subject', width: 300}
+            , {field: 'notBefore', title: 'notBefore', width: 150, templet: "<div>{{!d.notBefore?'':layui.util.toDateString(d.notBefore, 'yyyy-MM-dd HH:mm:ss') }}</div>" }
+            , {field: 'notAfter', title: 'notAfter', width: 150, templet: "<div>{{!d.notAfter?'':layui.util.toDateString(d.notAfter, 'yyyy-MM-dd HH:mm:ss') }}</div>" }
             , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
 
 

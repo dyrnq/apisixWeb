@@ -58,6 +58,9 @@ public class Cert {
     private
     Long notAfter;
 
+    @Column("not_before")
+    private
+    Long notBefore;
 
     @Column("aux")
     private
@@ -199,5 +202,14 @@ public class Cert {
 
     public void setKeyFile(UploadedFile keyFile) {
         this.keyFile = keyFile;
+    }
+
+
+    public Long getNotBefore() {
+        return notBefore;
+    }
+
+    public void setNotBefore(Long notBefore) {
+        this.notBefore = notBefore;
     }
 }

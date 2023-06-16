@@ -57,6 +57,12 @@ public class CertController extends ApiController {
                 if (cert.getKeyFile() != null) {
                     cert.setPrivateKey(IOUtils.toString(cert.getKeyFile().getContent(), StandardCharsets.UTF_8));
                 }
+                X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
+                cert.setSubject(x509Cert.getSubjectDN().toString());
+                cert.setNotAfter(x509Cert.getNotAfter().getTime());
+                cert.setNotBefore(x509Cert.getNotBefore().getTime());
+                String[] sniArray = CertUtils.extractSNI(x509Cert);
+                cert.setDomain(StringUtils.join(sniArray,","));
             } else if (ap == 0) {
                 //免费证书
 
