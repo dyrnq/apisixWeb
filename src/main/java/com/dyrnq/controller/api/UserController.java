@@ -5,7 +5,6 @@ import cn.hutool.core.util.PageUtil;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
-import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.utils.BCryptPasswordEncoder;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -15,6 +14,8 @@ import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 @Mapping("api/user")
 @Controller
@@ -28,7 +29,9 @@ public class UserController extends ApiController {
         try {
             int start = PageUtil.getStart(page - 1, limit);
             IPage<User> p = userMapper.selectPage(start, limit, null);
-            return PageResult.succeed(p.getList(), p.getTotal());
+            List<User> userList = p.getList();
+            userList.forEach(user -> user.setPass("**********************"));
+            return PageResult.succeed(userList, p.getTotal());
         } catch (Exception e) {
             logger.error(e.getMessage());
             return PageResult.failure(e.getMessage());
@@ -67,6 +70,7 @@ public class UserController extends ApiController {
     public Result get(Context ctx, String id) {
         try {
             User user = userMapper.selectById(id);
+            user.setPass("**********************");
             return Result.succeed(user);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -76,14 +80,14 @@ public class UserController extends ApiController {
 
     @Mapping("update")
     public Result update(Context ctx, User user) {
-        throw new RuntimeException("not support");
-//        try {
-//            userMapper.updateById(user, true);
-//            return Result.succeed("ok");
-//        } catch (Exception e) {
-//            logger.error(e.getMessage());
-//            return Result.failure(e.getMessage());
-//        }
+        //throw new RuntimeException("not support");
+        try {
+            userMapper.updateById(user, true);
+            return Result.succeed("ok");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
     }
     @Mapping("changePass")
     public Result changePass(Context ctx,String id,String newPass){

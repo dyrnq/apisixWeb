@@ -15,6 +15,11 @@ public class User {
     private String pass;
 
 
+    @Column("email")
+    private String email;
+    @Column("phone")
+    private String phone;
+
     public String getId() {
         return id;
     }
@@ -38,4 +43,21 @@ public class User {
     public void setPass(String pass) {
         this.pass = pass;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
 }
