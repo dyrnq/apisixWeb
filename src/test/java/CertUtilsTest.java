@@ -1,6 +1,8 @@
 import com.dyrnq.utils.CertUtils;
 import com.dyrnq.utils.X509Holder;
 import org.apache.commons.io.IOUtils;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.util.ASN1Dump;
 import org.junit.Test;
 
 import java.io.*;
@@ -143,4 +145,18 @@ public class CertUtilsTest {
         PrivateKey privateKey_CA = CertUtils.load(new File("src/test/resources/example-ca.key"));
         CertUtils.toPKCS8(privateKey_CA);
     }
+
+    /**
+     * 模拟OpenSSL的x509 -in dsa-cert.pem -noout -text命令的输出。
+     * @throws Exception
+     */
+    @Test
+    public void test_print() throws Exception {
+        FileInputStream certFileInputStream = new FileInputStream(new File("src/test/resources/example-ca.crt"));
+        CertificateFactory certificateFactory = CertificateFactory.getInstance("X.509");
+        X509Certificate x509Certificate = (X509Certificate) certificateFactory.generateCertificate(certFileInputStream);
+        System.out.println(ASN1Dump.dumpAsString(new ASN1InputStream(x509Certificate.getEncoded()).readObject()));
+    }
+
+
 }
