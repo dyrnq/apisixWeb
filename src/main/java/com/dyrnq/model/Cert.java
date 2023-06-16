@@ -1,6 +1,8 @@
 package com.dyrnq.model;
 
+import org.noear.solon.core.handle.UploadedFile;
 import org.noear.wood.annotation.Column;
+import org.noear.wood.annotation.Exclude;
 import org.noear.wood.annotation.PrimaryKey;
 import org.noear.wood.annotation.Table;
 
@@ -33,7 +35,7 @@ public class Cert {
 
     @Column("supplier")
     private
-    Integer supplier;//供应商 0=Let's Encrypt 1=Alicloud 2=TencentCloud
+    Integer supplier;//供应商 0=Let's Encrypt 1=AliCloud 2=TencentCloud
 
     @Column("encryption")
     private
@@ -64,6 +66,11 @@ public class Cert {
     @Column("inst_id")
     private
     String instId; //inst table id
+
+    @Exclude
+    private UploadedFile certFile;
+    @Exclude
+    private UploadedFile keyFile;
 
 
     public String getId() {
@@ -176,5 +183,21 @@ public class Cert {
 
     public void setInstId(String instId) {
         this.instId = instId;
+    }
+
+    public UploadedFile getCertFile() {
+        return certFile;
+    }
+
+    public void setCertFile(UploadedFile certFile) {
+        this.certFile = certFile;
+    }
+
+    public UploadedFile getKeyFile() {
+        return keyFile;
+    }
+
+    public void setKeyFile(UploadedFile keyFile) {
+        this.keyFile = keyFile;
     }
 }
