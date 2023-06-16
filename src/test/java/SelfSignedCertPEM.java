@@ -1,3 +1,5 @@
+import cn.hutool.crypto.digest.HMac;
+import cn.hutool.crypto.digest.HmacAlgorithm;
 import com.dyrnq.utils.CertUtils;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
@@ -12,6 +14,7 @@ import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.File;
@@ -94,4 +97,71 @@ public class SelfSignedCertPEM {
         IOUtils.write(CertUtils.content(cert), new FileOutputStream(new File("src/test/resources/example.crt")));
         IOUtils.write(CertUtils.content(privKey), new FileOutputStream(new File("src/test/resources/example.key")));
     }
+
+    /**
+     * 创建密钥对测试
+     *
+     * @throws NoSuchAlgorithmException
+     * @throws CertificateException
+     * @throws OperatorCreationException
+     * @throws IOException
+     * @throws NoSuchProviderException
+     */
+    @Test
+    public void test_createRSAKeyPair() throws NoSuchAlgorithmException, CertificateException, OperatorCreationException, IOException, NoSuchProviderException {
+
+        KeyPairGenerator kpGen = KeyPairGenerator.getInstance("RSA", BC);
+        kpGen.initialize(2048);
+
+        KeyPair pair = kpGen.generateKeyPair();
+        PrivateKey privKey = pair.getPrivate();
+        PublicKey publicKey = pair.getPublic();
+        IOUtils.write(CertUtils.content(publicKey), new FileOutputStream(new File("src/test/resources/rsa-public.key")));
+        IOUtils.write(CertUtils.content(privKey), new FileOutputStream(new File("src/test/resources/rsa-private.key")));
+    }
+
+    @Test
+    public void test_HmacAlgorithm() throws InterruptedException {
+        String data = "Hello, world!";
+        String key = "secret";
+
+
+        HMac hMac = new HMac(HmacAlgorithm.HmacSHA256, key.getBytes());
+        byte[] result = hMac.digest(data.getBytes());
+
+        String hmac = cn.hutool.core.codec.Base64.encode(result);
+        //Hmac 算法是一种单向散列函数，它通常用于计算消息身份验证码 (MAC)。
+        //因此，在 HMAC 中不存在解密的操作，只能通过重新计算 MAC 值来验证消息的完整性和真实性。
+        byte[] expected = hMac.digest(data.getBytes());
+        byte[] actual = cn.hutool.core.codec.Base64.decode(hmac);
+        Assert.assertArrayEquals(expected, actual);
+
+    }
+
+    /**
+     * 在Java中，可以使用 KeyPairGenerator 类的 getProvider() 方法来获取支持的密钥对算法列表。
+     */
+    @Test
+    public void test_listAlgorithm() {
+        Provider[] providers = Security.getProviders();
+
+        for (Provider provider : providers) {
+            System.out.println("Provider: " + provider.getName());
+            for (String key : provider.stringPropertyNames()) {
+                if (key.startsWith("KeyPairGenerator.")) {
+                    String algorithm = key.substring("KeyPairGenerator.".length());
+                    System.out.println("\tAlgorithm: " + algorithm);
+                    for (String className : provider.getProperty(key).split("\\|")) {
+                        try {
+                            Class<?> clazz = Class.forName(className);
+                            KeyPairGenerator kpg = (KeyPairGenerator) clazz.newInstance();
+                            System.out.println("\t\tClass: " + className + "\tStrength: " + kpg.getAlgorithm());
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
