@@ -1,7 +1,7 @@
 package com.dyrnq;
 
 import cn.hutool.core.io.resource.ClassPathResource;
-import com.cym.utils.VersionUtils;
+import com.dyrnq.utils.VersionUtils;
 import org.apache.commons.io.IOUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;

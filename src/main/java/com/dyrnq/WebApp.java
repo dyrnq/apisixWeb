@@ -2,7 +2,7 @@ package com.dyrnq;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.cym.utils.VersionUtils;
+import com.dyrnq.utils.VersionUtils;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
 import io.jsonwebtoken.Claims;
