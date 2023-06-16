@@ -82,15 +82,20 @@ input[name='param']{
             </div>
             </div>
 
-            <div class="layui-form-item" id="renew">
-                <label class="layui-form-label">是否开启自动renew证书</label>
-                <br>
-                <input type="hidden" name="renew">
-<!--                <input type="checkbox" name="renew" title="是|否" lay-skin="switch" value="1" lay-filter="demo-checkbox-filter">-->
-<!--                <input type="checkbox" name="agreement" value="1" title="是|否" lay-skin="switch" lay-filter="demo-checkbox-filter">-->
-                <input type="checkbox" name="agreement" value="1" title="是否同意" lay-filter="demo-checkbox-filter">
-                <br>
+            <div class="layui-form-item" id="domain">
+                <label class="layui-form-label">domain</label>
+                <div class="layui-input-block">
+                    <input type="text" name="domain" class="layui-input">
+                </div>
             </div>
+
+            <div class="layui-form-item" id="subject">
+                <label class="layui-form-label">subject</label>
+                <div class="layui-input-block">
+                    <input type="text" name="subject" class="layui-input">
+                </div>
+            </div>
+
 
             <div class="layui-form-item" id="supplier">
                 <label class="layui-form-label">供应商</label>
@@ -137,12 +142,7 @@ input[name='param']{
                 </div>
             </div>
 
-            <div class="layui-form-item" id="domain">
-                <label class="layui-form-label">domain</label>
-                <div class="layui-input-block">
-                    <input type="text" name="domain" class="layui-input">
-                </div>
-            </div>
+
 
             <div class="layui-form-item" id="aux">
                 <label class="layui-form-label">aux</label>
@@ -151,20 +151,18 @@ input[name='param']{
                 </div>
             </div>
 
-            <div class="layui-form-item" id="subject">
-                <label class="layui-form-label">subject</label>
-                <div class="layui-input-block">
-                    <input type="text" name="subject" class="layui-input">
-                </div>
-            </div>
 
 
-            <div class="layui-form-item" id="privateKey">
-                <label class="layui-form-label">privateKey</label>
-                <div class="layui-input-block">
-                    <input type="text" name="privateKey" class="layui-input">
-                </div>
+            <div class="layui-form-item" id="renew">
+                <label class="layui-form-label"></label>
+                <br>
+                <input type="hidden" name="renew">
+                <!--                <input type="checkbox" name="renew" title="是|否" lay-skin="switch" value="1" lay-filter="demo-checkbox-filter">-->
+                <!--                <input type="checkbox" name="agreement" value="1" title="是|否" lay-skin="switch" lay-filter="demo-checkbox-filter">-->
+                <input type="checkbox" name="agreement" value="1" title="开启自动renew证书" lay-filter="demo-checkbox-filter">
+                <br>
             </div>
+
 
             <div class="layui-form-item" style="margin-top:20px;margin-bottom:20px" id="certFile">
                 <label class="layui-form-label">cert</label>

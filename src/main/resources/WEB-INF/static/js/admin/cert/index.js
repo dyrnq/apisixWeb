@@ -25,7 +25,8 @@ function addLink(d) {
        let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">' + commonStr.clear + '</button>'
        let exptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">' + commonStr.export + '</button>'
        let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">' + commonStr.import + '</button>'
-       return editBtn+'&nbsp;'+delBtn;
+       let renewBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
+       return editBtn+'&nbsp;'+renewBtn+'&nbsp;'+delBtn;
     }
 }
 
@@ -58,7 +59,6 @@ $("#certFile").hide();
 
 function view(value){
     if(value == 1){
-        $("#privateKeyFile").show();
         $("#certFile").show();
         $("#renew").hide();
         $("#supplier").hide();
@@ -67,10 +67,9 @@ function view(value){
         $("#domain").hide();
         $("#subject").hide();
         $("#aux").hide();
-        $("#privateKey").hide();
+        $("#privateKeyFile").show();
         $("#Ca").hide();
     }else if(value == 2){
-        $("#privateKeyFile").hide();
         $("#certFile").hide();
         $("#renew").hide();
         $("#supplier").hide();
@@ -79,10 +78,9 @@ function view(value){
         $("#domain").show();
         $("#subject").show();
         $("#aux").hide();
-        $("#privateKey").hide();
+        $("#privateKeyFile").hide();
         $("#Ca").show();
     }else if(value == 0){
-        $("#privateKeyFile").hide();
         $("#certFile").hide();
         $("#renew").show();
         $("#supplier").show();
@@ -91,7 +89,7 @@ function view(value){
         $("#domain").show();
         $("#subject").show();
         $("#aux").show();
-        $("#privateKey").show();
+        $("#privateKeyFile").hide();
         $("#Ca").hide();
     }
 }
@@ -361,12 +359,12 @@ $.ajax({
             {type: 'checkbox', fixed: 'left'}
             , {field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
             , {field: 'domain', title: 'domain', width: 200}
-            , {field: 'renew', title: 'renew', width: 100}
-            , {field: 'caId', title: 'caId', width: 100}
             , {field: 'supplier', title: 'supplier', width: 100}
             , {field: 'encryption', title: 'encryption', width: 100}
             , {field: 'challenge', title: 'challenge', width: 100}
             , {field: 'subject', title: 'subject', width: 300, sort: true}
+            , {field: 'not_before', title: 'not_before', width: 150, sort: true}
+            , {field: 'not_after', title: 'not_after', width: 150, sort: true}
             , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
 
 
