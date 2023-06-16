@@ -183,6 +183,9 @@ public class CertUtils {
     public static String content(PrivateKey i) throws IOException {
         return pemWriter(i);
     }
+    public static String content(PublicKey i) throws IOException {
+        return pemWriter(i);
+    }
 
     public static String content(X509Certificate i) throws IOException {
         return pemWriter(i);
