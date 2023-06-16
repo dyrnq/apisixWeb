@@ -1,15 +1,19 @@
 function cleanData(d){
     if( d === true ){
         $("#div_id").hide();
+        $("#div_pass").hide();
         $('#addForm1 input[name="u"]').val("update");
     }else{
         $("#div_id").show();
+        $("#div_pass").show();
         $('#addForm1 input[name="u"]').val("add");
     }
 
     $('#addForm1 input[name="id"]').val("");
     $('#addForm1 input[name="name"]').val("");
     $('#addForm1 input[name="pass"]').val("");
+    $('#addForm1 input[name="email"]').val("");
+    $('#addForm1 input[name="phone"]').val("");
 }
 
 
@@ -20,9 +24,9 @@ function addLink(d) {
     }
    if (addLink.length > 0) {
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
-       let changePassBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="changePass">' + commonStr.edit + '</button>'
+       let changePassBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="changePass">改密</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       return changePassBtn+'&nbsp;'+delBtn;
+       return editBtn+'&nbsp;'+changePassBtn+'&nbsp;'+delBtn;
    }
 }
 
@@ -89,8 +93,12 @@ $('#addOver').click(function(){
       return obj;
     }, {});
 
-    formData['pass']= Base64.encode(Base64.encode($('#addForm1 input[name="pass"]').val()));
-
+    if ( 'add' == u ){
+        formData['pass']= Base64.encode(Base64.encode($('#addForm1 input[name="pass"]').val()));
+    }else{
+        formData['pass'] = null;
+    }
+    console.log(formData);
     $.ajax({
         type : 'POST',
         url: ctx + '/api/user/'+u,
@@ -133,6 +141,8 @@ $('#addOver').click(function(){
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
             ,{field: 'name', title: 'name', width: 80}
+            ,{field: 'email', title: 'email', width: 200}
+            ,{field: 'phone', title: 'phone', width: 200}
             ,{field: 'upstream', title: 'operation', fixed: 'right',  templet: addLink}
         ]]
         , done: function (res, curr, count){
@@ -271,7 +281,8 @@ $('#addOver').click(function(){
                     if(data.code=='200'){
                         $('#addForm1 input[name="id"]').val(data.data.id);
                         $('#addForm1 input[name="name"]').val(data.data.name);
-                        $('#addForm1 input[name="pass"]').val(data.data.pass);
+                        $('#addForm1 input[name="email"]').val(data.data.email);
+                        $('#addForm1 input[name="phone"]').val(data.data.phone);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
