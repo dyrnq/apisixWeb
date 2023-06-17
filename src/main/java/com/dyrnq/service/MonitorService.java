@@ -5,7 +5,8 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.system.oshi.OshiUtil;
 import com.sun.management.OperatingSystemMXBean;
 import org.noear.solon.annotation.Component;
-import org.noear.solon.annotation.Init;
+import org.noear.solon.core.bean.LifecycleBean;
+import oshi.SystemInfo;
 import oshi.software.os.OSFileStore;
 import oshi.util.FormatUtil;
 
@@ -14,29 +15,40 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.util.*;
-import oshi.SystemInfo;
+
 /**
  * 获取系统信息的业务逻辑实现类.
  *
  * @author amg * @version 1.0 Creation date: 2008-3-11 - 上午10:06:06
  */
 @Component
-public class MonitorService {
+public class MonitorService implements LifecycleBean {
 
     OperatingSystemMXBean osmxb;
     SystemInfo systemInfo;
-    @Init
-    public void afterInjection() {
 
-        osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-
-        systemInfo = new SystemInfo();
+    private static String formatByte(long byteNumber) {
+        //换算单位
+        double FORMAT = 1024.0;
+        double kbNumber = byteNumber / FORMAT;
+        if (kbNumber < FORMAT) {
+            return new DecimalFormat("#.##KB").format(kbNumber);
+        }
+        double mbNumber = kbNumber / FORMAT;
+        if (mbNumber < FORMAT) {
+            return new DecimalFormat("#.##MB").format(mbNumber);
+        }
+        double gbNumber = mbNumber / FORMAT;
+        if (gbNumber < FORMAT) {
+            return new DecimalFormat("#.##GB").format(gbNumber);
+        }
+        double tbNumber = gbNumber / FORMAT;
+        return new DecimalFormat("#.##TB").format(tbNumber);
     }
 
-    private SystemInfo getSystemInfo(){
+    private SystemInfo getSystemInfo() {
         return systemInfo;
     }
-
 
     public MonitorInfo getMonitorInfoOshi() {
 
@@ -84,9 +96,9 @@ public class MonitorService {
         //operatingSystem.getFamily();
 
         try {
-			cpuInfo.put("computerName", InetAddress.getLocalHost().getHostName());
-		} catch (UnknownHostException e) {
-		}
+            cpuInfo.put("computerName", InetAddress.getLocalHost().getHostName());
+        } catch (UnknownHostException e) {
+        }
 
 //        //服务器Ip
 //        try {
@@ -105,27 +117,8 @@ public class MonitorService {
 //        info.put("memInfo", getMemInfo());
         info.put("sysInfo", getSysInfo());
         // info.put("sysFileInfo", getSysFileInfo());
-        info.put("jvmProps",System.getProperties());
+        info.put("jvmProps", System.getProperties());
         return info;
-    }
-
-    private static String formatByte(long byteNumber) {
-        //换算单位
-        double FORMAT = 1024.0;
-        double kbNumber = byteNumber / FORMAT;
-        if (kbNumber < FORMAT) {
-            return new DecimalFormat("#.##KB").format(kbNumber);
-        }
-        double mbNumber = kbNumber / FORMAT;
-        if (mbNumber < FORMAT) {
-            return new DecimalFormat("#.##MB").format(mbNumber);
-        }
-        double gbNumber = mbNumber / FORMAT;
-        if (gbNumber < FORMAT) {
-            return new DecimalFormat("#.##GB").format(gbNumber);
-        }
-        double tbNumber = gbNumber / FORMAT;
-        return new DecimalFormat("#.##TB").format(tbNumber);
     }
 
     public Map getJvmInfo() {
@@ -151,4 +144,10 @@ public class MonitorService {
         return jvmInfo;
     }
 
+    @Override
+    public void start() throws Throwable {
+        osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+
+        systemInfo = new SystemInfo();
+    }
 }
