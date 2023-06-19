@@ -173,7 +173,7 @@ $('#dropAll').click(function(){
                 var dataX = checkStatus.data;
                 layer.alert(JSON.stringify(dataX));
                 break;
-            case 'deleteAll':
+            case 'deleteSelected':
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {

@@ -186,7 +186,7 @@ $('#addOver').click(function(){
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
-            case 'deleteAll':
+            case 'deleteSelected':
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {

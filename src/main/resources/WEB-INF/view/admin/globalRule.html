@@ -33,7 +33,7 @@ input[name='param']{
                 <legend>${i18n.get("menu.globalRule")}</legend>
             </fieldset>
 
-            <form action="${ctx}/adminPage/http" id="searchForm" method="post">
+            <form action="${ctx}/admin/http" id="searchForm" method="post">
                 <div class="layui-form">
                     <div class="layui-inline">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="add">${i18n.get("add.globalRule")}</button>
@@ -104,7 +104,8 @@ input[name='param']{
 
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">${i18n.get("commonStr.batchDelete")}</button>
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add"><i class="layui-icon  layui-icon-add-1"></i></button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteSelected"><i class="layui-icon  layui-icon-delete"></i></button>
     </div>
 </script>
 <script src="${ctx}/js/admin/globalRule/index.js?v=${jsrandom}" type="text/javascript"></script>

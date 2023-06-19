@@ -32,7 +32,7 @@ var layer = layui.layer;
 var laypage = layui.laypage;
 var table = layui.table;
 var form = layui.form;
-
+var dropdown = layui.dropdown;
 
 
 
@@ -176,7 +176,7 @@ $('#dropAll').click(function(){
             case 'LAYTABLE_TIPS':
                 layer.alert(desc.route, { area: ['500px', '300px'] });
                 break;
-            case 'LAYTABLE_CLEANS':
+            case 'clear':
                 layer.confirm(commonStr.confirmClear, function(index) {
                     $.ajax({
                         type : 'POST',
@@ -194,14 +194,88 @@ $('#dropAll').click(function(){
                     });
                 });
                 break;
-            case 'LAYTABLE_HELPS':
+            case 'more':
+
+                var that = this;
+
+
+                dropdown.render({
+                    elem: that,
+                    show: true,
+                    data: [
+                        {title: '删除',id: 'del'}
+                        ,{title: '开启',id: 'enable'}
+                        ,{title: '关闭',id: 'disable'}
+                    ],
+                    click: function(data, othis){
+                    var dataX = table.checkStatus(obj.config.id).data;
+                    //layer.alert(JSON.stringify(dataX));
+                    if(data.id === 'del'){
+                    var allId = [];
+                    if (dataX.length === 0) {
+                        layer.msg(commonStr.pleaseSelect);
+                    } else {
+                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
+                            for (let i = 0; i < dataX.length; i++) {
+                                const val = dataX[i];
+                                allId.push(val.id);
+                            }
+                            $.ajax({
+                                url: ctx + '/api/route/del',
+                                type: 'post',
+                                contentType: 'application/json',
+                                data: JSON.stringify({id: allId}),
+                                success:function (data,statusText) {
+                                if(data.code=='200'){
+                                    table.reload('demo',{});
+                                    layer.msg(commonStr.delSuccess);
+                                }else{
+                                    layer.msg(data.description);
+                                }
+                                },
+                                'error':function () {
+                                layer.msg(commonStr.errorInfo);
+                                }
+                            });
+                        layer.close(index);
+                        });
+                    }
+
+
+                    } else {
+                    //layer.alert(JSON.stringify(dataX));
+                    //layer.msg('得到表格下拉菜单 id：'+ data.id);
+                    }
+                    },
+                    align: 'right', // 右对齐弹出
+                    style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
+                })
+                dropdown.reload(that,{});
+              break;
+
+
+            case 'help':
                 window.open("https://apisix.apache.org/zh/docs/apisix/admin-api/#route");
                 break;
             case 'getCheckData':
                 var dataX = checkStatus.data;
                 layer.alert(JSON.stringify(dataX));
                 break;
-            case 'deleteAll':
+            case 'add':
+                cleanData(false);
+                layer.open({
+                    type: 1,
+                    area: ['800px', '600px'],
+                    title: 'Add Route',
+                    content : $('#windowDiv'),
+                    anim: 'slideRight',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    skin: 'layui-layer-win10'
+                });
+                break;
+            case 'deleteSelected':
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {

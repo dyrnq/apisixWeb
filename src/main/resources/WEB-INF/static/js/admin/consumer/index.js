@@ -195,7 +195,7 @@ $('#dropAll').click(function(){
             case 'LAYTABLE_TIPS':
                 layer.alert(desc.consumer);
                 break;
-            case 'deleteAll':
+            case 'deleteSelected':
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {

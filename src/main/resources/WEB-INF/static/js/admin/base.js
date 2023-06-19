@@ -61,19 +61,7 @@ $(function() {
 	$("a[href='" + ctx + url + "']").parent().addClass("layui-this");
 
 
-//	$.ajax({
-//		type: 'POST',
-//		url: ctx + '/adminPage/login/getLocalType',
-//		dataType: 'json',
-//		success: function(data) {
-//			if (data.success) {
-//				$("#localType").html(data.obj);
-//			}
-//		},
-//		error: function() {
-//			layer.alert(commonStr.errorInfo);
-//		}
-//	});
+
 
 	// 判断屏幕分辨率, 给table加上lay-size="sm"
 	//if (document.body.clientWidth <= 1600) {

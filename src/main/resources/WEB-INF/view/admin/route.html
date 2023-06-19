@@ -32,7 +32,7 @@ input[name='param']{
                 <legend>${i18n.get("menu.route")}</legend>
             </fieldset>
 
-            <form action="${ctx}/adminPage/http" id="searchForm" method="post">
+            <form action="${ctx}/admin/http" id="searchForm" method="post">
                 <div class="layui-form">
                     <div class="layui-inline">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="add">${i18n.get("add.route")}</button>
@@ -104,10 +104,19 @@ input[name='param']{
 <#include 'admin/script.html'/>
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button class="layui-btn layui-btn-sm" lay-event="deleteAll">${i18n.get("commonStr.batchDelete")}</button>
+
+        <button class="layui-btn layui-btn-sm layui-btn-normal" lay-event="add"><i class="layui-icon  layui-icon-add-1"></i></button>
+        <button class="layui-btn layui-btn-sm" lay-event="deleteSelected"><i class="layui-icon  layui-icon-delete"></i></button>
         <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display: none">获取选中行数据</button>
         <button class="layui-btn layui-btn-sm" lay-event="statusAll1">${i18n.get("commonStr.batchEnable")}</button>
         <button class="layui-btn layui-btn-sm" lay-event="statusAll0">${i18n.get("commonStr.batchDisable")}</button>
+        <button class="layui-btn layui-btn-sm" lay-event="more">批量操作<i class="layui-icon layui-icon-down layui-font-12"></i></button>
+
+
+        <button class="layui-btn layui-btn-sm layui-btn-danger" lay-event="clear"><i class="layui-icon  layui-icon-delete"></i></button>
+<!--        <button class="layui-btn layui-btn-sm layui-btn-primary layui-border-black" lay-event="help"><i class="layui-icon  layui-icon-help"></i></button>-->
+
+
     </div>
 </script>
 <script src="${ctx}/js/admin/route/index.js?v=${jsrandom}" type="text/javascript"></script>

@@ -167,7 +167,7 @@ $('#addOver').click(function(){
             case 'LAYTABLE_TIPS':
                 layer.alert(desc.upstream, { area: ['500px', '300px'] });
                 break;
-            case 'deleteAll':
+            case 'deleteSelected':
                 var dataX = checkStatus.data;
                 var allId = [];
                 if (dataX.length === 0) {
