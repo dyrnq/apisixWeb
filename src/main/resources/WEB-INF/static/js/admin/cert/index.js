@@ -577,7 +577,7 @@ $.ajax({
                     layer.alert(commonStr.errorInfo);
                 }
             });
-        } else if (layEvent === 'edit'){//编辑,暂无方法体
+        } else if (layEvent === 'edit'){
 
                 //console.log(obj.data.id);
                 cleanData(true);

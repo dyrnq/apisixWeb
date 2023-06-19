@@ -242,7 +242,7 @@ table.on('toolbar(test)', function (obj) {
 
                 layer.close(index);
             });
-        }else if (layEvent === 'edit'){//编辑,暂无方法体
+        } else if (layEvent === 'edit'){
 
             cleanData(true);
             $.ajax({

@@ -217,7 +217,7 @@ table.on('toolbar(test)', function (obj) {
 
         } else if(layEvent === 'del'){ //删除
 
-        } else if (layEvent === 'edit'){//编辑,暂无方法体
+        } else if (layEvent === 'edit'){
 
         } else if (layEvent === 'detail_consumer_schema'){
             editor.setValue("",-1);
