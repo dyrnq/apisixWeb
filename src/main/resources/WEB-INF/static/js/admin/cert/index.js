@@ -94,7 +94,11 @@ function addLink(d) {
        var issueBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="issue">' + 'issue'+ '</button>'
 
 
-       if( d.approach != enum_Approach.trustCA ){
+//       const arr = [enum_Approach.trustCA,enum_Approach.privateCA];
+//       console.log(d.id+"=============="+d.approach);
+
+       //if (arr.indexOf(d.approach) !== -1) {
+       if ( d.approach == enum_Approach.manual ) {
             renewBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
             issueBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="issue">' + 'issue'+ '</button>'
        }
@@ -212,19 +216,44 @@ $('#reloadCA').click(function(){
 
 });
 
-
+var global_index=0;
 $('#newCA').click(function(){
-    layer.open({
-        type: 1,
-        area: ['500px', '300px'],
-        title: 'New CA',
-        content : $('#newDiv'),
-        anim: 'slideRight',
-        shade: 0.6, // 遮罩透明度
-        shadeClose: true, // 点击遮罩区域，关闭弹层
-        maxmin: true, // 允许全屏最小化
-        skin: 'layui-layer-win10'
-    });
+$('#caForm input, #caForm select, #caForm textarea, #caForm checkbox').val('');
+layer.open({
+    type: 1,
+    area: ['500px', '300px'],
+    title: 'New CA',
+    content : $('#newDiv'),
+    anim: 'slideRight',
+    shade: 0.6, // 遮罩透明度
+    shadeClose: true, // 点击遮罩区域，关闭弹层
+    maxmin: true, // 允许全屏最小化
+    skin: 'layui-layer-win10',
+      success: function(layero, index, that){
+//            // 弹层的最外层元素的 jQuery 对象
+//            console.log(layero);
+//            // 弹层的索引值
+//            console.log(index);
+//            // 弹层内部原型链中的 this --- 2.8+
+//            console.log(that);
+        global_index=index;
+      }
+});
+
+});
+
+$('#listCA').click(function(){
+            layer.open({
+                type: 2,
+                area: ['1000px', '600px'],
+                title: 'List CA',
+                content: ctx + '/admin/ca',
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
 
 });
 
@@ -237,6 +266,7 @@ $('#newCAOver').click(function (){
         success : function(data) {
             if(data.code=='200'){
                 layer.msg('新建成功');
+                layer.close(global_index);
             } else {
                 layer.msg(data.description);
             }
@@ -513,36 +543,40 @@ $.ajax({
                 layer.close(index);
             });
         } else if (layEvent === 'renew'){
-            if (obj.data.approach == enum_Approach.trustCA){
-                $.ajax({
-                    url: ctx + '/api/cert/renew',
-                    type:'post',
-                    contentType: 'application/json',
-                    data:JSON.stringify({id:obj.data.id}),
-                    success:function (data,statusText) {
-                        if(data.code=='200'){
-                            layer.msg('ok');
-                        }
+            $.ajax({
+                url: ctx + '/api/cert/renew',
+                type:'post',
+                contentType: 'application/json',
+                data:JSON.stringify({id:obj.data.id}),
+                success:function (data,statusText) {
+                    if(data.code=='200'){
+                        layer.msg('ok');
+                    }else{
+                        layer.alert(data.description);
                     }
-                });
-            }
+                },
+                'error':function () {
+                    layer.alert(commonStr.errorInfo);
+                }
+            });
+
         } else if (layEvent === 'issue'){
-
-
-            if (obj.data.approach == enum_Approach.trustCA){
-                $.ajax({
-                    url: ctx + '/api/cert/issue',
-                    type:'post',
-                    contentType: 'application/json',
-                    data:JSON.stringify({id:obj.data.id}),
-                    success:function (data,statusText) {
-                        if(data.code=='200'){
-                            layer.msg('ok');
-                        }
+            $.ajax({
+                url: ctx + '/api/cert/issue',
+                type:'post',
+                contentType: 'application/json',
+                data:JSON.stringify({id:obj.data.id}),
+                success:function (data,statusText) {
+                    if(data.code=='200'){
+                        layer.msg('ok');
+                    }else{
+                        layer.alert(data.description);
                     }
-                });
-            }
-
+                },
+                'error':function () {
+                    layer.alert(commonStr.errorInfo);
+                }
+            });
         } else if (layEvent === 'edit'){//编辑,暂无方法体
 
                 //console.log(obj.data.id);

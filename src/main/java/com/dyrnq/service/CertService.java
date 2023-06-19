@@ -176,6 +176,8 @@ public class CertService {
                 cert.setNotAfter(x509Cert.getNotAfter().getTime());
                 cert.setNotBefore(x509Cert.getNotBefore().getTime());
                 cert.setSubject(x509Cert.getSubjectDN().toString());
+            }else{
+                throw new RuntimeException("error");
             }
         } else if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.http.getId()) {
             String[] dms = StringUtils.split(cert.getDomain(), ",");
@@ -200,6 +202,7 @@ public class CertService {
 
             } catch (Exception ex) {
                 logger.error("Failed to get a certificate for domains " + domains, ex);
+                throw new RuntimeException(ex);
             }
         }
 

@@ -190,4 +190,10 @@ public class AdminController extends BaseController{
         model.put("dnsapi",certService.getAcmeshDnsapi());
         return model;
     }
+    @Mapping("ca")
+    public Object ca(Context ctx) {
+        ModelAndView model = new ModelAndView("admin/ca.html");
+        return model;
+    }
+
 }

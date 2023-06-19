@@ -1,18 +1,24 @@
 package com.dyrnq.controller.api;
 
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.PageUtil;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.CaMapper;
+import com.dyrnq.dso.CertMapper;
 import com.dyrnq.model.Ca;
+import com.dyrnq.model.Cert;
 import com.dyrnq.service.CertService;
 import com.dyrnq.utils.CertUtils;
 import com.dyrnq.utils.X509Holder;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
+import org.noear.wood.MapperWhereQ;
+import org.noear.wood.ext.Act1;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -29,13 +35,19 @@ public class CaController extends ApiController {
 
     @Inject
     CaMapper caMapper;
-
+    @Inject
+    CertMapper certMapper;
 
     @Mapping("")
     public PageResult query(Context ctx, int page, int limit) {
         try {
             int start = PageUtil.getStart(page - 1, limit);
             IPage<Ca> p = caMapper.selectPage(start, limit, null);
+            List<Ca> cerList = p.getList();
+            cerList.forEach(ca -> {
+                ca.setCert("***");
+                ca.setKey("***");
+            });
             return PageResult.succeed(p.getList(), p.getTotal());
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -47,6 +59,13 @@ public class CaController extends ApiController {
     public Result add(Context ctx, Ca ca) {
         try {
             //自签名
+            if(StringUtils.isBlank(ca.getSubject())){
+                ca.setSubject("CN="+ca.getTitle());
+            }
+            if(StringUtils.isBlank(ca.getId())){
+                ca.setId(UUID.randomUUID().toString(true));
+            }
+
             X509Holder x509Holder = CertUtils.genCA(ca.getSubject());
             ca.setCert(x509Holder.getCert());
             ca.setKey(x509Holder.getKey());
@@ -73,6 +92,27 @@ public class CaController extends ApiController {
                 o.add(m);
             }
             return Result.succeed(o);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping("del")
+    public Result del(Context ctx, String... id) {
+        try {
+            Act1<MapperWhereQ> condition = mapperWhereQ -> {
+                mapperWhereQ.whereEq("ca_id", id[0]);
+            };
+            long count = certMapper.selectCount(condition);
+            if(count>0){
+                return Result.failure("data association cannot be deleted");
+            }else{
+                for (String i : id) {
+                    caMapper.deleteById(i);
+                }
+                return Result.succeed("ok");
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             return Result.failure(e.getMessage());

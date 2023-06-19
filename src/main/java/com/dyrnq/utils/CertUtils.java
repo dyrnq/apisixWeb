@@ -329,7 +329,7 @@ public class CertUtils {
         JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter();
         certConverter.setProvider(BC);
 
-        X509Certificate caCert = certConverter.getCertificate(certificateHolder);
+        X509Certificate certificate = certConverter.getCertificate(certificateHolder);
 
 //        //将PKCS#1私钥转换为PKCS#8格式
 //        JcaPEMKeyConverter converter = new JcaPEMKeyConverter().setProvider("BC");
@@ -341,9 +341,10 @@ public class CertUtils {
 //        PrivateKey privateKey = KeyFactory.getInstance("RSA", "BC").generatePrivate(pkcs8Spec);
 
 
-        holder.setCert(CertUtils.content(caCert));
+        holder.setCert(CertUtils.content(certificate));
         holder.setKey(CertUtils.content(privKey));
-
+        holder.setCertificate(certificate);
+        holder.setKeyPair(keyPair);
         return holder;
     }
 
@@ -353,7 +354,7 @@ public class CertUtils {
 //    PemObject pemObject = new PemObject("PRIVATE KEY", pki.toASN1Primitive().getEncoded());
 
 
-    private static String toPKCS8(PrivateKey pkcs1PrivateKey) throws NoSuchAlgorithmException, IOException {
+    public static String toPKCS8(PrivateKey pkcs1PrivateKey) throws NoSuchAlgorithmException, IOException {
         // Get the encoded bytes of the private key
         byte[] encodedPrivateKey = pkcs1PrivateKey.getEncoded();
 
