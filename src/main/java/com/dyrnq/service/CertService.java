@@ -212,9 +212,7 @@ public class CertService {
 
 
     public void issue(Cert cert) throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, OperatorCreationException {
-        if (cert.getApproach() == Approach.manual.getId()) {
-            this.manual(cert);
-        } else if (cert.getApproach() == Approach.trustCA.getId()) {
+        if (cert.getApproach() == Approach.trustCA.getId()) {
             this.trustCA(cert);
         } else if (cert.getApproach() == Approach.privateCA.getId()) {
             this.privateCA(cert);
@@ -222,9 +220,7 @@ public class CertService {
     }
 
     public void renew(Cert cert) throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, OperatorCreationException {
-        if (cert.getApproach() == Approach.manual.getId()) {
-            this.manual(cert);
-        } else if (cert.getApproach() == Approach.trustCA.getId()) {
+        if (cert.getApproach() == Approach.trustCA.getId()) {
             this.trustCA(cert);
         } else if (cert.getApproach() == Approach.privateCA.getId()) {
             this.privateCA(cert);
