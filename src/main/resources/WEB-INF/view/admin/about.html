@@ -33,24 +33,90 @@ input[name='param']{
                 <legend>${i18n.get("menu.about")}</legend>
             </fieldset>
 
-
-
-            <div class="layui-tab" lay-filter="test-hash">
-                <ul class="layui-tab-title">
-                    <li class="layui-this" lay-id="11">标签1</li>
-                    <li lay-id="22">标签2</li>
-                    <li lay-id="33">标签3</li>
-                    <li lay-id="44">标签4</li>
-                    <li lay-id="55">标签5</li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">内容-1</div>
-                    <div class="layui-tab-item">内容-2</div>
-                    <div class="layui-tab-item">内容-3</div>
-                    <div class="layui-tab-item">内容-4</div>
-                    <div class="layui-tab-item">内容-5</div>
+            <div class="layui-bg-gray" style="padding: 16px;">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">项目介绍</div>
+                            <div class="layui-card-body">
+                                ${projectName}是一个Apisix的webui界面,该项目使用apisix的<a href="https://apisix.apache.org/docs/apisix/admin-api/" target="_blank">管理API(即数据面API)</a>实现了对apisix实例的业务操作!</br>
+                                <div style="margin-top:5px;margin-bottom:5px;">
+                                项目主要功能包括
+                                </div>
+                                <li>基于管理API的Route,StreamRoute等增删改查</li>
+                                <li>多Apisix实例管理</li>
+                                <li>批量删除规则</li>
+                                <li>一键清空所有规则</li>
+                                <li>Apisix接口数据导入导出</li>
+                                <li>结合acme.sh实现DNS-01的证书申请</li>
+                                <li>结合acme4j实现HTTP-01的证书申请</li>
+                                <li>自签名证书管理</li>
+                                <li>过期证书自动续签</li>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">技术栈</div>
+                            <div class="layui-card-body">
+                                <li>JDK8</li>
+                                <li><a href="https://maven.apache.org/" target="_blank">Apache maven</a></li>
+                                <li><a href="https://www.docker.com/" target="_blank">Docker</a></li>
+                                <li><a href="https://solon.noear.org/" target="_blank">Solon</a>
+                                    <svg width="16" height="16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C32.2347 44 38.9998 37.4742 38.9998 29.0981C38.9998 27.0418 38.8953 24.8375 37.7555 21.4116C36.6157 17.9858 36.3861 17.5436 35.1809 15.4279C34.666 19.7454 31.911 21.5448 31.2111 22.0826C31.2111 21.5231 29.5445 15.3359 27.0176 11.6339C24.537 8 21.1634 5.61592 19.1853 4C19.1853 7.06977 18.3219 11.6339 17.0854 13.9594C15.8489 16.2849 15.6167 16.3696 14.0722 18.1002C12.5278 19.8308 11.8189 20.3653 10.5274 22.4651C9.23596 24.565 9 27.3618 9 29.4181C9 37.7942 15.7653 44 24 44Z" fill="none" stroke="#d0021b" stroke-width="4" stroke-linejoin="round"/></svg>
+                                    <svg width="16" height="16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C32.2347 44 38.9998 37.4742 38.9998 29.0981C38.9998 27.0418 38.8953 24.8375 37.7555 21.4116C36.6157 17.9858 36.3861 17.5436 35.1809 15.4279C34.666 19.7454 31.911 21.5448 31.2111 22.0826C31.2111 21.5231 29.5445 15.3359 27.0176 11.6339C24.537 8 21.1634 5.61592 19.1853 4C19.1853 7.06977 18.3219 11.6339 17.0854 13.9594C15.8489 16.2849 15.6167 16.3696 14.0722 18.1002C12.5278 19.8308 11.8189 20.3653 10.5274 22.4651C9.23596 24.565 9 27.3618 9 29.4181C9 37.7942 15.7653 44 24 44Z" fill="none" stroke="#d0021b" stroke-width="4" stroke-linejoin="round"/></svg>
+                                    <svg width="16" height="16" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C32.2347 44 38.9998 37.4742 38.9998 29.0981C38.9998 27.0418 38.8953 24.8375 37.7555 21.4116C36.6157 17.9858 36.3861 17.5436 35.1809 15.4279C34.666 19.7454 31.911 21.5448 31.2111 22.0826C31.2111 21.5231 29.5445 15.3359 27.0176 11.6339C24.537 8 21.1634 5.61592 19.1853 4C19.1853 7.06977 18.3219 11.6339 17.0854 13.9594C15.8489 16.2849 15.6167 16.3696 14.0722 18.1002C12.5278 19.8308 11.8189 20.3653 10.5274 22.4651C9.23596 24.565 9 27.3618 9 29.4181C9 37.7942 15.7653 44 24 44Z" fill="none" stroke="#d0021b" stroke-width="4" stroke-linejoin="round"/></svg>
+                                </li>
+                                <li><a href="https://layui.dev/" target="_blank">Layui</a></li>
+                                <li><a href="https://apisix.apache.org/" target="_blank">Apache apisix</a></li>
+                                <li><a href="https://github.com/acmesh-official/acme.sh" target="_blank">acme.sh</a></li>
+                                <li><a href="https://github.com/shred/acme4j" target="_blank">acme4j</a></li>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">开发人员</div>
+                            <div class="layui-card-body">
+                                <table class="layui-hide" id="ID-table-demo-data"></table>
+                            </div>
+                        </div>
+                    </div>
+<!--                    <div class="layui-col-md6">-->
+<!--                        <div class="layui-card">-->
+<!--                            <div class="layui-card-header"></div>-->
+<!--                            <div class="layui-card-body">-->
+
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">常见问题</div>
+                            <div class="layui-card-body">
+
+                                <li><a href="https://apisix.apache.org/docs/apisix/admin-api/#configuration" target="_blank">如何打开apisix的Admin API?</a></li>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+
+
             </div>
+
+
 
 
 
