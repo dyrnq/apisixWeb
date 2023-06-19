@@ -15,9 +15,10 @@ public class Ca {
     private
     String cert;
 
-    @Column("private_key")
+    //在关系型数据库中，字段名不应该使用数据库的保留字作为名称。_r 表示raw(data)
+    @Column("key_r")
     private
-    String privateKey;
+    String key;
 
     @Column("not_after")
     private
@@ -53,12 +54,12 @@ public class Ca {
         this.cert = cert;
     }
 
-    public String getPrivateKey() {
-        return privateKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Long getNotAfter() {

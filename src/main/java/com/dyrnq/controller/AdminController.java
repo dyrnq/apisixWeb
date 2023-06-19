@@ -1,9 +1,15 @@
 package com.dyrnq.controller;
 
 
+import cn.hutool.core.collection.ListUtil;
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.CfgExtractor;
+import com.dyrnq.service.CertService;
 import com.dyrnq.service.MonitorService;
+import enumeration.Approach;
+import enumeration.Challenge;
+import enumeration.Encryption;
+import enumeration.Supplier;
 import org.noear.solon.Utils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -14,6 +20,11 @@ import org.noear.solon.core.handle.Result;
 import org.noear.solon.i18n.annotation.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.EnumMap;
+import java.util.Map;
 
 
 @Mapping("admin")
@@ -167,9 +178,16 @@ public class AdminController extends BaseController{
 
     }
 
+    @Inject
+    CertService certService;
     @Mapping("cert")
-    public Object cert() {
+    public Object cert(Context ctx) {
         ModelAndView model = new ModelAndView("admin/cert.html");
+        model.put("approach",Approach.values());
+        model.put("supplier", Supplier.values());
+        model.put("challenge", Challenge.values());
+        model.put("encryption", Encryption.values());
+        model.put("dnsapi",certService.getAcmeshDnsapi());
         return model;
     }
 }

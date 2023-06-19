@@ -23,23 +23,25 @@ public class Cert {
 
     @Column("ca_id")
     private
-    String caId; //如果是自签名证书 table ca id
+    String caId; //如果是自签名证书 关联数据库中ca表的id字段
 
     @Column("approach")
     private
-    Integer approach;// 方法 0=免费证书 1=手工上传 2=自签名
+    Integer approach;
 
     @Column("renew")
     private
-    Integer renew;// 是否开启自动renew证书
+    Integer renew;// 开启自动renew证书,1为开启
+
 
     @Column("supplier")
     private
-    Integer supplier;//供应商 0=Let's Encrypt 1=AliCloud 2=TencentCloud
+    Integer supplier;
+
 
     @Column("encryption")
     private
-    Integer encryption;//加密方式 0='RSA' 1='ECC'
+    Integer encryption;
 
     @Column("subject")
     private
@@ -50,9 +52,10 @@ public class Cert {
     Integer challenge; // 使用 ACME 标准定义的验证方式来验证您对证书中域名的控制权。80=HTTP-01  53=DNS-01
     //https://letsencrypt.org/zh-cn/docs/challenge-types/
 
-    @Column("private_key")
+    //在关系型数据库中，字段名不应该使用数据库的保留字作为名称。_r 表示raw(data)
+    @Column("key_r")
     private
-    String privateKey;
+    String key;
 
     @Column("not_after")
     private
@@ -70,11 +73,39 @@ public class Cert {
     private
     String instId; //inst table id
 
+    @Column("dnsapi")
+    private
+    String dnsapi; //对应 acme.sh --dns <dnsapi>
+
     @Exclude
     private UploadedFile certFile;
     @Exclude
     private UploadedFile keyFile;
+    @Exclude
+    private
+    Integer issue;// 立即申请?
+    @Exclude
+    private
+    String encryptionDisplay;
 
+    @Exclude
+    private
+    String approachDisplay;
+
+    @Exclude
+    private
+    String challengeDisplay;
+    @Exclude
+    private
+    String supplierDisplay;
+
+    public String getEncryptionDisplay() {
+        return this.encryptionDisplay;
+    }
+
+    public void setEncryptionDisplay(String encryptionDisplay) {
+        this.encryptionDisplay = encryptionDisplay;
+    }
 
     public String getId() {
         return id;
@@ -156,12 +187,12 @@ public class Cert {
         this.challenge = challenge;
     }
 
-    public String getPrivateKey() {
-        return privateKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public Long getNotAfter() {
@@ -211,5 +242,45 @@ public class Cert {
 
     public void setNotBefore(Long notBefore) {
         this.notBefore = notBefore;
+    }
+
+    public String getDnsapi() {
+        return dnsapi;
+    }
+
+    public void setDnsapi(String dnsapi) {
+        this.dnsapi = dnsapi;
+    }
+
+    public String getApproachDisplay() {
+        return approachDisplay;
+    }
+
+    public void setApproachDisplay(String approachDisplay) {
+        this.approachDisplay = approachDisplay;
+    }
+
+    public String getChallengeDisplay() {
+        return challengeDisplay;
+    }
+
+    public void setChallengeDisplay(String challengeDisplay) {
+        this.challengeDisplay = challengeDisplay;
+    }
+
+    public String getSupplierDisplay() {
+        return supplierDisplay;
+    }
+
+    public void setSupplierDisplay(String supplierDisplay) {
+        this.supplierDisplay = supplierDisplay;
+    }
+
+    public Integer getIssue() {
+        return issue;
+    }
+
+    public void setIssue(Integer issue) {
+        this.issue = issue;
     }
 }

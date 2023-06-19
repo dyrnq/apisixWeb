@@ -1,23 +1,23 @@
 package com.dyrnq.utils;
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import java.security.KeyPair;
+import java.security.cert.X509Certificate;
 
 public class X509Holder {
 
-    @SerializedName("cert")
-    @Expose
+
     private String cert;
-    @SerializedName("key")
-    @Expose
     private String key;
 
-    public void setCert(String cert) {
-        this.cert = cert;
-    }
+    private X509Certificate certificate;
+    private KeyPair keyPair;
 
     public String getCert() {
         return cert;
+    }
+
+    public void setCert(String cert) {
+        this.cert = cert;
     }
 
     public String getKey() {
@@ -26,5 +26,21 @@ public class X509Holder {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public X509Certificate getCertificate() {
+        return certificate;
+    }
+
+    public void setCertificate(X509Certificate certificate) {
+        this.certificate = certificate;
+    }
+
+    public KeyPair getKeyPair() {
+        return keyPair;
+    }
+
+    public void setKeyPair(KeyPair keyPair) {
+        this.keyPair = keyPair;
     }
 }

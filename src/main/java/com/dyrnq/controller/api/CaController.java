@@ -14,6 +14,7 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
 
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,10 @@ public class CaController extends ApiController {
             //自签名
             X509Holder x509Holder = CertUtils.genCA(ca.getSubject());
             ca.setCert(x509Holder.getCert());
-            ca.setPrivateKey(x509Holder.getKey());
+            ca.setKey(x509Holder.getKey());
+            X509Certificate x509Cert = x509Holder.getCertificate();
+            ca.setNotAfter(x509Cert.getNotAfter().getTime());
+            ca.setNotBefore(x509Cert.getNotBefore().getTime());
             caMapper.insert(ca, true);
             return Result.succeed("ok");
         } catch (Exception e) {

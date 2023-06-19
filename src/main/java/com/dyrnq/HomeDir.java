@@ -9,12 +9,26 @@ public class HomeDir {
     private String homeAbsolutePath;
     private String tmpAbsolutePath;
 
-    public HomeDir(){
+    private String acmeHome;
+
+    private String acmeShDir;
+    private String acmeSh;
+
+
+    public HomeDir() {
         super();
     }
-    public HomeDir(String homeAbsolutePath,String tmpAbsolutePath){
+
+    public HomeDir(String homeAbsolutePath,
+                   String tmpAbsolutePath,
+                   String acmeShDir,
+                   String acmeSh,
+                   String acmeHome) {
         this.homeAbsolutePath = homeAbsolutePath;
         this.tmpAbsolutePath = tmpAbsolutePath;
+        this.acmeSh = acmeSh;
+        this.acmeShDir = acmeShDir;
+        this.acmeHome = acmeHome;
     }
 
     public String getHomeAbsolutePath() {
@@ -24,4 +38,19 @@ public class HomeDir {
     public String getTmpAbsolutePath() {
         return tmpAbsolutePath;
     }
+
+    public String getAcmeHome() {
+        return acmeHome;
+    }
+    public String getAcmeshDir() {
+        return acmeShDir;
+    }
+
+    public String getAcmeSh() {
+        return acmeSh;
+    }
+
+//    public void setAcmeSh(String acmeSh) {
+//        this.acmeSh = acmeSh;
+//    }
 }

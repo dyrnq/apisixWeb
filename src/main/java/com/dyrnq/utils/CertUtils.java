@@ -11,6 +11,11 @@ import org.bouncycastle.cert.X509v3CertificateBuilder;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
 import org.bouncycastle.cert.jcajce.JcaX509ExtensionUtils;
 import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
+import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
+import org.bouncycastle.jce.ECNamedCurveTable;
+import org.bouncycastle.jce.spec.ECNamedCurveParameterSpec;
 import org.bouncycastle.openssl.PEMKeyPair;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
@@ -40,8 +45,12 @@ import java.util.*;
 
 public class CertUtils {
 
-    private static final int DEFAULT_KEY_SIZE = 4096;
+    private static final int DEFAULT_KEY_SIZE = 2048;
     private static final int DEFAULT_DAYS = 100 * 365;
+
+    private static final String EncryRSA = "RSA";
+    private static final String EncryECC = "ECC";
+
 
     private static final String BC = org.bouncycastle.jce.provider.BouncyCastleProvider.PROVIDER_NAME;
 
@@ -128,7 +137,7 @@ public class CertUtils {
     public static PrivateKey load(String in) throws IOException, CertificateException {
         Reader reader = null;
         try {
-            reader = new StringReader((String) in);
+            reader = new StringReader(in);
 
 
             PEMParser parser = new PEMParser(reader);
@@ -183,6 +192,7 @@ public class CertUtils {
     public static String content(PrivateKey i) throws IOException {
         return pemWriter(i);
     }
+
     public static String content(PublicKey i) throws IOException {
         return pemWriter(i);
     }
@@ -191,48 +201,67 @@ public class CertUtils {
         return pemWriter(i);
     }
 
-    public static X509Holder gen(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null);
+    public static X509Holder genRSA(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryRSA, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, null, null);
     }
 
-    public static X509Holder gen(String subjectDN, String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni);
+    public static X509Holder genRSA(String subjectDN, String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryRSA, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, null, null);
     }
 
-    public static X509Holder genCA(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null);
-    }
-
-    public static X509Holder genCA(String subjectDN, int days) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN, true, days, DEFAULT_KEY_SIZE, null);
+    public static X509Holder genRSA(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryRSA, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, issuerCA, issuerCAKey);
     }
 
 
-    public static X509Holder gen(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
+    public static X509Holder genECC(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, null, null);
     }
 
-    public static X509Holder gen(
-            String subjectDN,
-            boolean isCA,
-            int days,
-            int keySize,
-            String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
-        return gen(subjectDN, isCA, days, keySize, sni, null, null);
+    public static X509Holder genECC(String subjectDN, String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, null, null);
     }
 
-    public static X509Holder gen(
+    public static X509Holder genECC(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryECC, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, issuerCA, issuerCAKey);
+    }
+
+
+    public static X509Holder genCA(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryRSA, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, null, null);
+    }
+
+    public static X509Holder genCA(String subjectDN, int days) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryRSA, subjectDN, true, days, DEFAULT_KEY_SIZE, null, null, null);
+    }
+
+
+    private static X509Holder gen(
+            String algorithm,
             String subjectDN,
             boolean isCA,
             int days,
             int keySize,
             String[] sni,
-            X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException {
+            X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
         X509Holder holder = new X509Holder();
 
-        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
-        keyPairGenerator.initialize(keySize);
+        KeyPairGenerator keyPairGenerator = null;
 
+        if (StringUtils.isBlank(algorithm) || StringUtils.equalsIgnoreCase("RSA", algorithm)) {
+            keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(keySize);
+        } else if (StringUtils.equalsIgnoreCase("ECC", algorithm)) {
+            try {
+                keyPairGenerator = KeyPairGenerator.getInstance("EC", "BC");
+            } catch (NoSuchProviderException e) {
+                throw new RuntimeException(e);
+            }
+            // 选择 ECC 曲线
+            ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("prime256v1");
+            // 生成密钥对
+            keyPairGenerator.initialize(ecSpec, new SecureRandom());
+        }
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         PrivateKey privKey = keyPair.getPrivate();
         PublicKey publicKey = keyPair.getPublic();
@@ -247,7 +276,7 @@ public class CertUtils {
         X509v3CertificateBuilder certBuilder;
 
         if (issuerCA == null) {
-            signer = new JcaContentSignerBuilder("SHA256WithRSAEncryption").setProvider(BC).build(privKey);
+            signer = new JcaContentSignerBuilder("SHA256withRSA").setProvider(BC).build(privKey);
             certBuilder = new JcaX509v3CertificateBuilder(
                     issuer,
                     BigInteger.valueOf(System.currentTimeMillis()),
@@ -276,7 +305,7 @@ public class CertUtils {
             );
         }
 
-        certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(issuerCA != null ? false : true)); // CA flag is true
+        certBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(issuerCA == null)); // CA flag is true
         SubjectKeyIdentifier subjectKeyIdentifier = new JcaX509ExtensionUtils().createSubjectKeyIdentifier(publicKey);
         certBuilder.addExtension(Extension.subjectKeyIdentifier, false, subjectKeyIdentifier);
         KeyUsage keyUsage = new KeyUsage(KeyUsage.cRLSign | KeyUsage.keyCertSign);
@@ -313,7 +342,7 @@ public class CertUtils {
 
 
         holder.setCert(CertUtils.content(caCert));
-        holder.setKey(CertUtils.toPKCS8(privKey));
+        holder.setKey(CertUtils.content(privKey));
 
         return holder;
     }
@@ -324,7 +353,7 @@ public class CertUtils {
 //    PemObject pemObject = new PemObject("PRIVATE KEY", pki.toASN1Primitive().getEncoded());
 
 
-    public static String toPKCS8(PrivateKey pkcs1PrivateKey) throws NoSuchAlgorithmException, IOException {
+    private static String toPKCS8(PrivateKey pkcs1PrivateKey) throws NoSuchAlgorithmException, IOException {
         // Get the encoded bytes of the private key
         byte[] encodedPrivateKey = pkcs1PrivateKey.getEncoded();
 
@@ -362,5 +391,31 @@ public class CertUtils {
 //        return pkcs8String;
     }
 
+    public static KeyPair createECKeyPair() {
+//        除了secp256r1和prime256v1之外，还有许多其他的椭圆曲线加密算法可供选择，例如：
+//
+//        secp384r1/prime384v1：使用384位的椭圆曲线参数。
+//        secp521r1/prime521v1：使用521位的椭圆曲线参数。
+//        Curve25519：一种基于扭曲爱德华兹曲线的加密算法，参数长度为255位，被广泛应用于加密协议中。
+        return createECKeyPair("secp384r1");
+    }
 
+    public static KeyPair createECKeyPair(String ecSpecName) {
+        try {
+            KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC", "BC");
+            ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec(ecSpecName);
+            keyGen.initialize(ecSpec, new SecureRandom());
+            return keyGen.generateKeyPair();
+        } catch (NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException ex) {
+            throw new IllegalStateException(ex);
+        }
+    }
+
+
+    // Generate Ed25519 key pair
+    public static AsymmetricCipherKeyPair generateEd25519KeyPair() {
+        Ed25519KeyPairGenerator generator = new Ed25519KeyPairGenerator();
+        generator.init(new Ed25519KeyGenerationParameters(null));
+        return generator.generateKeyPair();
+    }
 }

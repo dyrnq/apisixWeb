@@ -1,4 +1,73 @@
+layui.use(function(){
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
+var upload = layui.upload;
+var xmSelect = layui.xmSelect;
+form.render(); // 渲染全部表单
+$("#div_keyFile").hide();
+$("#div_certFile").hide();
+$("#div_CA").hide();
+
+
+var demo3 = xmSelect.render({
+	el: '#demo3',
+	radio: true,
+	name: 'dnsapi',
+	filterable: true,
+	clickClose: true,
+	data: dnsapiData
+})
+
+
+function view(value){
+    $("[id^='div_']").each(function() {
+      $(this).hide();
+      //console.log(this);
+    });
+    $("#div_id").show();
+    $("#div_approach").show();
+
+    if(value == enum_Approach.trustCA){
+        $("#div_renew").show();
+        $("#div_issue").show();
+        $("#div_supplier").show();
+        $("#div_encryption").show();
+        $("#div_challenge").show();
+        $("#div_domain").show();
+        $("#div_subject").show();
+        $("#div_aux").show();
+        $("#div_dnsapi").show();
+
+        $('#addForm1 select[name="supplier"]').val(enum_Supplier.acme);
+    }else if(value == enum_Approach.manual){
+        $("#div_keyFile").show();
+        $("#div_certFile").show();
+
+        $('#addForm1 select[name="supplier"]').val("");
+        $('#addForm1 select[name="encryption"]').val("");
+        $('#addForm1 select[name="challenge"]').val("");
+        $('#addForm1 select[name="dnsapi"]').val("");
+    }else if(value == enum_Approach.privateCA){
+        $("#div_CA").show();
+        $("#div_issue").show();
+        $("#div_encryption").show();
+        $("#div_domain").show();
+        $("#div_subject").show();
+
+        $('#addForm1 select[name="supplier"]').val("");
+        $('#addForm1 select[name="dnsapi"]').val("");
+
+    }
+    layui.form.render('select');
+    layui.form.render('checkbox');
+}
+
+
 function cleanData(d){
+    $('#addForm1 input, #addForm1 select, #addForm1 textarea, #addForm1 checkbox').val('');
     if( d === true ){
         $("#div_id").hide();
         $('#addForm1 input[name="u"]').val("update");
@@ -6,11 +75,13 @@ function cleanData(d){
         $('#addForm1 input[name="u"]').val("add");
         $("#div_id").show();
     }
-
-    $('#addForm1 input[name="id"]').val("");
-    $('#addForm1 input[name="domain"]').val("");
-    $('#addForm1 input[name="subject"]').val("");
-    $('#addForm1 input[name="privateKey"]').val("");
+    $('#addForm1 select[name="approach"]').val(enum_Approach.trustCA);
+    $('#addForm1 select[name="supplier"]').val(enum_Supplier.acme);
+    //$('#addForm1 select[name="encryption"]').val(enum_Encryption.RSA);
+    layui.form.render('select');
+    layui.form.render('checkbox');
+    demo3.setValue([]);
+    view(enum_Approach.trustCA);
 }
 
 function addLink(d) {
@@ -19,80 +90,24 @@ function addLink(d) {
         return '';
     }
     if (addLink.length > 0) {
+       var renewBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
+       var issueBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="issue">' + 'issue'+ '</button>'
 
+
+       if( d.approach != enum_Approach.trustCA ){
+            renewBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
+            issueBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="issue">' + 'issue'+ '</button>'
+       }
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">' + commonStr.del + '</button>'
        let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">' + commonStr.clear + '</button>'
-       let exptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">' + commonStr.export + '</button>'
+       let dumpBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dump">dump</button>'
        let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">' + commonStr.import + '</button>'
-       let renewBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
-       return editBtn+'&nbsp;'+renewBtn+'&nbsp;'+delBtn;
+
+       return editBtn + '&nbsp;'+ issueBtn + '&nbsp;' + renewBtn + '&nbsp;' + delBtn + '&nbsp;' + dumpBtn;
     }
 }
 
-
-
-layui.use(function(){
-
-var layer = layui.layer;
-var laypage = layui.laypage;
-var table = layui.table;
-var form = layui.form;
-var upload = layui.upload;
-form.render(); // 渲染全部表单
-$("#privateKeyFile").hide();
-$("#certFile").hide();
-
-    // // checkbox 事件
-    // form.on('checkbox(demo-checkbox-filter)', function(data){
-    //     var elem = data.elem; // 获得 checkbox 原始 DOM 对象
-    //     var checked = elem.checked; // 获得 checkbox 选中状态
-    //     var value = elem.value; // 获得 checkbox 值
-    //     var othis = data.othis; // 获得 checkbox 元素被替换后的 jQuery 对象
-    //     layer.msg('checked 状态: '+ elem.checked);
-    //     if ( elem.checked == true ){
-    //         $('#addForm1 input[name="renew"]').val("1");
-    //     }else{
-    //         $('#addForm1 input[name="renew"]').val("0");
-    //     }
-    // });
-
-function view(value){
-    if(value == 1){
-        $("#certFile").show();
-        $("#renew").hide();
-        $("#supplier").hide();
-        $("#encryption").hide();
-        $("#challenge").hide();
-        $("#domain").hide();
-        $("#subject").hide();
-        $("#aux").hide();
-        $("#privateKeyFile").show();
-        $("#Ca").hide();
-    }else if(value == 2){
-        $("#certFile").hide();
-        $("#renew").hide();
-        $("#supplier").hide();
-        $("#encryption").hide();
-        $("#challenge").hide();
-        $("#domain").show();
-        $("#subject").show();
-        $("#aux").hide();
-        $("#privateKeyFile").hide();
-        $("#Ca").show();
-    }else if(value == 0){
-        $("#certFile").hide();
-        $("#renew").show();
-        $("#supplier").show();
-        $("#encryption").show();
-        $("#challenge").show();
-        $("#domain").show();
-        $("#subject").show();
-        $("#aux").show();
-        $("#privateKeyFile").hide();
-        $("#Ca").hide();
-    }
-}
 
 form.on('select(approach)', function(data){
     var elem = data.elem; // 获得 select 原始 DOM 对象
@@ -155,7 +170,7 @@ $('#add').click(function(){
     cleanData(false);
     layer.open({
         type: 1,
-        area: ['1000px', '400px'],
+        area: ['1000px', '600px'],
         title: 'Add Cert',
         content : $('#windowDiv'),
         anim: 'slideRight',
@@ -167,53 +182,53 @@ $('#add').click(function(){
 
 });
 
-    $('#reloadCa').click(function(){
+$('#reloadCA').click(function(){
 
-        $('select[name="caId"]').empty();
-        $.ajax({
-            type : 'GET',
-            url: ctx + '/api/ca/dropdown',
-            dataType : 'json',
-            data : {},
-            success : function(data) {
-                if(data.code=='200'){
-
-                    for (let i = 0; i < data.data.length; i++) {
-                        let item = data.data[i];
-                        //console.log(item);
-                        $('select[name="caId"]').append('<option value="'+item.id+'">'+item.title+'</option>');
-                        // 重新渲染下拉框组件
-                        layui.form.render('select');
-                    }
-                } else {
-                    layer.msg(data.description);
+    $('select[name="caId"]').empty();
+    $.ajax({
+        type : 'GET',
+        url: ctx + '/api/ca/dropdown',
+        dataType : 'json',
+        data : {},
+        success : function(data) {
+            if(data.code=='200'){
+                $('select[name="caId"]').append('<option value=""></option>');
+                for (let i = 0; i < data.data.length; i++) {
+                    let item = data.data[i];
+                    //console.log(item);
+                    $('select[name="caId"]').append('<option value="'+item.id+'">'+item.title+'</option>');
+                    // 重新渲染下拉框组件
+                    layui.form.render('select');
                 }
-            },
-            error : function() {
-                layer.alert(commonStr.errorInfo);
+            } else {
+                layer.msg(data.description);
             }
-        });
-
-
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
     });
 
 
-    $('#newCa').click(function(){
-        layer.open({
-            type: 1,
-            area: ['1000px', '400px'],
-            title: 'New Ca',
-            content : $('#newDiv'),
-            anim: 'slideRight',
-            shade: 0.6, // 遮罩透明度
-            shadeClose: true, // 点击遮罩区域，关闭弹层
-            maxmin: true, // 允许全屏最小化
-            skin: 'layui-layer-win10'
-        });
+});
 
+
+$('#newCA').click(function(){
+    layer.open({
+        type: 1,
+        area: ['500px', '300px'],
+        title: 'New CA',
+        content : $('#newDiv'),
+        anim: 'slideRight',
+        shade: 0.6, // 遮罩透明度
+        shadeClose: true, // 点击遮罩区域，关闭弹层
+        maxmin: true, // 允许全屏最小化
+        skin: 'layui-layer-win10'
     });
 
-$('#newCaOver').click(function (){
+});
+
+$('#newCAOver').click(function (){
     $.ajax({
         type:'post',
         url:ctx + '/api/ca/add',
@@ -235,40 +250,37 @@ $('#newCaOver').click(function (){
 
 $('#addOver').click(function(){
     let u = $('#addForm1 input[name="u"]').val();
-
+    //收集表单信息
     let formData = new FormData();
-    $("#addForm1").find("input").each(function(index, element) {
-        let inputN = $(element).attr("name");
-        let inputV = $(element).val();
-        console.log(inputN + '====' + inputV);
-        if ('' == inputN || null == inputN || undefined == inputN || 'certFile' == inputN || 'keyFile' == inputN ) {
-            //
-        }else{
-            formData.append(inputN,inputV);
-        }
+    $('#addForm1 input, #addForm1 select, #addForm1 textarea, #addForm1 checkbox').each(function(){
+          var inputN = $(this).attr('name');
+          let inputV = $(this).val();
+          if ('' == inputN || null == inputN || undefined == inputN || 'certFile' == inputN || 'keyFile' == inputN ) {
+              //
+          }else{
+                if ( ($(this).is('input')) || ($(this).is('textarea'))) {
+                       if ( $(this).is(':checkbox') ){
+                            console.log(inputN+' is a checkbox');
+                            if ($(this).prop('checked')){
+                                formData.append(inputN,'1');
+                            }else{
+                                formData.append(inputN,'0');
+                            }
+                        }else{
+                            formData.append(inputN,inputV);
+                        }
+                }
+                if ( $(this).is('select')  && inputV !=null ) {
+                    formData.append(inputN,inputV);
+                }
+          }
+          //console.log(inputN+"======="+inputV);
+
     });
 
-    $("#addForm1").find("select").each(function(index, element) {
-        let inputN = $(element).attr("name");
-        let inputV = $(element).val();
-        console.log(inputN + '====' + inputV);
 
-        if ('' == inputN || null == inputN || undefined == inputN ) {
-            //
-        }else{
-            formData.append(inputN,inputV);
-        }
-    });
-
-//    var formData = $("#addForm1").serializeArray().reduce(function(obj, item) {
-//      obj[item.name] = item.value;
-//      return obj;
-//    }, {});
-
-    console.log(formData);
-
-    if($('#addForm1 select[name="approach"]').val() == '1'){
-        console.log("formData.append certFile");
+    if($('#addForm1 select[name="approach"]').val() == enum_Approach.manual){
+        //console.log("formData.append certFile");
         formData.append("certFile",$('#addForm1 input[name="certFile"]')[0].files[0]);
         formData.append("keyFile",$('#addForm1 input[name="keyFile"]')[0].files[0]);
     }
@@ -303,7 +315,7 @@ $.ajax({
     data : {},
     success : function(data) {
         if(data.code=='200'){
-
+            $('select[name="caId"]').append('<option value=""></option>');
             for (let i = 0; i < data.data.length; i++) {
                 let item = data.data[i];
                 //console.log(item);
@@ -321,7 +333,7 @@ $.ajax({
 });
 
 
-// $('#CaSelect').click(function (){
+// $('#CASelect').click(function (){
 //     $.ajax({
 //         type : 'GET',
 //         url: ctx + '/api/ca/dropdown',
@@ -367,10 +379,9 @@ $.ajax({
             {type: 'checkbox', fixed: 'left'}
             , {field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：'}
             , {field: 'domain', title: 'domain', width: 200}
-            , {field: 'supplier', title: 'supplier', width: 100}
-            , {field: 'encryption', title: 'encryption', width: 100}
-            , {field: 'challenge', title: 'challenge', width: 100}
-            , {field: 'subject', title: 'subject', width: 300}
+            , {field: 'approachDisplay', title: 'approach', width: 200}
+            , {field: 'encryptionDisplay', title: 'encry', width: 100}
+            , {field: 'renew', title: 'renew', width: 100}
             , {field: 'notBefore', title: 'notBefore', width: 150, templet: "<div>{{!d.notBefore?'':layui.util.toDateString(d.notBefore, 'yyyy-MM-dd HH:mm:ss') }}</div>" }
             , {field: 'notAfter', title: 'notAfter', width: 150, templet: "<div>{{!d.notAfter?'':layui.util.toDateString(d.notAfter, 'yyyy-MM-dd HH:mm:ss') }}</div>" }
             , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
@@ -501,8 +512,38 @@ $.ajax({
 
                 layer.close(index);
             });
+        } else if (layEvent === 'renew'){
+            if (obj.data.approach == enum_Approach.trustCA){
+                $.ajax({
+                    url: ctx + '/api/cert/renew',
+                    type:'post',
+                    contentType: 'application/json',
+                    data:JSON.stringify({id:obj.data.id}),
+                    success:function (data,statusText) {
+                        if(data.code=='200'){
+                            layer.msg('ok');
+                        }
+                    }
+                });
+            }
+        } else if (layEvent === 'issue'){
 
-        }else if (layEvent === 'edit'){//编辑,暂无方法体
+
+            if (obj.data.approach == enum_Approach.trustCA){
+                $.ajax({
+                    url: ctx + '/api/cert/issue',
+                    type:'post',
+                    contentType: 'application/json',
+                    data:JSON.stringify({id:obj.data.id}),
+                    success:function (data,statusText) {
+                        if(data.code=='200'){
+                            layer.msg('ok');
+                        }
+                    }
+                });
+            }
+
+        } else if (layEvent === 'edit'){//编辑,暂无方法体
 
                 //console.log(obj.data.id);
                 cleanData(true);
@@ -515,23 +556,25 @@ $.ajax({
 
 
                         if(data.code=='200'){
-                            $('#addForm1 input[name="id"]').val(data.data.id);
-                            $('#addForm1 input[name="domain"]').val(data.data.domain);
-                            $('#addForm1 input[name="subject"]').val(data.data.subject);
-                            $('#addForm1 input[name="privateKey"]').val(data.data.privateKey);
-                            $('#addForm1 select[name="approach"]').val(data.data.approach);
+                            //批量回添数据
+                            $('#addForm1 input, #addForm1 select, #addForm1 textarea, #addForm1 checkbox').each(function() {
+                              var elementName = $(this).attr('name');
+                              if (elementName in data.data) { // 判断对象中是否有该属性
+                                $(this).val(data.data[elementName]); // 将属性对应的值填充到表单元素中
+                              }
+                            });
+                            if (data.data.dnsapi !=null){
+                                  //特殊处理xmSelect
+                                    demo3.setValue([data.data.dnsapi]);
+                            }
 
-                            $('#addForm1 select[name="caId"]')
-
-
-                                .val(data.data.caId);
 
                             layui.form.render('select');
                             view(data.data.approach);
 
                             layer.open({
                                 type: 1,
-                                area: ['800px', '600px'],
+                                area: ['1000px', '600px'],
                                 title: 'Edit Cert',
                                 content : $('#windowDiv'),
                                 anim: 'slideRight',
@@ -548,29 +591,21 @@ $.ajax({
                         layer.msg(commonStr.errorInfo);
                     }
                 });
-            } else if(layEvent === 'importData'){//导入事件
-                $('#addForm3 input[name="id"]').val(obj.data.id);
-                $('#addForm3').find(".layui-upload-choose").each(function(index, element) {
-                      //console.log(element);
-                      $(element).html("");
-                });
-                $("#loading").hide();
+        } else if(layEvent === 'dump'){
 
-                instUpload.reload({data: { id: obj.data.id } });
-                layer.open({
-                    type: 1,
-                    area: ['500px', '300px'],
-                    title: 'import data',
-                    content : $('#guideDiv'),
-                    anim: 'slideRight',
-                    shade: 0.6, // 遮罩透明度
-                    shadeClose: true, // 点击遮罩区域，关闭弹层
-                    maxmin: true, // 允许全屏最小化
-                    skin: 'layui-layer-win10'
-                });
-        } else if(layEvent === 'export'){//导出事件
-                //console.log(obj.data.id);
-                window.open('/api/tar/export?id='+obj.data.id);
+            layer.open({
+                type: 2,
+                area: ['800px', '600px'],
+                title: 'Dump Cert',
+                content: ctx + '/api/cert/dump/'+obj.data.id,
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
+
+
         } else if(layEvent === 'drop'){
                 layer.confirm(commonStr.confirmClear, function(index) {
                     $.ajax({
