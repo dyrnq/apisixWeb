@@ -39,10 +39,10 @@
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="add">${i18n.get("add.user")}</button>
                     </div>
                     <div class="layui-inline" style="display: none">
-                        <button type="button" class="layui-btn layui-btn-sm" id="guide">${i18n.get("httpStr.guide")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm" id="guide">${i18n.get("commonStr.edit")}</button>
                     </div>
                     <div class="layui-inline" style="display: none">
-                        <button type="button" class="layui-btn layui-btn-sm">${i18n.get("upstreamStr.selectTemplateAsParam")}</button>
+                        <button type="button" class="layui-btn layui-btn-sm">${i18n.get("commonStr.edit")}</button>
                     </div>
                     <div class="layui-inline" style="display: none">
                         <button type="button" class="layui-btn layui-btn-sm layui-btn-normal">${i18n.get("commonStr.clear")}</button>
@@ -113,19 +113,50 @@
             <input type="hidden" name="id">
 
 
+            <div class="layui-row">
+                <div class="layui-col-md10"><div class="grid-demo">
+                    <div class="layui-form-item">
+                    <div class="layui-input-group">
+                        <div class="layui-input-split layui-input-prefix">${i18n.get("loginStr.pass")}</div>
+                        <input type="password" name="newPass" id="newPass" class="layui-input" lay-affix="eye">
+                    </div>
+                    </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">${i18n.get("loginStr.pass")}</label>
-                <div class="layui-input-block">
-                    <input type="password" name="newPass" id="newPass" class="layui-input" lay-affix="eye">
-                </div>
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label">${i18n.get("loginStr.pass")}</label>-->
+<!--                        <div class="layui-input-block">-->
+<!--                            <input type="password" name="newPass" id="newPass" class="layui-input" lay-affix="eye">-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                </div></div>
+
+<!--                <div class="layui-col-md2"><div class="grid-demo">-->
+<!--                    &nbsp;&nbsp;-->
+<!--                </div></div>-->
             </div>
 
-            <div class="layui-form-item">
-                <label class="layui-form-label">${i18n.get("loginStr.repeatPass")}</label>
-                <div class="layui-input-block">
-                    <input type="password" name="confirmPass" id="confirmPass" class="layui-input" lay-affix="eye">
-                </div>
+
+            <div class="layui-row">
+                <div class="layui-col-md10"><div class="grid-demo">
+                    <div class="layui-form-item">
+                    <div class="layui-input-group">
+                        <div class="layui-input-split layui-input-prefix">${i18n.get("loginStr.repeatPass")}</div>
+                        <input type="password" name="confirmPass" id="confirmPass" class="layui-input" lay-affix="eye">
+                    </div>
+                    </div>
+
+<!--                    <div class="layui-form-item">-->
+<!--                        <label class="layui-form-label">${i18n.get("loginStr.repeatPass")}</label>-->
+<!--                        <div class="layui-input-block">-->
+<!--                            <input type="password" name="confirmPass" id="confirmPass" class="layui-input" lay-affix="eye">-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div></div>
+
+<!--                <div class="layui-col-md2"><div class="grid-demo">-->
+<!--                    &nbsp;&nbsp;-->
+<!--                </div></div>-->
             </div>
 
             <div class="layui-form-item center">

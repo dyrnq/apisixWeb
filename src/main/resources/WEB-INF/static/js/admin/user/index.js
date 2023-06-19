@@ -309,7 +309,7 @@ $('#addOver').click(function(){
             $('#addForm2 input[name="confirmPass"]').val("");
             layer.open({
                 type: 1,
-                area: ['800px', '600px'],
+                area: ['400px', '300px'],
                 title: 'Change Password',
                 content : $('#changeDiv'),
                 shade: 0.6, // 遮罩透明度
