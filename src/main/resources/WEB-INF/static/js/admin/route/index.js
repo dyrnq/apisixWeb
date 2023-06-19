@@ -112,11 +112,12 @@ $('#dropAll').click(function(){
         , limit: default_limt
         , limits: cfg.pageLimits
         , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
-        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-            title: '提示'
-            , layEvent: 'LAYTABLE_TIPS'
-            , icon: 'layui-icon-tips'
-        }]
+        , defaultToolbar: [
+            {title: '清空', layEvent: 'LAYTABLE_CLEANS', icon: 'layui-icon-delete'}
+            ,{title: '帮助', layEvent: 'LAYTABLE_HELPS', icon: 'layui-icon-website'}
+            ,'filter', 'exports', 'print'
+            , {title: '提示', layEvent: 'LAYTABLE_TIPS', icon: 'layui-icon-tips'}
+        ]
         , totalRow: false //开启合计行
         , cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
@@ -174,6 +175,27 @@ $('#dropAll').click(function(){
         switch (obj.event) {
             case 'LAYTABLE_TIPS':
                 layer.alert(desc.route, { area: ['500px', '300px'] });
+                break;
+            case 'LAYTABLE_CLEANS':
+                layer.confirm(commonStr.confirmClear, function(index) {
+                    $.ajax({
+                        type : 'POST',
+                        url : ctx + '/api/route/drop',
+                        dataType : 'json',
+                        success : function(data) {
+                            if(data.code=='200'){
+                                layer.closeAll();
+                                layer.msg(commonStr.success);
+                                table.reload('demo',{});
+                            } else {
+                                layer.msg(data.description);
+                            }
+                        }
+                    });
+                });
+                break;
+            case 'LAYTABLE_HELPS':
+                window.open("https://apisix.apache.org/zh/docs/apisix/admin-api/#route");
                 break;
             case 'getCheckData':
                 var dataX = checkStatus.data;
