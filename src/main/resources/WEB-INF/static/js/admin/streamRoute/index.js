@@ -27,7 +27,7 @@ var layer = layui.layer;
 var laypage = layui.laypage;
 var table = layui.table;
 var form = layui.form;
-
+var dropdown = layui.dropdown;
 
 
 
@@ -166,6 +166,76 @@ $('#addOver').click(function(){
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
         switch (obj.event) {
+            case 'clear':
+                layer.confirm(commonStr.confirmClear, function(index) {
+                    $.ajax({
+                        type : 'POST',
+                        url : ctx + '/api/streamRoute/drop',
+                        dataType : 'json',
+                        success : function(data) {
+                            if(data.code=='200'){
+                                layer.closeAll();
+                                layer.msg(commonStr.success);
+                                table.reload('demo',{});
+                            } else {
+                                layer.msg(data.description);
+                            }
+                        }
+                    });
+                });
+                break;
+            case 'more':
+
+                var that = this;
+
+
+                dropdown.render({
+                    elem: that,
+                    show: true,
+                    data: [
+                        {title: commonStr.del, id: 'del'}
+                    ],
+                    click: function(data, othis){
+                        var dataX = table.checkStatus(obj.config.id).data;
+                        //layer.alert(JSON.stringify(dataX));
+
+                        var url = ctx + '/api/streamRoute/'+data.id;
+                        var confirmMsg = commonStr.confirm + ' ' + data.title +'?';
+                        var allId = [];
+                        if (dataX.length === 0) {
+                            layer.msg(commonStr.pleaseSelect);
+                        } else {
+                            layer.confirm(confirmMsg , function(index) {
+                                for (let i = 0; i < dataX.length; i++) {
+                                    const val = dataX[i];
+                                    allId.push(val.id);
+                                }
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({id: allId}),
+                                    success:function (data,statusText) {
+                                        if(data.code=='200'){
+                                            table.reload('demo',{});
+                                            layer.msg(commonStr.success);
+                                        }else{
+                                            layer.msg(data.description);
+                                        }
+                                    },
+                                    'error':function () {
+                                        layer.msg(commonStr.errorInfo);
+                                    }
+                                });
+                                layer.close(index);
+                            });
+                        }
+                    },
+                    align: 'right', // 右对齐弹出
+                    style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);' //设置额外样式
+                })
+                dropdown.reload(that,{});
+                break;
             case 'LAYTABLE_TIPS':
                 layer.alert(desc.streamRoute, { area: ['500px', '300px'] });
                 break;
@@ -209,6 +279,20 @@ $('#addOver').click(function(){
 
 
                 }
+                break;
+            case 'add':
+                cleanData(false);
+                layer.open({
+                    type: 1,
+                    area: ['800px', '600px'],
+                    title: 'Add StreamRoute',
+                    content : $('#windowDiv'),
+                    anim: 'slideRight',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    skin: 'layui-layer-win10'
+                });
                 break;
         }
     })
