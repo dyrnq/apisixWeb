@@ -500,6 +500,20 @@ $.ajax({
 
                 }
                 break;
+            case 'add':
+                cleanData(false);
+                layer.open({
+                    type: 1,
+                    area: ['800px', '600px'],
+                    title: 'Add Cert',
+                    content : $('#windowDiv'),
+                    anim: 'slideRight',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    skin: 'layui-layer-win10'
+                });
+                break;
 
 
         }
