@@ -227,7 +227,7 @@ $('#dropAll').click(function(){
             layer.confirm(commonStr.confirmDel, function(index){
 
 
-                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                obj.del();
                 $.ajax({
                     url: ctx + '/api/proto/del',
                     type: 'post',

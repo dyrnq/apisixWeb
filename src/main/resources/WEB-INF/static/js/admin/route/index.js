@@ -113,9 +113,7 @@ $('#dropAll').click(function(){
         , limits: cfg.pageLimits
         , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
         , defaultToolbar: [
-            {title: '清空', layEvent: 'LAYTABLE_CLEANS', icon: 'layui-icon-delete'}
-            ,{title: '帮助', layEvent: 'LAYTABLE_HELPS', icon: 'layui-icon-website'}
-            ,'filter', 'exports', 'print'
+            'filter', 'exports', 'print'
             , {title: '提示', layEvent: 'LAYTABLE_TIPS', icon: 'layui-icon-tips'}
         ]
         , totalRow: false //开启合计行
@@ -203,48 +201,44 @@ $('#dropAll').click(function(){
                     elem: that,
                     show: true,
                     data: [
-                        {title: '删除',id: 'del'}
-                        ,{title: '开启',id: 'enable'}
-                        ,{title: '关闭',id: 'disable'}
+                        {title: commonStr.del, id: 'del'}
+                        ,{title: commonStr.enable, id: 'enable'}
+                        ,{title: commonStr.disable, id: 'disable'}
                     ],
                     click: function(data, othis){
                     var dataX = table.checkStatus(obj.config.id).data;
                     //layer.alert(JSON.stringify(dataX));
-                    if(data.id === 'del'){
+
+                    var url = ctx + '/api/route/'+data.id;
+                    var confirmMsg = commonStr.confirm + ' ' + data.title +'?';
                     var allId = [];
                     if (dataX.length === 0) {
                         layer.msg(commonStr.pleaseSelect);
                     } else {
-                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
+                        layer.confirm(confirmMsg , function(index) {
                             for (let i = 0; i < dataX.length; i++) {
                                 const val = dataX[i];
                                 allId.push(val.id);
                             }
                             $.ajax({
-                                url: ctx + '/api/route/del',
+                                url: url,
                                 type: 'post',
                                 contentType: 'application/json',
                                 data: JSON.stringify({id: allId}),
                                 success:function (data,statusText) {
                                 if(data.code=='200'){
                                     table.reload('demo',{});
-                                    layer.msg(commonStr.delSuccess);
+                                    layer.msg(commonStr.success);
                                 }else{
                                     layer.msg(data.description);
                                 }
                                 },
                                 'error':function () {
-                                layer.msg(commonStr.errorInfo);
+                                    layer.msg(commonStr.errorInfo);
                                 }
                             });
-                        layer.close(index);
+                            layer.close(index);
                         });
-                    }
-
-
-                    } else {
-                    //layer.alert(JSON.stringify(dataX));
-                    //layer.msg('得到表格下拉菜单 id：'+ data.id);
                     }
                     },
                     align: 'right', // 右对齐弹出
@@ -275,120 +269,7 @@ $('#dropAll').click(function(){
                     skin: 'layui-layer-win10'
                 });
                 break;
-            case 'deleteSelected':
-                var dataX = checkStatus.data;
-                var allId = [];
-                if (dataX.length === 0) {
-                    layer.msg(commonStr.pleaseSelect);
-                } else {
-                    layer.confirm(commonStr.confirmBatchDelete, function(index) {
-
-
-
-                        for (let i = 0; i < dataX.length; i++) {
-                            const val = dataX[i];
-                            allId.push(val.id);
-                        }
-
-                        $.ajax({
-                            url: ctx + '/api/route/del',
-                            type:'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify({id: allId}),
-                            success:function (data,statusText) {
-
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg(commonStr.delSuccess);
-
-                                }else{
-                                    layer.msg(data.description);
-                                }
-                            },
-                            'error':function () {
-                                layer.msg(commonStr.errorInfo);
-                            }
-                        });
-
-
-
-                        layer.close(index);
-                    });
-
-                }
-                break;
-            case 'statusAll1':
-                var dataX = checkStatus.data;
-                var Id = [];
-                if(dataX.length === 0){
-                    layer.msg(commonStr.pleaseSelect);
-                }else{
-                    layer.confirm(commonStr.confirmBatchEnable,function (index){
-                        for (let i = 0; i < dataX.length; i++) {
-                            const val = dataX[i];
-                            Id.push(val.id);
-                        }
-                        $.ajax({
-                            url: ctx + '/api/route/enable',
-                            type:'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify({id: Id}),
-                            success:function (data,statusText) {
-
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg(commonStr.batchEnableSuccess);
-
-                                }else{
-                                    layer.msg(data.description);
-                                }
-                            },
-                            'error':function () {
-                                layer.msg(commonStr.errorInfo);
-                            }
-                        });
-                        layer.close(index);
-                    });
-
-
-                    }
-                break;
-            case 'statusAll0':
-                var dataX = checkStatus.data;
-                var Id = [];
-                if(dataX.length === 0){
-                    layer.msg(commonStr.pleaseSelect);
-                }else{
-                    layer.confirm(commonStr.confirmBatchDisable,function (index){
-                        for (let i = 0; i < dataX.length; i++) {
-                            const val = dataX[i];
-                            Id.push(val.id);
-                        }
-                        $.ajax({
-                            url: ctx + '/api/route/disable',
-                            type:'post',
-                            contentType: 'application/json',
-                            data: JSON.stringify({id: Id}),
-                            success:function (data,statusText) {
-
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg(commonStr.batchDisableSuccess);
-
-                                }else{
-                                    layer.msg(data.description);
-                                }
-                            },
-                            'error':function () {
-                                layer.msg(commonStr.errorInfo);
-                            }
-                        });
-                        layer.close(index);
-                    });
-
-                }
-                break;
-                }
+            }
 
 })
 
@@ -407,7 +288,7 @@ $('#dropAll').click(function(){
             layer.confirm(commonStr.confirmDel, function(index){
 
 
-                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                obj.del();
                 $.ajax({
                     url: ctx + '/api/route/del',
                     type: 'post',

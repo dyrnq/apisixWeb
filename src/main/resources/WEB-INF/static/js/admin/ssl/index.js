@@ -392,7 +392,7 @@ $('#ID-upload-demo-action').click(function(){
 
         } else if(layEvent === 'del'){ //删除
             layer.confirm(commonStr.confirmDel, function(index){
-                obj.del(); //删除对应行（tr）的DOM结构，并更新缓存
+                obj.del();
                 $.ajax({
                     url: ctx + '/api/ssl/del',
                     type: 'post',
