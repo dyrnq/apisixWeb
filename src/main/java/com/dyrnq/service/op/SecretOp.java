@@ -6,6 +6,7 @@ import com.dyrnq.apisix.domain.Secret;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SecretOp implements Op<Secret>, Sample {
@@ -37,6 +38,15 @@ public class SecretOp implements Op<Secret>, Sample {
     @Override
     public Secret putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putSecretRaw(id, rawData);
+    }
+
+    @Override
+    public List<Secret> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<Secret> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

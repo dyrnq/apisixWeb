@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Proto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProtoOp implements Op<Proto>, Sample {
@@ -40,6 +41,15 @@ public class ProtoOp implements Op<Proto>, Sample {
     @Override
     public Proto putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putProtoRaw(id, rawData);
+    }
+
+    @Override
+    public List<Proto> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<Proto> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

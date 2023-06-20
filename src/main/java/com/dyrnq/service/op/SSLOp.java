@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.SSL;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SSLOp implements Op<SSL>, Sample {
@@ -30,6 +31,15 @@ public class SSLOp implements Op<SSL>, Sample {
     @Override
     public SSL putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putSSLRaw(id, rawData);
+    }
+
+    @Override
+    public List<SSL> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<SSL> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

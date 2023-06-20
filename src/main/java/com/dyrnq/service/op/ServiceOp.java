@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ServiceOp implements Op<Service>, Sample {
@@ -40,6 +41,15 @@ public class ServiceOp implements Op<Service>, Sample {
     @Override
     public Service putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putServiceRaw(id, rawData);
+    }
+
+    @Override
+    public List<Service> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<Service> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

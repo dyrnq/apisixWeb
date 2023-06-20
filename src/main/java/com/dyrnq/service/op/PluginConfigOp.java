@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.PluginConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PluginConfigOp implements Op<PluginConfig>, Sample {
@@ -40,6 +41,15 @@ public class PluginConfigOp implements Op<PluginConfig>, Sample {
     @Override
     public PluginConfig putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putPluginConfigRaw(id, rawData);
+    }
+
+    @Override
+    public List<PluginConfig> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<PluginConfig> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

@@ -46,6 +46,15 @@ public class RouteOp implements Op<Route>, Sample {
     }
 
     @Override
+    public List<Route> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<Route> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
+    }
+
+    @Override
     public Object sample() {
         Route r = new Route();
         r.setName("demo");

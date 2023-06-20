@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Upstream;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UpstreamOp implements Op<Upstream>, Sample {
@@ -35,6 +36,15 @@ public class UpstreamOp implements Op<Upstream>, Sample {
     @Override
     public Upstream putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putUpstreamRaw(id, rawData);
+    }
+
+    @Override
+    public List<Upstream> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<Upstream> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

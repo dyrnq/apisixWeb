@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.GlobalRule;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalRuleOp implements Op<GlobalRule>, Sample {
@@ -40,6 +41,15 @@ public class GlobalRuleOp implements Op<GlobalRule>, Sample {
     @Override
     public GlobalRule putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putGlobalRuleRaw(id, rawData);
+    }
+
+    @Override
+    public List<GlobalRule> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<GlobalRule> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

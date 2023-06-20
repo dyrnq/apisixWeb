@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Consumer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConsumerOp implements Op<Consumer>, Sample {
@@ -40,6 +41,15 @@ public class ConsumerOp implements Op<Consumer>, Sample {
     @Override
     public Consumer putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putConsumerRaw(id, rawData);
+    }
+
+    @Override
+    public List<Consumer> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<Consumer> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override

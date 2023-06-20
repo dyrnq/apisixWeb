@@ -18,4 +18,6 @@ public interface Op<T> {
     String encodeId(T obj);
 
     T putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException;
+
+    List<T> list(AdminClient client, String[] id) throws ApisixSDKException;
 }

@@ -4,6 +4,7 @@ import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.StreamRoute;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StreamRouteOp implements Op<StreamRoute>, Sample {
@@ -35,6 +36,15 @@ public class StreamRouteOp implements Op<StreamRoute>, Sample {
     @Override
     public StreamRoute putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException {
         return client.putStreamRouteRaw(id, rawData);
+    }
+
+    @Override
+    public List<StreamRoute> list(AdminClient client, String[] id) throws ApisixSDKException {
+        List<StreamRoute> list = new ArrayList<>();
+        for (String i : id) {
+            list.add(get(client, i));
+        }
+        return list;
     }
 
     @Override
