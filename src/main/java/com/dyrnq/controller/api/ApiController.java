@@ -15,9 +15,17 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 @Mapping("api")
 @Controller
@@ -87,5 +95,49 @@ public class ApiController extends BaseController {
         return Result.succeed(map);
     }
 
+    @Mapping("{cls}/yaml")
+    public Result yaml(Context ctx, @Path("cls") String cls, String... id) {
+        try {
+            List<Object> list = Factory.create(cls).list(getAdminClient(),id);
+
+
+            DumperOptions options = new DumperOptions();
+            options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 设置默认流样式为块格式
+            options.setProcessComments(true);
+
+            Representer representer = new Representer(options) {
+                protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue, Tag customTag) {
+                    // if value of property is null, ignore it.
+                    if (propertyValue == null) {
+                        return null;
+                    } else {
+                        return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+                    }
+                }
+            };
+            Yaml yaml = new Yaml(representer);
+            Pattern pattern = Pattern.compile("^!!");
+            StringBuilder sb = new StringBuilder();
+            for (Object item : list) {
+                sb.append("---").append("\n");
+                String yamlStr = yaml.dump(item);
+                StringBuilder sb2 = new StringBuilder();
+                for (String line : yamlStr.split("\n")) {
+                    if (!pattern.matcher(line).find()) {
+                        sb2.append(line).append("\n");
+                    }
+                }
+                yamlStr = sb2.toString();
+                sb.append(yamlStr);
+            }
+            //ctx.output(sb.toString());
+            return Result.succeed(sb.toString());
+
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
 
 }

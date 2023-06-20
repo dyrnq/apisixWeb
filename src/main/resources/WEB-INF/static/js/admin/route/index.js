@@ -33,7 +33,17 @@ var laypage = layui.laypage;
 var table = layui.table;
 var form = layui.form;
 var dropdown = layui.dropdown;
-
+    var viewEditor = ace.edit("viewEditor");
+    viewEditor.setTheme("ace/theme/twilight");
+    viewEditor.session.setMode("ace/mode/yaml");
+    viewEditor.session.setUseWorker(false);
+    viewEditor.setReadOnly(true);
+    viewEditor.setFontSize(16);
+    viewEditor.setOptions({
+        minLines: 10,
+        maxLines: Infinity
+    });
+    viewEditor.resize();
 
 
     var default_limt = localStorage.getItem('pageLimit');
@@ -204,41 +214,87 @@ $('#dropAll').click(function(){
                         {title: commonStr.del, id: 'del'}
                         ,{title: commonStr.enable, id: 'enable'}
                         ,{title: commonStr.disable, id: 'disable'}
+                        ,{title: commonStr.view, id: 'yaml'}
                     ],
                     click: function(data, othis){
                     var dataX = table.checkStatus(obj.config.id).data;
                     //layer.alert(JSON.stringify(dataX));
 
                     var url = ctx + '/api/route/'+data.id;
-                    var confirmMsg = commonStr.confirm + ' ' + data.title +'?';
-                    var allId = [];
-                    if (dataX.length === 0) {
-                        layer.msg(commonStr.pleaseSelect);
-                    } else {
-                        layer.confirm(confirmMsg , function(index) {
-                            for (let i = 0; i < dataX.length; i++) {
-                                const val = dataX[i];
-                                allId.push(val.id);
+                    if (data.id == 'yaml'){
+                            viewEditor.setValue('',-1);
+                            var allId = [];
+                            if (dataX.length === 0) {
+                                layer.msg(commonStr.pleaseSelect);
+                            } else {
+                                    for (let i = 0; i < dataX.length; i++) {
+                                        const val = dataX[i];
+                                        allId.push(val.id);
+                                    }
+                                    $.ajax({
+                                        url: url,
+                                        type:'post',
+                                        contentType: 'application/json',
+                                        content: 'json',
+                                        data: JSON.stringify({id: allId}),
+                                        success: function (data,statusText) {
+                                            if(data.code=='200'){
+                                                  viewEditor.setValue(data.data,-1);
+                                            }else{
+                                                layer.msg(data.description);
+                                            }
+                                        },
+                                        'error':function () {
+                                            layer.msg(commonStr.errorInfo);
+                                        }
+                                    });
+
+
+                                layer.open({
+                                    type: 1,
+                                    area: ['800px', '600px'],
+                                    title: 'View',
+                                    content: $('#viewDiv'),
+                                    anim: 'slideRight',
+                                    shade: 0.6, // 遮罩透明度
+                                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                                    maxmin: true, // 允许全屏最小化
+                                    skin: 'layui-layer-win10'
+                                });
                             }
-                            $.ajax({
-                                url: url,
-                                type: 'post',
-                                contentType: 'application/json',
-                                data: JSON.stringify({id: allId}),
-                                success:function (data,statusText) {
-                                if(data.code=='200'){
-                                    table.reload('demo',{});
-                                    layer.msg(commonStr.success);
-                                }else{
-                                    layer.msg(data.description);
+
+                    }else{
+
+                        var confirmMsg = commonStr.confirm + ' ' + data.title +'?';
+                        var allId = [];
+                        if (dataX.length === 0) {
+                            layer.msg(commonStr.pleaseSelect);
+                        } else {
+                            layer.confirm(confirmMsg , function(index) {
+                                for (let i = 0; i < dataX.length; i++) {
+                                    const val = dataX[i];
+                                    allId.push(val.id);
                                 }
-                                },
-                                'error':function () {
-                                    layer.msg(commonStr.errorInfo);
-                                }
+                                $.ajax({
+                                    url: url,
+                                    type: 'post',
+                                    contentType: 'application/json',
+                                    data: JSON.stringify({id: allId}),
+                                    success:function (data,statusText) {
+                                    if(data.code=='200'){
+                                        table.reload('demo',{});
+                                        layer.msg(commonStr.success);
+                                    }else{
+                                        layer.msg(data.description);
+                                    }
+                                    },
+                                    'error':function () {
+                                        layer.msg(commonStr.errorInfo);
+                                    }
+                                });
+                                layer.close(index);
                             });
-                            layer.close(index);
-                        });
+                        }
                     }
                     },
                     align: 'right', // 右对齐弹出

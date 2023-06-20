@@ -41,6 +41,11 @@ public class PluginMetadataOp implements Op<Map>, Sample {
     }
 
     @Override
+    public List<Map> list(AdminClient client, String[] id) throws ApisixSDKException {
+        throw new RuntimeException("not support");
+    }
+
+    @Override
     public Object sample() {
         return null;
     }
