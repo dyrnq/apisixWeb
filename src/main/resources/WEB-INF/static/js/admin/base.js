@@ -211,30 +211,7 @@ function downloadFile(url, name) {
 	window.open(ctx + "/downloadFile?url=" + encodeURIComponent(url) + "&name=" + encodeURIComponent(name));
 }
 
-//function showUpdate(version, url, docker, update) {
-//	var str = `
-//		<div style="font-size: 16px; font-weight: bolder;">${commonStr.newVersion} ${version}</div>
-//		<div>${baseStr.updateContent}: ${update}</div>
-//		<div>${baseStr.jar}: <span class='green'>${url}</span></div>
-//		<div>${baseStr.docker}: <span class='green'>${docker}</span></div>
-//		<div>&nbsp;</div>
-//		<div>
-//			<button type="button" class="layui-btn layui-btn-sm" onclick="autoUpdate('${url}')">${baseStr.click}</button>
-//		</div>
-//	`;
-//
-//	layer.open({
-//		type: 0,
-//		title: commonStr.update,
-//		btn: [commonStr.close],
-//		yes: function(index, layero) {
-//			layer.closeAll();
-//		},
-//		area: ['600px', '400px'],
-//		content: str
-//	});
-//
-//}
+
 
 // form转json
 function form2JsonString(formId) {
@@ -251,7 +228,7 @@ function form2JsonString(formId) {
 
 var loaded;
 function autoUpdate(url) {
-	if (confirm(baseStr.confirmUpdate)) {
+	if (confirm(commonStr.confirmUpdate)) {
 		loaded = layer.load();
 		$.ajax({
 			type: 'POST',
@@ -269,7 +246,7 @@ function autoUpdate(url) {
 
 				setTimeout(function() {
 					layer.close(loaded);
-					layer.alert(baseStr.updateOver);
+					layer.alert(commonStr.updateOver);
 				}, 10000)
 
 
@@ -277,7 +254,7 @@ function autoUpdate(url) {
 			error: function() {
 				setTimeout(function() {
 					layer.close(loaded);
-					layer.alert(baseStr.updateOver);
+					layer.alert(commonStr.updateOver);
 				}, 10000)
 			}
 		});
