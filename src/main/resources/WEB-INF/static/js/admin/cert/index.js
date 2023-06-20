@@ -175,7 +175,7 @@ $('#add').click(function(){
     layer.open({
         type: 1,
         area: ['1000px', '600px'],
-        title: 'Add Cert',
+        title: 'Add',
         content : $('#windowDiv'),
         anim: 'slideRight',
         shade: 0.6, // 遮罩透明度
@@ -505,7 +505,7 @@ $.ajax({
                 layer.open({
                     type: 1,
                     area: ['800px', '600px'],
-                    title: 'Add Cert',
+                    title: 'Add',
                     content : $('#windowDiv'),
                     anim: 'slideRight',
                     shade: 0.6, // 遮罩透明度
@@ -623,7 +623,7 @@ $.ajax({
                             layer.open({
                                 type: 1,
                                 area: ['1000px', '600px'],
-                                title: 'Edit Cert',
+                                title: 'Edit',
                                 content : $('#windowDiv'),
                                 anim: 'slideRight',
                                 shade: 0.6, // 遮罩透明度

@@ -86,7 +86,7 @@ layui.use(function () {
         layer.open({
             type: 1,
             area: ['800px', '600px'],
-            title: 'Add SSL',
+            title: 'Add',
             content: $('#windowDiv'),
             anim: 'slideRight',
             shade: 0.6, // 遮罩透明度
@@ -100,7 +100,11 @@ layui.use(function () {
         var id = $('#addForm1 input[name="id"]').val();
         console.log(id);
         var text = editor.getValue();
-        console.log(text);
+        var modeName = editor.session.getMode().$id;
+        if (/yaml/.test(modeName)){
+            const jsonData = jsyaml.load(text);
+            text = JSON.stringify(jsonData, null, 2);
+        }
 
         $.ajax({
             type: 'POST',
@@ -191,7 +195,7 @@ layui.use(function () {
         layer.open({
             type: 1,
             area: ['800px', '600px'],
-            title: 'Add SSL',
+            title: 'Add',
             content: $('#guideDiv'),
             anim: 'slideRight',
             shade: 0.6, // 遮罩透明度
@@ -207,6 +211,18 @@ layui.use(function () {
     if ('' == default_limt || null == default_limt || undefined == default_limt) {
         default_limt = cfg.pageLimit;
     }
+
+ form.on('submit(demo-table-search)', function(data){
+     var field = data.field; // 获得表单字段
+     // 执行搜索重载
+     table.reload('demo', {
+       page: {
+         curr: 1 // 重新从第 1 页开始
+       },
+       where: field // 搜索的字段
+     });
+     return false; // 阻止默认 form 跳转
+   });
 
 
     //执行一个 table 实例
@@ -347,7 +363,11 @@ layui.use(function () {
                                     data: JSON.stringify({id: allId}),
                                     success: function (data, statusText) {
                                         if (data.code == '200') {
-                                            viewEditor.setValue(data.data, -1);
+                                                  for (val of data.data) {
+                                                        viewEditor.insert("---\n");
+                                                        const yamlText = jsyaml.dump(val);
+                                                        viewEditor.insert(yamlText)
+                                                  }
                                         } else {
                                             layer.msg(data.description);
                                         }
@@ -521,7 +541,7 @@ layui.use(function () {
                 layer.open({
                     type: 1,
                     area: ['800px', '600px'],
-                    title: 'Add SSL',
+                    title: 'Add',
                     content: $('#windowDiv'),
                     anim: 'slideRight',
                     shade: 0.6, // 遮罩透明度
@@ -529,6 +549,32 @@ layui.use(function () {
                     maxmin: true, // 允许全屏最小化
                     skin: 'layui-layer-win10'
                 });
+                break;
+            case 'upload':
+
+                $('#addForm2').find(".layui-upload-choose").each(function (index, element) {
+                    //console.log(element);
+                    $(element).html("");
+                });
+                $('#addForm2 input[name="id"]').val("");
+                $('#addForm2 input[name="snis"]').val("");
+                $('#addForm2 input[name="certFile"]').val("");
+                $('#addForm2 input[name="keyFile"]').val("");
+
+
+                layer.open({
+                    type: 1,
+                    area: ['800px', '600px'],
+                    title: 'Upload',
+                    content: $('#guideDiv'),
+                    anim: 'slideRight',
+                    shade: 0.6, // 遮罩透明度
+                    shadeClose: true, // 点击遮罩区域，关闭弹层
+                    maxmin: true, // 允许全屏最小化
+                    skin: 'layui-layer-win10'
+                });
+
+
                 break;
         }
 
@@ -579,11 +625,18 @@ layui.use(function () {
 
                     if (data.code == '200') {
                         $('#addForm1 input[name="id"]').val(obj.data.id);
-                        editor.setValue(data.data.rawData, -1);
+                        var modeName = editor.session.getMode().$id;
+                        if (/yaml/.test(modeName)){
+                            const jsonObject = JSON.parse(data.data.rawData);
+                            const yamlText = jsyaml.dump(jsonObject);
+                            editor.setValue(yamlText,-1);
+                        }else{
+                            editor.setValue(data.data.rawData, -1);
+                        }
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
-                            title: 'Edit SSL',
+                            title: 'Edit',
                             content: $('#windowDiv'),
                             anim: 'slideRight',
                             shade: 0.6, // 遮罩透明度

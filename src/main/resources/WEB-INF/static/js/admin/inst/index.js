@@ -80,7 +80,7 @@ $('#add').click(function(){
     layer.open({
         type: 1,
         area: ['800px', '600px'],
-        title: 'Add Inst',
+        title: 'Add',
         content : $('#windowDiv'),
         anim: 'slideRight',
         shade: 0.6, // 遮罩透明度
@@ -229,7 +229,7 @@ $('#addOver').click(function(){
                 layer.open({
                     type: 1,
                     area: ['800px', '600px'],
-                    title: 'Add Inst',
+                    title: 'Add',
                     content : $('#windowDiv'),
                     anim: 'slideRight',
                     shade: 0.6, // 遮罩透明度
@@ -305,7 +305,7 @@ $('#addOver').click(function(){
                             layer.open({
                                 type: 1,
                                 area: ['800px', '600px'],
-                                title: 'Edit Inst',
+                                title: 'Edit',
                                 content : $('#windowDiv'),
                                 anim: 'slideRight',
                                 shade: 0.6, // 遮罩透明度

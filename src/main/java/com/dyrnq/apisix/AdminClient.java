@@ -30,8 +30,8 @@ public class AdminClient extends BaseClient {
         return new StreamRouteClient(getProfile()).query(page, page_size);
     }
 
-    public Multi<Upstream> queryUpstreams(String page, String page_size) throws ApisixSDKException {
-        return new UpstreamClient(getProfile()).query(page, page_size);
+    public Multi<Upstream> queryUpstreams(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
+        return new UpstreamClient(getProfile()).query(page, page_size,qp);
     }
 
     public Multi<Secret> querySecrets(String page, String page_size) throws ApisixSDKException {
@@ -314,8 +314,8 @@ public class AdminClient extends BaseClient {
         return new SSLClient(getProfile()).list();
     }
 
-    public Multi<SSL> querySSLs(String page, String page_size) throws ApisixSDKException {
-        return new SSLClient(getProfile()).query(page, page_size);
+    public Multi<SSL> querySSLs(String page, String page_size,Map<String,String> pq) throws ApisixSDKException {
+        return new SSLClient(getProfile()).query(page, page_size,pq);
     }
 
 

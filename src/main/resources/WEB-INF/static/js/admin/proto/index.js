@@ -54,7 +54,7 @@ layui.use(function () {
         layer.open({
             type: 1,
             area: ['800px', '600px'],
-            title: 'Add Proto',
+            title: 'Add',
             content: $('#windowDiv'),
             anim: 'slideRight',
             shade: 0.6, // 遮罩透明度
@@ -68,7 +68,11 @@ layui.use(function () {
     $('#addOver').click(function () {
         var id = $('#addForm1 input[name="id"]').val();
         var text = editor.getValue();
-
+        var modeName = editor.session.getMode().$id;
+        if (/yaml/.test(modeName)){
+            const jsonData = jsyaml.load(text);
+            text = JSON.stringify(jsonData, null, 2);
+        }
         $.ajax({
             type: 'POST',
             url: ctx + '/api/proto/put',
@@ -242,7 +246,11 @@ layui.use(function () {
                                     data: JSON.stringify({id: allId}),
                                     success: function (data, statusText) {
                                         if (data.code == '200') {
-                                            viewEditor.setValue(data.data, -1);
+                                                  for (val of data.data) {
+                                                        viewEditor.insert("---\n");
+                                                        const yamlText = jsyaml.dump(val);
+                                                        viewEditor.insert(yamlText)
+                                                  }
                                         } else {
                                             layer.msg(data.description);
                                         }
@@ -351,7 +359,7 @@ layui.use(function () {
                 layer.open({
                     type: 1,
                     area: ['800px', '600px'],
-                    title: 'Add Proto',
+                    title: 'Add',
                     content: $('#windowDiv'),
                     anim: 'slideRight',
                     shade: 0.6, // 遮罩透明度
@@ -415,7 +423,7 @@ layui.use(function () {
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
-                            title: 'Edit Proto',
+                            title: 'Edit',
                             content: $('#windowDiv'),
                             anim: 'slideRight',
                             shade: 0.6, // 遮罩透明度

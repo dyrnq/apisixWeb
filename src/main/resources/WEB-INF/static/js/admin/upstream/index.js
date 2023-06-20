@@ -52,7 +52,7 @@ layui.use(function () {
         layer.open({
             type: 1,
             area: ['800px', '600px'],
-            title: 'Add Upstream',
+            title: 'Add',
             content: $('#windowDiv'),
             anim: 'slideRight',
             shade: 0.6, // 遮罩透明度
@@ -106,6 +106,17 @@ layui.use(function () {
         });
     });
 
+ form.on('submit(demo-table-search)', function(data){
+     var field = data.field; // 获得表单字段
+     // 执行搜索重载
+     table.reload('demo', {
+       page: {
+         curr: 1 // 重新从第 1 页开始
+       },
+       where: field // 搜索的字段
+     });
+     return false; // 阻止默认 form 跳转
+   });
 
     //执行一个 table 实例
     table.render({
@@ -242,7 +253,11 @@ layui.use(function () {
                                     data: JSON.stringify({id: allId}),
                                     success: function (data, statusText) {
                                         if (data.code == '200') {
-                                            viewEditor.setValue(data.data, -1);
+                                                  for (val of data.data) {
+                                                        viewEditor.insert("---\n");
+                                                        const yamlText = jsyaml.dump(val);
+                                                        viewEditor.insert(yamlText)
+                                                  }
                                         } else {
                                             layer.msg(data.description);
                                         }
@@ -348,7 +363,7 @@ layui.use(function () {
                 layer.open({
                     type: 1,
                     area: ['800px', '600px'],
-                    title: 'Add Upstream',
+                    title: 'Add',
                     content: $('#windowDiv'),
                     anim: 'slideRight',
                     shade: 0.6, // 遮罩透明度
@@ -406,11 +421,18 @@ layui.use(function () {
 
                     if (data.code == '200') {
                         $('#addForm1 input[name="id"]').val(obj.data.id);
-                        editor.setValue(data.data.rawData, -1);
+                        var modeName = editor.session.getMode().$id;
+                        if (/yaml/.test(modeName)){
+                            const jsonObject = JSON.parse(data.data.rawData);
+                            const yamlText = jsyaml.dump(jsonObject);
+                            editor.setValue(yamlText,-1);
+                        }else{
+                            editor.setValue(data.data.rawData, -1);
+                        }
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],
-                            title: 'Edit Upstream',
+                            title: 'Edit',
                             content: $('#windowDiv'),
                             anim: 'slideRight',
                             shade: 0.6, // 遮罩透明度

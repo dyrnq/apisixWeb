@@ -99,12 +99,30 @@ public class ApiController extends BaseController {
     public Result yaml(Context ctx, @Path("cls") String cls, String... id) {
         try {
             List<Object> list = Factory.create(cls).list(getAdminClient(), id);
+            return Result.succeed(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    /**
+     * 转化不理想
+     *
+     * @param ctx
+     * @param cls
+     * @param id
+     * @return
+     */
+    @Mapping("{cls}/yaml2")
+    public Result yaml2(Context ctx, @Path("cls") String cls, String... id) {
+        try {
+            List<Object> list = Factory.create(cls).list(getAdminClient(), id);
 
 
             DumperOptions options = new DumperOptions();
             options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 设置默认流样式为块格式
-            options.setProcessComments(true);
-
+            options.setProcessComments(false);
             Representer representer = new Representer(options) {
                 protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue, Tag customTag) {
                     // if value of property is null, ignore it.
@@ -116,11 +134,13 @@ public class ApiController extends BaseController {
                 }
             };
             Yaml yaml = new Yaml(representer);
+
             Pattern pattern = Pattern.compile("^!!");
             StringBuilder sb = new StringBuilder();
             for (Object item : list) {
                 sb.append("---").append("\n");
                 String yamlStr = yaml.dump(item);
+                // yaml.dumpAs(item, Tag.MAP, null);
                 StringBuilder sb2 = new StringBuilder();
                 for (String line : yamlStr.split("\n")) {
                     if (!pattern.matcher(line).find()) {

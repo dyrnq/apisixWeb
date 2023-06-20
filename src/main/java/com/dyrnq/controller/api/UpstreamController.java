@@ -42,9 +42,9 @@ public class UpstreamController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit) {
+    public PageResult query(Context ctx, String page, String limit, String name) {
         try {
-            Multi<Upstream> rsp = getAdminClient().queryUpstreams(page, limit);
+            Multi<Upstream> rsp = getAdminClient().queryUpstreams(page, limit, toMap(name, null, null));
             List<Upstream> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {

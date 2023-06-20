@@ -23,6 +23,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Mapping("api/ssl")
 @Controller
@@ -78,9 +79,11 @@ public class SSLController extends ApiController {
     }
 
     @Mapping("")
-    public Result query(Context ctx, String page, String limit) {
+    public Result query(Context ctx, String page, String limit, String sni) {
         try {
-            Multi<SSL> rsp = getAdminClient().querySSLs(page, limit);
+            Map<String, String> pq = toMap(null, null, null);
+            pq.put("sni", sni);
+            Multi<SSL> rsp = getAdminClient().querySSLs(page, limit, pq);
             List<SSL> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {
