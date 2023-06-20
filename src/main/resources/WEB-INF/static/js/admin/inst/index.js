@@ -258,7 +258,7 @@ $('#addOver').click(function(){
 
         } else if(layEvent === 'del'){ //删除
             if(obj.data.id == "1") {
-                layer.msg("该账号不可删除！")
+                layer.msg(commonStr.cantDel)
             }else{
                 layer.confirm(commonStr.confirmDel, function(index){
                     obj.del();

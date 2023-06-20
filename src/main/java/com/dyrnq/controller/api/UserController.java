@@ -6,11 +6,13 @@ import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
 import com.dyrnq.utils.BCryptPasswordEncoder;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
+import org.noear.solon.i18n.I18nUtil;
 import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -89,9 +91,13 @@ public class UserController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
+
     @Mapping("changePass")
-    public Result changePass(Context ctx,String id,String newPass){
+    public Result changePass(Context ctx, String id, String newPass) {
         try {
+            if (StringUtils.isBlank(newPass)) {
+                throw new RuntimeException(I18nUtil.getMessage("loginStr.error2"));
+            }
             businessLogic.changePass(id, newPass);
             return Result.succeed("ok");
         } catch (Exception e) {

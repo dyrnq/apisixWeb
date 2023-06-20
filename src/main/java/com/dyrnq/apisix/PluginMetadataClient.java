@@ -40,6 +40,10 @@ public class PluginMetadataClient extends BaseClient implements Stub<PluginMetad
         throw new ApisixSDKException("not support");
     }
 
+    public Multi<PluginMetadata> query(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        throw new ApisixSDKException("not support");
+    }
+
     public void del(String id) throws ApisixSDKException {
         Wrap<PluginMetadata> rsp = null;
         try {

@@ -1,7 +1,6 @@
 package com.dyrnq.controller.api;
 
 import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.NumberUtil;
 import cn.hutool.core.util.PageUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.system.SystemUtil;
@@ -103,8 +102,8 @@ public class CertController extends ApiController {
             if (cert.getApproach() == Approach.manual.getId()) {
                 certService.manual(cert);
             }
-                //界面选中马上申请才去申请
-            if (NumberUtil.equals(cert.getIssue(), 1)) {
+            //界面选中马上申请才去申请
+            if (cert.getIssue() != null && cert.getIssue().intValue() == 1) {
                 certService.issue(cert);
             }
             certMapper.insert(cert, true);

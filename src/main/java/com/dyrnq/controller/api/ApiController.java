@@ -98,7 +98,7 @@ public class ApiController extends BaseController {
     @Mapping("{cls}/yaml")
     public Result yaml(Context ctx, @Path("cls") String cls, String... id) {
         try {
-            List<Object> list = Factory.create(cls).list(getAdminClient(),id);
+            List<Object> list = Factory.create(cls).list(getAdminClient(), id);
 
 
             DumperOptions options = new DumperOptions();
@@ -138,6 +138,14 @@ public class ApiController extends BaseController {
             logger.error(e.getMessage());
             return Result.failure(e.getMessage());
         }
+    }
+
+    protected Map<String, String> toMap(String name, String label, String uri) {
+        Map<String, String> qp = new HashMap<>();
+        qp.put("name", name);
+        qp.put("label", label);
+        qp.put("uri", uri);
+        return qp;
     }
 
 }

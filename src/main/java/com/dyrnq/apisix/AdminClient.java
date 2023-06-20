@@ -22,8 +22,8 @@ public class AdminClient extends BaseClient {
     }
 
 
-    public Multi<Route> queryRoutes(String page, String page_size) throws ApisixSDKException {
-        return new RouteClient(getProfile()).query(page, page_size);
+    public Multi<Route> queryRoutes(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        return new RouteClient(getProfile()).query(page, page_size, qp);
     }
 
     public Multi<StreamRoute> queryStreamRoutes(String page, String page_size) throws ApisixSDKException {

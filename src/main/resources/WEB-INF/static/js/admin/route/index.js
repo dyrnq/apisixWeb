@@ -112,6 +112,19 @@ $('#dropAll').click(function(){
 });
 
 
+ form.on('submit(demo-table-search)', function(data){
+     var field = data.field; // 获得表单字段
+     // 执行搜索重载
+     table.reload('demo', {
+       page: {
+         curr: 1 // 重新从第 1 页开始
+       },
+       where: field // 搜索的字段
+     });
+     return false; // 阻止默认 form 跳转
+   });
+
+
     //执行一个 table 实例
     table.render({
         elem: '#demo'

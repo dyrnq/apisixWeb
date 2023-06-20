@@ -7,6 +7,7 @@ import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -38,11 +39,24 @@ public class SecretClient extends BaseClient implements Stub<Secret> {
     }
 
     public Multi<Secret> query(String page, String page_size) throws ApisixSDKException {
+        return query(page, page_size, null);
+    }
+
+    public Multi<Secret> query(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
         Multi<Secret> rsp = null;
         try {
             Map<String, String> paramsMap = new HashMap<String, String>();
             paramsMap.put(QUERY_PARAMS_PAGE, page);
             paramsMap.put(QUERY_PARAMS_PAGE_SIZE, page_size);
+            if (qp != null) {
+                for (Map.Entry<String, String> entry : qp.entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    if (StringUtils.isNotBlank(value)) {
+                        paramsMap.put(key, value);
+                    }
+                }
+            }
             Type type = new TypeToken<Multi<Secret>>() {
             }.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PATH, mapToQueryString(paramsMap)), type);

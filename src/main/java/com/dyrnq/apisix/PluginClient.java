@@ -42,6 +42,10 @@ public class PluginClient extends BaseClient implements Stub<Map> {
         throw new ApisixSDKException("not support");
     }
 
+    public Multi<Map> query(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        throw new ApisixSDKException("not support");
+    }
+
     public void del(String id) throws ApisixSDKException {
         throw new ApisixSDKException("not support");
     }

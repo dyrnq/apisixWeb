@@ -68,9 +68,9 @@ public class RouteController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit) {
+    public PageResult query(Context ctx, String page, String limit, String name, String label, String uri) {
         try {
-            Multi<Route> rsp = getAdminClient().queryRoutes(page, limit);
+            Multi<Route> rsp = getAdminClient().queryRoutes(page, limit, toMap(name, label, uri));
             List<Route> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {

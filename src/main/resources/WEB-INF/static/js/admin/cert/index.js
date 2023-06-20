@@ -90,8 +90,8 @@ function addLink(d) {
         return '';
     }
     if (addLink.length > 0) {
-       var renewBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
-       var issueBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="issue">' + 'issue'+ '</button>'
+       var renewBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="renew">' + commonStr.renew + '</button>'
+       var issueBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="issue">' + commonStr.issue + '</button>'
 
 
 //       const arr = [enum_Approach.trustCA,enum_Approach.privateCA];
@@ -99,13 +99,13 @@ function addLink(d) {
 
        //if (arr.indexOf(d.approach) !== -1) {
        if ( d.approach == enum_Approach.manual ) {
-            renewBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="renew">' + 'renew'+ '</button>'
-            issueBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="issue">' + 'issue'+ '</button>'
+            renewBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="renew">' + commonStr.renew + '</button>'
+            issueBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="issue">' + commonStr.issue + '</button>'
        }
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">' + commonStr.del + '</button>'
        let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">' + commonStr.clear + '</button>'
-       let dumpBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dump">dump</button>'
+       let dumpBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dump">' + commonStr.dump + '</button>'
        let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">' + commonStr.import + '</button>'
 
        return editBtn + '&nbsp;'+ issueBtn + '&nbsp;' + renewBtn + '&nbsp;' + delBtn + '&nbsp;' + dumpBtn;
