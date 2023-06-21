@@ -37,15 +37,22 @@ input[name='param']{
                 <div class="layui-form">
 
                     <div class="layui-col-md2"><div class="grid-demo">
-                        &nbsp;
+                        <div class="layui-input-group">
+                            <div class="layui-input-split layui-input-prefix">label</div>
+                            <input type="text" name="label" class="layui-input">
+                        </div>
                     </div></div>
 
                     <div class="layui-col-md2"><div class="grid-demo">
-                        &nbsp;
+                        <div class="layui-btn-container layui-col-xs12">
+
+                            <button class="layui-btn layui-btn-sm" lay-submit lay-filter="demo-table-search">${i18n.get("commonStr.search")}</button>
+                            <button class="layui-btn layui-btn-sm layui-btn-primary" type="reset" >${i18n.get("commonStr.clear")}</button>
+                        </div>
                     </div></div>
                     <div class="layui-col-md1"><div class="grid-demo">
                         <div class="layui-inline">
-                            <a href=" https://apisix.apache.org/zh/docs/apisix/admin-api/#pluginConfig" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">${i18n.get("commonStr.help")}</a>
+                            <a href="https://apisix.apache.org/zh/docs/apisix/admin-api/#pluginConfig" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">${i18n.get("commonStr.help")}</a>
                         </div>
                     </div></div>
                 </div>

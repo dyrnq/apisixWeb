@@ -46,16 +46,16 @@ public class AdminClient extends BaseClient {
         return new ConsumerClient(getProfile()).query(page, page_size,qp);
     }
 
-    public Multi<ConsumerGroup> queryConsumerGroups(String page, String page_size) throws ApisixSDKException {
-        return new ConsumerGroupClient(getProfile()).query(page, page_size);
+    public Multi<ConsumerGroup> queryConsumerGroups(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
+        return new ConsumerGroupClient(getProfile()).query(page, page_size,qp);
     }
 
     public Multi<GlobalRule> queryGlobalRules(String page, String page_size) throws ApisixSDKException {
         return new GlobalRuleClient(getProfile()).query(page, page_size);
     }
 
-    public Multi<PluginConfig> queryPluginConfigs(String page, String page_size) throws ApisixSDKException {
-        return new PluginConfigClient(getProfile()).query(page, page_size);
+    public Multi<PluginConfig> queryPluginConfigs(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
+        return new PluginConfigClient(getProfile()).query(page, page_size,qp);
     }
 
 

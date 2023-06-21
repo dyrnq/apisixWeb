@@ -20,8 +20,9 @@ function addLink(d) {
     }
    if (addLink.length > 0) {
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
+       let hisBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">'+'历史'+'</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       return editBtn+'&nbsp;'+delBtn;
+       return editBtn+'&nbsp;'+hisBtn+'&nbsp;'+delBtn;
    }
 }
 
@@ -106,7 +107,7 @@ $('#addOver').click(function(){
         ,cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
-            ,{field: 'title', title: 'name', width: 80}
+            ,{field: 'title', title: 'title', width: 80}
             ,{field: 'upstream', title: 'operation', fixed: 'right',  templet: addLink}
         ]]
         , done: function (res, curr, count){
@@ -216,7 +217,17 @@ $('#addOver').click(function(){
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-
+            layer.open({
+                type: 2,
+                area: ['1000px', '600px'],
+                title: 'List',
+                content: ctx + '/admin/manifestVer?id='+obj.data.id,
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            });
         } else if(layEvent === 'del'){ //删除
 
             if(obj.data.id == "1") {

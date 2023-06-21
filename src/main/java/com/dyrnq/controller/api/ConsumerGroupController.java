@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapping("api/consumerGroup")
 @Controller
@@ -42,9 +43,10 @@ public class ConsumerGroupController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit) {
+    public PageResult query(Context ctx, String page, String limit,String label) {
         try {
-            Multi<ConsumerGroup> rsp = getAdminClient().queryConsumerGroups(page, limit);
+            Map<String,String> qp = toMap(null,label,null);
+            Multi<ConsumerGroup> rsp = getAdminClient().queryConsumerGroups(page, limit,qp);
             List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {
