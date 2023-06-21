@@ -33,24 +33,21 @@ input[name='param']{
                 <legend>${i18n.get("menu.streamRoute")}</legend>
             </fieldset>
 
-            <form action="${ctx}/admin/http" id="searchForm" method="post">
+            <form class="layui-form" id="searchForm" method="post">
                 <div class="layui-form">
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="add">${i18n.get("add.streamRoute")}</button>
-                    </div>
-                    <div class="layui-inline" style="display:none">
-                        <button type="button" class="layui-btn layui-btn-sm" id="guide">${i18n.get("commonStr.edit")}</button>
-                    </div>
-                    <div class="layui-inline" style="display:none">
-                        <button type="button" class="layui-btn layui-btn-sm">${i18n.get("commonStr.edit")}</button>
-                    </div>
-                    <div class="layui-inline">
-                        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" id="dropAll">${i18n.get("commonStr.clear")}</button>
-                    </div>
-                    <div class="layui-inline">
-                        <a href="https://apisix.apache.org/zh/docs/apisix/admin-api/#stream-route" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">${i18n.get("commonStr.help")}</a>
 
-                    </div>
+                    <div class="layui-col-md2"><div class="grid-demo">
+                        &nbsp;
+                    </div></div>
+
+                    <div class="layui-col-md2"><div class="grid-demo">
+                        &nbsp;
+                    </div></div>
+                    <div class="layui-col-md1"><div class="grid-demo">
+                        <div class="layui-inline">
+                            <a href=" https://apisix.apache.org/zh/docs/apisix/admin-api/#streamRoute" class="layui-btn layui-btn-sm layui-bui-normal" target="_blank">${i18n.get("commonStr.help")}</a>
+                        </div>
+                    </div></div>
                 </div>
             </form>
 

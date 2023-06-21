@@ -42,9 +42,9 @@ public class ServiceController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit) {
+    public PageResult query(Context ctx, String page, String limit,String name) {
         try {
-            Multi<Service> rsp = getAdminClient().queryServices(page, limit);
+            Multi<Service> rsp = getAdminClient().queryServices(page, limit,toMap(name, null, null));
             List<Service> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {

@@ -38,12 +38,12 @@ public class AdminClient extends BaseClient {
         return new SecretClient(getProfile()).query(page, page_size);
     }
 
-    public Multi<Service> queryServices(String page, String page_size) throws ApisixSDKException {
-        return new ServiceClient(getProfile()).query(page, page_size);
+    public Multi<Service> queryServices(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
+        return new ServiceClient(getProfile()).query(page, page_size,qp);
     }
 
-    public Multi<Consumer> queryConsumers(String page, String page_size) throws ApisixSDKException {
-        return new ConsumerClient(getProfile()).query(page, page_size);
+    public Multi<Consumer> queryConsumers(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
+        return new ConsumerClient(getProfile()).query(page, page_size,qp);
     }
 
     public Multi<ConsumerGroup> queryConsumerGroups(String page, String page_size) throws ApisixSDKException {
