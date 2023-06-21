@@ -39,6 +39,12 @@ public class AdminController extends BaseController{
         return model;
     }
 
+    @Mapping("manifest")
+    public Object manifest() {
+        ModelAndView model = new ModelAndView("admin/manifest.html");
+        return model;
+    }
+
     @Mapping("user")
     public Object user() {
         ModelAndView model = new ModelAndView("admin/user.html");

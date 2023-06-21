@@ -46,6 +46,31 @@ CREATE TABLE `cert` (
    PRIMARY KEY (`id`)
 );
 
+CREATE TABLE `manifest` (
+  `id` varchar(40) NOT NULL ,
+  `title` varchar(512) DEFAULT NULL ,
+   PRIMARY KEY (`id`)
+);
+
+CREATE TABLE `manifest_ver` (
+  `id` varchar(40) NOT NULL ,
+  `ver` BIGINT DEFAULT NULL ,
+  `content` CLOB DEFAULT NULL ,
+   PRIMARY KEY (`id`,`ver`)
+);
+
+CREATE TABLE `deploy` (
+  `id` varchar(40) NOT NULL ,
+  `manifest_id` varchar(40) DEFAULT NULL ,
+  `manifest_ver` BIGINT DEFAULT NULL ,
+  `inst_id` varchar(40) DEFAULT NULL ,
+  `insert_time` TIMESTAMP DEFAULT NULL ,
+  `update_time` TIMESTAMP DEFAULT NULL ,
+   PRIMARY KEY (`id`)
+);
+
+
+
 
 INSERT INTO `user` VALUES ('1', 'admin','hello@admin.com','13988888888', '$2a$12$nXPoohJkpNbD1oSxtN0P1uGxhYP40Rn1Z0Yh1yxQ2lMhdz2TOqIZu');
 INSERT INTO `inst` VALUES ('1', 'default', 'http://192.168.66.100:9180','edd1c9f034335f136f87ad84b625c8f1');
