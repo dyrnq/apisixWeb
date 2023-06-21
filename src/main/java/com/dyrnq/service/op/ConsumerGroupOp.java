@@ -52,6 +52,11 @@ public class ConsumerGroupOp implements Op<ConsumerGroup>, Sample {
     }
 
     @Override
+    public ConsumerGroup put(AdminClient client, ConsumerGroup obj) throws ApisixSDKException {
+        return client.putConsumerGroup(obj.getId(), obj);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

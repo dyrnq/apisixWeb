@@ -17,6 +17,11 @@ public class SSLOp implements Op<SSL>, Sample {
     }
 
     @Override
+    public SSL put(AdminClient client, SSL obj) throws ApisixSDKException {
+        return client.putSSL(obj.getId(), obj);
+    }
+
+    @Override
     public void drop(AdminClient client) throws ApisixSDKException {
         for (SSL r : client.listSSLs()) {
             client.delSSL(r.getId());

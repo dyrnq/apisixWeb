@@ -20,4 +20,6 @@ public interface Op<T> {
     T putRaw(AdminClient client, String id, String rawData) throws ApisixSDKException;
 
     List<T> list(AdminClient client, String[] id) throws ApisixSDKException;
+
+    T put(AdminClient client, T obj) throws ApisixSDKException;
 }

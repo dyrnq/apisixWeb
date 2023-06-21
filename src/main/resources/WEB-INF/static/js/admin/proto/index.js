@@ -419,7 +419,18 @@ layui.use(function () {
 
                     if (data.code == '200') {
                         $('#addForm1 input[name="id"]').val(obj.data.id);
-                        editor.setValue(data.data.rawData);
+                        var modeName = editor.session.getMode().$id;
+                        if (/yaml/.test(modeName)){
+                            const jsonObject = JSON.parse(data.data.rawData);
+                            let yamlText="content: |"
+                            yamlText = yamlText +"\n"
+                            yamlText =  yamlText +"  "+ jsonObject.content.replace(/\n/g, "\n  ");
+                            //const yamlText = jsyaml.dump(jsonObject);
+                            editor.setValue(yamlText,-1);
+                        }else{
+                            editor.setValue(data.data.rawData, -1);
+                        }
+
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],

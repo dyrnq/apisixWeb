@@ -53,6 +53,11 @@ public class PluginConfigOp implements Op<PluginConfig>, Sample {
     }
 
     @Override
+    public PluginConfig put(AdminClient client, PluginConfig obj) throws ApisixSDKException {
+        return client.putPluginConfig(obj.getId(), obj);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

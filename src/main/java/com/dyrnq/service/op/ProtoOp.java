@@ -44,6 +44,11 @@ public class ProtoOp implements Op<Proto>, Sample {
     }
 
     @Override
+    public Proto put(AdminClient client, Proto obj) throws ApisixSDKException {
+        return client.putProto(obj.getId(), obj);
+    }
+
+    @Override
     public List<Proto> list(AdminClient client, String[] id) throws ApisixSDKException {
         List<Proto> list = new ArrayList<>();
         for (String i : id) {

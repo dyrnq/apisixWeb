@@ -53,6 +53,11 @@ public class ConsumerOp implements Op<Consumer>, Sample {
     }
 
     @Override
+    public Consumer put(AdminClient client, Consumer obj) throws ApisixSDKException {
+        return client.putConsumer(obj.getId(), obj);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

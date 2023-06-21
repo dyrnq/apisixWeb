@@ -24,6 +24,11 @@ public class ServiceOp implements Op<Service>, Sample {
     }
 
     @Override
+    public Service put(AdminClient client, Service obj) throws ApisixSDKException {
+        return client.putService(obj.getId(), obj);
+    }
+
+    @Override
     public Service get(AdminClient client, String id) throws ApisixSDKException {
         return client.getService(id);
     }

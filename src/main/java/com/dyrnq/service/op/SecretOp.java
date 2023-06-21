@@ -19,6 +19,11 @@ public class SecretOp implements Op<Secret>, Sample {
     }
 
     @Override
+    public Secret put(AdminClient client, Secret obj) throws ApisixSDKException {
+        return client.putSecret(obj.getId(), "vault", obj);
+    }
+
+    @Override
     public void drop(AdminClient client) throws ApisixSDKException {
         for (Secret r : client.listSecrets()) {
             client.delSecret(r.getId());

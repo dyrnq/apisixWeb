@@ -53,6 +53,11 @@ public class GlobalRuleOp implements Op<GlobalRule>, Sample {
     }
 
     @Override
+    public GlobalRule put(AdminClient client, GlobalRule obj) throws ApisixSDKException {
+        return client.putGlobalRule(obj.getId(), obj);
+    }
+
+    @Override
     public Object sample() {
         return null;
     }

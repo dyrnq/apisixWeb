@@ -17,6 +17,11 @@ public class StreamRouteOp implements Op<StreamRoute>, Sample {
     }
 
     @Override
+    public StreamRoute put(AdminClient client, StreamRoute obj) throws ApisixSDKException {
+        return client.putStreamRoute(obj.getId(), obj);
+    }
+
+    @Override
     public void drop(AdminClient client) throws ApisixSDKException {
         for (StreamRoute r : client.listStreamRoutes()) {
             client.delStreamRoute(r.getId());
