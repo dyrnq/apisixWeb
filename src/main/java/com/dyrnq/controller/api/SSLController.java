@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import javax.naming.InvalidNameException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -79,10 +80,9 @@ public class SSLController extends ApiController {
     }
 
     @Mapping("")
-    public Result query(Context ctx, String page, String limit, String sni) {
+    public Result query(Context ctx, String page, String limit, String label) {
         try {
-            Map<String, String> pq = toMap(null, null, null);
-            pq.put("sni", sni);
+            Map<String, String> pq = toMap(null, label, null);
             Multi<SSL> rsp = getAdminClient().querySSLs(page, limit, pq);
             List<SSL> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
@@ -98,8 +98,8 @@ public class SSLController extends ApiController {
             SSL ssl = new SSL();
             byte[] byteCert = IOUtils.toByteArray(certFile.getContent());
             byte[] byteKey = IOUtils.toByteArray(keyFile.getContent());
-            ssl.setCert(IOUtils.toString(byteCert));
-            ssl.setKey(IOUtils.toString(byteKey));
+            ssl.setCert(new String(byteCert, Charset.defaultCharset()));
+            ssl.setKey(new String(byteKey,Charset.defaultCharset()));
 
             if (StringUtils.isNotBlank(snis)) {
                 String[] strArray = StringUtils.splitByWholeSeparator(snis, ",");

@@ -44,10 +44,9 @@ public class ConsumerController extends ApiController {
 
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit,String username) {
+    public PageResult query(Context ctx, String page, String limit,String label) {
         try {
-            Map<String,String> qp = toMap(null,null,null);
-            qp.put("username",username);
+            Map<String,String> qp = toMap(null,label,null);
             Multi<Consumer> rsp = getAdminClient().queryConsumers(page, limit,qp);
             List<Consumer> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
