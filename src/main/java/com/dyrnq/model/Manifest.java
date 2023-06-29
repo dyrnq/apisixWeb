@@ -18,6 +18,10 @@ public class Manifest {
     private
     String content;
 
+    @Exclude
+    private
+    Long ver;
+
     public String getId() {
         return id;
     }
@@ -40,5 +44,13 @@ public class Manifest {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Long getVer() {
+        return ver;
+    }
+
+    public void setVer(Long ver) {
+        this.ver = ver;
     }
 }

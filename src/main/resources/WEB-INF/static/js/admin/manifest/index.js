@@ -9,7 +9,8 @@ function cleanData(d){
 
     $('#addForm1 input[name="id"]').val("");
     $('#addForm1 input[name="title"]').val("");
-    $('#addForm1 input[name="content"]').val("");
+    //$('#addForm1 input[name="content"]').val("");
+    editor.setValue("", -1);
 }
 
 
@@ -20,9 +21,10 @@ function addLink(d) {
     }
    if (addLink.length > 0) {
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
-       let hisBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">'+'历史'+'</button>'
+       let hisBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">'+'Ver'+'</button>'
+       let deployBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="deploy">'+'发布'+'</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       return editBtn+'&nbsp;'+hisBtn+'&nbsp;'+delBtn;
+       return editBtn+'&nbsp;'+hisBtn+'&nbsp;'+deployBtn+ '&nbsp;' +delBtn;
    }
 }
 
@@ -33,7 +35,7 @@ var laypage = layui.laypage;
 var table = layui.table;
 var form = layui.form;
 
-
+editor.session.setUseWorker(false);
 
 
 var default_limt = localStorage.getItem('pageLimit');
@@ -65,6 +67,8 @@ $('#addOver').click(function(){
       obj[item.name] = item.value;
       return obj;
     }, {});
+    var text = editor.getValue();
+    formData['content'] = text;
 
     $.ajax({
         type : 'POST',
@@ -107,7 +111,7 @@ $('#addOver').click(function(){
         ,cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
-            ,{field: 'title', title: 'title', width: 80}
+            ,{field: 'title', title: 'title'}
             ,{field: 'upstream', title: 'operation', fixed: 'right',  templet: addLink}
         ]]
         , done: function (res, curr, count){
@@ -228,6 +232,28 @@ $('#addOver').click(function(){
                 maxmin: true, // 允许全屏最小化
                 skin: 'layui-layer-win10'
             });
+        } else if(layEvent === 'deploy'){
+
+                    $.ajax({
+                        url: ctx + '/api/manifest/deploy',
+                        type: 'post',
+                        contentType: 'application/json',
+                        data: JSON.stringify({id: obj.data.id }),
+                        success: function (data, statusText) {
+
+                            if (data.code == '200') {
+                                layer.msg(commonStr.success);
+                                table.reload("demo")
+
+                            } else {
+                                layer.msg(data.description);
+                            }
+                        },
+                        'error': function () {
+                            layer.msg(commonStr.errorInfo);
+                        }
+                    });
+
         } else if(layEvent === 'del'){ //删除
 
             if(obj.data.id == "1") {
@@ -270,7 +296,9 @@ $('#addOver').click(function(){
                     if(data.code=='200'){
                         $('#addForm1 input[name="id"]').val(data.data.id);
                         $('#addForm1 input[name="title"]').val(data.data.title);
-                        $('#addForm1 input[name="content"]').val(data.data.content);
+                        //$('#addForm1 input[name="content"]').val(data.data.content);
+                        var modeName = editor.session.getMode().$id;
+                        editor.setValue(data.data.content, -1);
                         layer.open({
                             type: 1,
                             area: ['800px', '600px'],

@@ -30,9 +30,7 @@ function addLink(d) {
     ,toolbar: false
     ,totalRow: false //开启合计行
     ,cols: [[ //表头
-       {field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
-      ,{field: 'title', title: 'title', sort: true}
-      ,{field: 'ver', title: 'ver', width: 150, templet: "<div>{{!d.ver?'':layui.util.toDateString(d.ver, 'yyyy-MM-dd HH:mm:ss') }}</div>" }
+      {field: 'ver', title: 'ver', templet: "<div>{{!d.ver?'':layui.util.toDateString(d.ver, 'yyyy-MM-dd HH:mm:ss') }}</div>" }
       ,{field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
     ]]
     ,response: {
@@ -77,7 +75,7 @@ table.on('toolbar(test)', function (obj) {
                     url: ctx + '/api/manifestVer/del',
                     type: 'post',
                     contentType: 'application/json',
-                    data: JSON.stringify({id: [obj.data.id] }),
+                    data: JSON.stringify({id: obj.data.id , ver: obj.data.ver }),
                     success:function (data,statusText) {
                          if(data.code=='200'){
                             obj.del();
