@@ -1,6 +1,7 @@
 package com.dyrnq.controller.api;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.PageUtil;
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.apisix.domain.*;
@@ -31,17 +32,7 @@ public class DeployController extends ApiController {
     @Inject
     DeployMapper deployMapper;
 
-    public Class get(String name) {
-        try {
-            if (StringUtils.contains(name, ".")) {
-                Class.forName(name);
-            }
-            return Class.forName("com.dyrnq.apisix.domain." + name);
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
 
-    }
 
     @Mapping("")
     public PageResult query(Context ctx, int page, int limit) {
@@ -128,9 +119,9 @@ public class DeployController extends ApiController {
                         Map<String, ?> map = (Map) block;
                         if (map.containsKey("kind")) {
                             String className = map.get("kind").toString();
+                            className = StringUtils.contains(className, ".")?className:"com.dyrnq.apisix.domain."+className;
                             String _id = map.get("id").toString();
-                            Class cz = get(className);
-                            if(clz == cz) {
+                            if(ClassUtil.equals(clz,className,true)) {
                                 String json = JSONUtil.toJsonStr(map);
                                 Factory.create(className).putRaw(businessLogic.getAdminClient(deploy.getInstId()), _id, json);
                                 break;
@@ -166,10 +157,10 @@ public class DeployController extends ApiController {
                         Map<String, ?> map = (Map) block;
                         if (map.containsKey("kind")) {
                             String className = map.get("kind").toString();
+                            className = StringUtils.contains(className, ".")?className:"com.dyrnq.apisix.domain."+className;
                             String _id = map.get("id").toString();
-                            Class cz = get(className);
-                            if(clz == cz) {
-                                String json = JSONUtil.toJsonStr(map);
+                            if(ClassUtil.equals(clz,className,true)) {
+                                //String json = JSONUtil.toJsonStr(map);
                                 Factory.create(className).del(businessLogic.getAdminClient(deploy.getInstId()), _id);
                                 break;
                             }
