@@ -367,7 +367,7 @@ $('#choose').click(function (){
                 type: 1,
                 area: ['500px', '300px'],
                 title: '输出格式',
-                content : $('#exportForm'),
+                content : $('#exportDiv'),
                 anim: 'slideRight',
                 shade: 0.6, // 遮罩透明度
                 shadeClose: true, // 点击遮罩区域，关闭弹层
