@@ -12,7 +12,7 @@ public class PathUtils {
         String homeAbsolutePath = "";
         String systemUserDir = SystemUtils.getUserHome().getAbsolutePath();
         if (StringUtils.isBlank(home)) {
-            homeAbsolutePath = StringUtils.joinWith(File.separator, systemUserDir, "." + projectName);
+            homeAbsolutePath = StringUtils.joinWith(File.separator, systemUserDir, projectName);
         } else {
             if (StringUtils.startsWith(home, "~")) {
                 homeAbsolutePath = RegExUtils.replaceFirst(home, "~", systemUserDir);

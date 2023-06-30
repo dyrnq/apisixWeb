@@ -6,7 +6,7 @@
 
 
 	<groupId>com.dyrnq</groupId>
-	<artifactId>solon-example</artifactId>
+	<artifactId>apisixWeb</artifactId>
 	<version>1.0.0</version>
 	<inceptionYear>2022</inceptionYear>
 	<contributors>
