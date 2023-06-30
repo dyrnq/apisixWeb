@@ -22,9 +22,9 @@ function addLink(d) {
    if (addLink.length > 0) {
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
        let hisBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">'+'Ver'+'</button>'
-       let deployBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="deploy">'+'发布'+'</button>'
+       //let deployBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="deploy">'+'发布'+'</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       return editBtn+'&nbsp;'+hisBtn+'&nbsp;'+deployBtn+ '&nbsp;' +delBtn;
+       return editBtn+'&nbsp;'+hisBtn+'&nbsp;'+ delBtn;
    }
 }
 
