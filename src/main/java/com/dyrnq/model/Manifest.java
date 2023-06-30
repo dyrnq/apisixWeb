@@ -1,7 +1,6 @@
 package com.dyrnq.model;
 
 import org.noear.wood.annotation.Column;
-import org.noear.wood.annotation.Exclude;
 import org.noear.wood.annotation.PrimaryKey;
 import org.noear.wood.annotation.Table;
 
@@ -14,13 +13,10 @@ public class Manifest {
     @Column("title")
     private String title;
 
-    @Exclude
+    @Column("content")
     private
     String content;
 
-    @Exclude
-    private
-    Long ver;
 
     public String getId() {
         return id;
@@ -46,11 +42,5 @@ public class Manifest {
         this.content = content;
     }
 
-    public Long getVer() {
-        return ver;
-    }
 
-    public void setVer(Long ver) {
-        this.ver = ver;
-    }
 }

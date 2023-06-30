@@ -44,12 +44,7 @@ public class AdminController extends BaseController{
         ModelAndView model = new ModelAndView("admin/manifest.html");
         return model;
     }
-    @Mapping("manifestVer")
-    public Object manifestVer(Context ctx, String id) {
-        ModelAndView model = new ModelAndView("admin/manifestVer.html");
-        model.put("id", id);
-        return model;
-    }
+
     @Mapping("deploy")
     public Object deploy(Context ctx) {
         ModelAndView model = new ModelAndView("admin/deploy.html");

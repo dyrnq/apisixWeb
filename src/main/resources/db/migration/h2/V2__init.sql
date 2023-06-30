@@ -49,15 +49,11 @@ CREATE TABLE `cert` (
 CREATE TABLE `manifest` (
   `id` varchar(40) NOT NULL ,
   `title` varchar(512) DEFAULT NULL ,
+  `content` CLOB DEFAULT NULL ,
    PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `manifest_ver` (
-  `id` varchar(40) NOT NULL ,
-  `ver` BIGINT DEFAULT NULL ,
-  `content` CLOB DEFAULT NULL ,
-   PRIMARY KEY (`id`,`ver`)
-);
+
 
 CREATE TABLE `deploy` (
   `id` varchar(40) NOT NULL ,

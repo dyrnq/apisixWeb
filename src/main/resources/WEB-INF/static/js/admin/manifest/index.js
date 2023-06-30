@@ -1,3 +1,12 @@
+layui.use(function(){
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
+
+editor.session.setUseWorker(false);
+
 function cleanData(d){
     if( d === true ){
         $("#div_id").hide();
@@ -24,18 +33,12 @@ function addLink(d) {
        let hisBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">'+'Ver'+'</button>'
        //let deployBtn  = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="deploy">'+'发布'+'</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">'+commonStr.del+'</button>'
-       return editBtn+'&nbsp;'+hisBtn+'&nbsp;'+ delBtn;
+       return editBtn+'&nbsp;' + delBtn;
    }
 }
 
-layui.use(function(){
 
-var layer = layui.layer;
-var laypage = layui.laypage;
-var table = layui.table;
-var form = layui.form;
 
-editor.session.setUseWorker(false);
 
 
 var default_limt = localStorage.getItem('pageLimit');
@@ -90,6 +93,7 @@ $('#addOver').click(function(){
         }
     });
 });
+
 
 
     //执行一个 table 实例
@@ -221,17 +225,7 @@ $('#addOver').click(function(){
         var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
 
         if(layEvent === 'detail'){ //查看
-            layer.open({
-                type: 2,
-                area: ['1000px', '600px'],
-                title: 'List',
-                content: ctx + '/admin/manifestVer?id='+obj.data.id,
-                anim: 'slideRight',
-                shade: 0.6, // 遮罩透明度
-                shadeClose: true, // 点击遮罩区域，关闭弹层
-                maxmin: true, // 允许全屏最小化
-                skin: 'layui-layer-win10'
-            });
+
         } else if(layEvent === 'deploy'){
 
                     $.ajax({
