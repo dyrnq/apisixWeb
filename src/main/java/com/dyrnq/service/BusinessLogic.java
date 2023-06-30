@@ -18,6 +18,9 @@ import com.dyrnq.service.op.Factory;
 import com.dyrnq.service.op.Op;
 import com.dyrnq.utils.BCryptPasswordEncoder;
 import com.dyrnq.utils.TarUtils;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
@@ -33,12 +36,6 @@ import org.noear.wood.annotation.Db;
 import org.noear.wood.ext.Act1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.yaml.snakeyaml.DumperOptions;
-import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.introspector.Property;
-import org.yaml.snakeyaml.nodes.NodeTuple;
-import org.yaml.snakeyaml.nodes.Tag;
-import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -135,7 +132,7 @@ public class BusinessLogic {
     }
 
     public void drop(String instId) throws ApisixSDKException {
-        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
+        Class[] clss = new Class[]{Upstream.class, Service.class, Route.class, StreamRoute.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
         AdminClient client = getAdminClient(instId);
         //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
         for (Class obj : clss) {
@@ -154,20 +151,13 @@ public class BusinessLogic {
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .create();
-        DumperOptions options = new DumperOptions();//一个专属于yaml的字符串对象转化方法，类似于Gson.
-        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 设置默认流样式为块格式
-        options.setProcessComments(false);
-        Representer representer = new Representer(options) {
-            protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue, Tag customTag) {
-                // if value of property is null, ignore it.
-                if (propertyValue == null) {
-                    return null;
-                } else {
-                    return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
-                }
-            }
-        };
-        Yaml yaml = new Yaml(representer);
+
+
+        JsonMapper jsonMapper = new JsonMapper();
+        YAMLMapper yamlMapper = new YAMLMapper();
+        // 配置 ObjectMapper 忽略值为 null 的字段
+        //jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
         String rdm = Long.toString(currentTimeMillis);
         String targetFolderPath = homeDir.getTmpAbsolutePath() + File.separator + rdm;
         String targetTarFile = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
@@ -197,7 +187,13 @@ public class BusinessLogic {
                 String content = null; //创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
 
                 if (StringUtils.equalsIgnoreCase("yaml", format)) {
-                    content = yaml.dump(item);
+                    // 将JSON字符串转换为JsonNode对象
+
+                    JsonNode jsonNode = jsonMapper.readTree(gson.toJson(item));
+
+                    // 将JsonNode对象转换为YAML字符串
+                    content = yamlMapper.writeValueAsString(jsonNode);
+
                 } else {
                     content = gson.toJson(item);
                 }
@@ -223,7 +219,10 @@ public class BusinessLogic {
         String rdm = Long.toString(currentTimeMillis);
         String targetFolderPath = homeDir.getTmpAbsolutePath() + File.separator + rdm;
 
-        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
+        JsonMapper jsonMapper = new JsonMapper();
+        YAMLMapper yamlMapper = new YAMLMapper();
+
+        Class[] clss = new Class[]{Upstream.class, Service.class, Route.class, StreamRoute.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
 
         AdminClient client = getAdminClient(instId);
         String tarGzFilepath = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
@@ -240,11 +239,26 @@ public class BusinessLogic {
             Op op = Factory.create(obj);
             for (File item : folder.listFiles()) {
                 FileReader reader = new FileReader(item);
-                String jsonS = IOUtils.toString(reader);
+                String content = IOUtils.toString(reader);
                 String fileName = item.getName();
-                String id = StringUtils.removeEnd(fileName, ".json");
+
+                String id = null;
+                if (StringUtils.endsWithIgnoreCase(fileName, ".json")) {
+                    id = StringUtils.removeEnd(fileName, ".json");
+                } else if (StringUtils.endsWithIgnoreCase(fileName, ".yaml")) {
+                    id = StringUtils.removeEnd(fileName, ".yaml");
+                } else if (StringUtils.endsWithIgnoreCase(fileName, ".yml")) {
+                    id = StringUtils.removeEnd(fileName, ".yml");
+                }
+
                 id = URLDecoder.decode(id, "UTF-8");
-                op.putRaw(client, id, jsonS);
+                //将yaml转化为json
+                if (!StringUtils.endsWithIgnoreCase(fileName, ".json")) {
+                    JsonNode jsonNode = yamlMapper.readTree(content);
+                    content = jsonMapper.writeValueAsString(jsonNode);
+                }
+
+                op.putRaw(client, id, content);
                 reader.close();
             }
         }

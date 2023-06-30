@@ -118,6 +118,7 @@ $('#choose').click(function (){
     let id = $('#exportForm input[name="id"]').val();
     //console.log(format)
     window.open(ctx + '/api/tar/export?id='+id+"&format="+format);
+    layer.closeAll();
 })
 
     form.on('radio(demo-radio-filter)', function(data){
