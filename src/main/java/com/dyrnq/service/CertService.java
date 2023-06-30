@@ -15,7 +15,6 @@ import com.dyrnq.utils.X509Holder;
 import enumeration.Approach;
 import enumeration.Challenge;
 import enumeration.Encryption;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.operator.OperatorCreationException;
@@ -78,7 +77,6 @@ public class CertService {
     }
 
 
-
     public void privateCA(Cert cert) throws CertificateException, IOException, NoSuchAlgorithmException, OperatorCreationException, InvalidAlgorithmParameterException {
         if (StringUtils.isBlank(cert.getSubject())) {
             cert.setSubject("CN=" + StringUtils.split(cert.getDomain(), ",")[0]);
@@ -91,10 +89,10 @@ public class CertService {
             issuerCA = CertUtils.loadCertificate(ca.getCert());
             issuerCAKey = CertUtils.load(ca.getKey());
         }
-        if(cert.getEncryption()!=null && cert.getEncryption() == Encryption.ECC.getId()){
+        if (cert.getEncryption() != null && cert.getEncryption() == Encryption.ECC.getId()) {
             x509Holder = CertUtils.genECC(cert.getSubject(), StringUtils.split(cert.getDomain(), ","), issuerCA, issuerCAKey);
-        }else {
-            x509Holder = CertUtils.genRSA(cert.getSubject(), StringUtils.split(cert.getDomain(), ","),issuerCA,issuerCAKey);
+        } else {
+            x509Holder = CertUtils.genRSA(cert.getSubject(), StringUtils.split(cert.getDomain(), ","), issuerCA, issuerCAKey);
         }
 
         cert.setCert(x509Holder.getCert());
@@ -154,29 +152,30 @@ public class CertService {
             if (cert.getEncryption() != null && cert.getEncryption().intValue() == Encryption.ECC.getId()) {
                 keylength = " --ecc --keylength ec-256 ";
             }
-            cmd = homeDir.getAcmeSh() + " --issue --force " + home + " --dns " + cert.getDnsapi() + domain + keylength + " --server letsencrypt --staging";
+            cmd = homeDir.getAcmeSh() + " --issue --force " + home + " --dns " + cert.getDnsapi() + domain + keylength + " --server letsencrypt ";
+            // --staging
             rs = acmeshCmd.execCMD(cmd, env, 5 * 60 * 1000);
             logger.info(rs);
 
             if (rs.contains("Your cert is in")) {
                 // 申请成功, 定位证书
                 String firstDomain = cert.getDomain().split(",")[0];
-                String certDir = homeDir.getAcmeHome() +File.separator+ firstDomain;
-                if ( cert.getEncryption() == Encryption.ECC.getId()) {
+                String certDir = homeDir.getAcmeHome() + File.separator + firstDomain;
+                if (cert.getEncryption() == Encryption.ECC.getId()) {
                     certDir += "_ecc";
                 }
                 certDir += "/";
 
                 String crtPath = certDir + "fullchain.cer";
-                String keyPath = certDir + firstDomain+".key";
+                String keyPath = certDir + firstDomain + ".key";
 
-                cert.setCert(FileUtil.readString(crtPath,"UTF-8"));
-                cert.setKey(FileUtil.readString(keyPath,"UTF-8"));
+                cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
+                cert.setKey(FileUtil.readString(keyPath, "UTF-8"));
                 X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
                 cert.setNotAfter(x509Cert.getNotAfter().getTime());
                 cert.setNotBefore(x509Cert.getNotBefore().getTime());
                 cert.setSubject(x509Cert.getSubjectDN().toString());
-            }else{
+            } else {
                 throw new RuntimeException("error");
             }
         } else if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.http.getId()) {
@@ -187,14 +186,14 @@ public class CertService {
                 acmeClient.fetchCertificate(domains);
 
                 String firstDomain = cert.getDomain().split(",")[0];
-                String certDir = homeDir.getAcmeHome() +File.separator+ firstDomain;
+                String certDir = homeDir.getAcmeHome() + File.separator + firstDomain;
 
 
-                String crtPath = certDir +File.separator+ "domain-chain.crt";
-                String keyPath = certDir +File.separator+ "domain.key";
+                String crtPath = certDir + File.separator + "domain-chain.crt";
+                String keyPath = certDir + File.separator + "domain.key";
 
-                cert.setCert(FileUtil.readString(crtPath,"UTF-8"));
-                cert.setKey(FileUtil.readString(keyPath,"UTF-8"));
+                cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
+                cert.setKey(FileUtil.readString(keyPath, "UTF-8"));
                 X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
                 cert.setNotAfter(x509Cert.getNotAfter().getTime());
                 cert.setNotBefore(x509Cert.getNotBefore().getTime());
@@ -208,7 +207,6 @@ public class CertService {
 
 
     }
-
 
 
     public void issue(Cert cert) throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, OperatorCreationException {

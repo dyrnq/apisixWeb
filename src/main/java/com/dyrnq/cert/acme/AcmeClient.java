@@ -1,6 +1,8 @@
 package com.dyrnq.cert.acme;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.io.file.FileNameUtil;
 import com.dyrnq.HomeDir;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
@@ -8,6 +10,7 @@ import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
 import com.dyrnq.service.BusinessLogic;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
 import org.shredzone.acme4j.*;
@@ -50,14 +53,14 @@ public class AcmeClient {
 
     //兼容acme.sh,公用一个account.key
     public File getUserKeyFile() {
-        return new File(homeDir.getAcmeHome() + File.separator + "ca/acme-v02.api.letsencrypt.org/directory/account.key");
+        return new File(StringUtils.joinWith(File.separator,homeDir.getAcmeHome(),"ca","acme-v02.api.letsencrypt.org","directory","account.key"));
     }
     public String getFirstDomain(Collection<String> domains) {
         return CollectionUtil.getFirst(domains);
     }
     private File getFile(Collection<String> domains,String fileName){
         String domain = getFirstDomain(domains);
-        File file = new File(homeDir.getAcmeHome() + File.separator + domain + File.separator + fileName);
+        File file = new File(StringUtils.joinWith(File.separator,homeDir.getAcmeHome(),domain,fileName));
         try {
             FileUtils.forceMkdirParent(file);
         } catch (IOException e) {
@@ -99,8 +102,8 @@ public class AcmeClient {
 
         // Create a session for Let's Encrypt.
         // Use "acme://letsencrypt.org" for production server
-        Session session = new Session("acme://letsencrypt.org/staging");
-
+        //Session session = new Session("acme://letsencrypt.org/staging");
+        Session session = new Session("acme://letsencrypt.org");
         // Get the Account.
         // If there is no account yet, create a new one.
         Account acct = findOrRegisterAccount(session, userKeyPair);
@@ -343,11 +346,11 @@ public class AcmeClient {
         logger.info("The file must not contain any leading or trailing whitespaces or line breaks!");
         logger.info("If you're ready, dismiss the dialog...");
 
-
+        //使用当前apisix instance充当80端口验证
         try {
             AdminClient client = businessLogic.getAdminClient();
             Route r = new Route();
-            r.setName("hello.dyrnq.com acme-challenge");
+            r.setName(auth.getIdentifier().getDomain()+" acme-challenge");
             r.setUri("/.well-known/acme-challenge/" + challenge.getToken());
             Map<String, Object> map = new HashMap<>();
             ResponseRewrite responseRewrite = new ResponseRewrite();

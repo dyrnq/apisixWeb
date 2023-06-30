@@ -3,14 +3,12 @@ package com.dyrnq;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.io.resource.ClassPathResource;
-import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.system.SystemUtil;
+import com.dyrnq.utils.PathUtils;
 import com.dyrnq.utils.TarUtils;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Inject;
@@ -51,19 +49,8 @@ public class Config {
 
     @Bean(value = "homeDir", typed = true)
     HomeDir getHomeDir() {
-        String homeAbsolutePath = "";
-        String tmpAbsolutePath = "";
-        String systemUserDir = SystemUtils.getUserHome().getAbsolutePath();
-        if (StringUtils.isBlank(home)) {
-            homeAbsolutePath = systemUserDir + File.separator + "." + projectName;
-        } else {
-            if (StringUtils.startsWith(home, "~")) {
-                homeAbsolutePath = RegExUtils.replaceFirst(home, "~", systemUserDir);
-            } else {
-                homeAbsolutePath = home;
-            }
-        }
-        tmpAbsolutePath = homeAbsolutePath + File.separator + "tmp";
+        String homeAbsolutePath = PathUtils.homeAbsolutePath(home, projectName);
+        String tmpAbsolutePath = StringUtils.joinWith(File.separator, homeAbsolutePath, "tmp");
 
         try {
             FileUtils.forceMkdir(new File(tmpAbsolutePath));
@@ -77,31 +64,33 @@ public class Config {
         String acmeVer = "3.0.6";
         String acmeTarGzFile = "acme.sh-" + acmeVer;
         //https://github.com/acmesh-official/acme.sh/archive/refs/tags/3.0.6.tar.gz
-        String acmeShDir = homeAbsolutePath + File.separator + acmeTarGzFile;
-        String acmeSh = acmeShDir + File.separator + "acme.sh";
+        String acmeShDir = StringUtils.joinWith(File.separator, homeAbsolutePath, acmeTarGzFile);
+        String acmeSh = StringUtils.joinWith(File.separator, acmeShDir, "acme.sh");
+        String acmeHome = StringUtils.joinWith(File.separator, homeAbsolutePath, "acme");
         InputStream inputStream = null;
         try {
 
             inputStream = new ClassPathResource(acmeTarGzFile + ".tar.gz").getStream();
-            FileUtil.writeFromStream(inputStream, tmpAbsolutePath + File.separator + acmeTarGzFile + ".tar.gz");
-            FileUtil.mkdir(homeAbsolutePath + File.separator + "acme");
+            String acmeTarGzTmp = StringUtils.joinWith(File.separator, tmpAbsolutePath, acmeTarGzFile + ".tar.gz");
+            FileUtil.writeFromStream(inputStream, acmeTarGzTmp);
+            FileUtil.mkdir(acmeHome);
 
-            TarUtils.extractTarGz(tmpAbsolutePath + File.separator + acmeTarGzFile + ".tar.gz", homeAbsolutePath);
+            TarUtils.extractTarGz(acmeTarGzTmp, homeAbsolutePath);
         } catch (IOException e) {
             logger.error(e.getMessage());
         } finally {
             IoUtil.close(inputStream);
         }
 
-        if (ReUtil.isMatch("(?i).*linux.*", SystemUtil.get(SystemUtil.OS_NAME))) {
+        if (SystemUtil.getOsInfo().isLinux() || SystemUtil.getOsInfo().isMac()) {
             RuntimeUtil.exec("chmod a+x " + acmeSh);
         }
 
-        String acmeHome = homeAbsolutePath +File.separator+ "acme";
+
         logger.info("config***********acmeShDir=" + acmeShDir);
         logger.info("config***********acmeSh=" + acmeSh);
         logger.info("config***********acmeHome=" + acmeHome);
-        return new HomeDir(homeAbsolutePath, tmpAbsolutePath, acmeShDir, acmeSh,acmeHome);
+        return new HomeDir(homeAbsolutePath, tmpAbsolutePath, acmeShDir, acmeSh, acmeHome);
     }
 
     @Bean(value = "cfgExtractor", typed = true)

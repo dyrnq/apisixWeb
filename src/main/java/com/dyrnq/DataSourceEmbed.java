@@ -1,12 +1,11 @@
 package com.dyrnq;
 
 import cn.hutool.core.util.ReUtil;
+import com.dyrnq.utils.PathUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.RegExUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.flywaydb.core.Flyway;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
@@ -41,17 +40,7 @@ public class DataSourceEmbed {
     @Bean(value = "db1", typed = true)
     public DataSource getDataSource() {
 
-        String homeAbsolutePath;
-        String systemUserDir = SystemUtils.getUserHome().getAbsolutePath();
-        if (StringUtils.isBlank(home)) {
-            homeAbsolutePath = systemUserDir + File.separator + "." + projectName;
-        } else {
-            if (StringUtils.startsWith(home, "~")) {
-                homeAbsolutePath = RegExUtils.replaceFirst(home, "~", systemUserDir);
-            } else {
-                homeAbsolutePath = home;
-            }
-        }
+        String homeAbsolutePath = PathUtils.homeAbsolutePath(home, projectName);
 
 
         HikariDataSource ds = null;
