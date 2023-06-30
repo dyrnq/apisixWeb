@@ -316,9 +316,13 @@ done
 
 fun_initdb(){
 
-docker run -it --rm --network mynet  ${mysql5_image} mysql --host mysql57 --user root --password=666666 --loose-default-character-set=utf8 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;show databases;"
-docker run -it --rm --network mynet  ${mysql8_image} mysql --host mysql8 --user root --password=666666 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;show databases;"
-
+docker run -it --rm --network mynet  ${mysql5_image} mysql --host mysql57 --user root --password=666666 --loose-default-character-set=utf8 -e "CREATE DATABASE if not exists apisixweb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;show databases;"
+docker run -it --rm --network mynet  ${mysql8_image} mysql --host mysql8 --user root --password=666666 -e "CREATE DATABASE if not exists apisixweb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;show databases;"
+docker exec -i postgres12 bash <<'EOF'
+if [ $(psql -tA --username "postgres" -c "select count(1) from pg_database where datname='apisixweb'") = "0" ]; then
+    psql -v ON_ERROR_STOP=1 --username "postgres" --no-password -c "create database apisixweb with encoding='utf8' TEMPLATE template0;"
+fi
+EOF
 }
 
 fun_add_mynet
