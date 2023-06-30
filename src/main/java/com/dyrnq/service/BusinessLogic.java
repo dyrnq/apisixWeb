@@ -33,6 +33,12 @@ import org.noear.wood.annotation.Db;
 import org.noear.wood.ext.Act1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.*;
 import java.net.URLDecoder;
@@ -91,10 +97,10 @@ public class BusinessLogic {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
             if (encoder.matches(pass, user.getPass())) {
                 return user;
-            }else {
+            } else {
                 throw new RuntimeException(I18nUtil.getMessage("loginStr.backError2"));
             }
-        }else{
+        } else {
             throw new RuntimeException(I18nUtil.getMessage("loginStr.backError5"));
         }
 
@@ -140,7 +146,7 @@ public class BusinessLogic {
     }
 
 
-    public byte[] export(String instId, long currentTimeMillis) throws ApisixSDKException, IOException {
+    public byte[] export(String instId, long currentTimeMillis, String format) throws ApisixSDKException, IOException {
         //创建gson对象，含有转化的toJson方法
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
@@ -148,6 +154,20 @@ public class BusinessLogic {
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .create();
+        DumperOptions options = new DumperOptions();//一个专属于yaml的字符串对象转化方法，类似于Gson.
+        options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK); // 设置默认流样式为块格式
+        options.setProcessComments(false);
+        Representer representer = new Representer(options) {
+            protected NodeTuple representJavaBeanProperty(Object javaBean, Property property, Object propertyValue, Tag customTag) {
+                // if value of property is null, ignore it.
+                if (propertyValue == null) {
+                    return null;
+                } else {
+                    return super.representJavaBeanProperty(javaBean, property, propertyValue, customTag);
+                }
+            }
+        };
+        Yaml yaml = new Yaml(representer);
         String rdm = Long.toString(currentTimeMillis);
         String targetFolderPath = homeDir.getTmpAbsolutePath() + File.separator + rdm;
         String targetTarFile = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
@@ -169,15 +189,26 @@ public class BusinessLogic {
             }
             FileUtils.forceMkdir(new File(targetFolderPath + File.separator + simpleName));
 
+            String fileEnd = StringUtils.equalsIgnoreCase("yaml", format) ? "yaml" : "json";
             for (Object item : list) {
                 String id = op.encodeId(item);
-                File file = new File(targetFolderPath + File.separator + simpleName + File.separator + id + ".json");//创建file文件地址对象，作为载体
+                File file = new File(targetFolderPath + File.separator + simpleName + File.separator + id + "." + fileEnd);//创建file文件地址对象，作为载体
                 FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-                String json = gson.toJson(item);//创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
-                writer.write(json);//执行写入方法。
+                String content = null; //创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
+
+                if (StringUtils.equalsIgnoreCase("yaml", format)) {
+                    content = yaml.dump(item);
+                } else {
+                    content = gson.toJson(item);
+                }
+
+                writer.write(content);//执行写入方法。
                 writer.close();//关闭写入方法。
             }
+
             TarUtils.tarGz(targetFolderPath, targetTarFile);
+
+
         }
         byte[] bytes = FileUtils.readFileToByteArray(new File(targetTarFile));
 

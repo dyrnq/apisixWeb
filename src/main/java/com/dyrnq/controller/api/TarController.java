@@ -15,9 +15,9 @@ import java.io.IOException;
 @Controller
 public class TarController extends ApiController {
     @Mapping("export")
-    public void export(Context ctx, String id) throws IOException, ApisixSDKException {
+    public void export(Context ctx, String id, String format) throws IOException, ApisixSDKException {
         long currentTimeMillis = System.currentTimeMillis();
-        byte[] b = businessLogic.export(id, currentTimeMillis);
+        byte[] b = businessLogic.export(id, currentTimeMillis, format);
         String fileName = "export-" + currentTimeMillis + ".tar.gz";
         DownloadedFile file = new DownloadedFile("application/octet-stream", b, fileName);
         ctx.outputAsFile(file);

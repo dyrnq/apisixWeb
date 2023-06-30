@@ -134,6 +134,27 @@ input[name='param']{
         </form>
     </div>
 
+    <div class="layui-form" id="exportForm">
+        <form class="layui-form">
+            <input type="hidden" name="format">
+            <input type="hidden" name="id">
+
+            <input type="radio" name="AAA" value="json" title="默认" lay-filter="demo-radio-filter" checked>
+            <div lay-radio>
+                <span style="color: blue;">json</span>
+            </div>
+            <input type="radio" name="AAA" value="yaml" title="默认" lay-filter="demo-radio-filter">
+            <div lay-radio>
+                <span style="color: green;">yaml</span>
+            </div>
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" id="choose">${i18n.get("commonStr.submit")}
+                </button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 <#include 'admin/script.html'/>

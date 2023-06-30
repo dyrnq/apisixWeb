@@ -113,6 +113,25 @@ $('#addOver').click(function(){
     });
 });
 
+$('#choose').click(function (){
+    let format = $('#exportForm input[name="format"]').val();
+    let id = $('#exportForm input[name="id"]').val();
+    //console.log(format)
+    window.open(ctx + '/api/tar/export?id='+id+"&format="+format);
+})
+
+    form.on('radio(demo-radio-filter)', function(data){
+        var elem = data.elem; // 获得 radio 原始 DOM 对象
+        var checked = elem.checked; // 获得 radio 选中状态
+        var value = elem.value; // 获得 radio 值
+        var othis = data.othis; // 获得 radio 元素被替换后的 jQuery 对象
+        if(checked == true){
+            $('#exportForm input[name="format"]').val(value);
+        }
+
+        //layer.msg(['value: '+ value, 'checked: '+ checked].join('<br>'));
+    });
+
 
     //执行一个 table 实例
     table.render({
@@ -343,7 +362,18 @@ $('#addOver').click(function(){
                 });
         } else if(layEvent === 'export'){//导出事件
                 //console.log(obj.data.id);
-                window.open('/api/tar/export?id='+obj.data.id);
+            $('#exportForm input[name="id"]').val(obj.data.id);
+            layer.open({
+                type: 1,
+                area: ['500px', '300px'],
+                title: '输出格式',
+                content : $('#exportForm'),
+                anim: 'slideRight',
+                shade: 0.6, // 遮罩透明度
+                shadeClose: true, // 点击遮罩区域，关闭弹层
+                maxmin: true, // 允许全屏最小化
+                skin: 'layui-layer-win10'
+            })
         } else if(layEvent === 'drop'){
                 layer.confirm(commonStr.confirmClear, function(index) {
                     $.ajax({
