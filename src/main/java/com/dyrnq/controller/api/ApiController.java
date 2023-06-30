@@ -1,5 +1,6 @@
 package com.dyrnq.controller.api;
 
+import com.dyrnq.CookieName;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.controller.BaseController;
@@ -36,6 +37,11 @@ public class ApiController extends BaseController {
 
     protected AdminClient getAdminClient() throws ApisixSDKException {
         return businessLogic.getAdminClient();
+    }
+
+    public String instId(){
+        String instId = Context.current().cookie(CookieName.NAME_INSTID, "1");
+        return instId;
     }
 
 

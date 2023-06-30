@@ -1,6 +1,8 @@
 package com.dyrnq.model;
 
+import org.noear.solon.core.handle.UploadedFile;
 import org.noear.wood.annotation.Column;
+import org.noear.wood.annotation.Exclude;
 import org.noear.wood.annotation.PrimaryKey;
 import org.noear.wood.annotation.Table;
 
@@ -21,17 +23,21 @@ public class Deploy {
     private
     Date updateTime;
 
-    @Column("manifest_id")
+    @Column("title")
     private
-    String manifestId;
+    String title;
 
-    @Column("manifest_ver")
+    @Column("content")
     private
-    Long manifestVer;
+    String content;
 
     @Column("inst_id")
     private
     String instId;
+
+    @Column("state")
+    private
+    Integer state;
 
     public String getId() {
         return id;
@@ -57,20 +63,20 @@ public class Deploy {
         this.updateTime = updateTime;
     }
 
-    public String getManifestId() {
-        return manifestId;
+    public String getTitle() {
+        return title;
     }
 
-    public void setManifestId(String manifestId) {
-        this.manifestId = manifestId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public Long getManifestVer() {
-        return manifestVer;
+    public String getContent() {
+        return content;
     }
 
-    public void setManifestVer(Long manifestVer) {
-        this.manifestVer = manifestVer;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public String getInstId() {
@@ -79,5 +85,25 @@ public class Deploy {
 
     public void setInstId(String instId) {
         this.instId = instId;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    @Exclude
+    private
+    UploadedFile uploadFile;
+
+    public UploadedFile getUploadFile() {
+        return uploadFile;
+    }
+
+    public void setUploadFile(UploadedFile uploadFile) {
+        this.uploadFile = uploadFile;
     }
 }

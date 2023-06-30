@@ -50,6 +50,11 @@ public class AdminController extends BaseController{
         model.put("id", id);
         return model;
     }
+    @Mapping("deploy")
+    public Object deploy(Context ctx) {
+        ModelAndView model = new ModelAndView("admin/deploy.html");
+        return model;
+    }
 
 
     @Mapping("user")

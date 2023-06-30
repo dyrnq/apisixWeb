@@ -61,8 +61,9 @@ CREATE TABLE `manifest_ver` (
 
 CREATE TABLE `deploy` (
   `id` varchar(40) NOT NULL ,
-  `manifest_id` varchar(40) DEFAULT NULL ,
-  `manifest_ver` BIGINT DEFAULT NULL ,
+  `title` varchar(512) DEFAULT NULL ,
+  `content` CLOB DEFAULT NULL ,
+  `state` INT DEFAULT NULL ,
   `inst_id` varchar(40) DEFAULT NULL ,
   `insert_time` TIMESTAMP DEFAULT NULL ,
   `update_time` TIMESTAMP DEFAULT NULL ,
