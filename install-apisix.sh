@@ -8,7 +8,14 @@ apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
 apisix_image="${apisix_image:-apache/apisix:3.2.0-debian}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.0-alpine}"
-
+etcd_image="${etcd_image:-dyrnq/etcd:3.5.7-0}"
+wait4x_image="${wait4x_image:-atkrad/wait4x:2.12}"
+nginx_image="${nginx_image:-nginx:1.22.1-alpine}"
+mysql5_image="${mysql5_image:-mysql:5.7.41}"
+mysql8_image="${mysql8_image:-mysql:8.0.23}"
+pg_image="${pg_image:-postgres:12.14}"
+whoami_image="${whoami_image:-containous/whoami:latest}"
+adminer_image="${adminer_image:-adminer:4.8.1}"
 
 
 while [ $# -gt 0 ]; do
@@ -71,7 +78,7 @@ docker run -d --name etcd \
 --ulimit nofile=40000:40000 \
 -v "$etcd_home"/etc/etcd:/etc/etcd \
 -v "$etcd_home"/var/lib/etcd:/var/lib/etcd \
-dyrnq/etcd:3.5.7-0 etcd --config-file /etc/etcd/etcd.conf.yml
+${etcd_image} etcd --config-file /etc/etcd/etcd.conf.yml
 }
 
 
@@ -133,7 +140,7 @@ EOF
 
 
 docker rm -f apisix 2>/dev/null || true
-docker run --net host --rm --name='wait4x' atkrad/wait4x:2.12 tcp -i 1s -q -t 5s 127.0.0.1:2379 && \
+docker run --net host --rm --name='wait4x' ${wait4x_image} tcp -i 1s -q -t 5s 127.0.0.1:2379 && \
 docker run -d --name apisix \
 --restart always \
 --net host \
@@ -254,7 +261,7 @@ for i in 1 2 3 4; do
     port=$((i+18080))
     docker rm -f nginx-$i 2>/dev/null || true
     mkdir -p $HOME/nginx/nginx-$i && echo "nginx-$i" > $HOME/nginx/nginx-$i/index.html
-    docker run -d --network mynet --restart always -p "${port}":80 --name nginx-$i -v $HOME/nginx/nginx-$i:/usr/share/nginx/html nginx:1.22.1-alpine
+    docker run -d --network mynet --restart always -p "${port}":80 --name nginx-$i -v $HOME/nginx/nginx-$i:/usr/share/nginx/html ${nginx_image}
 done
 
 }
@@ -273,7 +280,7 @@ docker run -d --name mysql57 \
 -e MYSQL_ROOT_PASSWORD=666666 \
 -v $HOME/var/lib/mysql:/var/lib/mysql \
 -p 3306:3306 \
-mysql:5.7.41 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00
+${mysql5_image} --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00
 
 mkdir -p $HOME/var/lib/mysql8
 docker run -d --name mysql8 \
@@ -282,7 +289,7 @@ docker run -d --name mysql8 \
 -e MYSQL_ROOT_PASSWORD=666666 \
 -v $HOME/var/lib/mysql8:/var/lib/mysql \
 -p 13306:3306 \
-mysql:8.0.23 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00 --innodb-dedicated-server=on
+${mysql8_image} --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --default-time-zone=+8:00 --innodb-dedicated-server=on
 
 
 mkdir -p $HOME/var/lib/postgresql/data
@@ -292,23 +299,25 @@ docker run -d --name postgres12 \
 --network mynet \
 -e POSTGRES_PASSWORD=666666 \
 -p 5432:5432 \
--v $HOME/var/lib/postgresql/data:/var/lib/postgresql/data postgres:12.14
+-v $HOME/var/lib/postgresql/data:/var/lib/postgresql/data \
+${pg_image}
 
-docker run -d --name=adminer --restart always --network mynet -p 18080:8080 adminer:4.8.1
+
+docker run -d --name=adminer --restart always --network mynet -p 18080:8080 ${adminer_image}
 
 
 for num in {1..7}; do
 name="w${num}"
 port=$((6680+num-1))
 docker rm -f "${name}" &>/dev/null || true ;
-docker run -d --name "${name}" --restart always --network mynet -p "${port}":80 containous/whoami:latest;
+docker run -d --name "${name}" --restart always --network mynet -p "${port}":80 ${whoami_image};
 done
 }
 
 fun_initdb(){
 
-docker run -it --rm --network mynet  mysql:5.7.41-debian mysql --host mysql57 --user root --password=666666 --loose-default-character-set=utf8 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;show databases;"
-docker run -it --rm --network mynet  mysql:8.0.23 mysql --host mysql8 --user root --password=666666 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;show databases;"
+docker run -it --rm --network mynet  ${mysql5_image} mysql --host mysql57 --user root --password=666666 --loose-default-character-set=utf8 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;show databases;"
+docker run -it --rm --network mynet  ${mysql8_image} mysql --host mysql8 --user root --password=666666 -e "CREATE DATABASE if not exists apisixWeb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;show databases;"
 
 }
 
