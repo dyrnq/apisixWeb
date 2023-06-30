@@ -12,12 +12,14 @@ editor.session.setUseWorker(false);
 function cleanData(d){
     if( d === true ){
         $("#div_id").hide();
+        $("#addOver").hide();
         $("#div_content").show();
         $("#div_uploadFile").hide();
         $('#addForm1 input[name="u"]').val("update");
 
     }else{
         $("#div_id").show();
+        $("#addOver").show();
         $("#div_content").hide();
         $("#div_uploadFile").show();
         $('#addForm1 input[name="u"]').val("add");
