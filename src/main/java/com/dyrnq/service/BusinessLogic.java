@@ -132,7 +132,7 @@ public class BusinessLogic {
     }
 
     public void drop(String instId) throws ApisixSDKException {
-        Class[] clss = new Class[]{Upstream.class, Service.class, Route.class, StreamRoute.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
+        Class[] clss = new Class[]{Route.class, Service.class, Upstream.class, StreamRoute.class, SSL.class, Secret.class, ConsumerGroup.class, Consumer.class, GlobalRule.class, PluginConfig.class, Proto.class};
         AdminClient client = getAdminClient(instId);
         //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
         for (Class obj : clss) {
@@ -222,7 +222,7 @@ public class BusinessLogic {
         JsonMapper jsonMapper = new JsonMapper();
         YAMLMapper yamlMapper = new YAMLMapper();
 
-        Class[] clss = new Class[]{Upstream.class, Service.class, Route.class, StreamRoute.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
+        Class[] clss = new Class[]{PluginConfig.class, Upstream.class, Service.class, Route.class, StreamRoute.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, Proto.class};
 
         AdminClient client = getAdminClient(instId);
         String tarGzFilepath = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
