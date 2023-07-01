@@ -6,6 +6,13 @@
 
 apisixWeb is a webui interface of Apisix. This project uses the management API of apisix (that is, the data plane API) to realize the business operation of the apisix instance!
 
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132516_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132622_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132652_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132717_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
 
 ## build
 
