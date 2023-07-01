@@ -74,7 +74,7 @@ public abstract class BaseClient {
         if (okRsp.code() >= BaseClient.HTTP_NOT_OK) {
             throw new ApisixSDKException(strResp, String.valueOf(okRsp.code()));
         }
-        logger.info(strResp);
+        logger.debug(strResp);
         return strResp;
     }
 
@@ -112,7 +112,7 @@ public abstract class BaseClient {
             throw new ApisixSDKException(String.valueOf(okRsp.code()), String.valueOf(okRsp.code()));
         }
         strResp = StringUtils.replace(strResp, "\"list\":{}", "\"list\":[]");
-        logger.info(strResp);
+        logger.debug(strResp);
         return strResp;
     }
 
