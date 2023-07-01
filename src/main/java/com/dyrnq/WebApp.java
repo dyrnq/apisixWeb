@@ -2,9 +2,9 @@ package com.dyrnq;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.dyrnq.utils.VersionUtils;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
+import com.dyrnq.utils.VersionUtils;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack.ONode;
@@ -56,7 +56,7 @@ public class WebApp {
             });
 
 
-            WoodConfig.isUsingValueExpression=false;
+            WoodConfig.isUsingValueExpression = false;
             if (Solon.cfg().isDebugMode()) {
                 //执行后打印下sql
                 WoodConfig.onExecuteAft(cmd -> {
@@ -114,21 +114,21 @@ public class WebApp {
 
         @Override
         public void doFilter(Context ctx, FilterChain chain) throws Throwable {
-            Map<String,String> cookName=new HashMap<>();
-            cookName.put("token",cfgExtractor.tokenCookieName());
-            cookName.put("instId",CookieName.NAME_INSTID);
+            Map<String, String> cookName = new HashMap<>();
+            cookName.put("token", cfgExtractor.tokenCookieName());
+            cookName.put("instId", CookieName.NAME_INSTID);
             ctx.attrSet("projectName", projectName);
             ctx.attrSet("cookName", JSONUtil.toJsonStr(cookName));
             ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100]}");
             ctx.attrSet("ctx", getCtxStr(ctx));
             ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());
-            try{
-                if(StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(),"English")){
+            try {
+                if (StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(), "English")) {
                     ctx.attrSet("langType", "English");
-                }else if(StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(),"Chinese")){
+                } else if (StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(), "Chinese")) {
                     ctx.attrSet("langType", "简体中文");
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 ctx.attrSet("langType", "简体中文");
             }
             chain.doFilter(ctx);
@@ -246,17 +246,7 @@ public class WebApp {
         @Inject
         BusinessLogic businessLogic;
 
-//        public Boolean isTokenExpired(String token) throws Exception {
-//            try {
-//                Claims claims = getClaimsFromToken(token);
-//                Date expiration = claims.getExpiration();
-//                return expiration.before(new Date());
-//            } catch (Exception e) {
-//                logger.error(e.getMessage());
-//                new Throwable(e);
-//            }
-//            return true;
-//        }
+
         @Inject
         CfgExtractor cfgExtractor;
 

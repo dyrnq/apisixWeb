@@ -33,7 +33,7 @@ public class TokenController extends BaseController {
             User user = businessLogic.login(name, pass);
             ctx.sessionSet(Claims.SUBJECT, user.getName());
             return Result.succeed(ctx.sessionState().sessionToken());
-        }catch (Exception e){
+        } catch (Exception e) {
             return Result.failure(e.getMessage());
         }
     }
@@ -43,6 +43,7 @@ public class TokenController extends BaseController {
         ctx.cookieSet("SOLON.LOCALE", l);
         return Result.succeed("ok");
     }
+
     @Mapping("/cap")
     public void getCode(Context ctx) throws Exception {
         ctx.headerAdd("Pragma", "No-cache");

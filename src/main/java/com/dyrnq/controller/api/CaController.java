@@ -6,7 +6,6 @@ import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.CaMapper;
 import com.dyrnq.dso.CertMapper;
 import com.dyrnq.model.Ca;
-import com.dyrnq.model.Cert;
 import com.dyrnq.service.CertService;
 import com.dyrnq.utils.CertUtils;
 import com.dyrnq.utils.X509Holder;
@@ -59,10 +58,10 @@ public class CaController extends ApiController {
     public Result add(Context ctx, Ca ca) {
         try {
             //自签名
-            if(StringUtils.isBlank(ca.getSubject())){
-                ca.setSubject("CN="+ca.getTitle());
+            if (StringUtils.isBlank(ca.getSubject())) {
+                ca.setSubject("CN=" + ca.getTitle());
             }
-            if(StringUtils.isBlank(ca.getId())){
+            if (StringUtils.isBlank(ca.getId())) {
                 ca.setId(UUID.randomUUID().toString(true));
             }
 
@@ -105,9 +104,9 @@ public class CaController extends ApiController {
                 mapperWhereQ.whereEq("ca_id", id[0]);
             };
             long count = certMapper.selectCount(condition);
-            if(count>0){
+            if (count > 0) {
                 return Result.failure("data association cannot be deleted");
-            }else{
+            } else {
                 for (String i : id) {
                     caMapper.deleteById(i);
                 }

@@ -3,13 +3,14 @@ package com.dyrnq.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.*;
+import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 public class VersionUtils {
 
     public static String getVersion() throws Exception {
@@ -29,7 +30,7 @@ public class VersionUtils {
             // 使用正则表达式匹配版本号
             Pattern pattern = Pattern.compile("<version>(.*?)<\\/version>");
             Matcher matcher = pattern.matcher(xmlContent);
-            String version="";
+            String version = "";
             if (matcher.find()) {
                 version = matcher.group(1);
             }

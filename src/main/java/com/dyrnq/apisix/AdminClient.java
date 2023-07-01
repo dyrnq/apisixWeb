@@ -30,32 +30,32 @@ public class AdminClient extends BaseClient {
         return new StreamRouteClient(getProfile()).query(page, page_size);
     }
 
-    public Multi<Upstream> queryUpstreams(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
-        return new UpstreamClient(getProfile()).query(page, page_size,qp);
+    public Multi<Upstream> queryUpstreams(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        return new UpstreamClient(getProfile()).query(page, page_size, qp);
     }
 
     public Multi<Secret> querySecrets(String page, String page_size) throws ApisixSDKException {
         return new SecretClient(getProfile()).query(page, page_size);
     }
 
-    public Multi<Service> queryServices(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
-        return new ServiceClient(getProfile()).query(page, page_size,qp);
+    public Multi<Service> queryServices(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        return new ServiceClient(getProfile()).query(page, page_size, qp);
     }
 
-    public Multi<Consumer> queryConsumers(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
-        return new ConsumerClient(getProfile()).query(page, page_size,qp);
+    public Multi<Consumer> queryConsumers(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        return new ConsumerClient(getProfile()).query(page, page_size, qp);
     }
 
-    public Multi<ConsumerGroup> queryConsumerGroups(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
-        return new ConsumerGroupClient(getProfile()).query(page, page_size,qp);
+    public Multi<ConsumerGroup> queryConsumerGroups(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        return new ConsumerGroupClient(getProfile()).query(page, page_size, qp);
     }
 
     public Multi<GlobalRule> queryGlobalRules(String page, String page_size) throws ApisixSDKException {
         return new GlobalRuleClient(getProfile()).query(page, page_size);
     }
 
-    public Multi<PluginConfig> queryPluginConfigs(String page, String page_size,Map<String, String> qp) throws ApisixSDKException {
-        return new PluginConfigClient(getProfile()).query(page, page_size,qp);
+    public Multi<PluginConfig> queryPluginConfigs(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+        return new PluginConfigClient(getProfile()).query(page, page_size, qp);
     }
 
 
@@ -314,8 +314,8 @@ public class AdminClient extends BaseClient {
         return new SSLClient(getProfile()).list();
     }
 
-    public Multi<SSL> querySSLs(String page, String page_size,Map<String,String> pq) throws ApisixSDKException {
-        return new SSLClient(getProfile()).query(page, page_size,pq);
+    public Multi<SSL> querySSLs(String page, String page_size, Map<String, String> pq) throws ApisixSDKException {
+        return new SSLClient(getProfile()).query(page, page_size, pq);
     }
 
 

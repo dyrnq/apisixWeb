@@ -38,6 +38,9 @@ public class Deploy {
     @Column("state")
     private
     Integer state;
+    @Exclude
+    private
+    UploadedFile uploadFile;
 
     public String getId() {
         return id;
@@ -94,10 +97,6 @@ public class Deploy {
     public void setState(Integer state) {
         this.state = state;
     }
-
-    @Exclude
-    private
-    UploadedFile uploadFile;
 
     public UploadedFile getUploadFile() {
         return uploadFile;

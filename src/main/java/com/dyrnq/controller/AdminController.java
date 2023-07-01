@@ -1,7 +1,6 @@
 package com.dyrnq.controller;
 
 
-import cn.hutool.core.collection.ListUtil;
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.CfgExtractor;
 import com.dyrnq.service.CertService;
@@ -21,17 +20,18 @@ import org.noear.solon.i18n.annotation.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.EnumMap;
-import java.util.Map;
-
 
 @Mapping("admin")
 @Controller
 @I18n
-public class AdminController extends BaseController{
+public class AdminController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(AdminController.class);
+    @Inject
+    MonitorService monitorService;
+    @Inject
+    CfgExtractor cfgExtractor;
+    @Inject
+    CertService certService;
 
     @Mapping("inst")
     public Object inst() {
@@ -50,7 +50,6 @@ public class AdminController extends BaseController{
         ModelAndView model = new ModelAndView("admin/deploy.html");
         return model;
     }
-
 
     @Mapping("user")
     public Object user() {
@@ -106,7 +105,6 @@ public class AdminController extends BaseController{
         return model;
     }
 
-
     @Mapping("consumer")
     public Object consumer() {
         ModelAndView model = new ModelAndView("admin/consumer.html");
@@ -137,7 +135,6 @@ public class AdminController extends BaseController{
         return model;
     }
 
-
     @Mapping("editor")
     public Object editor(Context ctx, String cls, String id) {
         ModelAndView model = new ModelAndView("admin/editor.html");
@@ -160,9 +157,6 @@ public class AdminController extends BaseController{
         return model;
     }
 
-
-    @Inject
-    MonitorService monitorService;
     @Mapping("/monitor/check")
     public Result check() {
         com.dyrnq.service.MonitorInfo monitorInfo = monitorService.getMonitorInfoOshi();
@@ -173,9 +167,6 @@ public class AdminController extends BaseController{
     public Result sys() {
         return new Result(JSONUtil.toJsonPrettyStr(monitorService.getInfo()));
     }
-
-    @Inject
-    CfgExtractor cfgExtractor;
 
     @Mapping("")
     public Object index(Context ctx) {
@@ -191,18 +182,17 @@ public class AdminController extends BaseController{
 
     }
 
-    @Inject
-    CertService certService;
     @Mapping("cert")
     public Object cert(Context ctx) {
         ModelAndView model = new ModelAndView("admin/cert.html");
-        model.put("approach",Approach.values());
+        model.put("approach", Approach.values());
         model.put("supplier", Supplier.values());
         model.put("challenge", Challenge.values());
         model.put("encryption", Encryption.values());
-        model.put("dnsapi",certService.getAcmeshDnsapi());
+        model.put("dnsapi", certService.getAcmeshDnsapi());
         return model;
     }
+
     @Mapping("ca")
     public Object ca(Context ctx) {
         ModelAndView model = new ModelAndView("admin/ca.html");

@@ -5,52 +5,52 @@ import com.google.gson.annotations.SerializedName;
 
 public class Wrap<T> {
 
-	
+
     @SerializedName("value")
     @Expose
     private T value;
-	
+
 
     @SerializedName("createdIndex")
-    @Expose    
-    private String  createdIndex;
+    @Expose
+    private String createdIndex;
 
     @SerializedName("modifiedIndex")
-    @Expose    
-    private String  modifiedIndex;
-    
+    @Expose
+    private String modifiedIndex;
+
     @SerializedName("key")
-    @Expose    
-    private String  key;
-    
-    
-	public String getModifiedIndex() {
-		return modifiedIndex;
-	}
+    @Expose
+    private String key;
 
-	public void setModifiedIndex(String modifiedIndex) {
-		this.modifiedIndex = modifiedIndex;
-	}
 
-	public String getKey() {
-		return key;
-	}
+    public String getModifiedIndex() {
+        return modifiedIndex;
+    }
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+    public void setModifiedIndex(String modifiedIndex) {
+        this.modifiedIndex = modifiedIndex;
+    }
 
-	public T getValue() {
-		return value;
-	}
+    public String getKey() {
+        return key;
+    }
 
-	public void setValue(T value) {
-		this.value = value;
-	}
+    public void setKey(String key) {
+        this.key = key;
+    }
 
-	public String getCreatedIndex() {
-		return createdIndex;
-	}
+    public T getValue() {
+        return value;
+    }
+
+    public void setValue(T value) {
+        this.value = value;
+    }
+
+    public String getCreatedIndex() {
+        return createdIndex;
+    }
 
 //	public Item<T> getValue() {
 //		return value;
@@ -60,7 +60,7 @@ public class Wrap<T> {
 //		this.value = value;
 //	}
 
-	public void setCreatedIndex(String createdIndex) {
-		this.createdIndex = createdIndex;
-	}
+    public void setCreatedIndex(String createdIndex) {
+        this.createdIndex = createdIndex;
+    }
 }

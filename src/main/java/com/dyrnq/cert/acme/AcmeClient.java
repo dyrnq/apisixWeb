@@ -1,8 +1,6 @@
 package com.dyrnq.cert.acme;
 
 import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.io.FileUtil;
-import cn.hutool.core.io.file.FileNameUtil;
 import com.dyrnq.HomeDir;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
@@ -53,14 +51,16 @@ public class AcmeClient {
 
     //兼容acme.sh,公用一个account.key
     public File getUserKeyFile() {
-        return new File(StringUtils.joinWith(File.separator,homeDir.getAcmeHome(),"ca","acme-v02.api.letsencrypt.org","directory","account.key"));
+        return new File(StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), "ca", "acme-v02.api.letsencrypt.org", "directory", "account.key"));
     }
+
     public String getFirstDomain(Collection<String> domains) {
         return CollectionUtil.getFirst(domains);
     }
-    private File getFile(Collection<String> domains,String fileName){
+
+    private File getFile(Collection<String> domains, String fileName) {
         String domain = getFirstDomain(domains);
-        File file = new File(StringUtils.joinWith(File.separator,homeDir.getAcmeHome(),domain,fileName));
+        File file = new File(StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), domain, fileName));
         try {
             FileUtils.forceMkdirParent(file);
         } catch (IOException e) {
@@ -70,24 +70,23 @@ public class AcmeClient {
     }
 
     private File getDomainKeyFile(Collection<String> domains) {
-        return getFile(domains,"domain.key");
+        return getFile(domains, "domain.key");
     }
 
     private File getDomainKeyFile(String domain) {
         Collection<String> domains = new ArrayList<>();
         domains.add(domain);
-        return getFile(domains,"domain.key");
+        return getFile(domains, "domain.key");
     }
 
 
     private File getDomainCsrFile(Collection<String> domains) {
-        return getFile(domains,"domain.csr");
+        return getFile(domains, "domain.csr");
     }
 
     public File getDomainChainFile(Collection<String> domains) {
-        return getFile(domains,"domain-chain.crt");
+        return getFile(domains, "domain-chain.crt");
     }
-
 
 
     /**
@@ -185,14 +184,15 @@ public class AcmeClient {
             }
 
         } else {
-            if(create) {
+            if (create) {
                 // If there is none, create a new key pair and save it
                 KeyPair userKeyPair = KeyPairUtils.createKeyPair(KEY_SIZE);
                 try (FileWriter fw = new FileWriter(getUserKeyFile())) {
                     KeyPairUtils.writeKeyPair(userKeyPair, fw);
                 }
                 return userKeyPair;
-            }{
+            }
+            {
                 return null;
             }
         }
@@ -350,7 +350,7 @@ public class AcmeClient {
         try {
             AdminClient client = businessLogic.getAdminClient();
             Route r = new Route();
-            r.setName(auth.getIdentifier().getDomain()+" acme-challenge");
+            r.setName(auth.getIdentifier().getDomain() + " acme-challenge");
             r.setUri("/.well-known/acme-challenge/" + challenge.getToken());
             Map<String, Object> map = new HashMap<>();
             ResponseRewrite responseRewrite = new ResponseRewrite();

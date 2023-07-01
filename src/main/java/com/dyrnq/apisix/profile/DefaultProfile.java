@@ -10,15 +10,15 @@ public class DefaultProfile implements Profile {
     private final Credential credential;
     private final String version;
     private final Timeout timeOut;
-//    private Logger logger;
+    //    private Logger logger;
     private Endpoint currentEndpoint;
-    private List<Endpoint> endpoints = new ArrayList<>();
+    private final List<Endpoint> endpoints = new ArrayList<>();
 
     private DefaultProfile(String endpoint, String version, Credential credential) {
         this.credential = credential;
         this.endpoint = endpoint;
         this.version = version;
-        this.timeOut = new Timeout(10,10,30);
+        this.timeOut = new Timeout(10, 10, 30);
 
         String[] address = endpoint.split("[,|]");
         Endpoint ep;

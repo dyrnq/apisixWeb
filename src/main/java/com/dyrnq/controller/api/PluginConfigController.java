@@ -43,10 +43,10 @@ public class PluginConfigController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit,String label) {
+    public PageResult query(Context ctx, String page, String limit, String label) {
         try {
-            Map<String,String> qp = toMap(null,label,null);
-            Multi<PluginConfig> rsp = getAdminClient().queryPluginConfigs(page, limit,qp);
+            Map<String, String> qp = toMap(null, label, null);
+            Multi<PluginConfig> rsp = getAdminClient().queryPluginConfigs(page, limit, qp);
             List<PluginConfig> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {

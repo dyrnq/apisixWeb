@@ -43,10 +43,10 @@ public class ConsumerGroupController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit,String label) {
+    public PageResult query(Context ctx, String page, String limit, String label) {
         try {
-            Map<String,String> qp = toMap(null,label,null);
-            Multi<ConsumerGroup> rsp = getAdminClient().queryConsumerGroups(page, limit,qp);
+            Map<String, String> qp = toMap(null, label, null);
+            Multi<ConsumerGroup> rsp = getAdminClient().queryConsumerGroups(page, limit, qp);
             List<ConsumerGroup> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {

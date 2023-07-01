@@ -39,7 +39,7 @@ public class ApiController extends BaseController {
         return businessLogic.getAdminClient();
     }
 
-    public String instId(){
+    public String instId() {
         String instId = Context.current().cookie(CookieName.NAME_INSTID, "1");
         return instId;
     }

@@ -98,11 +98,11 @@ public class InstController extends ApiController {
     public Result dropdown(Context ctx) {
         try {
             List<Inst> p = instMapper.selectList(null);
-            List<Map<String,String>> o = new ArrayList<>();
-            for(Inst inst : p){
-                Map<String,String> m= new HashMap<>();
-                m.put("title",inst.getName());
-                m.put("id",inst.getId());
+            List<Map<String, String>> o = new ArrayList<>();
+            for (Inst inst : p) {
+                Map<String, String> m = new HashMap<>();
+                m.put("title", inst.getName());
+                m.put("id", inst.getId());
                 o.add(m);
             }
             return Result.succeed(o);

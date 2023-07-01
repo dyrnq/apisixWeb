@@ -99,7 +99,7 @@ public class SSLController extends ApiController {
             byte[] byteCert = IOUtils.toByteArray(certFile.getContent());
             byte[] byteKey = IOUtils.toByteArray(keyFile.getContent());
             ssl.setCert(new String(byteCert, Charset.defaultCharset()));
-            ssl.setKey(new String(byteKey,Charset.defaultCharset()));
+            ssl.setKey(new String(byteKey, Charset.defaultCharset()));
 
             if (StringUtils.isNotBlank(snis)) {
                 String[] strArray = StringUtils.splitByWholeSeparator(snis, ",");

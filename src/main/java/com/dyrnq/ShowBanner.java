@@ -17,7 +17,7 @@ public class ShowBanner implements LifecycleBean {
 
     @Override
     public void start() throws Throwable {
-        BufferedReader reader =null;
+        BufferedReader reader = null;
         try {
             ClassPathResource resource = new ClassPathResource("banner.txt");
             reader = resource.getReader(StandardCharsets.UTF_8);
@@ -29,9 +29,9 @@ public class ShowBanner implements LifecycleBean {
             }
             reader.close();// 关闭流
             stringBuilder.append(projectName + " " + VersionUtils.getVersion() + "\n");
-            IOUtils.write(stringBuilder.toString(),System.out);
-        }catch (Exception e){
-        }finally {
+            IOUtils.write(stringBuilder.toString(), System.out);
+        } catch (Exception e) {
+        } finally {
             IOUtils.close(reader);
         }
     }
