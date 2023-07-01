@@ -37,12 +37,12 @@ layui.use(['form'], function(){
         return false;
     });
 
-    $('#pass').on('keydown', function (event) {
-        if (event.keyCode == 13) {
-            $("#loginBtn").trigger("click");
-            return false
-        }
-    });
+//    $('#pass').on('keydown', function (event) {
+//        if (event.keyCode == 13) {
+//            $("#loginBtn").trigger("click");
+//            return false
+//        }
+//    });
 
 
 
