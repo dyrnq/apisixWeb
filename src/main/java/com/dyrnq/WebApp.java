@@ -121,6 +121,7 @@ public class WebApp {
             ctx.attrSet("cookName", JSONUtil.toJsonStr(cookName));
             ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100]}");
             ctx.attrSet("ctx", getCtxStr(ctx));
+            ctx.attrSet("currentVersion", VersionUtils.getVersion());
             ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());
             try {
                 if (StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(), "English")) {
