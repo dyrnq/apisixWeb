@@ -9,6 +9,7 @@
 	<artifactId>apisixWeb</artifactId>
 	<version>1.0.0</version>
 	<inceptionYear>2022</inceptionYear>
+	<description>WebUI for Apisix</description>
 	<contributors>
 		<contributor>
 			<name>moonhunters</name>
