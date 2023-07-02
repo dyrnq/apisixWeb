@@ -113,6 +113,13 @@ fi
 systemctl status -l apisixWeb --no-pager
 ```
 
+Change default session jwt secret
+
+```bash
+java -cp apisixWeb.jar cli jwt
+```
+
+Then pass `--server.session.state.jwt.secret=your-secret` to `java -jar`.
 
 
 Parameter description (all are optional)
