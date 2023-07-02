@@ -1,14 +1,14 @@
 package com.dyrnq.cert.acme;
 
 import cn.hutool.core.util.ArrayUtil;
+import cn.hutool.core.util.RuntimeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
+
 
 @Component
 public class AcmeshCmd {
@@ -16,7 +16,7 @@ public class AcmeshCmd {
 
     public String execCMD(String cmd, String[] envs, long timeout) {
         Process process = null;
-        StringBuilder sbStd = new StringBuilder();
+        String sbStd = "";
 
         String[] allEnvs = ArrayUtil.addAll(System.getenv() //
                 .entrySet()//
@@ -24,51 +24,36 @@ public class AcmeshCmd {
                 .map(r -> String.format("%s=%s", r.getKey(), r.getValue()))//
                 .toArray(String[]::new), envs);
 
-        long start = System.currentTimeMillis();
+//        long start = System.currentTimeMillis();
         try {
-            process = Runtime.getRuntime().exec(new String[]{"/bin/sh", "-c", cmd}, allEnvs);
-
-            BufferedReader brStd = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line = null;
+            process = RuntimeUtil.exec(allEnvs, "/bin/sh", "-c", cmd);
 
             while (true) {
-                if (brStd.ready()) {
-                    line = brStd.readLine();
-                    sbStd.append(line + "\n");
-                    logger.info(line);
-                    continue;
-                }
-
-                if (process != null) {
+                if (process.isAlive()) {
                     try {
-                        process.exitValue();
-                        break;
-                    } catch (IllegalThreadStateException e) {
-                        System.err.println(e.getMessage());
+                        TimeUnit.MILLISECONDS.sleep(500);
+                    } catch (InterruptedException e) {
+
                     }
-                }
-
-                if (System.currentTimeMillis() - start > timeout) {
-                    line = "timeout";
-
-                    sbStd.append(line + "\n");
-                    logger.info(line);
+                } else {
                     break;
                 }
-
-                try {
-                    TimeUnit.MILLISECONDS.sleep(500);
-                } catch (InterruptedException e) {
+            }
+            logger.info("process.exitValue()=" + process.exitValue());
+            if (process.exitValue() == 0) {
+                sbStd = RuntimeUtil.getResult(process);
+            } else {
+                String error = RuntimeUtil.getErrorResult(process);
+                if (StringUtils.isNotBlank(error)) {
+                    throw new RuntimeException(error);
                 }
             }
-        } catch (IOException e) {
-            logger.error(e.getMessage(), e);
         } finally {
             if (process != null) {
                 process.destroy();
             }
         }
 
-        return sbStd.toString();
+        return sbStd;
     }
 }

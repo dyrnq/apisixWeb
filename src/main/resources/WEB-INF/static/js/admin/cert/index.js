@@ -546,8 +546,8 @@ $.ajax({
                 data: JSON.stringify({id: [obj.data.id] }),
                 success:function (data,statusText) {
                      if(data.code=='200'){
-                         layer.msg(commonStr.delSuccess);
-
+                        layer.msg(commonStr.delSuccess);
+                        table.reload('demo',{});
                      }else{
                          layer.msg(data.description);
                      }
@@ -567,9 +567,10 @@ $.ajax({
                 data:JSON.stringify({id:obj.data.id}),
                 success:function (data,statusText) {
                     if(data.code=='200'){
-                        layer.msg('ok');
+                        layer.msg(commonStr.success);
+                        table.reload('demo',{});
                     }else{
-                        layer.alert(data.description);
+                        layer.alert(data.description.replace(/\n/g, "<br/>"));
                     }
                 },
                 'error':function () {
@@ -585,9 +586,10 @@ $.ajax({
                 data:JSON.stringify({id:obj.data.id}),
                 success:function (data,statusText) {
                     if(data.code=='200'){
-                        layer.msg('ok');
+                        layer.msg(commonStr.success);
+                        table.reload('demo',{});
                     }else{
-                        layer.alert(data.description);
+                        layer.alert(data.description.replace(/\n/g, "<br/>"));
                     }
                 },
                 'error':function () {
@@ -666,7 +668,8 @@ $.ajax({
                         data:JSON.stringify({id:obj.data.id}),
                         success:function (data,statusText) {
                             if(data.code=='200'){
-                                layer.msg("OK");
+                                layer.msg(commonStr.success);
+                                table.reload('demo',{});
                             }else{
                                  layer.msg(data.description);
                             }

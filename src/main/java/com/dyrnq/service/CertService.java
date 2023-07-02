@@ -120,6 +120,8 @@ public class CertService {
 
 
     public void trustCA(Cert cert) throws CertificateException, IOException {
+        String acmeHome = homeDir.getAcmeHome();
+        acmeshCmd.execCMD(homeDir.getAcmeSh() + " --create-account-key --server letsencrypt --home " + acmeHome, new String[]{}, 5 * 60 * 1000);
 
         if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.dns.getId()) {
             String[] split = cert.getDomain().split(",");
@@ -137,22 +139,25 @@ public class CertService {
 
                 for (String key : properties.stringPropertyNames()) {
                     String value = properties.getProperty(key);
-                    envList.add(key + " = " + value);
+                    envList.add(key + "=" + value);
                 }
 
             } catch (IOException e) {
-                //
+                logger.error(e.getMessage());
             }
-            String home = " --home " + homeDir.getAcmeHome();
-            acmeshCmd.execCMD(homeDir.getAcmeSh() + " --create-account-key --server letsencrypt" + home, new String[]{}, 5 * 60 * 1000);
 
 
             String[] env = envList.toArray(new String[envList.size()]);
             String keylength = "";
+            // 在 acme.sh 中，默认情况下使用的是 ECC 密钥对。
+            // -k, --keylength <bits>            Specifies the domain key length: 2048, 3072, 4096, 8192 or ec-256, ec-384, ec-521.
             if (cert.getEncryption() != null && cert.getEncryption().intValue() == Encryption.ECC.getId()) {
-                keylength = " --ecc --keylength ec-256 ";
+                keylength = " --keylength ec-256 ";
+            } else {
+                keylength = " --keylength 2048 ";
             }
-            cmd = homeDir.getAcmeSh() + " --issue --force " + home + " --dns " + cert.getDnsapi() + domain + keylength + " --server letsencrypt ";
+            cmd = homeDir.getAcmeSh() + " --issue --force --debug 1 --home " + acmeHome + " --dns " + cert.getDnsapi() + domain + keylength + " --server letsencrypt ";
+            logger.info(cmd);
             // --staging
             rs = acmeshCmd.execCMD(cmd, env, 5 * 60 * 1000);
             logger.info(rs);
@@ -176,7 +181,7 @@ public class CertService {
                 cert.setNotBefore(x509Cert.getNotBefore().getTime());
                 cert.setSubject(x509Cert.getSubjectDN().toString());
             } else {
-                throw new RuntimeException("error");
+                throw new RuntimeException(rs);
             }
         } else if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.http.getId()) {
             String[] dms = StringUtils.split(cert.getDomain(), ",");

@@ -384,7 +384,7 @@ $('#choose').click(function (){
                         data:JSON.stringify({id:obj.data.id}),
                         success:function (data,statusText) {
                             if(data.code=='200'){
-                                layer.msg("OK");
+                                layer.msg(commonStr.success);
                             }else{
                                  layer.msg(data.description);
                             }
