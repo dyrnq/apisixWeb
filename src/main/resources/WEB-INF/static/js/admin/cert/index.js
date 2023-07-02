@@ -29,12 +29,14 @@ function view(value, isUpdate){
     });
     if(isUpdate === false){
         $("#div_id").show();
+        $("#div_issue").show();
     }
+
     $("#div_approach").show();
 
     if(value == enum_Approach.trustCA){
         $("#div_renew").show();
-        $("#div_issue").show();
+
         $("#div_supplier").show();
         $("#div_encryption").show();
         $("#div_challenge").show();
@@ -47,14 +49,14 @@ function view(value, isUpdate){
     }else if(value == enum_Approach.manual){
         $("#div_keyFile").show();
         $("#div_certFile").show();
-
+        $("#div_issue").hide();
         $('#addForm1 select[name="supplier"]').val("");
         $('#addForm1 select[name="encryption"]').val("");
         $('#addForm1 select[name="challenge"]').val("");
         $('#addForm1 select[name="dnsapi"]').val("");
     }else if(value == enum_Approach.privateCA){
         $("#div_CA").show();
-        $("#div_issue").show();
+
         $("#div_encryption").show();
         $("#div_domain").show();
         $("#div_subject").show();
