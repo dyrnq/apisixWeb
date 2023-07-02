@@ -22,12 +22,14 @@ var demo3 = xmSelect.render({
 })
 
 
-function view(value){
+function view(value, isUpdate){
     $("[id^='div_']").each(function() {
       $(this).hide();
       //console.log(this);
     });
-    $("#div_id").show();
+    if(isUpdate === false){
+        $("#div_id").show();
+    }
     $("#div_approach").show();
 
     if(value == enum_Approach.trustCA){
@@ -69,19 +71,20 @@ function view(value){
 function cleanData(d){
     $('#addForm1 input, #addForm1 select, #addForm1 textarea, #addForm1 checkbox').val('');
     if( d === true ){
-        $("#div_id").hide();
         $('#addForm1 input[name="u"]').val("update");
+        $('#addForm1 select[name="approach"]').prop('disabled', true);
     }else{
         $('#addForm1 input[name="u"]').val("add");
-        $("#div_id").show();
+        $('#addForm1 select[name="approach"]').prop('disabled', false);
+        $('#addForm1 select[name="approach"]').val(enum_Approach.trustCA);
+        $('#addForm1 select[name="supplier"]').val(enum_Supplier.acme);
+        $('#addForm1 select[name="encryption"]').val(enum_Encryption.RSA);
     }
-    $('#addForm1 select[name="approach"]').val(enum_Approach.trustCA);
-    $('#addForm1 select[name="supplier"]').val(enum_Supplier.acme);
-    //$('#addForm1 select[name="encryption"]').val(enum_Encryption.RSA);
+
     layui.form.render('select');
     layui.form.render('checkbox');
     demo3.setValue([]);
-    view(enum_Approach.trustCA);
+    view(enum_Approach.trustCA,d);
 }
 
 function addLink(d) {
@@ -117,7 +120,7 @@ form.on('select(approach)', function(data){
     var elem = data.elem; // 获得 select 原始 DOM 对象
     var value = data.value; // 获得被选中的值
     var othis = data.othis; // 获得 select 元素被替换后的 jQuery 对象
-    view(value);
+    view(value,false);
 
 });
 
@@ -618,7 +621,7 @@ $.ajax({
 
 
                             layui.form.render('select');
-                            view(data.data.approach);
+                            view(data.data.approach,true);
 
                             layer.open({
                                 type: 1,

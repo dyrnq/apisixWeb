@@ -160,7 +160,7 @@ public class CertService {
             if (rs.contains("Your cert is in")) {
                 // 申请成功, 定位证书
                 String firstDomain = cert.getDomain().split(",")[0];
-                String certDir = homeDir.getAcmeHome() + File.separator + firstDomain;
+                String certDir = StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), firstDomain);
                 if (cert.getEncryption() == Encryption.ECC.getId()) {
                     certDir += "_ecc";
                 }
@@ -186,11 +186,11 @@ public class CertService {
                 acmeClient.fetchCertificate(domains);
 
                 String firstDomain = cert.getDomain().split(",")[0];
-                String certDir = homeDir.getAcmeHome() + File.separator + firstDomain;
+                String certDir = StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), firstDomain);
 
 
-                String crtPath = certDir + File.separator + "domain-chain.crt";
-                String keyPath = certDir + File.separator + "domain.key";
+                String crtPath = StringUtils.joinWith(File.separator, certDir, "domain-chain.crt");
+                String keyPath = StringUtils.joinWith(File.separator, certDir, "domain.key");
 
                 cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
                 cert.setKey(FileUtil.readString(keyPath, "UTF-8"));

@@ -60,8 +60,7 @@ public class BusinessLogic {
     public AdminClient getAdminClient(String instId) throws ApisixSDKException {
         AdminClient client = null;
         try {
-            Inst inst = null;
-            inst = instMapper.selectById(instId);
+            Inst inst = instMapper.selectById(instId);
             if (inst != null) {
                 String url = inst.getUrl();
                 Credential c = new DefaultCredential(inst.getApiKey());

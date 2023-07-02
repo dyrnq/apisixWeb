@@ -210,7 +210,7 @@ public class CertUtils {
     }
 
     public static X509Holder genRSA(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
-        return gen(EncryRSA, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, issuerCA, issuerCAKey);
+        return gen(EncryRSA, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
     }
 
 
@@ -223,7 +223,7 @@ public class CertUtils {
     }
 
     public static X509Holder genECC(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
-        return gen(EncryECC, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, issuerCA, issuerCAKey);
+        return gen(EncryECC, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
     }
 
 
