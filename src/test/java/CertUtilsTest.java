@@ -113,18 +113,52 @@ public class CertUtilsTest {
     }
 
     @Test
-    public void test_gen() throws Exception {
-        X509Holder holderDomain = CertUtils.genRSA("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"});
-        IOUtils.write(holderDomain.getCert(), new FileOutputStream(new File("src/test/resources/example-domain.crt")));
-        IOUtils.write(holderDomain.getKey(), new FileOutputStream(new File("src/test/resources/example-domain.key")));
+    public void test_genCAuseECC() throws Exception {
+        X509Holder holder = CertUtils.genCAuseECC("CN=My CN", 365 * 2 * 100);
+
+        String certPath = "src/test/resources/ecc-example-ca.crt";
+        String keyPath = "src/test/resources/ecc-example-ca.key";
+
+        IOUtils.write(holder.getCert(), new FileOutputStream(new File(certPath)));
+        IOUtils.write(holder.getKey(), new FileOutputStream(new File(keyPath)));
+
+        processShell("openssl x509 -in " + certPath + " -text -noout");
+    }
 
 
-        processShell("openssl x509 -in src/test/resources/example-domain.crt -text -noout");
-        processShell("openssl x509 -in src/test/resources/server.crt -text -noout");
+    @Test
+    public void test_genRSA() throws Exception {
+
+        for (int keylen : new int[]{2048, 3072, 4096, 8192}) {
+            X509Holder holderDomain = CertUtils.genRSA("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, keylen);
+
+            String certPath = "src/test/resources/example-domain-" + keylen + ".crt";
+            String keyPath = "src/test/resources/example-domain-" + keylen + ".key";
+            IOUtils.write(holderDomain.getCert(), new FileOutputStream(new File(certPath)));
+            IOUtils.write(holderDomain.getKey(), new FileOutputStream(new File(keyPath)));
+            processShell("openssl x509 -in " + certPath + " -text -noout");
+        }
     }
 
     @Test
-    public void test_genByCa() throws Exception {
+    public void test_genECC() throws Exception {
+
+
+        for (int keylen : new int[]{256, 384, 521}) {
+            X509Holder holderDomain = CertUtils.genECC("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, keylen);
+
+            String certPath = "src/test/resources/ecc-example-domain-" + keylen + ".crt";
+            String keyPath = "src/test/resources/ecc-example-domain-" + keylen + ".key";
+            IOUtils.write(holderDomain.getCert(), new FileOutputStream(new File(certPath)));
+            IOUtils.write(holderDomain.getKey(), new FileOutputStream(new File(keyPath)));
+            processShell("openssl x509 -in " + certPath + " -text -noout");
+        }
+
+    }
+
+
+    @Test
+    public void test_genByCA() throws Exception {
         X509Certificate caCert = CertUtils.loadCertificate(new File("src/test/resources/example-ca.crt"));
         PrivateKey caKey = CertUtils.load(new File("src/test/resources/example-ca.key"));
         X509Holder domain = CertUtils.genRSA("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, caCert, caKey);
@@ -134,11 +168,30 @@ public class CertUtilsTest {
     }
 
     @Test
-    public void test_renew() throws Exception {
-        test_genCA();
-        test_genByCa();
-        test_gen();
+    public void test_genByCAuseECC() throws Exception {
+        X509Certificate caCert = CertUtils.loadCertificate(new File("src/test/resources/ecc-example-ca.crt"));
+        PrivateKey caKey = CertUtils.load(new File("src/test/resources/ecc-example-ca.key"));
+        X509Holder domain = CertUtils.genECC("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, caCert, caKey);
+        IOUtils.write(domain.getCert(), new FileOutputStream(new File("src/test/resources/ecc-example-domain-by-ca.crt")));
+        IOUtils.write(domain.getKey(), new FileOutputStream(new File("src/test/resources/ecc-example-domain-by-ca.key")));
+        processShell("openssl x509 -in src/test/resources/ecc-example-domain-by-ca.crt -text -noout");
     }
+
+
+    @Test
+    public void test_genAll_RSA() throws Exception {
+        test_genCA();
+        test_genByCA();
+        test_genRSA();
+    }
+
+    @Test
+    public void test_genAll_ECC() throws Exception {
+        test_genCAuseECC();
+        test_genByCAuseECC();
+        test_genECC();
+    }
+
 
     @Test
     public void test_convert() throws Exception {
@@ -148,6 +201,7 @@ public class CertUtilsTest {
 
     /**
      * 模拟OpenSSL的x509 -in dsa-cert.pem -noout -text命令的输出。
+     *
      * @throws Exception
      */
     @Test

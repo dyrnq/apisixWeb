@@ -34,8 +34,24 @@ public class SelfSignedECC extends BaseJunit {
     public void test_ECC() throws Exception {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 
+//        secp256r1和prime256v1其实指的是同一种椭圆曲线，也称为NIST P-256或者简称P-256。这个标准定义了一条特定的椭圆曲线，用于椭圆曲线密码学中的加密和数字签名算法。
+//        "secp256r1"是该椭圆曲线在安全椭圆曲线规范（SEC）中的命名方式，其中的"256"表示该曲线的位长度为256位。而"prime256v1"则是在X9.62标准中对该曲线的命名方式，其中的"256"同样表示位长度。
+//        所以，secp256r1和prime256v1并没有实质的区别，只是命名方式不同，是同一条256位的椭圆曲线。它们被广泛应用于许多密码学协议和应用中，例如TLS/SSL通信、数字签名和密钥交换等。
+//        除了prime256v1（secp256r1或P-256）之外，还有许多其他的椭圆曲线曲线被广泛应用于密码学和安全通信中。以下是一些常见的曲线：
+//        secp384r1（P-384）：使用384位素数作为有限域上的模数，提供比prime256v1更高的安全性级别。
+//        secp521r1（P-521）：使用521位素数作为有限域上的模数，提供非常高的安全性级别。
+//        Curve25519：由Daniel J. Bernstein提出的一种高性能曲线，使用255位素数作为有限域上的模数。它在密钥交换协议中得到广泛应用。
+//        secp256k1：与prime256v1类似，但参数略有不同。它被用于比特币和其他某些加密货币的公钥和私钥生成。
+//        这只是其中一些常见的椭圆曲线，实际上还存在许多其他的曲线参数集。选择适当的曲线取决于具体的安全需求和性能考虑。在实际应用中，需要根据具体情况选择合适的曲线。
+
+
+//        在 "secp256r1" 中，"secp" 是 Secure Elliptic Curve（安全椭圆曲线）的缩写。它指的是该椭圆曲线所属的标准或规范。具体来说，"secp" 是由美国国家标准与技术研究院（National Institute of Standards and Technology，简称 NIST）定义和推荐的一系列椭圆曲线标准。
+//        至于 "r1"，它是指在 "secp256r1" 中的特定曲线版本。这里的 "r1" 指的是第一个版本，表示在该曲线规范中的序号为 1。当存在多个相同长度的椭圆曲线时，通过不同的序号来区分它们。
+//        因此，"secp256r1" 表示 NIST 标准中定义的一个256位的椭圆曲线，其中 "secp" 表示安全椭圆曲线，"256" 表示位长度为256位，而 "r1" 则表示该曲线的第一个版本。
+
+
         // 选择 ECC 曲线
-        ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("prime256v1");
+        ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("P-521");
 
         // 生成密钥对
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC", "BC");

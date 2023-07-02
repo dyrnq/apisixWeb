@@ -46,6 +46,9 @@ import java.util.*;
 public class CertUtils {
 
     private static final int DEFAULT_KEY_SIZE = 2048;
+
+    private static final int ECC_DEFAULT_KEY_SIZE = 256;
+
     private static final int DEFAULT_DAYS = 100 * 365;
 
     private static final String EncryRSA = "RSA";
@@ -209,21 +212,30 @@ public class CertUtils {
         return gen(EncryRSA, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, null, null);
     }
 
+    public static X509Holder genRSA(String subjectDN, String[] sni, int keySize) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryRSA, subjectDN, false, DEFAULT_DAYS, keySize, sni, null, null);
+    }
+
+
     public static X509Holder genRSA(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
         return gen(EncryRSA, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
     }
 
 
     public static X509Holder genECC(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
-        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, null, null, null);
+        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, ECC_DEFAULT_KEY_SIZE, null, null, null);
     }
 
     public static X509Holder genECC(String subjectDN, String[] sni) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
-        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, null, null);
+        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, ECC_DEFAULT_KEY_SIZE, sni, null, null);
+    }
+
+    public static X509Holder genECC(String subjectDN, String[] sni, int keySize) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryECC, subjectDN, false, DEFAULT_DAYS, keySize, sni, null, null);
     }
 
     public static X509Holder genECC(String subjectDN, String[] sni, X509Certificate issuerCA, PrivateKey issuerCAKey) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
-        return gen(EncryECC, subjectDN, true, DEFAULT_DAYS, DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
+        return gen(EncryECC, subjectDN, true, DEFAULT_DAYS, ECC_DEFAULT_KEY_SIZE, sni, issuerCA, issuerCAKey);
     }
 
 
@@ -235,6 +247,13 @@ public class CertUtils {
         return gen(EncryRSA, subjectDN, true, days, DEFAULT_KEY_SIZE, null, null, null);
     }
 
+    public static X509Holder genCAuseECC(String subjectDN) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryECC, subjectDN, true, DEFAULT_DAYS, ECC_DEFAULT_KEY_SIZE, null, null, null);
+    }
+
+    public static X509Holder genCAuseECC(String subjectDN, int days) throws NoSuchAlgorithmException, IOException, CertificateException, OperatorCreationException, InvalidAlgorithmParameterException {
+        return gen(EncryECC, subjectDN, true, days, ECC_DEFAULT_KEY_SIZE, null, null, null);
+    }
 
     private static X509Holder gen(
             String algorithm,
@@ -258,7 +277,7 @@ public class CertUtils {
                 throw new RuntimeException(e);
             }
             // 选择 ECC 曲线
-            ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("prime256v1");
+            ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("P-" + keySize);
             // 生成密钥对
             keyPairGenerator.initialize(ecSpec, new SecureRandom());
         }
@@ -276,7 +295,16 @@ public class CertUtils {
         X509v3CertificateBuilder certBuilder;
 
         if (issuerCA == null) {
-            signer = new JcaContentSignerBuilder("SHA256withRSA").setProvider(BC).build(privKey);
+//            if (StringUtils.isBlank(algorithm) || StringUtils.equalsIgnoreCase("RSA", algorithm)) {
+//                signer = new JcaContentSignerBuilder("SHA256withRSA").setProvider(BC).build(privKey);
+//            } else {
+//                signer = new JcaContentSignerBuilder("SHA256withECDSA").setProvider(BC).build(privKey);
+//            }
+            if (StringUtils.equalsIgnoreCase("EC", privKey.getAlgorithm())) {
+                signer = new JcaContentSignerBuilder("SHA256with" + privKey.getAlgorithm() + "DSA").setProvider(BC).build(privKey);
+            } else {
+                signer = new JcaContentSignerBuilder("SHA256with" + privKey.getAlgorithm()).setProvider(BC).build(privKey);
+            }
             certBuilder = new JcaX509v3CertificateBuilder(
                     issuer,
                     BigInteger.valueOf(System.currentTimeMillis()),
@@ -291,7 +319,7 @@ public class CertUtils {
                     publicKey
             );
 //            JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
-            signer = new JcaContentSignerBuilder("SHA256withRSA").setProvider(BC).build(issuerCAKey);
+            signer = new JcaContentSignerBuilder("SHA256with" + issuerCAKey.getAlgorithm()).setProvider(BC).build(issuerCAKey);
             PKCS10CertificationRequest csr = p10Builder.build(signer);
 
             // 根据证书请求生成证书
