@@ -112,7 +112,7 @@ function i18n(lang){
 ////    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
 ////    let expires = "expires="+ now.toUTCString();
 //    document.cookie = cname + "=" + lang + ";path=/";
-    Cookies.set('SOLON.LOCALE', lang, { expires: 1, path: '/' })
+    Cookies.set('SOLON.LOCALE', lang, { expires: 365, path: '/' })
     location.reload();
 
 //     $.ajax({
