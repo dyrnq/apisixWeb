@@ -103,7 +103,13 @@ input[name='param']{
                             <div class="layui-card-body">
 
                                 <li><a href="https://apisix.apache.org/docs/apisix/admin-api/#configuration" target="_blank">如何打开apisix的Admin API?</a></li>
-
+                                <li>apisix默认端口有哪些?</li>
+                                <li>- 9180 管理API端口 eg. <b>curl http://127.0.0.1:9180/apisix/admin/plugins/list --header 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1'</b> </li>
+                                <li>- 9090 控制API端口 eg. <b>curl http://127.0.0.1:9090/v1/schema</b> </li>
+                                <li>- 9091 指标端口 eg. <b>curl http://127.0.0.1:9091/apisix/prometheus/metrics</b> </li>
+                                <li>- 9080 流量端口(http) </li>
+                                <li>- 9443 流量端口(https) </li>
+                                <li>- 9100 流量端口(stream) </li>
                             </div>
                         </div>
                     </div>
