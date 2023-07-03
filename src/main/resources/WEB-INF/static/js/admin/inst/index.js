@@ -278,7 +278,7 @@ $('#choose').click(function (){
                 layer.msg(commonStr.cantDel)
             }else{
                 layer.confirm(commonStr.confirmDel, function(index){
-                    obj.del();
+
                     $.ajax({
                     url: ctx + '/api/inst/del',
                     type: 'post',
@@ -286,6 +286,7 @@ $('#choose').click(function (){
                     data: JSON.stringify({id: [obj.data.id] }),
                     success:function (data,statusText) {
                          if(data.code=='200'){
+                             obj.del();
                              layer.msg(commonStr.delSuccess);
 
                          }else{

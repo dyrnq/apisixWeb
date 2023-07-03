@@ -225,7 +225,7 @@ layui.use(function () {
                     ],
                     click: function (data, othis) {
                         var dataX = table.checkStatus(obj.config.id).data;
-                        //layer.alert(JSON.stringify(dataX));
+
 
                         var url = ctx + '/api/streamRoute/' + data.id;
                         if (data.id == 'yaml') {
@@ -384,17 +384,16 @@ layui.use(function () {
             layer.confirm(commonStr.confirmDel, function (index) {
 
 
-                obj.del();
+
                 $.ajax({
                     url: ctx + '/api/streamRoute/del',
                     type: 'post',
                     contentType: 'application/json',
                     data: JSON.stringify({id: [obj.data.id]}),
                     success: function (data, statusText) {
-
                         if (data.code == '200') {
+                            obj.del();
                             layer.msg(commonStr.delSuccess);
-
                         } else {
                             layer.msg(data.description);
 

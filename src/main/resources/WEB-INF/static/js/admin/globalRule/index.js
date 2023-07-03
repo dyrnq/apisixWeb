@@ -224,7 +224,7 @@ layui.use(function () {
                     ],
                     click: function (data, othis) {
                         var dataX = table.checkStatus(obj.config.id).data;
-                        //layer.alert(JSON.stringify(dataX));
+
 
                         var url = ctx + '/api/globalRule/' + data.id;
                         if (data.id == 'yaml') {

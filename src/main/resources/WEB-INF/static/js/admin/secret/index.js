@@ -224,7 +224,7 @@ layui.use(function () {
                     ],
                     click: function (data, othis) {
                         var dataX = table.checkStatus(obj.config.id).data;
-                        //layer.alert(JSON.stringify(dataX));
+
 
                         var url = ctx + '/api/secret/' + data.id;
                         if (data.id == 'yaml') {
@@ -378,19 +378,18 @@ layui.use(function () {
 
         } else if (layEvent === 'del') { //删除
             layer.confirm(commonStr.confirmDel, function (index) {
-                alert(obj.data.id);
 
-                obj.del();
+
+
                 $.ajax({
                     url: ctx + '/api/secret/del',
                     type: 'post',
                     contentType: 'application/json',
                     data: JSON.stringify({id: [obj.data.id]}),
                     success: function (data, statusText) {
-
                         if (data.code == '200') {
+                            obj.del();
                             layer.msg(commonStr.delSuccess);
-
                         } else {
                             layer.msg(data.description);
 
