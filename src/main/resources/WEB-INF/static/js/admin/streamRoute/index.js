@@ -67,6 +67,11 @@ layui.use(function () {
     $('#addOver').click(function () {
         var id = $('#addForm1 input[name="id"]').val();
         var text = editor.getValue();
+        var modeName = editor.session.getMode().$id;
+        if (/yaml/.test(modeName)){
+            const jsonData = jsyaml.load(text);
+            text = JSON.stringify(jsonData, null, 2);
+        }
 
         $.ajax({
             type: 'POST',
