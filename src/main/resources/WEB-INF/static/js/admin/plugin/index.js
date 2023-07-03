@@ -185,7 +185,7 @@ table.on('toolbar(test)', function (obj) {
     var checkStatus = table.checkStatus(obj.config.id);
     switch (obj.event) {
         case 'LAYTABLE_TIPS':
-            console.log(obj.event);
+            //console.log(obj.event);
             break;
     }
 });

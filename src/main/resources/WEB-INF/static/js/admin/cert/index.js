@@ -99,8 +99,7 @@ function addLink(d) {
        var issueBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="issue">' + commonStr.issue + '</button>'
 
 
-//       const arr = [enum_Approach.trustCA,enum_Approach.privateCA];
-//       console.log(d.id+"=============="+d.approach);
+
 
        //if (arr.indexOf(d.approach) !== -1) {
        if ( d.approach == enum_Approach.manual ) {
@@ -133,7 +132,7 @@ form.on('select(approach)', function(data){
         ,accept: "file"
         ,multiple: false
         ,before: function(res){
-            console.log(res);
+            //console.log(res);
         }
         ,exts: 'crt|key|pem|der|jks|txt'
         ,field: 'certFile'
@@ -143,7 +142,7 @@ form.on('select(approach)', function(data){
         ,done: function(res, index, upload){
         }
         ,error: function(index, upload){
-            console.log(index);
+            //console.log(index);
         }
     });
 
@@ -153,7 +152,7 @@ form.on('select(approach)', function(data){
         ,accept: "file"
         ,multiple: false
         ,before: function(res){
-            console.log(res);
+            //console.log(res);
         }
         ,exts: 'crt|key|pem|der|jks|txt'
         ,field: 'keyFile'
@@ -163,7 +162,7 @@ form.on('select(approach)', function(data){
         ,done: function(res, index, upload){
         }
         ,error: function(index, upload){
-            console.log(index);
+            //console.log(index);
         }
     });
 
@@ -235,12 +234,12 @@ layer.open({
     maxmin: true, // 允许全屏最小化
     skin: 'layui-layer-win10',
       success: function(layero, index, that){
-//            // 弹层的最外层元素的 jQuery 对象
-//            console.log(layero);
-//            // 弹层的索引值
-//            console.log(index);
-//            // 弹层内部原型链中的 this --- 2.8+
-//            console.log(that);
+            // 弹层的最外层元素的 jQuery 对象
+            //console.log(layero);
+            // 弹层的索引值
+            //console.log(index);
+            // 弹层内部原型链中的 this --- 2.8+
+            //console.log(that);
         global_index=index;
       }
 });
@@ -295,7 +294,7 @@ $('#addOver').click(function(){
           }else{
                 if ( ($(this).is('input')) || ($(this).is('textarea'))) {
                        if ( $(this).is(':checkbox') ){
-                            console.log(inputN+' is a checkbox');
+                            //console.log(inputN+' is a checkbox');
                             if ($(this).prop('checked')){
                                 formData.append(inputN,'1');
                             }else{
@@ -426,23 +425,23 @@ $.ajax({
         , done: function (res, curr, count){
             //如果是异步请求数据方式，res即为你接口返回的信息。
             //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-            console.log(res);
+            //console.log(res);
             //得到当前页码
-            console.log(curr);
+            //console.log(curr);
             //得到数据总量
-            console.log(count);
+            //console.log(count);
 
 
             // 获取配置项
             var thisOptions = table.getOptions('demo');
-            console.log(thisOptions);
+            //console.log(thisOptions);
             localStorage.setItem('pageLimit', thisOptions.limit);
 
 
             if(res.data && res.data.length == 0){
                 if(curr>1){
                     toPage=curr-1;
-                    console.log(toPage);
+                    //console.log(toPage);
                     table.reload('demo',{page: {curr:toPage}});
                 }
             }
@@ -461,7 +460,7 @@ $.ajax({
     });
 // //监听表格复选框
 // table.on('checkbox(test)', function (obj) {
-//     console.log(obj)
+//     //console.log(obj)
 // });
 //头部工具条监听事件
     table.on('toolbar(test)', function (obj) {

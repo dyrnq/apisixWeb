@@ -160,21 +160,21 @@ $('#dropAll').click(function(){
         , done: function (res, curr, count){
             //如果是异步请求数据方式，res即为你接口返回的信息。
             //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
-            console.log(res);
+            //console.log(res);
             //得到当前页码
-            console.log(curr);
+            //console.log(curr);
             //得到数据总量
-            console.log(count);
+            //console.log(count);
 
             // 获取配置项
             var thisOptions = table.getOptions('demo');
-            console.log(thisOptions);
+            //console.log(thisOptions);
             localStorage.setItem('pageLimit', thisOptions.limit);
 
             if(res.data && res.data.length == 0){
                 if(curr>1){
                     toPage=curr-1;
-                    console.log(toPage);
+                    //console.log(toPage);
                     table.reload('demo',{page: {curr:toPage}});
                 }
             }
@@ -191,10 +191,7 @@ $('#dropAll').click(function(){
             };
         }
     });
-// //监听表格复选框
-// table.on('checkbox(test)', function (obj) {
-//     console.log(obj)
-// });
+
 //头部工具条监听事件
     table.on('toolbar(test)', function (obj) {
         var checkStatus = table.checkStatus(obj.config.id);
