@@ -52,7 +52,7 @@ public class SelfSignedECC extends BaseJunit {
 
         // 选择 ECC 曲线
         ECNamedCurveParameterSpec ecSpec = ECNamedCurveTable.getParameterSpec("P-521");
-
+        //ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("prime256v1");
         // 生成密钥对
         KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC", "BC");
         keyGen.initialize(ecSpec, new SecureRandom());
