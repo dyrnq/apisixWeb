@@ -8,15 +8,19 @@ public class Upstream{
     public Upstream(){
         super();
     }
+    @SerializedName("discovery_args")
+    @Expose
+    private DiscoveryArgs discoveryArgs;
+
     @SerializedName("checks")
     @Expose
-    private String checks;
+    private Checks checks;
 
-    public void setChecks(String checks){
+    public void setChecks(Checks checks){
         this.checks=checks;
     }
 
-    public String getChecks(){
+    public Checks getChecks(){
         return this.checks;
     }
 
@@ -285,4 +289,11 @@ public class Upstream{
         return this.id;
     }
 
+    public DiscoveryArgs getDiscoveryArgs() {
+        return discoveryArgs;
+    }
+
+    public void setDiscoveryArgs(DiscoveryArgs discoveryArgs) {
+        this.discoveryArgs = discoveryArgs;
+    }
 }

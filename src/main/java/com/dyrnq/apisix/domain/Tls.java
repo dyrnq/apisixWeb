@@ -21,6 +21,11 @@ public class Tls{
     @Expose
     private String clientKey;
 
+    @SerializedName("verify")
+    @Expose
+    private Boolean verify;
+
+
     public void setClientKey(String clientKey){
         this.clientKey=clientKey;
     }
@@ -44,5 +49,17 @@ public class Tls{
     public Tls(String clientCert,String clientKey){
         this.clientCert=clientCert;
         this.clientKey=clientKey;
+    }
+
+    /**
+     * Turn on server certificate verification, currently only kafka upstream is supported
+     *
+     */
+    public Boolean getVerify() {
+        return verify;
+    }
+
+    public void setVerify(Boolean verify) {
+        this.verify = verify;
     }
 }
