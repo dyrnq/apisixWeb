@@ -115,7 +115,7 @@ public class AcmeClient {
 
         // Perform all required authorizations
         for (Authorization auth : order.getAuthorizations()) {
-            authorize(auth);
+            authorize(auth, domains);
         }
 
         // Generate a CSR for all of the domains, and sign it with the domain key pair.
@@ -253,7 +253,7 @@ public class AcmeClient {
      *
      * @param auth {@link Authorization} to perform
      */
-    private void authorize(Authorization auth) throws AcmeException {
+    private void authorize(Authorization auth, Collection<String> domains) throws AcmeException {
         logger.info("Authorization for domain {}", auth.getIdentifier().getDomain());
 
         // The authorization is already valid. No need to process a challenge.
@@ -263,14 +263,14 @@ public class AcmeClient {
 
         // Find the desired challenge and prepare it.
         Challenge challenge = null;
-        challenge = httpChallenge(auth);
+        challenge = httpChallenge(auth, domains);
         switch (CHALLENGE_TYPE) {
             case HTTP:
-                challenge = httpChallenge(auth);
+                challenge = httpChallenge(auth, domains);
                 break;
 
             case DNS:
-                challenge = dnsChallenge(auth);
+                challenge = dnsChallenge(auth, domains);
                 break;
         }
 
@@ -330,7 +330,7 @@ public class AcmeClient {
      * @param auth {@link Authorization} to find the challenge in
      * @return {@link Challenge} to verify
      */
-    public Challenge httpChallenge(Authorization auth) throws AcmeException {
+    public Challenge httpChallenge(Authorization auth, Collection<String> domains) throws AcmeException {
         // Find a single http-01 challenge
         Http01Challenge challenge = auth.findChallenge(Http01Challenge.class);
         if (challenge == null) {
@@ -350,6 +350,7 @@ public class AcmeClient {
         try {
             AdminClient client = businessLogic.getAdminClient();
             Route r = new Route();
+            r.setHosts(new ArrayList<>(domains));
             r.setName(auth.getIdentifier().getDomain() + " acme-challenge");
             r.setUri("/.well-known/acme-challenge/" + challenge.getToken());
             Map<String, Object> map = new HashMap<>();
@@ -388,7 +389,7 @@ public class AcmeClient {
      * @param auth {@link Authorization} to find the challenge in
      * @return {@link Challenge} to verify
      */
-    public Challenge dnsChallenge(Authorization auth) throws AcmeException {
+    public Challenge dnsChallenge(Authorization auth, Collection<String> domains) throws AcmeException {
         // Find a single dns-01 challenge
         Dns01Challenge challenge = auth.findChallenge(Dns01Challenge.TYPE);
         if (challenge == null) {
