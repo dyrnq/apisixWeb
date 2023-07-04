@@ -6,6 +6,19 @@
 
 apisixWeb is a webui interface of Apisix. This project uses the management API of apisix (that is, the data plane API) to realize the business operation of the apisix instance!
 
+### features
+
+- Add, delete, modify Routes, StreamRoutes, SSL... based on Apisix management APIs.
+- Multiple Apisix instance management.
+- Batch delete rules.
+- Clear all rules with one click.
+- Rawdata import and export.
+- Implementing DNS-01 certificate application using acme.sh.
+- Implementing HTTP-01 certificate application with acme4j.
+- Self signed certificate management.
+- Automatic renewal of expired certificates.
+- Deploy management based on yaml files.
+
 <img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132516_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
 
 <img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132622_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
