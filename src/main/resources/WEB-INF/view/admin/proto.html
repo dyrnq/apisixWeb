@@ -82,6 +82,20 @@
                 <input type="text" name="id" id="id" class="layui-input" placeholder="id">
             </div>
 
+            <div class="layui-row">
+                <div class="layui-col-md2"><div class="grid-demo">
+                    <div class="layui-form-item" id="div_mode">
+                            <select name="aceMode" lay-filter="aceMode">
+                                <option value="json">JSON</option>
+                                <option value="yaml" selected>YAML</option>
+                            </select>
+                    </div>
+                </div></div>
+                <div class="layui-col-md4"><div class="grid-demo">
+                    &nbsp;
+                </div></div>
+            </div>
+
             <div class="layui-form-item">
                 <pre id="editor" class=".json-editor"></pre>
             </div>

@@ -119,7 +119,7 @@ public class WebApp {
             cookName.put("instId", CookieName.NAME_INSTID);
             ctx.attrSet("projectName", projectName);
             ctx.attrSet("cookName", JSONUtil.toJsonStr(cookName));
-            ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100]}");
+            ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100], \"aceMode\": \"yaml\" }");
             ctx.attrSet("ctx", getCtxStr(ctx));
             ctx.attrSet("currentVersion", VersionUtils.getVersion());
             ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());

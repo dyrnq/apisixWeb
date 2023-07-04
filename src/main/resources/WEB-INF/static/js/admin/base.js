@@ -15,23 +15,6 @@ $(function() {
     form = layui.form;
     laypage = layui.laypage;
     dropdown = layui.dropdown;
-//	// 执行一个laypage实例
-//	laypage.render({
-//		elem: 'pageInfo', // 渲染节点
-//		count: page.count, // 总记录数
-//		curr: page.curr, // 起始页
-//		limit: page.limit, // 每页记录数
-//		layout: ['count', 'prev', 'page', 'next', 'skip', 'limit'],
-//		jump: function(obj, first) {
-//			// 首次不执行
-//			if (!first) {
-//				// do something
-//				$("input[name='curr']").val(obj.curr);
-//				$("input[name='limit']").val(obj.limit);
-//				$("#searchForm").submit();
-//			}
-//		}
-//	});
 
 	// 日期控件
 	layui.use('laydate', function() {
@@ -60,8 +43,49 @@ $(function() {
 	var url = location.pathname + location.search;
 	$("a[href='" + ctx + url + "']").parent().addClass("layui-this");
 
+    //初始化aceMode默认值
+    if ($('#addForm1 select[name="aceMode"]').length) {
+        var aceMode = localStorage.getItem(lastPath+'_aceMode');
+        if ('' == aceMode || null == aceMode || undefined == aceMode) {
+            aceMode = cfg.aceMode;
+        }
+        $('#addForm1 select[name="aceMode"]').val(aceMode);
+        layui.form.render('select');
+    }
+    //aceMode切换事件
+    form.on('select(aceMode)', function(data){
+        var elem = data.elem; // 获得 select 原始 DOM 对象
+        var value = data.value; // 获得被选中的值
+        var othis = data.othis; // 获得 select 元素被替换后的 jQuery 对象
+        var text = editor.getValue();
+        var modeName = editor.session.getMode().$id;
+        if (/yaml/.test(modeName)){
+            try{
+                const jsonData = jsyaml.load(text);
+                const jsonText = JSON.stringify(jsonData, null, 2);
+                editor.setValue(jsonText,-1);
+            } catch(error) {
 
+            }
+        }else if (/json/.test(modeName)){
+            try{
+                const jsonObject = JSON.parse(text);
+                const yamlText = jsyaml.dump(jsonObject);
+                editor.setValue(yamlText,-1);
+            }  catch(error) {
 
+            }
+        }
+
+        var path = window.location.pathname;
+        var pathArray = path.split('/');
+        var lastPath = pathArray[pathArray.length - 1];
+        //console.log(lastPath);
+        //console.log(value);
+        editor.session.setMode("ace/mode/"+value);
+        //存储当前页面的aceMode到本地存储
+        localStorage.setItem(lastPath+'_aceMode', value);
+    });
 
 	// 判断屏幕分辨率, 给table加上lay-size="sm"
 	//if (document.body.clientWidth <= 1600) {

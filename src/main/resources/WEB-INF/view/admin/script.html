@@ -26,9 +26,23 @@
 	var COOK_NAME = ${cookName};
 
     if (document.getElementById("editor")) {
+
+        var path = window.location.pathname;
+        var pathArray = path.split('/');
+        var lastPath = pathArray[pathArray.length - 1];
+
+
+        var aceMode = localStorage.getItem(lastPath+'_aceMode');
+
+        if ('' == aceMode || null == aceMode || undefined == aceMode) {
+            aceMode = cfg.aceMode;
+        }
+
+
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/twilight");
-        editor.session.setMode("ace/mode/yaml");
+        editor.session.setMode("ace/mode/"+aceMode);
+        editor.session.setOption("tabSize", 2);
         editor.setFontSize(16);
         editor.setOptions({
             minLines: 20,
