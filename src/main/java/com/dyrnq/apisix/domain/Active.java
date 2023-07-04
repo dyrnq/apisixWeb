@@ -32,7 +32,7 @@ public class Active {
     private Boolean httpsVerifyCertificate = true;
     @SerializedName("req_headers")
     @Expose
-    private List<String> reqHeaders = new ArrayList<String>();
+    private List<String> reqHeaders;
     @SerializedName("unhealthy")
     @Expose
     private Unhealthy__1 unhealthy;
