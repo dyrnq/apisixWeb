@@ -415,6 +415,10 @@ curl -fsSL http://127.0.0.1:19000/test/bashrc | head -n5
 curl -fsSL http://127.0.0.1:9080/bashrc | head -n5
 
 }
+fun_install_httpbin() {
+  docker rm -f httpbin &>/dev/null || true ;
+  docker run -d --name=httpbin --restart always --network host --privileged --ulimit nofile=40000:40000 mccutchen/go-httpbin go-httpbin -port 9991
+}
 
 fun_add_mynet
 fun_install_nginx
@@ -423,3 +427,4 @@ fun_install_etcd
 fun_install
 fun_initdb
 fun_install_minio
+fun_install_httpbin
