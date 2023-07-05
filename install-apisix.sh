@@ -362,7 +362,7 @@ docker run -i --rm --network host --entrypoint '' quay.io/minio/mc bash<<EOF
 mc alias set myminio http://localhost:19000 minioadmin minioadmin;
 mc mb myminio/test 2>/dev/null || true;
 mc anonymous set download myminio/test;
-mc cp /etc/bashrc myminio/test;
+mc cp --attr "content-type=text/javascript" /etc/bashrc myminio/test;
 EOF
 
 curl http://127.0.0.1:19000/test/bashrc
