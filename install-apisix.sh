@@ -89,6 +89,11 @@ mkdir -p ${apisix_home}/
 mkdir -p ${apisix_home}/conf
 mkdir -p ${apisix_dashboard_home}/conf
 
+if [ ! -f ${apisix_home}/dhparam.pem ]; then
+  #openssl dhparam -out ${apisix_home}/dhparam.pem 4096
+  openssl dhparam -dsaparam -out ${apisix_home}/dhparam.pem 4096
+fi
+
 ## https://github.com/apache/apisix/blob/master/conf/config.yaml
 cat > ${apisix_home}/conf/config.yaml <<EOF
 apisix:
@@ -106,6 +111,9 @@ apisix:
   stream_proxy:
       tcp:
         - 9100
+nginx_config:
+  http_configuration_snippet: |
+    ssl_dhparam /etc/ssl/certs/dhparam.pem;
 
 deployment:
   role: traditional
@@ -157,6 +165,7 @@ docker run -d --name apisix \
 --privileged \
 -u root \
 --ulimit nofile=40000:40000 \
+-v ${apisix_home}/dhparam.pem:/etc/ssl/certs/dhparam.pem \
 -v ${apisix_home}/conf/config.yaml:/usr/local/apisix/conf/config.yaml  \
 ${apisix_image}
 
