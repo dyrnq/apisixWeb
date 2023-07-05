@@ -365,7 +365,7 @@ mc anonymous set download myminio/test;
 mc cp --attr "content-type=text/javascript" /etc/bashrc myminio/test;
 EOF
 
-curl http://127.0.0.1:19000/test/bashrc
+
 
 curl http://127.0.0.1:9180/apisix/admin/routes/9008 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -i -d '
 {
@@ -401,6 +401,9 @@ curl http://127.0.0.1:9180/apisix/admin/routes/9008 -H 'X-API-KEY: edd1c9f034335
   },
   "uri": "/*"
 }'
+
+curl -fsSL http://127.0.0.1:19000/test/bashrc | head -n5
+curl -fsSL http://127.0.0.1:9080/bashrc | head -n5
 
 }
 
