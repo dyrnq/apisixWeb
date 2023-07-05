@@ -6,8 +6,8 @@ iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.2.0-debian}"
-apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.0-alpine}"
+apisix_image="${apisix_image:-apache/apisix:3.3.0-debian}"
+apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.1-alpine}"
 etcd_image="${etcd_image:-dyrnq/etcd:3.5.7-0}"
 wait4x_image="${wait4x_image:-atkrad/wait4x:2.12}"
 nginx_image="${nginx_image:-nginx:1.22.1-alpine}"
@@ -91,7 +91,13 @@ mkdir -p ${apisix_dashboard_home}/conf
 ## https://github.com/apache/apisix/blob/master/conf/config.yaml
 cat > ${apisix_home}/conf/config.yaml <<EOF
 apisix:
-  node_listen: 9080
+  node_listen:
+    - 9080
+  ssl:
+    enable: true
+    listen:
+      - port: 9443
+        enable_http2: true
   enable_ipv6: false
   stream_proxy:
       tcp:
