@@ -41,7 +41,7 @@ public class SelfSignedEd25519 extends BaseJunit {
         JcaContentSignerBuilder signerBuilder = new JcaContentSignerBuilder("Ed448");
         ContentSigner contentSigner = signerBuilder.build(keyPair.getPrivate());
         BigInteger serialNumber = BigInteger.valueOf(System.currentTimeMillis());
-        X500Name issuer = new X500Name("CN=Your Name");
+        X500Name issuer = new X500Name("CN=hello.com");
         X500Name subject = issuer;
 
         // 构建有效期
@@ -86,7 +86,7 @@ public class SelfSignedEd25519 extends BaseJunit {
         JcaContentSignerBuilder signerBuilder = new JcaContentSignerBuilder("Ed25519");
         ContentSigner contentSigner = signerBuilder.build(keyPair.getPrivate());
         BigInteger serialNumber = BigInteger.valueOf(System.currentTimeMillis());
-        X500Name issuer = new X500Name("CN=Your Name");
+        X500Name issuer = new X500Name("CN=hello.com");
         X500Name subject = issuer;
 
         // 构建有效期

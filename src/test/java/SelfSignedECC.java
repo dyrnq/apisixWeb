@@ -59,7 +59,7 @@ public class SelfSignedECC extends BaseJunit {
         KeyPair keyPair = keyGen.generateKeyPair();
 
         // 构建证书请求主题
-        X500Name subject = new X500Name("CN=Your Name");
+        X500Name subject = new X500Name("CN=hello.com");
 
         // 构建证书颁发者
         X500Name issuer = subject;
