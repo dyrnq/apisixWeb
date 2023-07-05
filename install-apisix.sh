@@ -93,10 +93,13 @@ cat > ${apisix_home}/conf/config.yaml <<EOF
 apisix:
   node_listen:
     - 9080
+    - 80
   ssl:
     enable: true
     listen:
       - port: 9443
+        enable_http2: true
+      - port: 443
         enable_http2: true
   enable_ipv6: false
   stream_proxy:
@@ -151,6 +154,7 @@ docker run -d --name apisix \
 --restart always \
 --net host \
 --privileged \
+-u root \
 --ulimit nofile=40000:40000 \
 -v ${apisix_home}/conf/config.yaml:/usr/local/apisix/conf/config.yaml  \
 ${apisix_image}
