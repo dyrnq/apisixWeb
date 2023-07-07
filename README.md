@@ -2,11 +2,24 @@
 
 <img src="https://a.dyrnq.com/apisixWeb/images/logo.png" alt="apisixWeb" width="300" height="300">
 
+<!-- TOC -->
+
+- [apisixWeb](#apisixweb)
+  - [description](#description)
+  - [features](#features)
+  - [build](#build)
+  - [run](#run)
+    - [install jdk](#install-jdk)
+    - [install apisix](#install-apisix)
+    - [run apisixWeb](#run-apisixweb)
+
+<!-- /TOC -->
+
 ## description
 
 apisixWeb is a webui interface of Apisix. This project uses the management API of apisix (that is, the data plane API) to realize the business operation of the apisix instance!
 
-### features
+## features
 
 - Add, delete, modify Routes, StreamRoutes, SSL... based on Apisix management APIs.
 - Multiple Apisix instance management.
@@ -40,6 +53,7 @@ cd apisixWeb
 ### install jdk
 
 Ubuntu
+
 ```bash
 apt update
 apt install openjdk-8-jdk -y
@@ -47,10 +61,12 @@ apt install openjdk-8-jdk -y
 ```
 
 Centos
+
 ```bash
 yum install -y java-1.8.0-openjdk
 # yum install -y java-11-openjdk
 ```
+
 ### install apisix
 
 <https://apisix.apache.org/docs/apisix/installation-guide/>
@@ -64,6 +80,7 @@ wget https://a.dyrnq.com/apisixWeb/f/latest/apisixWeb.jar
 ```bash
 java -jar apisixWeb.jar
 ```
+
 run with more cmd-opts
 
 ```bash
@@ -134,7 +151,6 @@ java -cp apisixWeb.jar cli jwt
 
 Then pass `--server.session.state.jwt.secret=your-secret` to `java -jar`.
 
-
 Parameter description (all are optional)
 
 | Parameter                    | Meaning                                        | Default         |
@@ -145,8 +161,3 @@ Parameter description (all are optional)
 | --spring.datasource.url      | datasource url                                 |                 |
 | --spring.datasource.username | datasource username                            |                 |
 | --spring.datasource.password | datasource password                            |                 |
-
-
-
-
-
