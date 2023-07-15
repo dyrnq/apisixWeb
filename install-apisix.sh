@@ -116,6 +116,28 @@ nginx_config:
     user apisix apisix;
   http_configuration_snippet: |
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
+    server{
+        listen 45651;
+        server_name _;
+        access_log off;
+        location / {
+            root /usr/local/apisix/conf;
+            index index.html index.htm;
+            autoindex on;
+            autoindex_exact_size on;
+            autoindex_localtime on;
+            types {
+            text/plain yaml;
+            text/plain md;
+            text/plain yml;
+            text/plain conf;
+            text/plain properties;
+            text/plain service;
+            text/plain sh;
+            text/plain sed;
+            }
+        }
+    }
 
 deployment:
   role: traditional
