@@ -127,14 +127,14 @@ nginx_config:
             autoindex_exact_size on;
             autoindex_localtime on;
             types {
-            text/plain yaml;
-            text/plain md;
-            text/plain yml;
-            text/plain conf;
-            text/plain properties;
-            text/plain service;
-            text/plain sh;
-            text/plain sed;
+                text/plain yaml;
+                text/plain md;
+                text/plain yml;
+                text/plain conf;
+                text/plain properties;
+                text/plain service;
+                text/plain sh;
+                text/plain sed;
             }
         }
     }
