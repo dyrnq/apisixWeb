@@ -112,6 +112,8 @@ apisix:
       tcp:
         - 9100
 nginx_config:
+  main_configuration_snippet: |
+    user apisix apisix;
   http_configuration_snippet: |
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
 
