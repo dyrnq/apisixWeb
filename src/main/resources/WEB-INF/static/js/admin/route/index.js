@@ -154,7 +154,11 @@ $('#dropAll').click(function(){
      return false; // 阻止默认 form 跳转
    });
 
-
+var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+var defaultHidden = false;
+if (windowWidth <= 1900) {
+    defaultHidden = true;
+}
     //执行一个 table 实例
     table.render({
         elem: '#demo'
@@ -175,11 +179,11 @@ $('#dropAll').click(function(){
             , {field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
             , {field: 'priority',title:'priority', width: 80, sort: true}
             , {field: 'name', title: 'name', width: 200}
-            , {field: 'desc', title: 'desc', width: 90}
+            , {field: 'desc', title: 'desc', width: 90, hide: defaultHidden}
             , {field: 'host', title: 'host(s)', width: 200, templet: host}
             , {field: 'uri', title: 'uri(s)', width: 200, templet: uri}
-            , {field: 'createTime', title: 'create_time', sort: false , width: 200 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
-            , {field: 'updateTime', title: 'update_time', sort: true , width: 200 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+            , {field: 'createTime', title: 'create_time', sort: false , width: 200 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>", hide: defaultHidden }
+            , {field: 'updateTime', title: 'update_time', sort: true , width: 200 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>", hide: defaultHidden }
             , {field: 'status', title: 'status', width: 80}
             , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
         ]]
