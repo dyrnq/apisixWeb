@@ -1,3 +1,29 @@
+layui.use(function(){
+
+var layer = layui.layer;
+var laypage = layui.laypage;
+var table = layui.table;
+var form = layui.form;
+var dropdown = layui.dropdown;
+    var viewEditor = ace.edit("viewEditor");
+    viewEditor.setTheme("ace/theme/twilight");
+    viewEditor.session.setMode("ace/mode/yaml");
+    viewEditor.session.setUseWorker(false);
+    viewEditor.setReadOnly(true);
+    viewEditor.setFontSize(16);
+    viewEditor.setOptions({
+        minLines: 10,
+        maxLines: Infinity
+    });
+    viewEditor.resize();
+
+
+    var default_limt = localStorage.getItem('pageLimit');
+
+    if ('' == default_limt || null == default_limt || undefined == default_limt) {
+        default_limt = cfg.pageLimit;
+    }
+
 function cleanData(d){
     if( d === true ){
         $("#div_id").hide();
@@ -24,33 +50,32 @@ function addLink(d) {
    }
 }
 
-
-
-layui.use(function(){
-
-var layer = layui.layer;
-var laypage = layui.laypage;
-var table = layui.table;
-var form = layui.form;
-var dropdown = layui.dropdown;
-    var viewEditor = ace.edit("viewEditor");
-    viewEditor.setTheme("ace/theme/twilight");
-    viewEditor.session.setMode("ace/mode/yaml");
-    viewEditor.session.setUseWorker(false);
-    viewEditor.setReadOnly(true);
-    viewEditor.setFontSize(16);
-    viewEditor.setOptions({
-        minLines: 10,
-        maxLines: Infinity
-    });
-    viewEditor.resize();
-
-
-    var default_limt = localStorage.getItem('pageLimit');
-
-    if ('' == default_limt || null == default_limt || undefined == default_limt) {
-        default_limt = cfg.pageLimit;
+function uri(d) {
+    var uri_all='';
+    if (undefined !== d.uri) {
+        uri_all=uri_all+ "<span class=\"layui-badge layui-bg-blue\">"+d.uri+"</span>&nbsp;";
     }
+    if (undefined !== d.uris) {
+        for (let i = 0; i < d.uris.length; i++) {
+          uri_all=uri_all+ "<span class=\"layui-badge layui-bg-blue\">"+d.uris[i]+"</span>&nbsp;";
+        }
+    }
+    return uri_all;
+}
+function host(d) {
+    var host_all='';
+    if (undefined !== d.host) {
+        host_all=host_all+ "<span class=\"layui-badge layui-bg-green\">"+d.host+"</span>&nbsp;";
+    }
+    if (undefined !== d.hosts) {
+        for (let i = 0; i < d.hosts.length; i++) {
+          host_all=host_all+ "<span class=\"layui-badge layui-bg-green\">"+d.hosts[i]+"</span>&nbsp;";
+        }
+        //host_all=host_all+d.hosts;
+    }
+    return host_all;
+}
+
 
 $('#add').click(function(){
     cleanData(false);
@@ -151,9 +176,10 @@ $('#dropAll').click(function(){
             , {field: 'priority',title:'priority', width: 80, sort: true}
             , {field: 'name', title: 'name', width: 200}
             , {field: 'desc', title: 'desc', width: 90}
-            , {field: 'createTime', title: 'create_time', sort: false , width: 300 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
-            , {field: 'updateTime', title: 'update_time', sort: true , width: 300 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
-            , {field: 'uri', title: 'uri', width: 100}
+            , {field: 'host', title: 'host(s)', width: 200, templet: host}
+            , {field: 'uri', title: 'uri(s)', width: 200, templet: uri}
+            , {field: 'createTime', title: 'create_time', sort: false , width: 200 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>" }
+            , {field: 'updateTime', title: 'update_time', sort: true , width: 200 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
             , {field: 'status', title: 'status', width: 80}
             , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
         ]]
