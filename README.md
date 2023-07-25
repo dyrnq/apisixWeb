@@ -19,6 +19,10 @@
 
 apisixWeb is a webui interface of Apisix. This project uses the management API of apisix (that is, the data plane API) to realize the business operation of the apisix instance!
 
+The ultimate purpose is using Apisix to take over the traffic ports of the website, 80 and 443. Use best practices for website traffic management, efficiently and conveniently.
+
+Inspired by [nginxWebUI](https://gitee.com/cym1102/nginxWebUI).
+
 ## features
 
 - Add, delete, modify Routes, StreamRoutes, SSL... based on Apisix management APIs.
