@@ -20,6 +20,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.TimeZone;
 
 /**
@@ -124,6 +125,21 @@ public class Tencent {
         return invoke(service, host, version, action, region, arg, type);
     }
 
+    private ResponseWrap<?> invoke_cvm(String action, String region, Object arg, Type type) {
+        String service = "cvm";
+        String host = "cvm.tencentcloudapi.com";
+        String version = "2017-03-12";
+        return invoke(service, host, version, action, region, arg, type);
+    }
+
+    public DescribeRegionsResult describeRegions() {
+        Type type = new TypeToken<ResponseWrap<DescribeRegionsResult>>() {
+        }.getType();
+        ResponseWrap<DescribeRegionsResult> w = (ResponseWrap<DescribeRegionsResult>) invoke_cvm("DescribeRegions", "", new HashMap<>(), type);
+        return w.getResponse();
+    }
+
+
     private ResponseWrap<?> invoke(String service, String host, String version, String action, String region, Object arg, Type type) {
         String SECRET_KEY = this.secretKey;
         String SECRET_ID = this.secretId;
@@ -189,7 +205,15 @@ public class Tencent {
             response = client.newCall(request).execute();
             jsonResponse = response.body().string();
             //logger.debug(jsonResponse);
-            if (JsonPath.isPathDefinite("$.Response.Error")) {
+
+            boolean error = false;
+            try {
+                JsonPath.read(jsonResponse, "$.Response.Error");
+                error = true;
+            } catch (com.jayway.jsonpath.PathNotFoundException e) {
+            }
+
+            if (error) {
                 String code = JsonPath.read(jsonResponse, "$.Response.Error.Code");
                 String message = JsonPath.read(jsonResponse, "$.Response.Error.Message");
                 throw new TencentRuntimeException(code + " " + message);

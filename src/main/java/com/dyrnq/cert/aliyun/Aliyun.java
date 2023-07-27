@@ -88,8 +88,8 @@ public class Aliyun {
         try {
             response = client.newCall(request).execute();
             jsonResponse = response.body().string();
-            //logger.debug(jsonResponse);
-            if (response.code() > 400) {
+            logger.debug(jsonResponse);
+            if (response.code() >= 400) {
                 Map mapRes = gson.fromJson(jsonResponse, Map.class);
                 throw new AliyunRuntimeException(mapRes.get("Message") + " " + mapRes.get("Recommend") + " " + mapRes.get("Code"));
             }

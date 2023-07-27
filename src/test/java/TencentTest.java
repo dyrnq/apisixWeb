@@ -1,7 +1,6 @@
 import com.dyrnq.cert.tencent.Tencent;
-import com.dyrnq.cert.tencent.vo.ApplyCertificateArg;
-import com.dyrnq.cert.tencent.vo.DescribeCertificatesArg;
-import com.dyrnq.cert.tencent.vo.DescribeCertificatesResult;
+import com.dyrnq.cert.tencent.vo.*;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -12,16 +11,31 @@ public class TencentTest {
 
     private final static String SECRET_ID = "";
     private final static String SECRET_KEY = "";
+    Tencent tencentSDK = null;
+
+    @Before
+    public void init() {
+        tencentSDK = new Tencent(SECRET_ID, SECRET_KEY);
+    }
+
+    @Test
+    public void test_describeRegions() throws Exception {
+        DescribeRegionsResult describeRegionsResult = tencentSDK.describeRegions();
+
+        for (RegionInfo info : describeRegionsResult.getRegionSet()) {
+            System.out.println(info.getRegionName());
+        }
+    }
 
     @Test
     public void test_applyCertificate() throws Exception {
-        Tencent t = new Tencent(SECRET_ID, SECRET_KEY);
+
         ApplyCertificateArg arg = new ApplyCertificateArg();
         String domain = "test.onka.cn";
 
         arg.setDomainName(domain);
         arg.setDvAuthMethod("DNS_AUTO");
-        t.applyCertificate(arg);
+        tencentSDK.applyCertificate(arg);
 
 
         String certificateId = null;
@@ -33,7 +47,7 @@ public class TencentTest {
             deArg.setSearchKey(domain);
             deArg.setCertificateStatus(new Integer[]{1});
             //查询已签发的证书
-            DescribeCertificatesResult r = t.describeCertificates(deArg);
+            DescribeCertificatesResult r = tencentSDK.describeCertificates(deArg);
             if (r != null && r.getTotalCount() != null && r.getTotalCount() >= 1 && r.getCertificates() != null && r.getCertificates().get(0) != null) {
                 certificateId = r.getCertificates().get(0).getCertificateId();
             }
