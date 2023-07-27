@@ -91,7 +91,7 @@ public class Aliyun {
             //logger.debug(jsonResponse);
             if (response.code() > 400) {
                 Map mapRes = gson.fromJson(jsonResponse, Map.class);
-                throw new RuntimeException(mapRes.get("Message") + " " + mapRes.get("Recommend") + " " + mapRes.get("Code"));
+                throw new AliyunRuntimeException(mapRes.get("Message") + " " + mapRes.get("Recommend") + " " + mapRes.get("Code"));
             }
 
         } catch (IOException e) {
@@ -154,7 +154,7 @@ public class Aliyun {
         q.put("ValidateType", validateType);
         String json = invoke_cas("CreateCertificateForPackageRequest", q);
         Number number = JsonPath.read(json, "$.OrderId");
-        return new Long(number.longValue());
+        return Long.valueOf(number.longValue());
     }
 
     /**

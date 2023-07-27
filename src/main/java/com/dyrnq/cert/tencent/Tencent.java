@@ -4,6 +4,7 @@ import cn.hutool.core.util.HexUtil;
 import com.dyrnq.cert.tencent.vo.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jayway.jsonpath.JsonPath;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,12 +189,18 @@ public class Tencent {
             response = client.newCall(request).execute();
             jsonResponse = response.body().string();
             //logger.debug(jsonResponse);
+            if (JsonPath.isPathDefinite("$.Response.Error")) {
+                String code = JsonPath.read(jsonResponse, "$.Response.Error.Code");
+                String message = JsonPath.read(jsonResponse, "$.Response.Error.Message");
+                throw new TencentRuntimeException(code + " " + message);
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
-            throw new RuntimeException(e);
+            throw new TencentRuntimeException(e);
         }
 
         ResponseWrap<?> w = gson.fromJson(jsonResponse, type);
+
         return w;
     }
 }
