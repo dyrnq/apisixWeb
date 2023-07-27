@@ -1,10 +1,7 @@
 package com.dyrnq.service;
 
-import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.io.file.FileNameUtil;
 import com.dyrnq.HomeDir;
-import com.dyrnq.cert.acme.AcmeClient;
-import com.dyrnq.cert.acme.AcmeshCmd;
 import com.dyrnq.dso.CaMapper;
 import com.dyrnq.dso.CertMapper;
 import com.dyrnq.dso.InstMapper;
@@ -15,6 +12,7 @@ import com.dyrnq.utils.X509Holder;
 import enumeration.Approach;
 import enumeration.Challenge;
 import enumeration.Encryption;
+import enumeration.Supplier;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.operator.OperatorCreationException;
@@ -24,14 +22,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.naming.InvalidNameException;
-import java.io.*;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class CertService {
@@ -46,13 +47,18 @@ public class CertService {
     @Inject
     CertMapper certMapper;
 
-    @Inject
-    HomeDir homeDir;
+    @Inject(value = "acmeImpl")
+    ApplyCertificate acme;
+
+    @Inject(value = "tencentImpl")
+    ApplyCertificate tencent;
+
+    @Inject(value = "aliyunImpl")
+    ApplyCertificate aliyun;
+
 
     @Inject
-    AcmeshCmd acmeshCmd;
-    @Inject
-    AcmeClient acmeClient;
+    HomeDir homeDir;
 
 
     /**
@@ -119,98 +125,24 @@ public class CertService {
     }
 
 
-    public void trustCA(Cert cert) throws CertificateException, IOException {
-        String acmeHome = homeDir.getAcmeHome();
-        acmeshCmd.execCMD(homeDir.getAcmeSh() + " --create-account-key --server letsencrypt --home " + acmeHome, new String[]{}, 5 * 60 * 1000);
-
-        if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.dns.getId()) {
-            String[] split = cert.getDomain().split(",");
-            StringBuffer sb = new StringBuffer();
-            Arrays.stream(split).forEach(s -> sb.append(" --domain ").append(s));
-            String domain = sb.toString();
-            String cmd = null;
-            String rs = null;
-
-            Properties properties = new Properties();
-            InputStream inputStream = new ByteArrayInputStream((cert.getAux() != null ? cert.getAux() : "").getBytes());
-            List<String> envList = new ArrayList<>();
-            try {
-                properties.load(inputStream);
-
-                for (String key : properties.stringPropertyNames()) {
-                    String value = properties.getProperty(key);
-                    envList.add(key + "=" + value);
-                }
-
-            } catch (IOException e) {
-                logger.error(e.getMessage());
-            }
-
-
-            String[] env = envList.toArray(new String[envList.size()]);
-            String keylength = "";
-            // 在 acme.sh 中，默认情况下使用的是 ECC 密钥对。
-            // -k, --keylength <bits>            Specifies the domain key length: 2048, 3072, 4096, 8192 or ec-256, ec-384, ec-521.
-            if (cert.getEncryption() != null && cert.getEncryption().intValue() == Encryption.ECC.getId()) {
-                keylength = " --keylength ec-256 ";
-            } else {
-                keylength = " --keylength 2048 ";
-            }
-            cmd = homeDir.getAcmeSh() + " --issue --force --debug 1 --home " + acmeHome + " --dns " + cert.getDnsapi() + domain + keylength + " --server letsencrypt ";
-            logger.info(cmd);
-            // --staging
-            rs = acmeshCmd.execCMD(cmd, env, 5 * 60 * 1000);
-            logger.info(rs);
-
-            if (rs.contains("Your cert is in")) {
-                // 申请成功, 定位证书
-                String firstDomain = cert.getDomain().split(",")[0];
-                String certDir = StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), firstDomain);
-                if (cert.getEncryption() == Encryption.ECC.getId()) {
-                    certDir += "_ecc";
-                }
-                certDir += "/";
-
-                String crtPath = certDir + "fullchain.cer";
-                String keyPath = certDir + firstDomain + ".key";
-
-                cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
-                cert.setKey(FileUtil.readString(keyPath, "UTF-8"));
-                X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
-                cert.setNotAfter(x509Cert.getNotAfter().getTime());
-                cert.setNotBefore(x509Cert.getNotBefore().getTime());
-                cert.setSubject(x509Cert.getSubjectDN().toString());
-            } else {
-                throw new RuntimeException(rs);
-            }
-        } else if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.http.getId()) {
-            String[] dms = StringUtils.split(cert.getDomain(), ",");
-            java.util.List<String> domains = new ArrayList<>();
-            Collections.addAll(domains, dms);
-            try {
-                acmeClient.fetchCertificate(domains);
-
-                String firstDomain = cert.getDomain().split(",")[0];
-                String certDir = StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), firstDomain);
-
-
-                String crtPath = StringUtils.joinWith(File.separator, certDir, "domain-chain.crt");
-                String keyPath = StringUtils.joinWith(File.separator, certDir, "domain.key");
-
-                cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
-                cert.setKey(FileUtil.readString(keyPath, "UTF-8"));
-                X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
-                cert.setNotAfter(x509Cert.getNotAfter().getTime());
-                cert.setNotBefore(x509Cert.getNotBefore().getTime());
-                cert.setSubject(x509Cert.getSubjectDN().toString());
-
-            } catch (Exception ex) {
-                logger.error("Failed to get a certificate for domains " + domains, ex);
-                throw new RuntimeException(ex);
-            }
+    private ApplyCertificate getApplyCertificate(int id) {
+        if (id == Supplier.acme.getId()) {
+            return acme;
+        } else if (id == Supplier.aliyun.getId()) {
+            return aliyun;
+        } else if (id == Supplier.tencent.getId()) {
+            return tencent;
         }
+        return acme;
+    }
 
 
+    public void trustCA(Cert cert) throws CertificateException, IOException {
+        if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.dns.getId()) {
+            getApplyCertificate(cert.getSupplier().intValue()).dns(cert);
+        } else if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.http.getId()) {
+            getApplyCertificate(cert.getSupplier().intValue()).http(cert);
+        }
     }
 
 

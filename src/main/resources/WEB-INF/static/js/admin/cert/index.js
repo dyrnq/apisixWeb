@@ -45,7 +45,9 @@ function view(value, isUpdate){
         $("#div_aux").show();
         $("#div_dnsapi").show();
 
-        $('#addForm1 select[name="supplier"]').val(enum_Supplier.acme);
+        if(isUpdate == false){
+            $('#addForm1 select[name="supplier"]').val(enum_Supplier.acme);
+        }
     }else if(value == enum_Approach.manual){
         $("#div_keyFile").show();
         $("#div_certFile").show();

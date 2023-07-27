@@ -2,7 +2,7 @@ package enumeration;
 
 public enum Supplier {
     acme(1, "ACME(Let's Encrypt)"),
-    ali(2, "Cloud(ali)"),
+    aliyun(2, "Cloud(aliyun)"),
     tencent(3, "Cloud(tencent)");
 
     private final String name;
