@@ -160,8 +160,17 @@ public class Aliyun {
     /**
      * https://next.api.aliyun.com/api/cas/2020-04-07/ListUserCertificateOrder
      *
-     * @param keyword
-     * @param status
+     * @param keyword 模糊查询，匹配域名和订单资源ID
+     * @param status  订单状态。 状态取值：
+     *                <p>
+     *                PAYED：待申请，当OrderType=CPACK或者BUY有效。
+     *                CHECKING：审核中，当OrderType=CPACK或者BUY有效。
+     *                CHECKED_FAIL：审核失败，当OrderType=CPACK或者BUY有效。
+     *                ISSUED：已签发。
+     *                WILLEXPIRED：即将过期。
+     *                EXPIRED：已过期。
+     *                NOTACTIVATED：未激活，当OrderType=CPACK或者BUY有效。
+     *                REVOKED：吊销完成，当OrderType=CPACK或者BUY有效。
      * @return
      */
     public List<CertificateOrder> listUserCertificateOrder(String keyword, String status) {

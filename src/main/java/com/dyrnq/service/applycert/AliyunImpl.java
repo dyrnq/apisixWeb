@@ -1,11 +1,10 @@
 package com.dyrnq.service.applycert;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
 import com.dyrnq.cert.aliyun.Aliyun;
-import com.dyrnq.cert.aliyun.vo.CertificateOrder;
+import com.dyrnq.cert.aliyun.DomainUtils;
 import com.dyrnq.cert.aliyun.vo.DescribeCertificateStateResult;
 import com.dyrnq.model.Cert;
 import com.dyrnq.service.ApplyCertificate;
@@ -28,15 +27,19 @@ import java.util.*;
 @Component(name = "aliyunImpl")
 public class AliyunImpl implements ApplyCertificate {
     static Logger logger = LoggerFactory.getLogger(AliyunImpl.class);
+    static int SLEEP = 1200;
     @Inject
     BusinessLogic businessLogic;
 
-    private String baseDomain(String domain) {
-        String[] domainx = StringUtils.split(domain, ".");
-
-        String baseDomain = domainx[domainx.length - 2] + "." + domainx[domainx.length - 1];
-        return baseDomain;
+    public static void sleep(String log, int m) {
+        try {
+            logger.info(log + ", will Thread.sleep(" + m + ")");
+            Thread.sleep(m);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     public void dns(Cert cert) throws CertificateException, IOException {
@@ -57,23 +60,22 @@ public class AliyunImpl implements ApplyCertificate {
         Aliyun aliyunSDK = new Aliyun(SECRET_ID, SECRET_KEY);
 
         String domain = cert.getDomain();
-        String baseDomain = baseDomain(domain);
+        String baseDomain = DomainUtils.base(domain);
 
         Long orderId = aliyunSDK.createCertificateForPackageRequest(domain, "DNS");
 
 
-        String rr = null;
+        String recordDomain = null;
         String recodeValue = null;
         String recodeType = null;
 
-        while (rr == null) {
+        while (recordDomain == null) {
             try {
-                logger.info("rr is null,will get rr value");
                 DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(orderId);
-                rr = StringUtils.replace(result.getRecordDomain(), "." + baseDomain, "");
+                recordDomain = result.getRecordDomain();
 
-                if (rr == null) {
-                    Thread.sleep(100);
+                if (recordDomain == null) {
+                    sleep("recordDomain is null, will get recordDomain", SLEEP);
                     continue;
                 }
 
@@ -84,31 +86,54 @@ public class AliyunImpl implements ApplyCertificate {
                 logger.error(e.getMessage());
             }
         }
+        //此处要将拿到的recordDomain转化为dns中的rr记录,比如 hello.dyrnq.com, hello是RR记录,dyrnq.com为域名
+        String rr = StringUtils.replace(recordDomain, "." + baseDomain, "");
         //插入域名校验记录，腾讯云那边有AUTO_DNS，不需要这一步
         aliyunSDK.addDomainRecord(baseDomain, rr, recodeType, recodeValue);
 
 
-        //等待证书审批下发
-        List<CertificateOrder> list = null;
-        while (CollectionUtil.isEmpty(list)) {
+//        List<CertificateOrder> list = null;
+//        while (CollectionUtil.isEmpty(list)) {
+//            try {
+//                list = aliyunSDK.listUserCertificateOrder(domain, "ISSUED");
+//                if (CollectionUtil.isEmpty(list)) {
+//                    Thread.sleep(100);
+//                }
+//            } catch (Exception e) {
+//                logger.error(e.getMessage());
+//            }
+//        }
+//
+//        for (CertificateOrder obj : list) {
+//            DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(obj.getOrderId());
+//            if (result != null) {
+//                cert.setKey(result.getPrivateKey());
+//                cert.setCert(result.getCertificate());
+//                break;
+//            }
+//        }
+
+        post(cert, domain, aliyunSDK, orderId);
+    }
+
+    private void post(Cert cert, String domain, Aliyun aliyunSDK, Long orderId) throws CertificateException, IOException {
+        //等待证书审批下发,用orderId去查询,不能根据domain去模糊匹配,那样会查询到多个同时ISSUED的证书,不好判断哪个是新的
+        String certificateTxt = null;
+        String keyTxt = null;
+        while (certificateTxt == null) {
             try {
-                list = aliyunSDK.listUserCertificateOrder(domain, "ISSUED");
-                if (CollectionUtil.isEmpty(list)) {
-                    Thread.sleep(100);
+                DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(orderId);
+                certificateTxt = result.getCertificate();
+                keyTxt = result.getPrivateKey();
+                if (certificateTxt == null) {
+                    sleep("waiting domain ISSUED " + domain + ", " + result.getType(), SLEEP);
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
         }
-
-        for (CertificateOrder obj : list) {
-            DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(obj.getOrderId());
-            if (result != null) {
-                cert.setKey(result.getPrivateKey());
-                cert.setCert(result.getCertificate());
-                break;
-            }
-        }
+        cert.setKey(keyTxt);
+        cert.setCert(certificateTxt);
 
         if (cert.getCert() != null) {
             X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
@@ -116,9 +141,8 @@ public class AliyunImpl implements ApplyCertificate {
             cert.setNotBefore(x509Cert.getNotBefore().getTime());
             cert.setSubject(x509Cert.getSubjectDN().toString());
         }
-
-
     }
+
 
     @Override
     public void http(Cert cert) throws CertificateException, IOException {
@@ -147,12 +171,11 @@ public class AliyunImpl implements ApplyCertificate {
 
         while (fileContent == null) {
             try {
-                logger.info("fileContent is null,will get fileContent");
                 DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(orderId);
                 fileContent = result.getContent();
 
                 if (fileContent == null) {
-                    Thread.sleep(100);
+                    sleep("fileContent is null, will get fileContent", SLEEP);
                     continue;
                 }
                 uri = result.getUri();
@@ -178,35 +201,8 @@ public class AliyunImpl implements ApplyCertificate {
             }
         }
 
-        //等待证书审批下发
-        List<CertificateOrder> list = null;
-        while (CollectionUtil.isEmpty(list)) {
-            try {
-                list = aliyunSDK.listUserCertificateOrder(domain, "ISSUED");
-                if (CollectionUtil.isEmpty(list)) {
-                    Thread.sleep(100);
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
-            }
-        }
 
-
-        for (CertificateOrder obj : list) {
-            DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(obj.getOrderId());
-            if (result != null) {
-                cert.setKey(result.getPrivateKey());
-                cert.setCert(result.getCertificate());
-                break;
-            }
-        }
-
-        if (cert.getCert() != null) {
-            X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
-            cert.setNotAfter(x509Cert.getNotAfter().getTime());
-            cert.setNotBefore(x509Cert.getNotBefore().getTime());
-            cert.setSubject(x509Cert.getSubjectDN().toString());
-        }
+        post(cert, domain, aliyunSDK, orderId);
 
 
     }

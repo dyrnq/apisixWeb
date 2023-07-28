@@ -1,7 +1,6 @@
 package com.dyrnq.service.applycert;
 
 import cn.hutool.core.codec.Base64;
-import cn.hutool.core.collection.CollectionUtil;
 import com.dyrnq.HomeDir;
 import com.dyrnq.cert.tencent.Tencent;
 import com.dyrnq.cert.tencent.vo.*;
@@ -25,7 +24,6 @@ import java.rmi.RemoteException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -33,8 +31,20 @@ import java.util.zip.ZipFile;
 @Component(name = "tencentImpl")
 public class TencentImpl implements ApplyCertificate {
     static Logger logger = LoggerFactory.getLogger(TencentImpl.class);
+
+    static int SLEEP = 1200;
+
     @Inject
     HomeDir homeDir;
+
+    public static void sleep(String log, int m) {
+        try {
+            logger.info(log + ", will Thread.sleep(" + m + ")");
+            Thread.sleep(m);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void dns(Cert cert) throws CertificateException, IOException {
@@ -61,31 +71,49 @@ public class TencentImpl implements ApplyCertificate {
         arg.setDvAuthMethod("DNS_AUTO");
         ApplyCertificateResult applyCertificateResult = tencentSDK.applyCertificate(arg);
 
+        String certificateId = applyCertificateResult.getCertificateId();
 
-        DescribeCertificatesArg deArg = new DescribeCertificatesArg();
-        deArg.setLimit(1000);
-        deArg.setOffset(0);
-        deArg.setSearchKey(domain);
-        deArg.setCertificateStatus(new Integer[]{1});
+//        DescribeCertificatesArg deArg = new DescribeCertificatesArg();
+//        deArg.setLimit(1000);
+//        deArg.setOffset(0);
+//        deArg.setSearchKey(domain);
+//        deArg.setCertificateStatus(new Integer[]{1});
+//
+//
+//        List<Certificates> list = null;
+//
+//        //等待证书审批下发
+//        while (CollectionUtil.isEmpty(list)) {
+//            try {
+//                DescribeCertificatesResult r = tencentSDK.describeCertificates(deArg);
+//                list = r != null ? r.getCertificates() : null;
+//                if (CollectionUtil.isEmpty(list)) {
+//                    Thread.sleep(100);
+//                }
+//            } catch (Exception e) {
+//                logger.error(e.getMessage());
+//            }
+//        }
 
 
-        List<Certificates> list = null;
+        DescribeCertificateArg deArg = new DescribeCertificateArg();
+        deArg.setCertificateId(certificateId);
 
         //等待证书审批下发
-        while (CollectionUtil.isEmpty(list)) {
-            try {
-                DescribeCertificatesResult r = tencentSDK.describeCertificates(deArg);
-                list = r != null ? r.getCertificates() : null;
-                if (CollectionUtil.isEmpty(list)) {
-                    Thread.sleep(100);
-                }
-            } catch (Exception e) {
-                logger.error(e.getMessage());
+
+        boolean ISSUED = false;
+        while (!ISSUED) {
+            DescribeCertificateResult r = tencentSDK.describeCertificate(deArg);
+            if (r != null && r.getStatus() != null && r.getStatus() == 1) {
+                ISSUED = true;
+            } else {
+                sleep("waiting domain ISSUED " + domain + ", " + r.getStatusName(), SLEEP);
             }
         }
+
         //下载证书
         DownloadCertificateArg downloadCertificateArg = new DownloadCertificateArg();
-        downloadCertificateArg.setCertificateId(list.get(0).getCertificateId());
+        downloadCertificateArg.setCertificateId(certificateId);
         DownloadCertificateResult downloadCertificateResult = tencentSDK.downloadCertificate(downloadCertificateArg);
         byte[] decodedBytes = Base64.decode(downloadCertificateResult.getContent());
         String outputPath = StringUtils.joinWith(File.separator, homeDir.getTmpAbsolutePath(), domain + ".zip");
@@ -116,6 +144,8 @@ public class TencentImpl implements ApplyCertificate {
 
     @Override
     public void http(Cert cert) throws CertificateException, IOException {
+        //没有找到相关接口实现这个HTTP
         throw new RuntimeException("not support");
     }
+
 }

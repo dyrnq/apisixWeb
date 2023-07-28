@@ -103,9 +103,23 @@ public class Tencent {
         return w.getResponse();
     }
 
+    /**
+     * 获取证书信息 https://cloud.tencent.com/document/product/400/41674
+     *
+     * @param arg
+     * @return
+     */
+
+    public DescribeCertificateResult describeCertificate(DescribeCertificateArg arg) {
+        Type type = new TypeToken<ResponseWrap<DescribeCertificateResult>>() {
+        }.getType();
+        ResponseWrap<DescribeCertificateResult> w = (ResponseWrap<DescribeCertificateResult>) invoke_ssl("DescribeCertificate", "", arg, type);
+        return w.getResponse();
+    }
+
 
     /**
-     * 获取证书信息 https://cloud.tencent.com/document/api/400/41674
+     * 获取证书列表 https://cloud.tencent.com/document/product/400/41671
      *
      * @param arg
      * @return
@@ -204,7 +218,7 @@ public class Tencent {
         try {
             response = client.newCall(request).execute();
             jsonResponse = response.body().string();
-            //logger.debug(jsonResponse);
+            logger.debug(jsonResponse);
 
             boolean error = false;
             try {
