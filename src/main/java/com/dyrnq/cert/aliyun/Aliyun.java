@@ -102,20 +102,41 @@ public class Aliyun {
         return jsonResponse;
     }
 
+    /**
+     * https://next.api.aliyun.com/api-tools/sdk/Ecs
+     *
+     * @param action
+     * @param q
+     * @return
+     */
     public String invoke_ecs(String action, Map<String, String> q) {
         return invoke("https://ecs.aliyuncs.com", "2014-05-26", action, q);
     }
 
+    /**
+     * https://next.api.aliyun.com/api-tools/sdk/cas
+     *
+     * @param action
+     * @param q
+     * @return
+     */
     public String invoke_cas(String action, Map<String, String> q) {
         return invoke("https://cas.aliyuncs.com", "2020-04-07", action, q);
     }
 
-    private String invoke_dns(String action, Map<String, String> q) {
+    /**
+     * https://next.api.aliyun.com/api-tools/sdk/Alidns
+     *
+     * @param action
+     * @param q
+     * @return
+     */
+    public String invoke_dns(String action, Map<String, String> q) {
         return invoke("https://dns.aliyuncs.com", "2015-01-09", action, q);
     }
 
     /**
-     * 新增域名记录
+     * 新增域名记录 https://next.api.aliyun.com/document/Alidns/2015-01-09/AddDomain
      *
      * @param domainName
      * @param RR
@@ -131,7 +152,11 @@ public class Aliyun {
         String json = invoke_dns("AddDomainRecord", q);
     }
 
-
+    /**
+     * 查询可以使用的阿里云地域 https://next.api.aliyun.com/document/Ecs/2014-05-26/DescribeRegions
+     *
+     * @return
+     */
     public List<Region> describeRegions() {
         String json = invoke_ecs("DescribeRegions", null);
         String jsonResult = JsonPath.read(json, "$.Regions.Region").toString();
@@ -144,7 +169,7 @@ public class Aliyun {
     }
 
     /**
-     * https://next.api.aliyun.com/api/cas/2020-04-07/CreateCertificateForPackageRequest
+     * 创建证书请求 https://next.api.aliyun.com/api/cas/2020-04-07/CreateCertificateForPackageRequest
      */
     public Long createCertificateForPackageRequest(String domain, String validateType) {
         Map<String, String> q = new HashMap<>();
@@ -158,7 +183,7 @@ public class Aliyun {
     }
 
     /**
-     * https://next.api.aliyun.com/api/cas/2020-04-07/ListUserCertificateOrder
+     * 查询用户证书或者订单列表 https://next.api.aliyun.com/api/cas/2020-04-07/ListUserCertificateOrder
      *
      * @param keyword 模糊查询，匹配域名和订单资源ID
      * @param status  订单状态。 状态取值：
@@ -189,6 +214,12 @@ public class Aliyun {
         return gson.fromJson(jsonResult, type);
     }
 
+    /**
+     * 查询DV证书的申请状态 https://next.api.aliyun.com/api/cas/2020-04-07/DescribeCertificateState
+     *
+     * @param orderId
+     * @return
+     */
     public DescribeCertificateStateResult describeCertificateState(Long orderId) {
         Map<String, String> q = new HashMap<>();
         q.put("OrderId", String.valueOf(orderId));
