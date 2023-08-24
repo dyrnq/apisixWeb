@@ -1,5 +1,6 @@
 package com.dyrnq.apisix;
 
+import cn.hutool.core.net.url.UrlQuery;
 import com.dyrnq.apisix.profile.Credential;
 import com.dyrnq.apisix.profile.Endpoint;
 import com.dyrnq.apisix.profile.Profile;
@@ -11,8 +12,6 @@ import okhttp3.Headers;
 import okhttp3.Headers.Builder;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,11 +50,14 @@ public abstract class BaseClient {
     }
 
     protected static String mapToQueryString(Map<String, String> params) {
-        List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-        for (Map.Entry<String, String> entry : params.entrySet()) {
-            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-        }
-        return URLEncodedUtils.format(nameValuePairs, StandardCharsets.UTF_8);
+//        List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+//        for (Map.Entry<String, String> entry : params.entrySet()) {
+//            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+//        }
+//
+//        return URLEncodedUtils.format(nameValuePairs, StandardCharsets.UTF_8);
+
+        return UrlQuery.of(params, false).build(StandardCharsets.UTF_8);
     }
 
     public Profile getProfile() {
@@ -148,18 +150,19 @@ public abstract class BaseClient {
 
         Headers headers = hb.build();
 
-        if (reqMethod.equals(HttpMethod.REQ_GET)) {
-            return conn.getRequest(url + "?" + param, headers);
-        } else if (reqMethod.equals(HttpMethod.REQ_POST)) {
-            return conn.postRequest(url, param, headers);
-        } else if (reqMethod.equals(HttpMethod.REQ_DELETE)) {
-            return conn.deleteRequest(url, headers);
-        } else if (reqMethod.equals(HttpMethod.REQ_PUT)) {
-            return conn.putRequest(url, param, headers);
-        } else if (reqMethod.equals(HttpMethod.REQ_PATCH)) {
-            return conn.patchRequest(url, param, headers);
-        } else {
-            throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE, PATCH)");
+        switch (reqMethod) {
+            case HttpMethod.REQ_GET:
+                return conn.getRequest(url + "?" + param, headers);
+            case HttpMethod.REQ_POST:
+                return conn.postRequest(url, param, headers);
+            case HttpMethod.REQ_DELETE:
+                return conn.deleteRequest(url, headers);
+            case HttpMethod.REQ_PUT:
+                return conn.putRequest(url, param, headers);
+            case HttpMethod.REQ_PATCH:
+                return conn.patchRequest(url, param, headers);
+            default:
+                throw new ApisixSDKException("Method only support (GET, POST, PUT, DELETE, PATCH)");
         }
     }
 
