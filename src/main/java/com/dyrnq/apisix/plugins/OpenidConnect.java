@@ -102,4 +102,8 @@ public String introspectionEndpointAuthMethod;
 @SerializedName("redirect_uri")
 @Expose
 public String redirectUri;
+// proxy_opts
+@SerializedName("proxy_opts")
+@Expose
+public Object proxyOpts;
 }

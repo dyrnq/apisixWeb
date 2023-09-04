@@ -26,6 +26,10 @@ public String path;
 @SerializedName("include_resp_body")
 @Expose
 public boolean includeRespBody;
+// match
+@SerializedName("match")
+@Expose
+public String[] match;
 // metadata_schema
 // private Object logFormat;
 }

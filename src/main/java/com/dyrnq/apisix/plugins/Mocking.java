@@ -34,4 +34,8 @@ public Integer responseStatus;
 @SerializedName("response_example")
 @Expose
 public String responseExample;
+// response_headers
+@SerializedName("response_headers")
+@Expose
+public Object responseHeaders;
 }

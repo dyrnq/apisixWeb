@@ -50,4 +50,8 @@ public boolean sslVerify;
 @SerializedName("policy")
 @Expose
 public String policy;
+// send_headers_upstream
+@SerializedName("send_headers_upstream")
+@Expose
+public String[] sendHeadersUpstream;
 }
