@@ -164,4 +164,15 @@ public class SSL{
         return this.id;
     }
 
+    @SerializedName("ssl_protocols")
+    @Expose
+    private List<String> sslProtocols;
+
+    public void setSslProtocols(List<String> sslProtocols){
+        this.sslProtocols=sslProtocols;
+    }
+
+    public List<String> getSslProtocols(){
+        return this.sslProtocols;
+    }
 }
