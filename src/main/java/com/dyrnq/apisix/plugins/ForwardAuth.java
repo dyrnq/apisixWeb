@@ -50,4 +50,8 @@ public String[] upstreamHeaders;
 @SerializedName("timeout")
 @Expose
 public Integer timeout;
+// allow_degradation
+@SerializedName("allow_degradation")
+@Expose
+public boolean allowDegradation;
 }
