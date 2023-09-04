@@ -6,7 +6,8 @@ iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.4.0-debian}"
+apisix_image="${apisix_image:-apache/apisix:3.4.1-debian}"
+#apisix_image="${apisix_image:-bitnami/apisix:3.5.0-debian-11-r0}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.1-alpine}"
 etcd_image="${etcd_image:-quay.io/coreos/etcd:v3.5.9}"
 wait4x_image="${wait4x_image:-atkrad/wait4x:2.12}"
@@ -100,6 +101,7 @@ apisix:
   node_listen:
     - 9080
     - 80
+  proxy_mode: "http&stream"
   ssl:
     enable: true
     listen:
@@ -112,8 +114,8 @@ apisix:
       tcp:
         - 9100
 nginx_config:
-  main_configuration_snippet: |
-    user apisix apisix;
+#  main_configuration_snippet: |
+#    user apisix apisix;
   http_configuration_snippet: |
     ssl_dhparam /etc/ssl/certs/dhparam.pem;
     server{
@@ -182,6 +184,20 @@ EOF
 
 
 docker rm -f apisix 2>/dev/null || true
+if grep "bitnami" <<< ${apisix_image}; then
+docker run --net host --rm --name='wait4x' ${wait4x_image} tcp -i 1s -q -t 5s 127.0.0.1:2379 && \
+docker run -d --name apisix \
+--restart always \
+--net host \
+--privileged \
+-u root \
+--ulimit nofile=40000:40000 \
+-v ${apisix_home}/dhparam.pem:/etc/ssl/certs/dhparam.pem \
+-v ${apisix_home}/conf/config.yaml:/usr/local/apisix/conf/config.yaml  \
+--entrypoint="" \
+${apisix_image} \
+sh -c "apisix init && apisix init_etcd && exec openresty -p /usr/local/apisix -g 'daemon off;'"
+else
 docker run --net host --rm --name='wait4x' ${wait4x_image} tcp -i 1s -q -t 5s 127.0.0.1:2379 && \
 docker run -d --name apisix \
 --restart always \
@@ -192,6 +208,7 @@ docker run -d --name apisix \
 -v ${apisix_home}/dhparam.pem:/etc/ssl/certs/dhparam.pem \
 -v ${apisix_home}/conf/config.yaml:/usr/local/apisix/conf/config.yaml  \
 ${apisix_image}
+fi
 
 
 
