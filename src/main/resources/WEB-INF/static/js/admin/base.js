@@ -99,6 +99,14 @@ $(function() {
             ,click: function(obj){
                 Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
                 location.reload();
+            },
+            templet: function(d){
+                var instId=Cookies.get(COOK_NAME.instId);
+                if (undefined!=instId && d.id==instId) {
+                    return d.title + '&nbsp;&nbsp;<span class="layui-badge-dot layui-bg-green"></span>';
+                } else {
+                    return d.title;
+                }
             }
        });
 
