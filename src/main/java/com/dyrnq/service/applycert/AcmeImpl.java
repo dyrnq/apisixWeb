@@ -18,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
@@ -90,8 +91,8 @@ public class AcmeImpl implements ApplyCertificate {
             String crtPath = certDir + "fullchain.cer";
             String keyPath = certDir + firstDomain + ".key";
 
-            cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
-            cert.setKey(FileUtil.readString(keyPath, "UTF-8"));
+            cert.setCert(FileUtil.readString(crtPath, StandardCharsets.UTF_8));
+            cert.setKey(FileUtil.readString(keyPath, StandardCharsets.UTF_8));
             X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
             cert.setNotAfter(x509Cert.getNotAfter().getTime());
             cert.setNotBefore(x509Cert.getNotBefore().getTime());
@@ -120,8 +121,8 @@ public class AcmeImpl implements ApplyCertificate {
             String crtPath = StringUtils.joinWith(File.separator, certDir, "domain-chain.crt");
             String keyPath = StringUtils.joinWith(File.separator, certDir, "domain.key");
 
-            cert.setCert(FileUtil.readString(crtPath, "UTF-8"));
-            cert.setKey(FileUtil.readString(keyPath, "UTF-8"));
+            cert.setCert(FileUtil.readString(crtPath, StandardCharsets.UTF_8));
+            cert.setKey(FileUtil.readString(keyPath, StandardCharsets.UTF_8));
             X509Certificate x509Cert = CertUtils.loadCertificate(cert.getCert());
             cert.setNotAfter(x509Cert.getNotAfter().getTime());
             cert.setNotBefore(x509Cert.getNotBefore().getTime());
