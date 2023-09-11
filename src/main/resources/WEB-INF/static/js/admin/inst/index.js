@@ -58,6 +58,9 @@ var upload = layui.upload;
                           if(res.code=='200'){
                               layer.closeAll();
                               layer.msg(commonStr.success);
+                          }else {
+                              layer.closeAll();
+                              layer.msg(res.description);
                           }
                     }
                     ,progress: function(n, elem, res, index){
