@@ -42,13 +42,13 @@ public class StreamRoute{
 
     @SerializedName("server_port")
     @Expose
-    private String serverPort;
+    private Integer serverPort;
 
-    public void setServerPort(String serverPort){
+    public void setServerPort(Integer serverPort){
         this.serverPort=serverPort;
     }
 
-    public String getServerPort(){
+    public Integer getServerPort(){
         return this.serverPort;
     }
 
