@@ -107,7 +107,7 @@ public class ApiController extends BaseController {
             List<Object> list = Factory.create(cls).list(getAdminClient(), id);
             return Result.succeed(list);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -161,7 +161,7 @@ public class ApiController extends BaseController {
 
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

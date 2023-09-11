@@ -31,7 +31,7 @@ public class TarController extends ApiController {
             this.businessLogic.importData(id, b, currentTimeMillis);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

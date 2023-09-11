@@ -49,7 +49,7 @@ public class CaController extends ApiController {
             });
             return PageResult.succeed(p.getList(), p.getTotal());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }
@@ -74,7 +74,7 @@ public class CaController extends ApiController {
             caMapper.insert(ca, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -92,7 +92,7 @@ public class CaController extends ApiController {
             }
             return Result.succeed(o);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -113,7 +113,7 @@ public class CaController extends ApiController {
                 return Result.succeed("ok");
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

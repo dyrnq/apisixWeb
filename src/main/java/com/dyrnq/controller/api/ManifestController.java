@@ -33,7 +33,7 @@ public class ManifestController extends ApiController {
             IPage<Manifest> p = manifestMapper.selectPage(start, limit, null);
             return PageResult.succeed(p.getList(), p.getTotal());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }
@@ -49,7 +49,7 @@ public class ManifestController extends ApiController {
 
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -63,7 +63,7 @@ public class ManifestController extends ApiController {
             }
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -74,7 +74,7 @@ public class ManifestController extends ApiController {
             Manifest manifest = manifestMapper.selectById(id);
             return Result.succeed(manifest);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -85,7 +85,7 @@ public class ManifestController extends ApiController {
             manifestMapper.updateById(manifest, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

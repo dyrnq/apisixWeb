@@ -41,7 +41,7 @@ public class CertController extends ApiController {
         try {
             return Result.succeed(certService.getAcmeshDnsapi());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -88,7 +88,7 @@ public class CertController extends ApiController {
             return PageResult.succeed(cerList, p.getTotal());
 
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }
@@ -109,7 +109,7 @@ public class CertController extends ApiController {
             certMapper.insert(cert, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -122,7 +122,7 @@ public class CertController extends ApiController {
             certMapper.updateById(cert, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -135,7 +135,7 @@ public class CertController extends ApiController {
             certMapper.updateById(cert, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -148,7 +148,7 @@ public class CertController extends ApiController {
             }
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -161,7 +161,7 @@ public class CertController extends ApiController {
             cert.setKey("***");
             return Result.succeed(cert);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -175,7 +175,7 @@ public class CertController extends ApiController {
             certMapper.updateById(cert, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -196,7 +196,7 @@ public class CertController extends ApiController {
                 ctx.output(rs);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             ctx.output(e.getMessage());
         }
     }

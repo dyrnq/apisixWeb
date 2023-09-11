@@ -25,7 +25,7 @@ public class UpstreamController extends ApiController {
             Factory.create(Upstream.class).del(getAdminClient(), id);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -36,7 +36,7 @@ public class UpstreamController extends ApiController {
             getAdminClient().putUpstreamRaw(id, rawData);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -48,7 +48,7 @@ public class UpstreamController extends ApiController {
             List<Upstream> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }

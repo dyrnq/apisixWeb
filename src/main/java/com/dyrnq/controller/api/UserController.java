@@ -35,7 +35,7 @@ public class UserController extends ApiController {
             userList.forEach(user -> user.setPass("**********************"));
             return PageResult.succeed(userList, p.getTotal());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }
@@ -50,7 +50,7 @@ public class UserController extends ApiController {
             userMapper.insert(user, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -63,7 +63,7 @@ public class UserController extends ApiController {
             }
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -75,7 +75,7 @@ public class UserController extends ApiController {
             user.setPass("**********************");
             return Result.succeed(user);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -87,7 +87,7 @@ public class UserController extends ApiController {
             userMapper.updateById(user, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -101,7 +101,7 @@ public class UserController extends ApiController {
             businessLogic.changePass(id, newPass);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

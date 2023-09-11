@@ -25,7 +25,7 @@ public class PluginMetadataController extends ApiController {
             getAdminClient().putPluginMetadataRaw(id, rawData);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -50,7 +50,7 @@ public class PluginMetadataController extends ApiController {
 
             return Result.succeed(pluginMetadata);
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -71,7 +71,7 @@ public class PluginMetadataController extends ApiController {
             Factory.create(PluginMetadata.class).del(getAdminClient(), id);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

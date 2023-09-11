@@ -32,7 +32,7 @@ public class InstController extends ApiController {
             IPage<Inst> p = instMapper.selectPage(start, limit, null);
             return PageResult.succeed(p.getList(), p.getTotal());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }
@@ -43,7 +43,7 @@ public class InstController extends ApiController {
             instMapper.insert(inst, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -56,7 +56,7 @@ public class InstController extends ApiController {
             }
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -67,7 +67,7 @@ public class InstController extends ApiController {
             Inst inst = instMapper.selectById(id);
             return Result.succeed(inst);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -78,7 +78,7 @@ public class InstController extends ApiController {
             instMapper.updateById(inst, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -89,7 +89,7 @@ public class InstController extends ApiController {
             List<Inst> p = instMapper.selectList(null);
             return Result.succeed(p);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -107,7 +107,7 @@ public class InstController extends ApiController {
             }
             return Result.succeed(o);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -118,7 +118,7 @@ public class InstController extends ApiController {
             businessLogic.drop(id);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

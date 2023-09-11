@@ -26,7 +26,7 @@ public class ConsumerController extends ApiController {
             Factory.create(Consumer.class).del(getAdminClient(), id);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -37,7 +37,7 @@ public class ConsumerController extends ApiController {
             getAdminClient().putConsumerRaw(id, rawData);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -51,7 +51,7 @@ public class ConsumerController extends ApiController {
             List<Consumer> result = getAdminClient().arrangeMulti(rsp.getNodes());
             return PageResult.succeed(result, rsp.getTotal());
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }

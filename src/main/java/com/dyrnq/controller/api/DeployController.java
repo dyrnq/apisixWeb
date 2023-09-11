@@ -38,7 +38,7 @@ public class DeployController extends ApiController {
             IPage<Deploy> p = deployMapper.selectPage(start, limit, null);
             return PageResult.succeed(p.getList(), p.getTotal());
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
         }
     }
@@ -61,7 +61,7 @@ public class DeployController extends ApiController {
             deployMapper.insert(deploy, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -74,7 +74,7 @@ public class DeployController extends ApiController {
             }
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -85,7 +85,7 @@ public class DeployController extends ApiController {
             Deploy deploy = deployMapper.selectById(id);
             return Result.succeed(deploy);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -96,7 +96,7 @@ public class DeployController extends ApiController {
             deployMapper.updateById(deploy, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -165,7 +165,7 @@ public class DeployController extends ApiController {
             deployMapper.updateById(deploy, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
@@ -209,7 +209,7 @@ public class DeployController extends ApiController {
             deployMapper.updateById(deploy, true);
             return Result.succeed("ok");
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }

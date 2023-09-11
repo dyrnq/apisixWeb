@@ -14,7 +14,7 @@ public class PluginController extends ApiController {
         try {
             return Result.succeed(getAdminClient().listPlugins());
         } catch (ApisixSDKException e) {
-            logger.error(e.getMessage());
+            logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
