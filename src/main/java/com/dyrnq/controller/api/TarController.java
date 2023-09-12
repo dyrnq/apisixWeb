@@ -8,12 +8,16 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.DownloadedFile;
 import org.noear.solon.core.handle.Result;
 import org.noear.solon.core.handle.UploadedFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 @Mapping("api/tar")
 @Controller
 public class TarController extends ApiController {
+    static Logger logger = LoggerFactory.getLogger(TarController.class);
+
     @Mapping("export")
     public void export(Context ctx, String id, String format) throws IOException, ApisixSDKException {
         long currentTimeMillis = System.currentTimeMillis();
