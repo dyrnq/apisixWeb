@@ -8,6 +8,19 @@ var laydate;
 var $ = layui.$;
 var jQuery = layui.$;
 
+layui.$.ajaxSetup({
+    complete: function(xhr,status) {
+//        console.log(xhr.status);
+//        console.log(ctx);
+//        console.log(xhr.statusText);
+//        console.log(xhr.responseText);
+        if (xhr.status == 401) {
+            window.location.href = ctx;
+        }
+    }
+});
+
+
 $(function() {
 
     layer = layui.layer;
