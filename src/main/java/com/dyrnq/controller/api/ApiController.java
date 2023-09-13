@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Mapping("api")
@@ -57,6 +58,17 @@ public class ApiController extends BaseController {
                 })
                 .create();
         return gson;
+    }
+
+    @Mapping("{cls}/yaml")
+    public Result yaml(Context ctx, @Path("cls") String cls, String... id) {
+        try {
+            List<Object> list = Factory.create(cls).list(getAdminClient(), id);
+            return Result.succeed(list);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
     }
 
     @Mapping("raw")
