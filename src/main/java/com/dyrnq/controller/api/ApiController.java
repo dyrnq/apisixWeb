@@ -73,15 +73,16 @@ public class ApiController extends BaseController {
 
     @Mapping("raw")
     public Result raw(Context ctx, String cls, String id) {
-        String jsonStr = "{}";
         try {
-            jsonStr = g().toJson(Factory.create(cls).get(getAdminClient(), id));
-        } catch (Exception Exception) {
+            String jsonStr = g().toJson(Factory.create(cls).get(getAdminClient(), id));
+            Map map = new HashMap();
+            map.put("id", id);
+            map.put("rawData", jsonStr);
+            return Result.succeed(map);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
         }
-        Map map = new HashMap();
-        map.put("id", id);
-        map.put("rawData", jsonStr);
-        return Result.succeed(map);
     }
 
 
@@ -89,9 +90,11 @@ public class ApiController extends BaseController {
     public Result drop(Context ctx, @Path("cls") String cls) {
         try {
             Factory.create(cls).drop(getAdminClient());
-        } catch (Exception Exception) {
+            return Result.succeed("ok");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
         }
-        return Result.succeed("ok");
     }
 
 
