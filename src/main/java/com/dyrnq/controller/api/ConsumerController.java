@@ -18,7 +18,7 @@ import java.util.Map;
 @Mapping("api/consumer")
 @Controller
 public class ConsumerController extends ApiController {
-    static Logger logger = LoggerFactory.getLogger(com.dyrnq.controller.api.ConsumerController.class);
+    static Logger logger = LoggerFactory.getLogger(ConsumerController.class);
 
     @Mapping("del")
     public Result del(Context ctx, String... id) {

@@ -21,6 +21,8 @@ import org.noear.solon.annotation.Path;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -30,6 +32,7 @@ import java.util.List;
 @Mapping("api/cert")
 @Controller
 public class CertController extends ApiController {
+    static Logger logger = LoggerFactory.getLogger(CertController.class);
     @Inject
     CertService certService;
     @Inject

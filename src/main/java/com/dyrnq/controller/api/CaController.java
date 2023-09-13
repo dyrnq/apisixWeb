@@ -18,6 +18,8 @@ import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
 import org.noear.wood.MapperWhereQ;
 import org.noear.wood.ext.Act1;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
@@ -28,7 +30,7 @@ import java.util.Map;
 @Mapping("api/ca")
 @Controller
 public class CaController extends ApiController {
-
+    static Logger logger = LoggerFactory.getLogger(CaController.class);
     @Inject
     CertService certService;
 

@@ -16,6 +16,8 @@ import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.StringReader;
@@ -26,7 +28,7 @@ import java.util.*;
 @Controller
 public class DeployController extends ApiController {
 
-
+    static Logger logger = LoggerFactory.getLogger(DeployController.class);
     @Inject
     DeployMapper deployMapper;
 

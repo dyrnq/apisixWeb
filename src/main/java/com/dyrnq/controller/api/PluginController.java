@@ -5,10 +5,14 @@ import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mapping("api/plugin")
 @Controller
 public class PluginController extends ApiController {
+    static Logger logger = LoggerFactory.getLogger(PluginController.class);
+
     @Mapping("")
     public Result plugin(Context ctx) {
         try {

@@ -13,11 +13,13 @@ import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Mapping("api/manifest")
 @Controller
 public class ManifestController extends ApiController {
-
+    static Logger logger = LoggerFactory.getLogger(ManifestController.class);
     @Inject
     ManifestMapper manifestMapper;
 
