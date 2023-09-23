@@ -28,8 +28,6 @@ public class Factory {
             return new UpstreamOp();
         } else if (cls.equals(StreamRoute.class)) {
             return new StreamRouteOp();
-        } else if (cls.equals(Upstream.class)) {
-            return new UpstreamOp();
         } else if (cls.equals(ConsumerGroup.class)) {
             return new ConsumerGroupOp();
         } else if (cls.equals(Consumer.class)) {
@@ -70,8 +68,6 @@ public class Factory {
             return new UpstreamOp();
         } else if (cls.equals(StreamRoute.class)) {
             return new StreamRouteOp();
-        } else if (cls.equals(Upstream.class)) {
-            return new UpstreamOp();
         } else if (cls.equals(ConsumerGroup.class)) {
             return new ConsumerGroupOp();
         } else if (cls.equals(Consumer.class)) {
