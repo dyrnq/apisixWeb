@@ -19,7 +19,7 @@
 
 apisixWeb是一个Apisix的webui界面，该项目使用apisix的管理API（即数据面API）实现了对apisix实例的业务操作!
 
-最终目的是使用Apifix来接管网站的流量端口80和443。使用最佳实践进行网站流量管理，既高效又方便。
+最终目的是使用Apisix来接管网站的流量端口80和443。使用最佳实践进行网站流量管理，既高效又方便。
 
 灵感来自 [nginxWebUI](https://gitee.com/cym1102/nginxWebUI)。
 
