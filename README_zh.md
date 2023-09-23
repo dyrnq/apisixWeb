@@ -36,13 +36,13 @@ apisixWeb是一个Apisix的webui界面，该项目使用apisix的管理API（即
 - 过期证书自动重新申请。
 - 使用yaml文件来实现规则的部署。
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132516_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-10-33%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132622_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-05%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132652_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-24%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132717_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-46%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
 ## 构建
 

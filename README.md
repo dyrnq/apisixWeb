@@ -36,13 +36,13 @@ Inspired by [nginxWebUI](https://gitee.com/cym1102/nginxWebUI).
 - Automatic renewal of expired certificates.
 - Deploy management based on yaml files.
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132516_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-10-33%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132622_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-05%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132652_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-24%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Web%20capture_1-7-2023_132717_192.168.66.100.jpeg" alt="apisixWeb" width="589" height="310">
+<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-46%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
 ## build
 
@@ -161,7 +161,7 @@ Parameter description (all are optional)
 |------------------------------|------------------------------------------------|-----------------|
 | --server.port                | http server port                               | 8080            |
 | --project.home               | project home dir, storing db, cert, logs, etc. | $HOME/apisixWeb |
-| --spring.database.type       | optional mysql,sqlite,postgresql               | h2              |
+| --spring.database.type       | optional h2, mysql, sqlite, postgresql         | h2              |
 | --spring.datasource.url      | datasource url                                 |                 |
 | --spring.datasource.username | datasource username                            |                 |
 | --spring.datasource.password | datasource password                            |                 |
