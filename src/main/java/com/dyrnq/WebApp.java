@@ -17,9 +17,7 @@ import org.noear.solon.core.handle.FilterChain;
 import org.noear.solon.core.handle.Handler;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
-import org.noear.solon.core.util.LogUtil;
 import org.noear.solon.i18n.I18nUtil;
-import org.noear.solon.logging.utils.LogUtilToSlf4j;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
 import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.noear.wood.WoodConfig;
@@ -34,8 +32,8 @@ public class WebApp {
 
     public static void main(String[] args) {
         Solon.start(WebApp.class, args, app -> {
-            LogUtil.globalSet(new LogUtilToSlf4j());
-            app.onError(e -> logger.error(e.getMessage(), e));
+            //LogUtil.globalSet(new LogUtilToSlf4j());
+            //app.onError(e -> logger.error(e.getMessage(), e));
 
             app.before(c -> {
                 String path = c.path();
