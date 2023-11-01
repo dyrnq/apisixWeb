@@ -120,6 +120,7 @@ public class WebApp {
             ctx.attrSet("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100], \"aceMode\": \"yaml\" }");
             ctx.attrSet("ctx", getCtxStr(ctx));
             ctx.attrSet("currentVersion", VersionUtils.getVersion());
+            ctx.attrSet("gitRevision", VersionUtils.getGitRevision());
             ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());
             try {
                 if (StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(), "English")) {

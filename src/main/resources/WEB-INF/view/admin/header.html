@@ -1,6 +1,11 @@
 <div class="layui-header">
 	<div class="layui-logo">${projectName} <span class="layui-font-12	">${currentVersion}</span></div>
 	<ul class="layui-nav layui-layout-right">
+
+		<li class="layui-nav-item">
+			<span class="layui-font-12"	style="color: gray;">${gitRevision[0..*7]}</span>
+		</li>
+
 		<li class="layui-nav-item">
 <!--			<div class="layui-inline layui-word-aux layui-font-white">-->
 				<a href="javascript:;" class="layui-font-white" id="ID-dropdown-demo-base-text">
@@ -26,7 +31,12 @@
 		</li>
 		
 		<li class="layui-nav-item">
-			<a href="javascript:showHelp()">${i18n.get("commonStr.userTutorial")}</a>
+			<a href="javascript:;">${i18n.get("commonStr.userTutorial")}</a>
+			<dl class="layui-nav-child">
+				<a href="javascript:showHelp()">官方文档</a>
+				<a href="https://github.com/apache/apisix" target="_blank">官方代码库</a>
+				<a href="https://hub.docker.com/r/apache/apisix" target="_blank">docker镜像</a>
+			</dl>
 		</li>
 		
 		

@@ -12,6 +12,20 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class VersionUtils {
+    public static String getGitRevision() throws Exception {
+        String jarPath = VersionUtils.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+        jarPath = java.net.URLDecoder.decode(jarPath, "UTF-8");
+        try {
+            URL url = new URL("jar:file:" + jarPath + "!/build.info");
+            InputStream inputStream = url.openStream();
+            Properties properties = new Properties();
+            properties.load(inputStream);
+            String version = properties.getProperty("git.revision");
+            return version;
+        } catch (Exception e) {
+            return "dev";
+        }
+    }
 
     public static String getVersion() throws Exception {
         // 查看jar包里面build.info版本号
