@@ -1,6 +1,9 @@
 package com.dyrnq;
 
+import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.ReUtil;
+import cn.hutool.core.util.RuntimeUtil;
+import cn.hutool.http.HttpUtil;
 import com.dyrnq.utils.PathUtils;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -52,9 +55,48 @@ public class DataSourceEmbed {
             } catch (Exception e) {
                 logger.error(e.getMessage());
             }
+            String defaultDbName = "h2";
+            String h2DbPath = StringUtils.joinWith(File.separator, h2Path, defaultDbName + ".mv.db");
+            if (FileUtil.exist(h2DbPath)) {
+                // Unsupported database file version or invalid file header in file
+                // 判断h2 format版本
+                // Caused by: org.h2.mvstore.MVStoreException: The write format 2 is smaller than the supported format 3
+
+                String oldDbName = "old";
+
+                if (H2FormatVersionChecker.isVer2(h2DbPath) && org.h2.engine.Constants.VERSION_MINOR > 1) {
+                    // 2.1.214 ---> 2.2.224
+                    //脚本升级
+                    FileUtil.move(new File(h2DbPath), new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), true);
+
+                    String jar_2_1_214 = StringUtils.joinWith(File.separator, h2Path, "h2-2.1.214.jar");
+                    String jar_2_2_224 = StringUtils.joinWith(File.separator, h2Path, "h2-2.2.224.jar");
+
+                    HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar", new File(jar_2_1_214), 60000);
+                    HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar", new File(jar_2_2_224), 60000);
+
+                    RuntimeUtil.exec("java -cp " + jar_2_1_214 + " org.h2.tools.Script -url jdbc:h2:" + h2Path + File.separator + oldDbName + " -user sa -script " + h2Path + File.separator + "backup");
+                    RuntimeUtil.exec("java -cp " + jar_2_2_224 + " org.h2.tools.RunScript -url jdbc:h2:" + h2Path + File.separator + defaultDbName + " -user sa -script " + h2Path + File.separator + "backup");
+                } else if (H2FormatVersionChecker.isVer3(h2DbPath) && org.h2.engine.Constants.VERSION_MINOR <= 1) {
+                    // 2.2.224 ---> 2.1.214
+                    //脚本降级
+                    FileUtil.move(new File(h2DbPath), new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), true);
+
+                    String jar_2_1_214 = StringUtils.joinWith(File.separator, h2Path, "h2-2.1.214.jar");
+                    String jar_2_2_224 = StringUtils.joinWith(File.separator, h2Path, "h2-2.2.224.jar");
+                    HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar", new File(jar_2_1_214), 60000);
+                    HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar", new File(jar_2_2_224), 60000);
+
+                    RuntimeUtil.exec("java -cp " + jar_2_2_224 + " org.h2.tools.Script -url jdbc:h2:" + h2Path + File.separator + oldDbName + " -user sa -script " + h2Path + File.separator + "backup");
+                    RuntimeUtil.exec("java -cp " + jar_2_1_214 + " org.h2.tools.RunScript -url jdbc:h2:" + h2Path + File.separator + defaultDbName + " -user sa -script " + h2Path + File.separator + "backup");
+
+                }
+
+            }
+
 
             HikariConfig dbConfig = new HikariConfig();
-            dbConfig.setJdbcUrl("jdbc:h2:" + h2Path + File.separator + "h2;DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE");
+            dbConfig.setJdbcUrl("jdbc:h2:" + h2Path + File.separator + defaultDbName + ";DB_CLOSE_DELAY=1000;DB_CLOSE_ON_EXIT=FALSE");
             dbConfig.setUsername("sa");
             dbConfig.setPassword("");
             dbConfig.setMaximumPoolSize(1);
