@@ -1,6 +1,7 @@
 package com.dyrnq;
 
 import cn.hutool.core.io.FileUtil;
+import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.RuntimeUtil;
 import cn.hutool.http.HttpUtil;
@@ -10,6 +11,7 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.flywaydb.core.Flyway;
+import org.h2.engine.Constants;
 import org.noear.solon.annotation.Bean;
 import org.noear.solon.annotation.Configuration;
 import org.noear.solon.annotation.Inject;
@@ -64,10 +66,10 @@ public class DataSourceEmbed {
 
                 String oldDbName = "old";
 
-                if (H2FormatVersionChecker.isVer2(h2DbPath) && org.h2.engine.Constants.VERSION_MINOR > 1) {
+                if (Constants.VERSION_MAJOR == 2 && Constants.VERSION_MINOR > 1 && H2FormatVersionChecker.isVer2(h2DbPath)) {
                     // 2.1.214 ---> 2.2.224
                     //脚本升级
-                    FileUtil.move(new File(h2DbPath), new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), true);
+
 
                     String jar_2_1_214 = StringUtils.joinWith(File.separator, h2Path, "h2-2.1.214.jar");
                     String jar_2_2_224 = StringUtils.joinWith(File.separator, h2Path, "h2-2.2.224.jar");
@@ -75,20 +77,62 @@ public class DataSourceEmbed {
                     HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar", new File(jar_2_1_214), 60000);
                     HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar", new File(jar_2_2_224), 60000);
 
-                    RuntimeUtil.exec("java -cp " + jar_2_1_214 + " org.h2.tools.Script -url jdbc:h2:" + h2Path + File.separator + oldDbName + " -user sa -script " + h2Path + File.separator + "backup");
-                    RuntimeUtil.exec("java -cp " + jar_2_2_224 + " org.h2.tools.RunScript -url jdbc:h2:" + h2Path + File.separator + defaultDbName + " -user sa -script " + h2Path + File.separator + "backup");
-                } else if (H2FormatVersionChecker.isVer3(h2DbPath) && org.h2.engine.Constants.VERSION_MINOR <= 1) {
+                    FileUtil.copy(new File(h2DbPath), new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), true);
+                    String cmd1 = "java -cp " + jar_2_1_214 + " org.h2.tools.Script -url jdbc:h2:" + h2Path + File.separator + oldDbName + " -user sa -script " + h2Path + File.separator + "backup";
+                    String cmd2 = "java -cp " + jar_2_2_224 + " org.h2.tools.RunScript -url jdbc:h2:" + h2Path + File.separator + defaultDbName + " -user sa -script " + h2Path + File.separator + "backup";
+                    Process process = RuntimeUtil.exec(cmd1);
+                    while (process.isAlive()) {
+                        ThreadUtil.safeSleep(200);
+                    }
+                    if (process.exitValue() != 0) {
+                        logger.error(RuntimeUtil.getErrorResult(process));
+                        System.exit(process.exitValue());
+                    }
+                    FileUtil.del(new File(h2DbPath));
+                    process = RuntimeUtil.exec(cmd2);
+                    while (process.isAlive()) {
+                        ThreadUtil.safeSleep(200);
+                    }
+                    if (process.exitValue() != 0) {
+                        //如果脚本执行失败得回滚数据
+                        FileUtil.copy(new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), new File(h2DbPath), true);
+                        logger.error(RuntimeUtil.getErrorResult(process));
+                        System.exit(process.exitValue());
+                    }
+
+
+                } else if (Constants.VERSION_MAJOR == 2 && Constants.VERSION_MINOR <= 1 && H2FormatVersionChecker.isVer3(h2DbPath)) {
                     // 2.2.224 ---> 2.1.214
                     //脚本降级
-                    FileUtil.move(new File(h2DbPath), new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), true);
+
 
                     String jar_2_1_214 = StringUtils.joinWith(File.separator, h2Path, "h2-2.1.214.jar");
                     String jar_2_2_224 = StringUtils.joinWith(File.separator, h2Path, "h2-2.2.224.jar");
                     HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar", new File(jar_2_1_214), 60000);
                     HttpUtil.downloadFile("http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar", new File(jar_2_2_224), 60000);
 
-                    RuntimeUtil.exec("java -cp " + jar_2_2_224 + " org.h2.tools.Script -url jdbc:h2:" + h2Path + File.separator + oldDbName + " -user sa -script " + h2Path + File.separator + "backup");
-                    RuntimeUtil.exec("java -cp " + jar_2_1_214 + " org.h2.tools.RunScript -url jdbc:h2:" + h2Path + File.separator + defaultDbName + " -user sa -script " + h2Path + File.separator + "backup");
+                    FileUtil.copy(new File(h2DbPath), new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), true);
+                    String cmd1 = "java -cp " + jar_2_2_224 + " org.h2.tools.Script -url jdbc:h2:" + h2Path + File.separator + oldDbName + " -user sa -script " + h2Path + File.separator + "backup";
+                    String cmd2 = "java -cp " + jar_2_1_214 + " org.h2.tools.RunScript -url jdbc:h2:" + h2Path + File.separator + defaultDbName + " -user sa -script " + h2Path + File.separator + "backup";
+                    Process process = RuntimeUtil.exec(cmd1);
+                    while (process.isAlive()) {
+                        ThreadUtil.safeSleep(200);
+                    }
+                    if (process.exitValue() != 0) {
+                        logger.error(RuntimeUtil.getErrorResult(process));
+                        System.exit(process.exitValue());
+                    }
+                    FileUtil.del(new File(h2DbPath));
+                    process = RuntimeUtil.exec(cmd2);
+                    while (process.isAlive()) {
+                        ThreadUtil.safeSleep(200);
+                    }
+                    if (process.exitValue() != 0) {
+                        //如果脚本执行失败得回滚数据
+                        FileUtil.copy(new File(h2DbPath.replace(defaultDbName + ".mv.db", oldDbName + ".mv.db")), new File(h2DbPath), true);
+                        logger.error(RuntimeUtil.getErrorResult(process));
+                        System.exit(process.exitValue());
+                    }
 
                 }
 
