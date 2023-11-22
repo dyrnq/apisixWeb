@@ -112,4 +112,15 @@ public class StreamRoute{
         return this.id;
     }
 
+    @SerializedName("service_id")
+    @Expose
+    private String serviceId;
+
+    public void setServiceId(String serviceId){
+        this.serviceId=serviceId;
+    }
+
+    public String getServiceId(){
+        return this.serviceId;
+    }
 }
