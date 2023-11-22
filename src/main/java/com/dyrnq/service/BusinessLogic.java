@@ -20,10 +20,9 @@ import com.dyrnq.utils.BCryptPasswordEncoder;
 import com.dyrnq.utils.TarUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.ToNumberPolicy;
+import com.google.gson.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -149,6 +148,18 @@ public class BusinessLogic {
                 .disableHtmlEscaping()
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return "createTime".equals(f.getName()) || "updateTime".equals(f.getName()); // 如果是特殊字段，则排除
+// 其他字段都保留
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
                 .create();
 
 
@@ -251,11 +262,23 @@ public class BusinessLogic {
                 }
 
                 id = URLDecoder.decode(id, "UTF-8");
+
+                JsonNode jsonNode = null;
+
                 //将yaml转化为json
                 if (!StringUtils.endsWithIgnoreCase(fileName, ".json")) {
-                    JsonNode jsonNode = yamlMapper.readTree(content);
-                    content = jsonMapper.writeValueAsString(jsonNode);
+                    jsonNode = yamlMapper.readTree(content);
+                } else {
+                    jsonNode = jsonMapper.readTree(content);
                 }
+
+                ObjectNode objectNode = (ObjectNode) jsonNode;
+
+                for (String removeKey : new String[]{"create_time", "update_time"})
+                    if (objectNode.has(removeKey)) {
+                        objectNode.remove(removeKey);
+                    }
+                content = jsonMapper.writeValueAsString(jsonNode);
 
                 op.putRaw(client, id, content);
                 reader.close();
