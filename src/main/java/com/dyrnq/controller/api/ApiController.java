@@ -8,6 +8,7 @@ import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.service.op.Factory;
 import com.dyrnq.service.op.Sample;
 import com.google.gson.*;
+import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -73,13 +74,18 @@ public class ApiController extends BaseController {
 
     @Mapping("raw")
     public Result raw(Context ctx, String cls, String id) {
+        Map map = new HashMap();
+        map.put("id", id);
         try {
             String jsonStr = g().toJson(Factory.create(cls).get(getAdminClient(), id));
-            Map map = new HashMap();
-            map.put("id", id);
             map.put("rawData", jsonStr);
             return Result.succeed(map);
         } catch (Exception e) {
+            if("pluginMetadata".equalsIgnoreCase(cls) && StringUtils.contains(e.getMessage(),"Key not found")){
+                map.put("rawData", "");
+                //logger.error(e.getMessage(), e);
+                return Result.succeed(map);
+            }
             logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }

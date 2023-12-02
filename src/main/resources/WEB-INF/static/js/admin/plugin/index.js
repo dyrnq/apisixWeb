@@ -94,7 +94,7 @@ var table = layui.table;
 var form = layui.form;
 
 
-init(true);
+init(false);
 
 $('#addOver').click(function(){
     var id = $('#addForm1 input[name="id"]').val();
