@@ -178,6 +178,10 @@ $('#del').click(function(){
         "data": res.data //解析数据列表
       };
     }
+    ,initSort: {
+      field: 'id',
+      type: 'asc'
+    }
   });
 
 //头部工具条监听事件
