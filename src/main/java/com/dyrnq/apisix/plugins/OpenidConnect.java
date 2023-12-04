@@ -106,4 +106,12 @@ public String redirectUri;
 @SerializedName("proxy_opts")
 @Expose
 public Object proxyOpts;
+// authorization_params
+@SerializedName("authorization_params")
+@Expose
+public Object authorizationParams;
+// token_endpoint_auth_method
+@SerializedName("token_endpoint_auth_method")
+@Expose
+public String tokenEndpointAuthMethod;
 }
