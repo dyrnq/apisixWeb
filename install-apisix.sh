@@ -6,8 +6,8 @@ iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.5.0-debian}"
-#apisix_image="${apisix_image:-bitnami/apisix:3.5.0-debian-11-r0}"
+apisix_image="${apisix_image:-apache/apisix:3.7.0-debian}"
+#apisix_image="${apisix_image:-bitnami/apisix:3.7.0-debian-11-r0}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.1-alpine}"
 etcd_image="${etcd_image:-quay.io/coreos/etcd:v3.5.9}"
 wait4x_image="${wait4x_image:-atkrad/wait4x:2.12}"
@@ -153,7 +153,7 @@ deployment:
   admin:
     allow_admin:
       - 192.168.0.0/16
-      - 127.0.0.0/24  
+      - 127.0.0.0/24
     admin_key:
       - name: admin
         key: edd1c9f034335f136f87ad84b625c8f1  # using fixed API token has security risk, please update it when you deploy to production environment
