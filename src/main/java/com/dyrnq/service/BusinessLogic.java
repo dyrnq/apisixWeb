@@ -52,7 +52,7 @@ public class BusinessLogic {
     HomeDir homeDir;
 
     public AdminClient getAdminClient() throws ApisixSDKException {
-        String instId = Context.current().cookie(CookieName.NAME_INSTID, "1");
+        String instId = Context.current().cookieOrDefault(CookieName.NAME_INSTID, "1");
         return getAdminClient(instId);
     }
 

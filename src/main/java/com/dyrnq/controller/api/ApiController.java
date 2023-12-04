@@ -34,7 +34,7 @@ public class ApiController extends BaseController {
     }
 
     public String instId() {
-        String instId = Context.current().cookie(CookieName.NAME_INSTID, "1");
+        String instId = Context.current().cookieOrDefault(CookieName.NAME_INSTID, "1");
         return instId;
     }
 
