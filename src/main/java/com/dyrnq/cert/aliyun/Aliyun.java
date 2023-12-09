@@ -174,7 +174,7 @@ public class Aliyun {
     public Long createCertificateForPackageRequest(String domain, String validateType) {
         Map<String, String> q = new HashMap<>();
         //symantec-free-1-free（默认）：表示DigiCert DV单域名证书（免费试用）。
-        q.put("ProductCode", "symantec-free-1-free");
+        q.put("ProductCode", "digicert-free-1-free");
         q.put("Domain", domain);
         q.put("ValidateType", validateType);
         String json = invoke_cas("CreateCertificateForPackageRequest", q);
