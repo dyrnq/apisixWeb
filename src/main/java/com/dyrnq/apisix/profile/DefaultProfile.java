@@ -18,7 +18,7 @@ public class DefaultProfile implements Profile {
         this.credential = credential;
         this.endpoint = endpoint;
         this.version = version;
-        this.timeOut = new Timeout(10, 10, 30);
+        this.timeOut = new Timeout(10, 10, 5);
 
         String[] address = endpoint.split("[,|]");
         Endpoint ep;
