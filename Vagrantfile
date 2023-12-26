@@ -38,7 +38,7 @@ Vagrant.configure("2") do |config|
             machine.vm.provision "shell", inline: <<-SHELL
                 echo "root:vagrant" | sudo chpasswd
                 timedatectl set-timezone "Asia/Shanghai"
-                curl -fsSL https://ghproxy.com/https://raw.githubusercontent.com/dyrnq/install-docker/main/install-docker.sh | bash -s docker \
+                curl -fsSL https://mirror.ghproxy.com/https://github.com/dyrnq/install-docker/raw/main/install-docker.sh | bash -s docker \
                 --mirror tencent \
                 --version 20.10.23 \
                 --systemd-mirror ghproxy && \
