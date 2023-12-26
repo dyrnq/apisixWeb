@@ -78,7 +78,12 @@ public class TarUtils {
 
         TarArchiveEntry entry;
         while ((entry = tais.getNextTarEntry()) != null) {
-            File outputFile = new File(destDirectory, entry.getName());
+            String fileName = entry.getName();
+            if (fileName.contains("..")) {
+                // 跳过包含..的文件名
+                continue;
+            }
+            File outputFile = new File(destDirectory, fileName);
             if (entry.isDirectory()) {
                 // 如果是目录，则创建目录
                 outputFile.mkdirs();
