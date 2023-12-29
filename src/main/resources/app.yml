@@ -9,7 +9,7 @@ server:
     state:
       jwt:
         name: TOKEN #变量名；（可不配，默认：TOKEN）
-        secret: "q7kuLQcrgAHEJ7XBpATQd5AL5+HVkWRxKnLhnsiSft0=" #密钥（使用 JwtUtils.createKey() 生成）；
+        secret: "IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==" #密钥（使用 JwtUtils.createKey() 生成）；
         #prefix: Bearer #令牌前缀（可不配，默认：空）
         allowExpire: true #充许超时；（可不配，默认：true）；false，则token一直有效
         allowAutoIssue: false #充许自动输出；（可不配，默认：true）；flase，则不向header 或 cookie 设置值（由用户手动控制）
