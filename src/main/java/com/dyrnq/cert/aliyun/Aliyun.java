@@ -6,7 +6,14 @@ import com.dyrnq.cert.aliyun.vo.DescribeCertificateStateResult;
 import com.dyrnq.cert.aliyun.vo.Region;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.TypeRef;
+import com.jayway.jsonpath.spi.json.GsonJsonProvider;
+import com.jayway.jsonpath.spi.json.JsonProvider;
+import com.jayway.jsonpath.spi.mapper.GsonMappingProvider;
+import com.jayway.jsonpath.spi.mapper.MappingProvider;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -38,6 +45,28 @@ public class Aliyun {
     public Aliyun(String accessSecretId, String acceccSecretKey) {
         this.accessSecretId = accessSecretId;
         this.acceccSecretKey = acceccSecretKey;
+
+        Configuration.setDefaults(new Configuration.Defaults() {
+
+            private final JsonProvider jsonProvider = new GsonJsonProvider();
+            private final MappingProvider mappingProvider = new GsonMappingProvider();
+
+            @Override
+            public JsonProvider jsonProvider() {
+                return jsonProvider;
+            }
+
+            @Override
+            public MappingProvider mappingProvider() {
+                return mappingProvider;
+            }
+
+            @Override
+            public Set<Option> options() {
+                return EnumSet.noneOf(Option.class);
+            }
+        });
+
     }
 
 
@@ -159,13 +188,9 @@ public class Aliyun {
      */
     public List<Region> describeRegions() {
         String json = invoke_ecs("DescribeRegions", null);
-        String jsonResult = JsonPath.read(json, "$.Regions.Region").toString();
-        Gson gson = new Gson();
-
-        Type type = new TypeToken<List<Region>>() {
-        }.getType();
-
-        return gson.fromJson(jsonResult, type);
+        TypeRef<List<Region>> typeRef = new TypeRef<List<Region>>() {
+        };
+        return JsonPath.parse(json).read("$.Regions.Region", typeRef);
     }
 
     /**
@@ -207,11 +232,16 @@ public class Aliyun {
             q.put("Keyword", keyword);
         }
         String json = invoke_cas("ListUserCertificateOrder", q);
-        String jsonResult = JsonPath.read(json, "$.CertificateOrderList").toString();
-        Type type = new TypeToken<List<CertificateOrder>>() {
-        }.getType();
-        Gson gson = new Gson();
-        return gson.fromJson(jsonResult, type);
+
+        TypeRef<List<CertificateOrder>> typeRef = new TypeRef<List<CertificateOrder>>() {
+        };
+        return JsonPath.parse(json).read("$.CertificateOrderList", typeRef);
+
+//        String jsonResult = JsonPath.read(json, "$.CertificateOrderList").toString();
+//        Type type = new TypeToken<List<CertificateOrder>>() {
+//        }.getType();
+//        Gson gson = new Gson();
+//        return gson.fromJson(jsonResult, type);
     }
 
     /**
