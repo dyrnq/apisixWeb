@@ -110,7 +110,7 @@ $(function() {
         dropdown.render({
             elem: '#ID-dropdown-demo-base-text'
             ,click: function(obj){
-                Cookies.set(COOK_NAME.instId, obj.id, {path: '/' })
+                Cookies.set(COOK_NAME.instId, obj.id, {path: '/', SameSite: "Strict" })
                 location.reload();
             },
             templet: function(d){
@@ -148,7 +148,7 @@ $(function() {
         if ($(elem).parent().is('li')){
 //            localStorage.setItem('menuToggle_'+menuKey, $(elem).parent().hasClass('layui-nav-itemed') );
 //            localStorage.setItem('menuHtml_'+menuKey, $(elem).parent().prop("outerHTML") );
-              Cookies.set('menuToggle_'+menuKey, $(elem).parent().hasClass('layui-nav-itemed'), {path: '/'});
+              Cookies.set('menuToggle_'+menuKey, $(elem).parent().hasClass('layui-nav-itemed'), { expires: 365, path: '/', SameSite: "Strict" })
         }
         //layer.msg(elem.text());
     });
@@ -173,7 +173,7 @@ function i18n(lang){
 ////    now.setTime(now.getTime() - 24 * 60 * 60 * 1000);
 ////    let expires = "expires="+ now.toUTCString();
 //    document.cookie = cname + "=" + lang + ";path=/";
-    Cookies.set('SOLON.LOCALE', lang, { expires: 365, path: '/' })
+    Cookies.set('SOLON.LOCALE', lang, { expires: 365, path: '/', SameSite: "Strict" })
     location.reload();
 
 //     $.ajax({

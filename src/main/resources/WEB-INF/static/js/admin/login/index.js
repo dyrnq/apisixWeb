@@ -23,7 +23,7 @@ layui.use(['form'], function(){
             dataType: 'json',
             success: function(data) {
                 if (data.code == 200) {
-                    Cookies.set(COOK_NAME.token, data.data, { expires: 1, path: '/' })
+                    Cookies.set(COOK_NAME.token, data.data, { expires: 1, path: '/', SameSite: "Strict" })
                     location.href = ctx + "/admin";
                 } else {
                     layer.msg(data.description);
