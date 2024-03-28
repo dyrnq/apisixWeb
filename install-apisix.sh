@@ -76,7 +76,6 @@ docker rm -f etcd 2>/dev/null || true
 docker run -d --name etcd \
 --restart always \
 --net host \
---privileged \
 --ulimit nofile=40000:40000 \
 -v "$etcd_home"/etc/etcd:/etc/etcd \
 -v "$etcd_home"/var/lib/etcd:/var/lib/etcd \
@@ -189,7 +188,6 @@ docker run --net host --rm --name='wait4x' ${wait4x_image} tcp -i 1s -q -t 5s 12
 docker run -d --name apisix \
 --restart always \
 --net host \
---privileged \
 -u root \
 --ulimit nofile=40000:40000 \
 -v ${apisix_home}/dhparam.pem:/etc/ssl/certs/dhparam.pem \
@@ -202,7 +200,6 @@ docker run --net host --rm --name='wait4x' ${wait4x_image} tcp -i 1s -q -t 5s 12
 docker run -d --name apisix \
 --restart always \
 --net host \
---privileged \
 -u root \
 --ulimit nofile=40000:40000 \
 -v ${apisix_home}/dhparam.pem:/etc/ssl/certs/dhparam.pem \
@@ -302,7 +299,6 @@ EOF
  docker run -d --name apisix-dashboard \
  --restart always \
  --net host \
- --privileged \
  -e TZ=Asia/Shanghai \
  -v ${apisix_dashboard_home}/conf/conf.yaml:/usr/local/apisix-dashboard/conf/conf.yaml  \
  ${apisix_dashboard_image}
@@ -458,7 +454,7 @@ curl -fsSL http://127.0.0.1:9080/bashrc | head -n5
 }
 fun_install_httpbin() {
   docker rm -f httpbin &>/dev/null || true ;
-  docker run -d --name=httpbin --restart always --network host --privileged --ulimit nofile=40000:40000 mccutchen/go-httpbin go-httpbin -port 9991
+  docker run -d --name=httpbin --restart always --network host --ulimit nofile=40000:40000 mccutchen/go-httpbin go-httpbin -port 9991
 }
 
 fun_add_mynet
