@@ -143,31 +143,16 @@ $(function() {
     element.on('nav(test)', function(elem){
         //console.log(elem); // 得到当前点击的元素 jQuery 对象
         //console.log(elem.text().trim());
-        var menuKey = elem.text().trim();
+        var menuKey = elem.attr("id");
         //console.log($(elem).parent().hasClass('layui-nav-itemed'));
         if ($(elem).parent().is('li')){
-            localStorage.setItem('menuToggle_'+menuKey, $(elem).parent().hasClass('layui-nav-itemed') );
+//            localStorage.setItem('menuToggle_'+menuKey, $(elem).parent().hasClass('layui-nav-itemed') );
+//            localStorage.setItem('menuHtml_'+menuKey, $(elem).parent().prop("outerHTML") );
+              Cookies.set('menuToggle_'+menuKey, $(elem).parent().hasClass('layui-nav-itemed'), {path: '/'});
         }
         //layer.msg(elem.text());
     });
 
-    // 循环遍历指定 <ul> 下的所有 <li> 元素
-    $('.layui-nav.layui-nav-tree[lay-filter="test"] > li').each(function(index) {
-        // 执行循环中的操作，这里以打印每个 <li> 的文本内容为例
-        //console.log('第' + (index + 1) + '个 <li> 的文本内容：', $(this));
-        var menuKey = $(this).find('a:first').text().trim();
-        //console.log(menuKey);
-        //使用 localStorage.getItem(key) 方法来判断 localStorage 中是否存在某个 key
-        if(localStorage.getItem('menuToggle_'+menuKey) != null){
-            //console.log(localStorage.getItem('menuToggle_'+menuKey))
-            if(localStorage.getItem('menuToggle_'+menuKey) == "true"){
-                //console.log(localStorage.getItem('menuToggle_'+menuKey)+"============")
-                $(this).addClass("layui-nav-itemed");
-            }else{
-                $(this).removeClass("layui-nav-itemed");
-            }
-        }
-    });
 
 })
 

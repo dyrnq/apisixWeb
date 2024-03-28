@@ -3,8 +3,8 @@
 		<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
 		<ul class="layui-nav layui-nav-tree" lay-filter="test">
 
-			<li class="layui-nav-item">
-				<a class="" href="javascript:;">
+			<li class="layui-nav-item <#if cookieMap['menuToggle_menu_titleTraffic']??>${(cookieMap['menuToggle_menu_titleTraffic']=='true')?string('layui-nav-itemed', '')}</#if>">
+				<a class="" href="javascript:;" id="menu_titleTraffic">
 					<span style="color: aqua;">${i18n.get("menu.titleTraffic")}</span>
 				</a>
 				<dl class="layui-nav-child">
@@ -52,9 +52,9 @@
 
 				</dl>
 			</li>
-			
-			<li class="layui-nav-item">
-				<a class="" href="javascript:;">
+
+			<li class="layui-nav-item <#if cookieMap['menuToggle_menu_titleSystem']??>${(cookieMap['menuToggle_menu_titleSystem']=='true')?string('layui-nav-itemed', '')}</#if>">
+				<a class="" href="javascript:;" id="menu_titleSystem">
 					<span style="color: aqua;">${i18n.get("menu.titleSystem")}</span>
 				</a>
 				<dl class="layui-nav-child">

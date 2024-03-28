@@ -122,6 +122,7 @@ public class WebApp {
             ctx.attrSet("currentVersion", VersionUtils.getVersion());
             ctx.attrSet("gitRevision", VersionUtils.getGitRevision());
             ctx.attrSet("jsrandom", VersionUtils.getVersion() + "." + System.currentTimeMillis());
+            ctx.attrSet("cookieMap",ctx.cookieMap());
             try {
                 if (StringUtils.equalsIgnoreCase(I18nUtil.getLocaleResolver().getLocale(ctx).getDisplayLanguage(), "English")) {
                     ctx.attrSet("langType", "English");
