@@ -80,9 +80,14 @@
 			<artifactId>solon.scheduling.simple</artifactId>
 		</dependency>
 
+<!--		<dependency>-->
+<!--			<groupId>org.noear</groupId>-->
+<!--			<artifactId>solon.sessionstate.jwt</artifactId>-->
+<!--		</dependency>-->
+
 		<dependency>
 			<groupId>org.noear</groupId>
-			<artifactId>solon.sessionstate.jwt</artifactId>
+			<artifactId>solon.sessionstate.local</artifactId>
 		</dependency>
 
 		<dependency>
@@ -344,6 +349,18 @@
 			<version>2.9.0</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.12.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-gson</artifactId>
+			<version>0.12.5</version>
+		</dependency>
 
 
 	</dependencies>

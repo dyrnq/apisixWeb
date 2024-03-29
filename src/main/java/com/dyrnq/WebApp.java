@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
+import com.dyrnq.utils.JwtUtils;
 import com.dyrnq.utils.VersionUtils;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +20,6 @@ import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
 import org.noear.solon.i18n.I18nUtil;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
-import org.noear.solon.sessionstate.jwt.JwtUtils;
 import org.noear.wood.WoodConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -251,10 +251,15 @@ public class WebApp {
         @Inject
         CfgExtractor cfgExtractor;
 
+        @Inject("${server.session.state.jwt.secret:${jwt.secret:}}")
+        String jwt_secret;
+        @Inject("${server.session.state.jwt.prefix:${jwt.prefix:}}")
+        String jwt_prefix;
         private Boolean validateToken(Context ctx, String token, String name) {
             if (StringUtils.isBlank(token)) return false;
 
-            Claims claims = JwtUtils.parseJwt(token);
+            Claims claims = JwtUtils.parseJwt(token, jwt_secret, jwt_prefix);
+            if (claims == null) return false;
             String username = claims.getSubject();
 //            logger.info("username=" + username);
             User user = businessLogic.findByName(username);

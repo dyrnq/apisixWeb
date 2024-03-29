@@ -28,7 +28,7 @@ public class Config {
     String projectName;
     @Inject("${project.home:}")
     private String home;
-    @Inject("${server.session.state.jwt.name:}")
+    @Inject("${server.session.state.jwt.name:${jwt.name:}}")
     private String jwtName;
 
     // typed=true，表示默认数据源。@Db 可不带名字注入
