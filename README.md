@@ -153,7 +153,7 @@ Change default session jwt secret
 java -cp apisixWeb.jar cli jwt
 ```
 
-Then pass `--server.session.state.jwt.secret=your-secret` to `java -jar`.
+Then pass `--jwt.secret=your-secret` to `java -jar`.
 
 Parameter description (all are optional)
 

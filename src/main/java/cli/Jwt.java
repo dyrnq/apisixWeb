@@ -17,7 +17,7 @@ public class Jwt extends CommonOptions implements Callable<Integer> {
 //        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         String jwtSecret = Encoders.BASE64.encode(Jwts.SIG.HS512.key().build().getEncoded());
         //System.out.println(jwtSecret);
-        System.out.println("--server.session.state.jwt.secret="+jwtSecret);
+        System.out.println("--jwt.secret="+jwtSecret);
         return 0;
     }
 }

@@ -153,7 +153,7 @@ systemctl status -l apisixWeb --no-pager
 java -cp apisixWeb.jar cli jwt
 ```
 
-将参数 `--server.session.state.jwt.secret=your-secret` 增加到 `java -jar`。
+将参数 `--jwt.secret=your-secret` 增加到 `java -jar`。
 
 参数描述 (都是可选的）
 
