@@ -148,8 +148,8 @@ layui.use(function () {
 
 
     $('#ID-upload-demo-action').click(function () {
-        upload_c.reload({field: 'certFile'});
-        upload_k.reload({field: 'keyFile'});
+//        upload_c.reload({field: 'certFile'});
+//        upload_k.reload({field: 'keyFile'});
 
 
         var formData = new FormData();
