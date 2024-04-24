@@ -7,6 +7,7 @@
 - [apisixWeb](#apisixweb)
   - [description](#description)
   - [features](#features)
+  - [docker](#docker)
   - [build](#build)
   - [run](#run)
     - [install jdk](#install-jdk)
@@ -43,6 +44,30 @@ Inspired by [nginxWebUI](https://gitee.com/cym1102/nginxWebUI).
 <img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-24%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
 
 <img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-46%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+
+## docker
+
+```bash
+# create persistence data directory for apisixWeb
+mkdir -p $HOME/apisixWeb
+chown -R 1000:1000 $HOME/apisixWeb
+# gen a new jwt secret replace default IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==
+docker run -it --rm --entrypoint="" dyrnq/apisixweb:latest-jre21 bash -c "java -cp /app/apisixWeb.jar cli jwt"
+
+# rm old apisixweb continer
+docker rm -f apisixweb >/dev/null 2>&1
+
+# run new apisixweb continer
+docker run \
+--name apisixweb \
+-d \
+--restart always \
+-v $HOME/apisixWeb:/app/apisixWeb \
+-p 8080:8080 \
+-e TZ="Asia/Shanghai" \
+-e JAVA_OPTS="-server -Xms512m -Xmx512m -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai -Djava.net.preferIPv4Stack=true --server.port=8080 --server.session.timeout=172800 --jwt.secret=IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==" \
+dyrnq/apisixweb:latest-jre21
+```
 
 ## build
 
