@@ -496,6 +496,37 @@
 				<artifactId>maven-checkstyle-plugin</artifactId>
 			</plugin>
 
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>Execute native2ascii-files</id>
+						<phase>compile</phase>
+						<configuration>
+							<!-- https://ant.apache.org/manual/Tasks/native2ascii.html -->
+							<!-- https://bugs.openjdk.org/browse/JDK-8074431 -->
+							<!-- https://www.optimaw.ch/change-to-jdk11-lts/ -->
+							<target description="Execute native2ascii for *.msg files" name="NativeToAscii">
+								<native2ascii src="${basedir}/src/main/native2ascii" dest="${basedir}/src/main/resources/i18n" encoding="${project.build.sourceEncoding}" ext=".properties" includes="**/*.msg" implementation="builtin"/>
+								<copy overwrite="true" force="true" verbose="true" file="${basedir}/src/main/resources/i18n/messages_zh_CN.properties" tofile="${basedir}/src/main/resources/i18n/messages.properties"/>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+
+
+
+				</executions>
+			</plugin>
+
+
+
+
 		</plugins>
 
 		<pluginManagement>
