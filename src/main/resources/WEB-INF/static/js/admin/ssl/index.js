@@ -41,6 +41,20 @@ layui.use(function () {
     });
     viewEditor.resize();
 
+
+    form.on('select(type)', function(data){
+        var elem = data.elem; // 获得 select 原始 DOM 对象
+        var value = data.value; // 获得被选中的值
+        var othis = data.othis; // 获得 select 元素被替换后的 jQuery 对象
+        console.log(value);
+        if (value === 'server') {
+             $("[id^='div_upload_client_ca']").hide();
+        }else{
+            $("[id^='div_upload_client_ca']").show();
+        }
+    });
+
+
     var upload_c = upload.render({
         elem: '#upload-cert'
         , auto: false
@@ -80,6 +94,29 @@ layui.use(function () {
             //console.log(index);
         }
     });
+
+
+    var upload_client_ca = upload.render({
+        elem: '#upload-client-ca'
+        , auto: false
+        , accept: "file"
+        , multiple: false
+        , before: function (res) {
+            //console.log(res);
+        }
+        , exts: 'crt|key|pem|der|jks|txt'
+        , field: 'caCertFile'
+        , size: 5210
+        , before: function (res) {
+        }
+        , done: function (res, index, upload) {
+        }
+        , error: function (index, upload) {
+            //console.log(index);
+        }
+    });
+
+
 
     $('#add').click(function () {
         cleanData(false);
@@ -155,8 +192,10 @@ layui.use(function () {
         var formData = new FormData();
         formData.append("certFile", $('#addForm2 input[name="certFile"]')[0].files[0]);
         formData.append("keyFile", $('#addForm2 input[name="keyFile"]')[0].files[0]);
+        formData.append("caCertFile", $('#addForm2 input[name="caCertFile"]')[0].files[0]);
         formData.append("id", $('#addForm2 input[name="id"]').val());
         formData.append("snis", $('#addForm2 input[name="snis"]').val());
+        formData.append("type", $('#addForm2 select[name="type"]').val());
         $.ajax({
             type: 'POST',
             url: ctx + '/api/ssl/upload',
@@ -181,29 +220,7 @@ layui.use(function () {
     });
 
 
-    $('#guide').click(function () {
-        $('#addForm2').find(".layui-upload-choose").each(function (index, element) {
-            //console.log(element);
-            $(element).html("");
-        });
-        $('#addForm2 input[name="id"]').val("");
-        $('#addForm2 input[name="snis"]').val("");
-        $('#addForm2 input[name="certFile"]').val("");
-        $('#addForm2 input[name="keyFile"]').val("");
 
-
-        layer.open({
-            type: 1,
-            area: ['800px', '600px'],
-            title: 'Add',
-            content: $('#guideDiv'),
-            anim: 'slideRight',
-            shade: 0.6, // 遮罩透明度
-            shadeClose: true, // 点击遮罩区域，关闭弹层
-            maxmin: true, // 允许全屏最小化
-            skin: 'layui-layer-win10'
-        });
-    });
 
 
     var default_limt = localStorage.getItem('pageLimit');
@@ -560,6 +577,9 @@ layui.use(function () {
                 $('#addForm2 input[name="snis"]').val("");
                 $('#addForm2 input[name="certFile"]').val("");
                 $('#addForm2 input[name="keyFile"]').val("");
+                $('#addForm2 select[name="type"]').val("server");
+                layui.form.render('select');
+                $("[id^='div_upload_client_ca']").hide();
 
 
                 layer.open({

@@ -1,6 +1,7 @@
 package com.dyrnq.controller.api;
 
 import com.dyrnq.apisix.ApisixSDKException;
+import com.dyrnq.apisix.domain.Client;
 import com.dyrnq.apisix.domain.SSL;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
@@ -93,7 +94,7 @@ public class SSLController extends ApiController {
     }
 
     @Mapping("upload")
-    public Result addSSLFile(Context ctx, UploadedFile certFile, UploadedFile keyFile, String id, String snis) {
+    public Result addSSLFile(Context ctx, UploadedFile certFile, UploadedFile keyFile, String id, String snis, String type, UploadedFile caCertFile) {
         try {
             SSL ssl = new SSL();
             byte[] byteCert = IOUtils.toByteArray(certFile.getContent());
@@ -101,6 +102,7 @@ public class SSLController extends ApiController {
             ssl.setCert(new String(byteCert, Charset.defaultCharset()));
             ssl.setKey(new String(byteKey, Charset.defaultCharset()));
 
+            ssl.setType(type);
             if (StringUtils.isNotBlank(snis)) {
                 String[] strArray = StringUtils.splitByWholeSeparator(snis, ",");
                 List<String> listStr = Arrays.asList(strArray);
@@ -109,6 +111,11 @@ public class SSLController extends ApiController {
                 X509Certificate x509Cert = CertUtils.loadCertificate(new ByteArrayInputStream((byteCert)));
                 String[] sniArray = CertUtils.extractSNI(x509Cert);
                 ssl.setSnis(Arrays.asList(sniArray));
+            }
+            if (StringUtils.equalsIgnoreCase("client", type) && caCertFile != null) {
+                Client c = new Client();
+                c.setCa(new String(IOUtils.toByteArray(caCertFile.getContent()), Charset.defaultCharset()));
+                ssl.setClient(c);
             }
             getAdminClient().putSSL(id, ssl);
             return Result.succeed("ok");
