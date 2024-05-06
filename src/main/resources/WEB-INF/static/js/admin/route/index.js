@@ -154,6 +154,39 @@ $('#dropAll').click(function(){
      return false; // 阻止默认 form 跳转
    });
 
+  // 状态 - 开关操作
+  form.on('switch(demo-templet-status)', function(obj){
+    var id = this.value;
+    var name = this.name;
+
+    url=ctx + '/api/route/disable'
+    if (obj.elem.checked === true){
+        url=ctx + '/api/route/enable'
+    }else{
+        url=ctx + '/api/route/disable'
+    }
+    console.log(url);
+    console.log(id + ' ' + name + ': '+ obj.elem.checked, obj.othis);
+    formData = encodeURIComponent('id') + '=' + encodeURIComponent(id);
+    $.ajax({
+        type : 'post',
+        url : url,
+        content: 'json',
+        data: formData,
+        success : function(data) {
+            if(data.code=='200'){
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+
+  });
+
 var windowWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 var defaultHidden = false;
 if (windowWidth <= 1900) {
@@ -184,7 +217,7 @@ if (windowWidth <= 1900) {
             , {field: 'uri', title: 'uri(s)', width: 200, templet: uri}
             , {field: 'createTime', title: 'create_time', sort: false , width: 200 , templet: "<div>{{layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>", hide: defaultHidden }
             , {field: 'updateTime', title: 'update_time', sort: true , width: 200 , templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>", hide: defaultHidden }
-            , {field: 'status', title: 'status', width: 80}
+            , {field: 'status', title: 'status', width: 80, templet: '<input type="checkbox" name="status" value="{{= d.id }}" title="开|" lay-skin="switch" lay-filter="demo-templet-status" {{= d.status == 1 ? "checked" : "" }}>'}
             , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
         ]]
         , done: function (res, curr, count){
