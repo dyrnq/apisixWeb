@@ -1,6 +1,7 @@
 package com.dyrnq.controller.api;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.PageUtil;
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.apisix.domain.*;
@@ -159,7 +160,8 @@ public class DeployController extends ApiController {
                 if (map.containsKey("kind")) {
                     String className = map.get("kind").toString();
                     String _id = map.get("id").toString();
-                    String json = JSONUtil.toJsonStr(map);
+                    String json = JSONUtil.toJsonStr(MapUtil.removeAny(map,"kind"));
+                    logger.debug(json);
                     Factory.create(className).putRaw(businessLogic.getAdminClient(deploy.getInstId()), _id, json);
                 }
             }
