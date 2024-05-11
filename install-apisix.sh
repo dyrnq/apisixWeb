@@ -1,23 +1,21 @@
 #!/usr/bin/env bash
-
+# shellcheck disable=SC2086
 
 
 iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.8.0-debian}"
-#apisix_image="${apisix_image:-bitnami/apisix:3.8.0-debian-12-r8}"
+apisix_image="${apisix_image:-apache/apisix:3.8.1-debian}"
+#apisix_image="${apisix_image:-bitnami/apisix:3.8.1-debian-12-r8}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.1-alpine}"
-etcd_image="${etcd_image:-quay.io/coreos/etcd:v3.5.9}"
-wait4x_image="${wait4x_image:-atkrad/wait4x:2.12}"
-nginx_image="${nginx_image:-nginx:1.22.1-alpine}"
+etcd_image="${etcd_image:-quay.io/coreos/etcd:v3.5.13}"
+wait4x_image="${wait4x_image:-atkrad/wait4x:2.14}"
 mysql5_image="${mysql5_image:-mysql:5.7.41}"
 mysql8_image="${mysql8_image:-mysql:8.0.23}"
 pg_image="${pg_image:-postgres:12.14}"
-whoami_image="${whoami_image:-containous/whoami:latest}"
 adminer_image="${adminer_image:-adminer:4.8.1}"
-minio_image="${minio_image:-minio/minio:RELEASE.2022-11-29T23-40-49Z}"
+
 
 
 while [ $# -gt 0 ]; do
@@ -84,10 +82,10 @@ ${etcd_image} etcd --config-file /etc/etcd/etcd.conf.yml
 
 
 
-fun_install() {
+fun_install_apisix() {
 mkdir -p ${apisix_home}/
 mkdir -p ${apisix_home}/conf
-mkdir -p ${apisix_dashboard_home}/conf
+
 
 if [ ! -f ${apisix_home}/dhparam.pem ]; then
   #openssl dhparam -out ${apisix_home}/dhparam.pem 4096
@@ -207,9 +205,10 @@ docker run -d --name apisix \
 ${apisix_image}
 fi
 
+}
 
-
-
+fun_install_apisix_dashboard(){
+mkdir -p ${apisix_dashboard_home}/conf
 
 secret=$(openssl rand -base64 32)
 secret="secret"
@@ -312,16 +311,7 @@ docker network inspect mynet &>/dev/null || docker network create --subnet 172.1
 
 }
 
-fun_install_nginx(){
 
-for i in 1 2 3 4; do
-    port=$((i+18080))
-    docker rm -f nginx-$i 2>/dev/null || true
-    mkdir -p $HOME/nginx/nginx-$i && echo "nginx-$i" > $HOME/nginx/nginx-$i/index.html
-    docker run -d --network mynet --restart always -p "${port}":80 --name nginx-$i -v $HOME/nginx/nginx-$i:/usr/share/nginx/html ${nginx_image}
-done
-
-}
 
 fun_install_misc(){
 docker rm -f mysql57 2>/dev/null || true
@@ -363,105 +353,38 @@ ${pg_image}
 docker run -d --name=adminer --restart always --network mynet -p 18080:8080 ${adminer_image}
 
 
-for num in {1..7}; do
-name="w${num}"
-port=$((6680+num-1))
-docker rm -f "${name}" &>/dev/null || true ;
-docker run -d --name "${name}" --restart always --network mynet -p "${port}":80 ${whoami_image};
-done
+
 }
 
 fun_initdb(){
 
+docker run --net host --rm --name='wait4x' ${wait4x_image} mysql root:666666@tcp\(127.0.0.1:3306\)/mysql --interval 1s --timeout 360s && \
 docker run -it --rm --network mynet  ${mysql5_image} mysql --host mysql57 --user root --password=666666 --loose-default-character-set=utf8 -e "CREATE DATABASE if not exists apisixweb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;show databases;"
+
+
+docker run --net host --rm --name='wait4x' ${wait4x_image} mysql root:666666@tcp\(127.0.0.1:13306\)/mysql --interval 1s --timeout 360s && \
 docker run -it --rm --network mynet  ${mysql8_image} mysql --host mysql8 --user root --password=666666 -e "CREATE DATABASE if not exists apisixweb DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;show databases;"
+
+
+docker run --net host --rm --name='wait4x' ${wait4x_image} postgresql 'postgres://postgres:666666@127.0.0.1:5432/postgres?sslmode=disable' --interval 1s --timeout 360s && \
 docker exec -i postgres12 bash <<'EOF'
 if [ $(psql -tA --username "postgres" -c "select count(1) from pg_database where datname='apisixweb'") = "0" ]; then
     psql -v ON_ERROR_STOP=1 --username "postgres" --no-password -c "create database apisixweb with encoding='utf8' TEMPLATE template0;"
 fi
+psql -v ON_ERROR_STOP=1 --username "postgres" --no-password -c "\l";
 EOF
 }
 
-fun_install_minio(){
-docker rm -f minio 2>/dev/null || true
-mkdir -p $HOME/minio/data
-docker run -d --name=minio --restart always --network host \
--e "MINIO_ROOT_USER=minioadmin" \
--e "MINIO_ROOT_PASSWORD=minioadmin" \
--v $HOME/minio/data:/data \
-${minio_image} server /data --address ":19000" --console-address ":19001"
-
-# WARNING: MINIO_ACCESS_KEY and MINIO_SECRET_KEY are deprecated.
-#-e "MINIO_ACCESS_KEY=u5SybesIDVX9b6Pk"
-#-e "MINIO_SECRET_KEY=lOpH1v7kdM6H8NkPu1H2R6gLc9jcsmWM"
-
-sleep 5s;
-
-docker run -i --rm --network host --entrypoint '' quay.io/minio/mc bash<<EOF
-mc alias set myminio http://localhost:19000 minioadmin minioadmin;
-mc admin user svcacct add --access-key "u5SybesIDVX9b6Pk" --secret-key "lOpH1v7kdM6H8NkPu1H2R6gLc9jcsmWM" myminio minioadmin 2>/dev/null || true;
-EOF
 
 
-
-docker run -i --rm --network host --entrypoint '' quay.io/minio/mc bash<<EOF
-mc alias set myminio http://localhost:19000 minioadmin minioadmin;
-mc mb myminio/test 2>/dev/null || true;
-mc anonymous set download myminio/test;
-mc cp --attr "content-type=text/javascript" /etc/bashrc myminio/test;
-EOF
-
-
-
-curl http://127.0.0.1:9180/apisix/admin/routes/9008 -H 'X-API-KEY: edd1c9f034335f136f87ad84b625c8f1' -X PUT -i -d '
-{
-  "name": "minio-test",
-  "plugins": {
-    "proxy-rewrite": {
-      "use_real_request_uri_unsafe": false,
-      "regex_uri": [
-        "^/(.*)$",
-        "/test/${1}"
-      ]
-    }
-  },
-  "priority": 10,
-  "status": 1,
-  "upstream": {
-    "hash_on": "vars",
-    "nodes": [
-      {
-        "host": "127.0.0.1",
-        "port": 19000,
-        "weight": 1
-      }
-    ],
-    "pass_host": "pass",
-    "scheme": "http",
-    "timeout": {
-      "connect": 6,
-      "send": 6,
-      "read": 6
-    },
-    "type": "roundrobin"
-  },
-  "uri": "/*"
-}'
-
-curl -fsSL http://127.0.0.1:19000/test/bashrc | head -n5
-curl -fsSL http://127.0.0.1:9080/bashrc | head -n5
-
-}
-fun_install_httpbin() {
-  docker rm -f httpbin &>/dev/null || true ;
-  docker run -d --name=httpbin --restart always --network host --ulimit nofile=40000:40000 mccutchen/go-httpbin go-httpbin -port 9991
-}
 
 fun_add_mynet
-fun_install_nginx
-fun_install_misc
+
+
 fun_install_etcd
-fun_install
+fun_install_apisix
+fun_install_apisix_dashboard
+
+fun_install_misc
 fun_initdb
-fun_install_minio
-fun_install_httpbin
+
