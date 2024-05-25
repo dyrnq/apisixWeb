@@ -6,8 +6,8 @@ iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.8.1-debian}"
-#apisix_image="${apisix_image:-bitnami/apisix:3.8.1-debian-12-r8}"
+apisix_image="${apisix_image:-apache/apisix:3.9.1-debian}"
+#apisix_image="${apisix_image:-bitnami/apisix:3.9.1-debian-12-r8}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.1-alpine}"
 etcd_image="${etcd_image:-quay.io/coreos/etcd:v3.5.13}"
 wait4x_image="${wait4x_image:-atkrad/wait4x:2.14}"
@@ -103,9 +103,7 @@ apisix:
     enable: true
     listen:
       - port: 9443
-        enable_http2: true
       - port: 443
-        enable_http2: true
   enable_ipv6: false
   stream_proxy:
       tcp:
