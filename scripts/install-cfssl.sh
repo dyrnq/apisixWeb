@@ -74,8 +74,8 @@ if [ -w "${target}" ]; then
   :
 else
   (
-    echo "!!!Error!!!"
-    echo "The current user does not have write permission \"${target}\" !!!"
+    echo "Error!"
+    echo "The current user does not have write permission \"${target}\" !"
     echo "Please pass -d change target dir"
     echo "Or change user and re install this script"
     echo "Exit install."
