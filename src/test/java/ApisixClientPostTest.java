@@ -4,7 +4,7 @@ import com.dyrnq.apisix.domain.*;
 import com.dyrnq.apisix.plugins.Echo;
 import com.dyrnq.utils.CertUtils;
 import org.apache.commons.io.IOUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.naming.InvalidNameException;
 import java.io.File;

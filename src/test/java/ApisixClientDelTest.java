@@ -1,7 +1,7 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
 import org.junit.FixMethodOrder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.runners.MethodSorters;
 
 import java.util.List;

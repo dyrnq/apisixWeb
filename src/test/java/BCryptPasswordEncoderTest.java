@@ -1,5 +1,5 @@
 import com.dyrnq.utils.BCryptPasswordEncoder;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class BCryptPasswordEncoderTest {
 

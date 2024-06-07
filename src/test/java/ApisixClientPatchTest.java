@@ -1,6 +1,6 @@
 import cn.hutool.core.io.FileUtil;
 import com.dyrnq.apisix.ApisixSDKException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.charset.Charset;

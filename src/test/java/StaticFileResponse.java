@@ -4,7 +4,7 @@ import com.dyrnq.apisix.plugins.Gzip;
 import com.dyrnq.apisix.plugins.Headers;
 import com.dyrnq.apisix.plugins.Redirect;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,5 +1,5 @@
 import com.dyrnq.apisix.domain.SSL;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;

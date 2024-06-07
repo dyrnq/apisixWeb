@@ -1,6 +1,6 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

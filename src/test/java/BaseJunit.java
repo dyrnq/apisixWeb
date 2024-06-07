@@ -3,14 +3,14 @@ import com.dyrnq.apisix.profile.Credential;
 import com.dyrnq.apisix.profile.DefaultCredential;
 import com.dyrnq.apisix.profile.DefaultProfile;
 import com.dyrnq.apisix.profile.Profile;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public class BaseJunit {
 
 
     AdminClient client = null;
 
-    @Before
+    @BeforeEach
     public void initClient() {
         if (client == null) {
             String url = "192.168.66.100:9180";

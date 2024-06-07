@@ -3,7 +3,7 @@ import com.dyrnq.utils.X509Holder;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.util.ASN1Dump;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.math.BigInteger;

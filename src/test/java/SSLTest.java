@@ -2,7 +2,7 @@ import cn.hutool.core.io.FileUtil;
 import com.dyrnq.apisix.domain.Client;
 import com.dyrnq.apisix.domain.SSL;
 import com.dyrnq.utils.CertUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.charset.Charset;

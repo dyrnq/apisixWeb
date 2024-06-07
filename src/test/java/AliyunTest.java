@@ -5,8 +5,8 @@ import com.dyrnq.cert.aliyun.vo.CertificateOrder;
 import com.dyrnq.cert.aliyun.vo.DescribeCertificateStateResult;
 import com.dyrnq.cert.aliyun.vo.Region;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ public class AliyunTest {
 
     Aliyun aliyunSDK = null;
 
-    @Before
+    @BeforeEach
     public void init() {
         aliyunSDK = new Aliyun(ACCESS_KEY_ID, ACCESS_KEY_SECRET);
     }

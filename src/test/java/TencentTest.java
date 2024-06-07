@@ -1,7 +1,7 @@
 import com.dyrnq.cert.tencent.Tencent;
 import com.dyrnq.cert.tencent.vo.*;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * https://github.com/TencentCloud/signature-process-demo/blob/main/cvm/signature-v3/java/TencentCloudAPITC3Demo.java
@@ -13,7 +13,7 @@ public class TencentTest {
     private final static String SECRET_KEY = "";
     Tencent tencentSDK = null;
 
-    @Before
+    @BeforeEach
     public void init() {
         tencentSDK = new Tencent(SECRET_ID, SECRET_KEY);
     }

@@ -3,7 +3,7 @@ import com.dyrnq.apisix.domain.GlobalRule;
 import com.dyrnq.apisix.plugins.Echo;
 import com.dyrnq.apisix.plugins.Headers;
 import com.dyrnq.apisix.plugins.ProxyRewrite;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
