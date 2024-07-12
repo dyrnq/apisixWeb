@@ -2,7 +2,7 @@
 # shellcheck disable=SC2086
 # shellcheck disable=SC2016
 
-nginx_image="${nginx_image:-nginx:1.22.1-alpine}"
+nginx_image="${nginx_image:-nginx:1.27.0-alpine}"
 
 fun_install_nginx(){
 
@@ -26,10 +26,8 @@ server {
 
     real_ip_header X-Forwarded-For;
     real_ip_recursive on;
-    set_real_ip_from  172.0.0.0/8;
-    set_real_ip_from  192.168.1.0/24;
-    set_real_ip_from  192.168.2.1;
-    set_real_ip_from  2001:0db8::/32;
+    set_real_ip_from  0.0.0.0/0;
+    set_real_ip_from  ::/0;
     ### http://nginx.org/en/docs/http/ngx_http_realip_module.html
 }
 EOF
@@ -69,7 +67,17 @@ curl http://127.0.0.1:9180/apisix/admin/routes/8001 -H 'X-API-KEY: edd1c9f034335
       "send": 6,
       "read": 6
     },
-    "type": "roundrobin"
+    "type": "roundrobin",
+    "checks": {
+        "active":{
+            "type": "http",
+            "http_path": "/",
+            "healthy": {
+                "http_statuses": [200]
+            }
+        }
+    }
+
   },
   "uri": "/*"
 }
@@ -79,12 +87,24 @@ curl http://127.0.0.1:9180/apisix/admin/routes/8001 -H 'X-API-KEY: edd1c9f034335
 
 fun_install_nginx
 fun_install_nginx_route
-for num in {1..5}; do
-  echo -n "${num}---------->" && sleep 1s;
+echo "sleep 10s;" && sleep 10s;
+for num in {1..10}; do
+  echo -n "${num}---------->"
   curl -fsSL http://127.0.0.1:9080/
 done
-for num in {1..5}; do
-  echo -n "${num}---------->" && sleep 1s;
+for num in {1..10}; do
+  echo -n "${num}---------->"
+  curl -fsSL http://192.168.66.100:9080/
+done
+
+docker stop nginx-2;
+
+for num in {1..10}; do
+  echo -n "${num}---------->"
+  curl -fsSL http://127.0.0.1:9080/
+done
+for num in {1..10}; do
+  echo -n "${num}---------->"
   curl -fsSL http://192.168.66.100:9080/
 done
 
