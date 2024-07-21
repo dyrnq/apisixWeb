@@ -24,6 +24,11 @@ server {
         root   /usr/share/nginx/html;
     }
 
+    location /livez {
+        access_log off;
+        return 200 "ok";
+    }
+
     real_ip_header X-Forwarded-For;
     real_ip_recursive on;
     set_real_ip_from  0.0.0.0/0;
@@ -58,7 +63,7 @@ curl http://127.0.0.1:9180/apisix/admin/routes/8001 -H 'X-API-KEY: edd1c9f034335
       { "host": "127.0.0.1","port": 18081,"weight": 1},
       { "host": "127.0.0.1","port": 18082,"weight": 1},
       { "host": "127.0.0.1","port": 18083,"weight": 1},
-      { "host": "127.0.0.1","port": 18084,"weight": 1}      
+      { "host": "127.0.0.1","port": 18084,"weight": 1}
     ],
     "pass_host": "pass",
     "scheme": "http",
@@ -71,7 +76,7 @@ curl http://127.0.0.1:9180/apisix/admin/routes/8001 -H 'X-API-KEY: edd1c9f034335
     "checks": {
         "active":{
             "type": "http",
-            "http_path": "/",
+            "http_path": "/livez",
             "healthy": {
                 "http_statuses": [200]
             }
