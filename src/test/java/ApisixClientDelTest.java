@@ -1,14 +1,16 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
-import org.junit.FixMethodOrder;
+
+import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.TestMethodOrder;
+
 
 import java.util.List;
 
 //@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
-@FixMethodOrder(MethodSorters.JVM)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class ApisixClientDelTest extends BaseJunit {
 
 

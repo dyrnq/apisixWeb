@@ -14,7 +14,7 @@ import org.bouncycastle.cert.jcajce.JcaX509v3CertificateBuilder;
 import org.bouncycastle.operator.ContentSigner;
 import org.bouncycastle.operator.OperatorCreationException;
 import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -134,7 +134,7 @@ public class SelfSignedCertPEM {
         //因此，在 HMAC 中不存在解密的操作，只能通过重新计算 MAC 值来验证消息的完整性和真实性。
         byte[] expected = hMac.digest(data.getBytes());
         byte[] actual = cn.hutool.core.codec.Base64.decode(hmac);
-        Assert.assertArrayEquals(expected, actual);
+        Assertions.assertArrayEquals(expected, actual);
 
     }
 
