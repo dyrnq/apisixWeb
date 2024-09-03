@@ -6,10 +6,10 @@ url="https://github.com/dyrnq/aia/releases/download/v0.0.2/aia-linux-${arch}"
 # url=${url/github.com/mirror.ghproxy.com/github.com}
 url=${url/github.com/files.m.daocloud.io/github.com}
 
-echo url;
+echo $url;
 service="aia"
 
-systemctl disable --now ${service}.service || true
+systemctl disable --now ${service}.service 2>/dev/null || true
 
 curl -f#SL -o /usr/local/bin/aia $url
 #cp -v -f /vagrant/aia /usr/local/bin/aia
