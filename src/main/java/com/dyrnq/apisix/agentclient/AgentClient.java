@@ -120,7 +120,7 @@ public class AgentClient {
 
         switch (reqMethod) {
             case HttpMethod.REQ_GET:
-                return getRequest(url + "?" + param, headers);
+                return getRequest(param != null ? url + "?" + param : url, headers);
             case HttpMethod.REQ_POST:
                 return postRequest(url, param, headers);
             default:
