@@ -1,3 +1,13 @@
+var editor1 = ace.edit("editor1");
+editor1.setTheme("ace/theme/twilight");
+editor1.session.setMode("ace/mode/yaml");
+editor1.setFontSize(16);
+editor1.setOptions({
+    minLines: 20,
+    maxLines: Infinity
+});
+editor1.resize();
+
 function cleanData(d){
     if( d === true ){
         $("#div_id").hide();
@@ -11,6 +21,8 @@ function cleanData(d){
     $('#addForm1 input[name="name"]').val("");
     $('#addForm1 input[name="url"]').val("");
     $('#addForm1 input[name="apiKey"]').val("");
+    $('#addForm1 input[name="agentUrl"]').val("");
+    $('#addForm1 input[name="agentApiKey"]').val("");
 }
 
 function addLink(d) {
@@ -25,7 +37,13 @@ function addLink(d) {
        let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">' + commonStr.clear + '</button>'
        let exptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export">' + commonStr.export + '</button>'
        let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">' + commonStr.import + '</button>'
-       return editBtn+'&nbsp;'+delBtn+'&nbsp;'+dropBtn+'&nbsp;'+exptBtn+'&nbsp;'+imptBtn ;
+
+       let config = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="config">' + commonStr.config + '</button>'
+       let reload = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="reload">' + commonStr.reload + '</button>'
+       let stop = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="stop">' + commonStr.stop + '</button>'
+       let start = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="start">' + commonStr.start + '</button>'
+       let restart = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="restart">' + commonStr.restart + '</button>'
+       return editBtn+'&nbsp;'+delBtn+'&nbsp;'+dropBtn+'&nbsp;'+exptBtn+'&nbsp;'+imptBtn + '&nbsp;'+config +'&nbsp;'+reload +'&nbsp;'+stop +'&nbsp;'+start +'&nbsp;'+restart;
     }
 }
 
@@ -106,6 +124,32 @@ $('#addOver').click(function(){
                 layer.closeAll();
                 layer.msg(commonStr.success);
                 table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+});
+
+$('#addOver4').click(function(){
+    let id = $('#addForm4 input[name="id"]').val();
+    var text = editor1.getValue();
+    const encodedString = Base64.encode(text);
+//    console.log(text)
+//    console.log(encodedString)
+    $.ajax({
+        type : 'POST',
+        url: ctx + '/api/inst/config/'+id,
+        data: JSON.stringify({id: id, data: encodedString}),
+        dataType : 'json',
+        contentType: 'application/json',
+        success : function(data) {
+            if(data.code=='200'){
+                layer.closeAll();
+                layer.msg(commonStr.success);
             } else {
                 layer.msg(data.description);
             }
@@ -321,7 +365,8 @@ $('#choose').click(function (){
                             $('#addForm1 input[name="name"]').val(data.data.name);
                             $('#addForm1 input[name="url"]').val(data.data.url);
                             $('#addForm1 input[name="apiKey"]').val(data.data.apiKey);
-
+                            $('#addForm1 input[name="agentUrl"]').val(data.data.agentUrl);
+                            $('#addForm1 input[name="agentApiKey"]').val(data.data.agentApiKey);
 
                             layer.open({
                                 type: 1,
@@ -395,7 +440,116 @@ $('#choose').click(function (){
                         }
                     });
                 });
+        } else if(layEvent === 'config'){//config事件
+                $('#addForm4 input[name="id"]').val("");
+                $('#addForm4 input[name="content"]').val("");
+
+                $.ajax({
+                        url: ctx + '/api/inst/config/'+ obj.data.id,
+                        type:'GET',
+                        contentType: 'application/json',
+                        success:function (data,statusText) {
+                            if(data.code=='200'){
+                                const decodedString = Base64.decode(data.data);
+                                //layer.msg(decodedString);
+                                $('#addForm4 input[name="id"]').val(obj.data.id);
+                                editor1.setValue("",-1);
+                                editor1.setValue(decodedString,-1);
+                                 layer.open({
+                                     type: 1,
+                                     area: ['800px', '600px'],
+                                     title: 'Config',
+                                     content : $('#configDiv'),
+                                     anim: 'slideRight',
+                                     shade: 0.6, // 遮罩透明度
+                                     shadeClose: true, // 点击遮罩区域，关闭弹层
+                                     maxmin: true, // 允许全屏最小化
+                                     skin: 'layui-layer-win10'
+                                 });
+
+                            }else{
+                                 layer.msg(data.description);
+                            }
+                        },
+                        'error':function () {
+                            layer.msg(commonStr.errorInfo);
+                        }
+                    });
+
+        } else if(layEvent === 'reload'){//reload事件
+
+            $.ajax({
+                url: ctx + '/api/inst/reload/'+ obj.data.id,
+                type:'GET',
+                contentType: 'application/json',
+                success:function (data,statusText) {
+                    if(data.code=='200'){
+                         layer.msg(data.data);
+                    }else{
+                         layer.msg(data.description);
+                    }
+                },
+                'error':function () {
+                    layer.msg(commonStr.errorInfo);
+                }
+            });
+
+        } else if(layEvent === 'stop'){//stop事件
+
+             $.ajax({
+                 url: ctx + '/api/inst/stop/'+ obj.data.id,
+                 type:'GET',
+                 contentType: 'application/json',
+                 success:function (data,statusText) {
+                     if(data.code=='200'){
+                          layer.msg(data.data);
+                     }else{
+                          layer.msg(data.description);
+                     }
+                 },
+                 'error':function () {
+                     layer.msg(commonStr.errorInfo);
+                 }
+             });
+
+        } else if(layEvent === 'start'){//start事件
+
+             $.ajax({
+                 url: ctx + '/api/inst/start/'+ obj.data.id,
+                 type:'GET',
+                 contentType: 'application/json',
+                 success:function (data,statusText) {
+                     if(data.code=='200'){
+                          layer.msg(data.data);
+                     }else{
+                          layer.msg(data.description);
+                     }
+                 },
+                 'error':function () {
+                     layer.msg(commonStr.errorInfo);
+                 }
+             });
+
+        } else if(layEvent === 'restart'){//restart事件
+
+                     $.ajax({
+                         url: ctx + '/api/inst/restart/'+ obj.data.id,
+                         type:'GET',
+                         contentType: 'application/json',
+                         success:function (data,statusText) {
+                             if(data.code=='200'){
+                                  layer.msg(data.data);
+                             }else{
+                                  layer.msg(data.description);
+                             }
+                         },
+                         'error':function () {
+                             layer.msg(commonStr.errorInfo);
+                         }
+                     });
+
         }
+
 
     });
 

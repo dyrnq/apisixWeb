@@ -76,6 +76,11 @@ commonStr.cantDel = 不可删除
 commonStr.deploy      = 部署
 commonStr.undeploy    = 撤销
 commonStr.download    = 下载
+commonStr.start      = 启动
+commonStr.stop       = 关闭
+commonStr.restart    = 重启
+commonStr.reload     = reload
+commonStr.config     = 配置
 
 loginStr.add         = 添加
 loginStr.authCode    = 身份码

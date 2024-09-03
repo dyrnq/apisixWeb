@@ -1,13 +1,13 @@
 package com.dyrnq.controller.api;
 
 import cn.hutool.core.util.PageUtil;
+import com.dyrnq.apisix.agentclient.AgentClient;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.InstMapper;
 import com.dyrnq.model.Inst;
-import org.noear.solon.annotation.Controller;
-import org.noear.solon.annotation.Inject;
-import org.noear.solon.annotation.Mapping;
+import org.noear.solon.annotation.*;
 import org.noear.solon.core.handle.Context;
+import org.noear.solon.core.handle.MethodType;
 import org.noear.solon.core.handle.Result;
 import org.noear.wood.IPage;
 import org.slf4j.Logger;
@@ -117,6 +117,82 @@ public class InstController extends ApiController {
         try {
             businessLogic.drop(id);
             return Result.succeed("ok");
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping(value = "config/{id}", method = MethodType.GET)
+    public Result getConfig(Context ctx, @Path("id") String id) {
+        try {
+            Inst inst = instMapper.selectById(id);
+            AgentClient agentClient = new AgentClient();
+            String data = agentClient.readConfig(inst.getAgentUrl(), inst.getAgentApiKey());
+            return Result.succeed(data);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping(value = "config/{id}", method = MethodType.POST)
+    public Result writeConfig(Context ctx, @Path("id") String id, String data ) {
+        try {
+            Inst inst = instMapper.selectById(id);
+            AgentClient agentClient = new AgentClient();
+            agentClient.writeConfig(inst.getAgentUrl(), inst.getAgentApiKey(),data);
+            return Result.succeed(data);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping(value = "restart/{id}", method = MethodType.GET)
+    public Result restart(Context ctx, @Path("id") String id) {
+        try {
+            Inst inst = instMapper.selectById(id);
+            AgentClient agentClient = new AgentClient();
+            String data = agentClient.restart(inst.getAgentUrl(), inst.getAgentApiKey());
+            return Result.succeed(data);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping(value = "reload/{id}", method = MethodType.GET)
+    public Result reload(Context ctx, @Path("id") String id) {
+        try {
+            Inst inst = instMapper.selectById(id);
+            AgentClient agentClient = new AgentClient();
+            String data = agentClient.reload(inst.getAgentUrl(), inst.getAgentApiKey());
+            return Result.succeed(data);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
+    }
+    @Mapping(value = "stop/{id}", method = MethodType.GET)
+    public Result stop(Context ctx, @Path("id") String id) {
+        try {
+            Inst inst = instMapper.selectById(id);
+            AgentClient agentClient = new AgentClient();
+            String data = agentClient.stop(inst.getAgentUrl(), inst.getAgentApiKey());
+            return Result.succeed(data);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
+        }
+    }
+
+    @Mapping(value = "start/{id}", method = MethodType.GET)
+    public Result start(Context ctx, @Path("id") String id) {
+        try {
+            Inst inst = instMapper.selectById(id);
+            AgentClient agentClient = new AgentClient();
+            String data = agentClient.start(inst.getAgentUrl(), inst.getAgentApiKey());
+            return Result.succeed(data);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());

@@ -16,6 +16,28 @@ public class Inst {
     @Column("api_key")
     private String apiKey;
 
+    public String getAgentUrl() {
+        return agentUrl;
+    }
+
+    public void setAgentUrl(String agentUrl) {
+        this.agentUrl = agentUrl;
+    }
+
+    @Column("agent_url")
+    private String agentUrl;
+
+    public String getAgentApiKey() {
+        return agentApiKey;
+    }
+
+    public void setAgentApiKey(String agentApiKey) {
+        this.agentApiKey = agentApiKey;
+    }
+
+    @Column("agent_api_key")
+    private String agentApiKey;
+
     public String getId() {
         return id;
     }

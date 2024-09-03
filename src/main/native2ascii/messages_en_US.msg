@@ -76,6 +76,11 @@ commonStr.cantDel = Can`t Del this!
 commonStr.deploy      = Deploy
 commonStr.undeploy    = Undeploy
 commonStr.download    = Download
+commonStr.start      = start
+commonStr.stop       = stop
+commonStr.restart    = restart
+commonStr.reload     = reload
+commonStr.config     = config
 
 loginStr.add         = Add
 loginStr.authCode    = Auth code

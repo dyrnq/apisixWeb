@@ -92,6 +92,20 @@ input[name='param']{
                 </div>
             </div>
 
+            <div class="layui-form-item">
+                <label class="layui-form-label">agentUrl</label>
+                <div class="layui-input-block">
+                    <input type="text" name="agentUrl" class="layui-input">
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">agentApiKey</label>
+                <div class="layui-input-block">
+                    <input type="text" name="agentApiKey" class="layui-input">
+                </div>
+            </div>
 
             <div class="layui-form-item center">
                 <button type="button" class="layui-btn layui-btn-normal" id="addOver">${i18n.get("commonStr.submit")}</button>
@@ -134,6 +148,37 @@ input[name='param']{
         </form>
     </div>
 
+
+    <div class="layui-form" id="configDiv" style="padding: 15px; display: none">
+        <form id="addForm4">
+            <input type="hidden" name="u">
+
+
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" id="div_content">
+                <label class="layui-form-label">content</label>
+                <div class="layui-input-block">
+                    <pre id="editor1" class=".json-editor"></pre>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="layui-form-item center">
+                <button type="button" class="layui-btn layui-btn-normal" id="addOver4">${i18n.get("commonStr.submit")}</button>
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+        </form>
+    </div>
+
+
     <div class="layui-form" id="exportDiv" style="padding: 15px; display: none;">
         <form id="exportForm">
             <input type="hidden" name="format"/>
@@ -166,6 +211,7 @@ input[name='param']{
         <button class="layui-btn layui-btn-sm" lay-event="statusAll0" style="display: none">${i18n.get("commonStr.batchDisable")}</button>
     </div>
 </script>
+<script src="${ctx}/lib/base64/base64.js" type="text/javascript"></script>
 <script src="${ctx}/js/admin/inst/index.js?v=${jsrandom}" type="text/javascript"></script>
 </body>
 </html>
