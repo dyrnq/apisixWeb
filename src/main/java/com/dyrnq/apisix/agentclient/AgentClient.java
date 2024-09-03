@@ -25,7 +25,7 @@ public class AgentClient {
     private final OkHttpClient client;
 
     public AgentClient() {
-        this(3, 3, 3);
+        this(6, 6, 6);
     }
 
     public AgentClient(Integer connTimeout, Integer readTimeout, Integer writeTimeout) {
@@ -66,7 +66,12 @@ public class AgentClient {
         if (r.code() == 200) {
             return JsonPath.read(bodyStr, "$.outStr");
         } else {
-            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            try {
+                throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            } catch (com.jayway.jsonpath.PathNotFoundException e) {
+                //
+            }
+            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.error"));
         }
     }
 
@@ -77,7 +82,12 @@ public class AgentClient {
         if (r.code() == 200) {
             return JsonPath.read(bodyStr, "$.outStr");
         } else {
-            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            try {
+                throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            } catch (com.jayway.jsonpath.PathNotFoundException e) {
+                //
+            }
+            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.error"));
         }
     }
 
@@ -88,7 +98,12 @@ public class AgentClient {
         if (r.code() == 200) {
             return JsonPath.read(bodyStr, "$.outStr");
         } else {
-            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            try {
+                throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            } catch (com.jayway.jsonpath.PathNotFoundException e) {
+                //
+            }
+            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.error"));
         }
     }
 
@@ -99,7 +114,12 @@ public class AgentClient {
         if (r.code() == 200) {
             return JsonPath.read(bodyStr, "$.outStr");
         } else {
-            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            try {
+                throw new ApisixSDKException(JsonPath.read(bodyStr, "$.errStr"));
+            } catch (com.jayway.jsonpath.PathNotFoundException e) {
+                //
+            }
+            throw new ApisixSDKException(JsonPath.read(bodyStr, "$.error"));
         }
     }
 
