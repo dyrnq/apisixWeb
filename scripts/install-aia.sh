@@ -2,7 +2,7 @@
 
 [ "$(uname -m)" = "x86_64" ] && arch="amd64";
 [ "$(uname -m)" = "aarch64" ] && arch="arm64";
-url="https://github.com/dyrnq/aia/releases/download/v0.0.2/aia-linux-${arch}"
+url="https://github.com/dyrnq/aia/releases/download/v0.0.4/aia-linux-${arch}"
 # url=${url/github.com/mirror.ghproxy.com/github.com}
 url=${url/github.com/files.m.daocloud.io/github.com}
 
@@ -30,7 +30,8 @@ ExecStart=/usr/local/bin/aia \
 --apisix-reload-cmd "docker exec -t apisix bash -c \"apisix reload\"" \
 --apisix-stop-cmd "docker stop apisix || true" \
 --apisix-start-cmd "docker start apisix" \
---apisix-restart-cmd "docker restart apisix"
+--apisix-restart-cmd "docker restart apisix" \
+--allowed-ip "192.168.0.0/16,127.0.0.1,172.17.0.0/16"
 TimeoutStartSec=30
 TimeoutStopSec=20
 ExecStop=/bin/kill -s TERM \$MAINPID
