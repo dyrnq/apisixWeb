@@ -12,6 +12,9 @@ curl http://127.0.0.1:9180/apisix/admin/global_rules/56660 -H 'X-API-KEY: edd1c9
                 },
                 "remove": ["Server"]
             }
+        },
+        "request-id": {
+            "include_in_response": true
         }
     }
 }
