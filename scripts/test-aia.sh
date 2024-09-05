@@ -1,25 +1,30 @@
 #!/usr/bin/env bash
 
+set -eu -o pipefail
+
 test_server="http://127.0.0.1:5980"
+apiKey="your-secret-api-key"
 
-
-server_data=$(curl -s -H "X-API-KEy: your-secret-api-key" ${test_server}/api/v1/config | jq -r ".data" | base64 -d)
+server_data=$(curl --fail -sS -H "X-API-KEy: ${apiKey}" ${test_server}/api/v1/config | jq -r ".data" | base64 -d)
 
 echo "$server_data"
 #
-echo "$server_data" > /tmp/config.yaml
-echo "# $(date)你好"  >> /tmp/config.yaml
-base64Str=$(base64 --wrap=0 /tmp/config.yaml)
+tempfile=$(mktemp -t config_XXXX.yaml)
+
+
+echo "$server_data" > "${tempfile}"
+echo "# $(date)你好"  >> "${tempfile}"
+base64Str=$(base64 --wrap=0 ${tempfile})
 echo ""
 echo $base64Str
 #
-curl -s -H "X-API-KEy: your-secret-api-key" -X POST ${test_server}/api/v1/config -d "{\"data\": \"$base64Str\"}"
+curl --fail -sS -H "X-API-KEy: ${apiKey}" -X POST ${test_server}/api/v1/config -d "{\"data\": \"$base64Str\"}"
 
 
-curl -s -H "X-API-KEy: your-secret-api-key" -X GET ${test_server}/api/v1/reload | jq
+curl --fail -sS -H "X-API-KEy: ${apiKey}" -X GET ${test_server}/api/v1/reload | jq
 sleep 4s;
-curl -s -H "X-API-KEy: your-secret-api-key" -X GET ${test_server}/api/v1/restart | jq
+curl --fail -sS -H "X-API-KEy: ${apiKey}" -X GET ${test_server}/api/v1/restart | jq
 sleep 4s;
-curl -s -H "X-API-KEy: your-secret-api-key" -X GET ${test_server}/api/v1/stop | jq
+curl --fail -sS -H "X-API-KEy: ${apiKey}" -X GET ${test_server}/api/v1/stop | jq
 sleep 4s;
-curl -s -H "X-API-KEy: your-secret-api-key" -X GET ${test_server}/api/v1/start | jq
+curl --fail -sS -H "X-API-KEy: ${apiKey}" -X GET ${test_server}/api/v1/start | jq
