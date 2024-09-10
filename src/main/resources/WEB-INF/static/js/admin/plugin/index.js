@@ -33,7 +33,7 @@ function init(d){
 
 
 function plugin_metadata(d){
-　　var addLink = d.id;
+   var addLink = d.id;
    if ('' == addLink || null == addLink || undefined == addLink) {
         return '';
    }
@@ -94,7 +94,7 @@ var table = layui.table;
 var form = layui.form;
 
 
-init(false);
+init(true);
 
 $('#addOver').click(function(){
     var id = $('#addForm1 input[name="id"]').val();
