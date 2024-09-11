@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
 public class AESDecryptor extends BaseJunit {
@@ -17,8 +18,8 @@ public class AESDecryptor extends BaseJunit {
         String key = "edd1c9f0985e76a2";
         String iv = "edd1c9f0985e76a2";
         byte[] encryptedBytes = Base64.getDecoder().decode(encrypted);
-        byte[] keyBytes = key.getBytes("UTF-8");
-        byte[] ivBytes = iv.getBytes("UTF-8");
+        byte[] keyBytes = key.getBytes(StandardCharsets.UTF_8);
+        byte[] ivBytes = iv.getBytes(StandardCharsets.UTF_8);
         SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ALGORITHM);
         IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
         Cipher cipher = Cipher.getInstance(TRANSFORMATION);
