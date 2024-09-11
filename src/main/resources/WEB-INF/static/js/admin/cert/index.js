@@ -1,3 +1,12 @@
+var editor1 = ace.edit("editor1");
+editor1.setTheme("ace/theme/twilight");
+editor1.session.setMode("ace/mode/yaml");
+editor1.setFontSize(16);
+editor1.setOptions({
+    minLines: 20,
+    maxLines: Infinity
+});
+editor1.resize();
 layui.use(function(){
 
 var layer = layui.layer;
@@ -105,16 +114,17 @@ function addLink(d) {
 
        //if (arr.indexOf(d.approach) !== -1) {
        if ( d.approach == enum_Approach.manual ) {
-            renewBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="renew">' + commonStr.renew + '</button>'
-            issueBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="issue">' + commonStr.issue + '</button>'
+            renewBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="renew" disabled>' + commonStr.renew + '</button>'
+            issueBtn = '<button type="button" class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="issue" disabled>' + commonStr.issue + '</button>'
        }
        let editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
        let delBtn  = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">' + commonStr.del + '</button>'
        let dropBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="drop">' + commonStr.clear + '</button>'
        let dumpBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dump">' + commonStr.dump + '</button>'
        let imptBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="importData">' + commonStr.import + '</button>'
+       let viewBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="view">' + commonStr.view + '</button>'
 
-       return editBtn + '&nbsp;'+ issueBtn + '&nbsp;' + renewBtn + '&nbsp;' + delBtn + '&nbsp;' + dumpBtn;
+       return editBtn + '&nbsp;'+ issueBtn + '&nbsp;' + renewBtn + '&nbsp;' + delBtn + '&nbsp;' + dumpBtn + '&nbsp;' + viewBtn;
     }
 }
 
@@ -682,6 +692,43 @@ $.ajax({
                         }
                     });
                 });
+        } else if(layEvent === 'view'){
+
+                 $.ajax({
+                     url: ctx + '/api/cert/view',
+                     type:'post',
+                     contentType: 'application/json',
+                     data:JSON.stringify({id:obj.data.id}),
+                     success:function (data,statusText) {
+                         if(data.code=='200'){
+                             //layer.msg(JSON.stringify(data.data));
+                             //table.reload('demo',{});
+
+                                editor1.setValue("",-1);
+                                const yamlText = jsyaml.dump(data.data);
+                                editor1.setValue(yamlText,-1);
+                                 layer.open({
+                                     type: 1,
+                                     area: ['800px', '600px'],
+                                     title: 'view',
+                                     content : $('#viewDiv'),
+                                     anim: 'slideRight',
+                                     shade: 0.6, // 遮罩透明度
+                                     shadeClose: true, // 点击遮罩区域，关闭弹层
+                                     maxmin: true, // 允许全屏最小化
+                                     skin: 'layui-layer-win10'
+                                 });
+
+
+                         }else{
+                              layer.msg(data.description);
+                         }
+                     },
+                     'error':function () {
+                         layer.msg(commonStr.errorInfo);
+                     }
+                 });
+
         }
 
     });

@@ -27,7 +27,9 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Mapping("api/cert")
 @Controller
@@ -201,6 +203,20 @@ public class CertController extends ApiController {
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             ctx.output(e.getMessage());
+        }
+    }
+
+    @Mapping("view")
+    public Result view(Context ctx, String id) {
+        try {
+            Cert cert = certMapper.selectById(id);
+            Map<String,String> map = new HashMap<>();
+            map.put("cert", cert.getCert());
+            map.put("key", cert.getKey());
+            return Result.succeed(map);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+            return Result.failure(e.getMessage());
         }
     }
 

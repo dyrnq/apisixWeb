@@ -387,6 +387,36 @@ input[name='param']{
     </div>
 
 
+    <div class="layui-form" id="viewDiv" style="padding: 15px; display: none">
+        <form id="addForm4">
+            <input type="hidden" name="u">
+
+
+            <div class="layui-form-item" style="display: none">
+                <label class="layui-form-label">id</label>
+                <div class="layui-input-block">
+                    <input type="text" name="id" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" id="div_content">
+                <label class="layui-form-label">content</label>
+                <div class="layui-input-block">
+                    <pre id="editor1" class=".json-editor"></pre>
+                </div>
+            </div>
+
+
+
+
+
+            <div class="layui-form-item center">
+<!--                <button type="button" class="layui-btn layui-btn-normal" id="addOver4">${i18n.get("commonStr.submit")}</button>-->
+                <button type="button" class="layui-btn" onclick="layer.closeAll()">${i18n.get("commonStr.close")}</button>
+            </div>
+        </form>
+    </div>
+
+
             <div class="layui-form-item center">
                 <button type="button" class="layui-btn layui-btn-normal" id="ID-upload-demo-action">${i18n.get("commonStr.submit")}
                     <i class="layui-icon layui-icon-loading layui-anim layui-anim-rotate layui-anim-loop" id="loading" style="display: none"></i>
