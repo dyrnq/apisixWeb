@@ -51,10 +51,10 @@ cat > $HOME/.m2/settings.xml<<EOF
 
   <mirrors>
     <mirror>
-        <id>nexus-tencentyun</id>
-        <mirrorOf>*</mirrorOf>
-        <name>Nexus tencentyun</name>
-        <url>http://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
+        <id>aliyunmaven</id>
+        <mirrorOf>central</mirrorOf>
+        <name>阿里云公共仓库</name>
+        <url>https://maven.aliyun.com/repository/public</url>
     </mirror>
   </mirrors>
 
@@ -82,17 +82,16 @@ popd || exit 1
 
 
 fun_gen_certs() {
+if ! command -v cfssl > /dev/null 2>&1; then
+  mkdir -p $HOME/bin
+  bash $SCRIPT_DIR/install-cfssl.sh -d $HOME/bin -m ghproxy
+  export PATH=$PATH:$HOME/bin
+fi
+echo $PATH
 
 
-mkdir -p $HOME/bin
 mkdir -p $HOME/opt/certs
 
-if ! test -e $HOME/bin/cfssl ; then
-  bash $SCRIPT_DIR/install-cfssl.sh -d $HOME/bin -m ghproxy
-fi;
-
-grep -q "$HOME/bin" <<< "$PATH" || export PATH=$PATH:$HOME/bin
-echo $PATH
 pushd $HOME/opt/certs || exit 1
 rm -rf ./*
 cat > config.json <<EOF
@@ -183,31 +182,20 @@ cat server-csr.json;
 
 cfssl gencert -initca ca-csr.json | cfssljson -bare ca
 cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=kubernetes server-csr.json | cfssljson -bare server
+cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=client client-csr.json | cfssljson -bare client
+#openssl pkcs12 -export -out server.p12 -inkey server-key.pem -in server.pem -passout pass:changeit
 
-openssl pkcs12 -export -out server.p12 -inkey server-key.pem -in server.pem -passout pass:changeit
+keytool -importcert -noprompt -trustcacerts -alias server-trust -file ca.pem -keystore truststore.p12 -v -srcstorepass changeit -storepass changeit -storetype PKCS12
+keytool -importcert -noprompt -trustcacerts -alias server-trust -file ca.pem -keystore truststore.jks -v -srcstorepass changeit -storepass changeit -storetype JKS
 
-keytool \
--importcert \
--trustcacerts \
--alias server-trust \
--file ca.pem \
--keystore truststore.jks \
--v \
--noprompt \
--srcstorepass changeit  \
--storepass changeit
 
-keytool \
--importkeystore \
--srckeystore \
-server.p12 \
--srcstoretype PKCS12 \
--destkeystore identity.jks \
--deststoretype pkcs12 \
--v \
--noprompt \
--srcstorepass changeit  \
--storepass changeit
+
+openssl pkcs12 -export -inkey server-key.pem -in server.pem -out server.p12 -chain -CAfile ca.pem -name server -caname ca -passout pass:changeit
+openssl pkcs12 -export -inkey client-key.pem -in client.pem -out client.p12 -chain -CAfile ca.pem -name client -caname ca -passout pass:changeit
+
+
+
+
 
 
 # Warning:
@@ -215,7 +203,7 @@ server.p12 \
 
 
 
-cfssl gencert -ca=ca.pem -ca-key=ca-key.pem -config=config.json -profile=client client-csr.json | cfssljson -bare client
+
 
 
 
@@ -244,9 +232,11 @@ eclipse-temurin:21 \
 java -jar /server.jar \
 --server.port=7443 \
 --server.ssl.enabled=true \
---server.ssl.key-store=/host/opt/certs/identity.jks \
+--server.ssl.key-store=/host/opt/certs/server.p12 \
+--server.ssl.key-store-type=PKCS12 \
 --server.ssl.key-password=changeit \
---server.ssl.key-store-password=changeit
+--server.ssl.key-store-password=changeit \
+--server.ssl.client-auth=NONE
 
 
 ## 启动一个  two-way TLS
@@ -265,12 +255,14 @@ eclipse-temurin:21 \
 java -jar /server.jar \
 --server.port=8443 \
 --server.ssl.enabled=true \
---server.ssl.key-store=/host/opt/certs/identity.jks \
+--server.ssl.key-store=/host/opt/certs/server.p12 \
+--server.ssl.key-store-type=PKCS12 \
 --server.ssl.key-password=changeit \
 --server.ssl.key-store-password=changeit \
---server.ssl.trust-store=/host/opt/certs/truststore.jks \
+--server.ssl.trust-store=/host/opt/certs/truststore.p12 \
+--server.ssl.trust-store-type=PKCS12 \
 --server.ssl.trust-store-password=changeit \
---server.ssl.client-auth=need
+--server.ssl.client-auth=NEED
 
 
 }
@@ -278,7 +270,7 @@ java -jar /server.jar \
 fun_test_server(){
 
 pushd $HOME/opt/certs || exit 1
-  echo "sleep 4s" && sleep 4s;
+  echo "sleep 10s" && sleep 10s;
   curl https://127.0.0.1:7443/api/hello || true
   fun_line
   curl -k https://127.0.0.1:7443/api/hello || true
@@ -288,6 +280,7 @@ pushd $HOME/opt/certs || exit 1
   curl https://127.0.0.1:8443/api/hello || true
   fun_line
   curl -k https://127.0.0.1:8443/api/hello || true
+  echo "curl: (56) OpenSSL SSL_read: error:14094412:SSL routines:ssl3_read_bytes:sslv3 alert bad certificate, errno 0"
   fun_line
   curl --key client-key.pem --cert client.pem --cacert ca.pem https://127.0.0.1:8443/api/hello
 popd || exit 1
@@ -420,7 +413,7 @@ curl -X PUT 'http://127.0.0.1:9180/apisix/admin/routes/50000011' \
     }
   },
   "priority": 10,
-  "status": 1,  
+  "status": 1,
   "upstream": {
     "scheme": "https",
     "tls": {
@@ -431,7 +424,7 @@ curl -X PUT 'http://127.0.0.1:9180/apisix/admin/routes/50000011' \
       "port": 8443,
       "weight": 1
     }],
-    "type": "roundrobin"    
+    "type": "roundrobin"
   }
 }
 '
@@ -446,7 +439,10 @@ curl -X PUT 'http://127.0.0.1:9180/apisix/admin/routes/50000011' \
 fun_prepare_env
 
 fun_build_mutual-tls-ssl
-test -e $HOME/opt/certs/identity.jks || fun_gen_certs
+
+if [ ! -f $HOME/opt/certs/server.p12 ]; then
+  fun_gen_certs
+fi
 
 fun_run_server
 
