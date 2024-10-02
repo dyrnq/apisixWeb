@@ -20,7 +20,7 @@
   <mirrors>
     <mirror>
         <id>nexus-tencentyun</id>
-        <mirrorOf>*</mirrorOf>
+        <mirrorOf>central</mirrorOf>
         <name>Nexus tencentyun</name>
         <url>http://mirrors.cloud.tencent.com/nexus/repository/maven-public/</url>
     </mirror>
