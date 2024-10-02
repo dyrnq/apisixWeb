@@ -12,18 +12,18 @@
 <script src="${ctx}/lib/js-cookie/js.cookie.js" type="text/javascript"></script>
 <script src="${ctx}/lib/js-yaml/js-yaml.js?v=${jsrandom}" type="text/javascript"></script>
 <script>
-	//根路径
-	var ctx = '${ctx}';
+    //根路径
+    var ctx = '${ctx}';
 
-	// 翻页参数
-	var page = {
-			count : '<#if page??>${page.count}<#else>0</#if>',
-			curr : '<#if page??>${page.curr}<#else>1</#if>',
-			limit : '<#if page??>${page.limit}<#else>10</#if>',
-	};
+    // 翻页参数
+    var page = {
+            count : '<#if page??>${page.count}<#else>0</#if>',
+            curr : '<#if page??>${page.curr}<#else>1</#if>',
+            limit : '<#if page??>${page.limit}<#else>10</#if>',
+    };
 
-	var cfg = ${cfg};
-	var COOK_NAME = ${cookName};
+    var cfg = ${cfg};
+    var COOK_NAME = ${cookName};
 
     if (document.getElementById("editor")) {
 

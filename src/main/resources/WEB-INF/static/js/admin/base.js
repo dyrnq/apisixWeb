@@ -29,32 +29,32 @@ $(function() {
     laypage = layui.laypage;
     dropdown = layui.dropdown;
 
-	// 日期控件
-	layui.use('laydate', function() {
-		laydate = layui.laydate;
+    // 日期控件
+    layui.use('laydate', function() {
+        laydate = layui.laydate;
 
-		// 执行laydate实例
-		$(".laydate").each(function() {
-			$(this).attr("id", "date_" + guid());
-			$(this).attr("readonly", true);
+        // 执行laydate实例
+        $(".laydate").each(function() {
+            $(this).attr("id", "date_" + guid());
+            $(this).attr("readonly", true);
 
-			laydate.render({
-				elem: "#" + $(this).attr("id"), // 指定元素
-				type: 'date',
-				trigger: 'click',
-				format: 'yyyy-MM-dd' // 可任意组合
-			});
-		})
-	});
+            laydate.render({
+                elem: "#" + $(this).attr("id"), // 指定元素
+                type: 'date',
+                trigger: 'click',
+                format: 'yyyy-MM-dd' // 可任意组合
+            });
+        })
+    });
 
-	form.render();
+    form.render();
 
-	// 关闭input自动填充
-	$("input").attr("autocomplete", "off");
+    // 关闭input自动填充
+    $("input").attr("autocomplete", "off");
 
-	// 菜单选中
-	var url = location.pathname + location.search;
-	$("a[href='" + ctx + url + "']").parent().addClass("layui-this");
+    // 菜单选中
+    var url = location.pathname + location.search;
+    $("a[href='" + ctx + url + "']").parent().addClass("layui-this");
 
     //初始化aceMode默认值
     if ($('#addForm1 select[name="aceMode"]').length) {
@@ -100,11 +100,11 @@ $(function() {
         localStorage.setItem(lastPath+'_aceMode', value);
     });
 
-	// 判断屏幕分辨率, 给table加上lay-size="sm"
-	//if (document.body.clientWidth <= 1600) {
-		//$(".layui-table").attr("lay-size", "sm");
-		//$(".layui-btn").addClass("layui-btn-sm");
-	//}
+    // 判断屏幕分辨率, 给table加上lay-size="sm"
+    //if (document.body.clientWidth <= 1600) {
+        //$(".layui-table").attr("lay-size", "sm");
+        //$(".layui-btn").addClass("layui-btn-sm");
+    //}
 
     if ($('#ID-dropdown-demo-base-text').length){
         dropdown.render({
@@ -158,12 +158,12 @@ $(function() {
 
 // 关闭AJAX相应的缓存
 $.ajaxSetup({
-	cache: false
+    cache: false
 });
 
 
 function gohref(url) {
-	location.href = url;
+    location.href = url;
 
 }
 function i18n(lang){
@@ -207,119 +207,119 @@ function loginOut() {
 
 // 日期格式化
 Date.prototype.format = function(format) {
-	var date = {
-		"M+": this.getMonth() + 1,
-		"d+": this.getDate(),
-		"H+": this.getHours(),
-		"m+": this.getMinutes(),
-		"s+": this.getSeconds(),
-		"q+": Math.floor((this.getMonth() + 3) / 3),
-		"S+": this.getMilliseconds()
-	};
-	if (/(y+)/i.test(format)) {
-		format = format.replace(RegExp.$1, (this.getFullYear() + '')
-			.substr(4 - RegExp.$1.length));
-	}
-	for (var k in date) {
-		if (new RegExp("(" + k + ")").test(format)) {
-			format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k]
-				: ("00" + date[k]).substr(("" + date[k]).length));
-		}
-	}
-	return format;
+    var date = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "H+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S+": this.getMilliseconds()
+    };
+    if (/(y+)/i.test(format)) {
+        format = format.replace(RegExp.$1, (this.getFullYear() + '')
+            .substr(4 - RegExp.$1.length));
+    }
+    for (var k in date) {
+        if (new RegExp("(" + k + ")").test(format)) {
+            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? date[k]
+                : ("00" + date[k]).substr(("" + date[k]).length));
+        }
+    }
+    return format;
 }
 
 function formatDate(now) {
-	if (now == null || now == '') {
-		return "";
-	}
+    if (now == null || now == '') {
+        return "";
+    }
 
-	return new Date(now).format("yyyy-MM-dd HH:mm:ss");
+    return new Date(now).format("yyyy-MM-dd HH:mm:ss");
 }
 
 // 查看图片
 function seePic(url) {
-	window.open(url);
+    window.open(url);
 }
 
 // 生成uuid
 function S4() {
-	return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+    return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
 }
 function guid() {
-	return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
+    return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
 // 时间字符串转时间戳
 function strToTime(str) {
-	var str = str.replace(/-/g, '/');
-	var timestamp = new Date(str).getTime();
+    var str = str.replace(/-/g, '/');
+    var timestamp = new Date(str).getTime();
 
-	return timestamp
+    return timestamp
 }
 
 // 获取url参数
 function getQueryString(name) {
-	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
-	var r = window.location.search.substr(1).match(reg);
-	if (r != null)
-		return unescape(r[2]);
-	return null;
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+    var r = window.location.search.substr(1).match(reg);
+    if (r != null)
+        return unescape(r[2]);
+    return null;
 }
 
 // 下载文件
 function downloadFile(url, name) {
-	window.open(ctx + "/downloadFile?url=" + encodeURIComponent(url) + "&name=" + encodeURIComponent(name));
+    window.open(ctx + "/downloadFile?url=" + encodeURIComponent(url) + "&name=" + encodeURIComponent(name));
 }
 
 
 
 // form转json
 function form2JsonString(formId) {
-	let fm = formId.startsWith('#') ? formId : ('#' + formId);
-	var paramArray = $(fm).serializeArray();
-	/* 请求参数转json对象 */
-	var jsonObj = {};
-	$(paramArray).each(function() {
-		jsonObj[this.name] = this.value;
-	});
-	return JSON.stringify(jsonObj);
+    let fm = formId.startsWith('#') ? formId : ('#' + formId);
+    var paramArray = $(fm).serializeArray();
+    /* 请求参数转json对象 */
+    var jsonObj = {};
+    $(paramArray).each(function() {
+        jsonObj[this.name] = this.value;
+    });
+    return JSON.stringify(jsonObj);
 
 }
 
 var loaded;
 function autoUpdate(url) {
-	if (confirm(commonStr.confirmUpdate)) {
-		loaded = layer.load();
-		$.ajax({
-			type: 'POST',
-			url: ctx + '/api/autoUpdate',
-			data: {
-				url: url
-			},
-			dataType: 'json',
-			success: function(data) {
-				if (!data.success) {
-					layer.close(loaded);
-					layer.alert(data.msg);
-					return;
-				}
+    if (confirm(commonStr.confirmUpdate)) {
+        loaded = layer.load();
+        $.ajax({
+            type: 'POST',
+            url: ctx + '/api/autoUpdate',
+            data: {
+                url: url
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (!data.success) {
+                    layer.close(loaded);
+                    layer.alert(data.msg);
+                    return;
+                }
 
-				setTimeout(function() {
-					layer.close(loaded);
-					layer.alert(commonStr.updateOver);
-				}, 10000)
+                setTimeout(function() {
+                    layer.close(loaded);
+                    layer.alert(commonStr.updateOver);
+                }, 10000)
 
 
-			},
-			error: function() {
-				setTimeout(function() {
-					layer.close(loaded);
-					layer.alert(commonStr.updateOver);
-				}, 10000)
-			}
-		});
-	}
+            },
+            error: function() {
+                setTimeout(function() {
+                    layer.close(loaded);
+                    layer.alert(commonStr.updateOver);
+                }, 10000)
+            }
+        });
+    }
 
 }
 
@@ -328,28 +328,28 @@ function autoUpdate(url) {
 
 
 function setParamOrder(id, seq) {
-	if (seq == -1) {
-		// 前移
-		var prev = $("#" + id).prev();
-		$("#" + id).after(prev);
-	} else {
-		// 后移
-		var next = $("#" + id).next();
-		$("#" + id).before(next);
-	}
+    if (seq == -1) {
+        // 前移
+        var prev = $("#" + id).prev();
+        $("#" + id).after(prev);
+    } else {
+        // 后移
+        var next = $("#" + id).next();
+        $("#" + id).before(next);
+    }
 }
 
 // 显示载入框
 var loadIndex;
 function showLoad() {
-	loadIndex = layer.load();
+    loadIndex = layer.load();
 }
 function closeLoad() {
-	layer.close(loadIndex);
+    layer.close(loadIndex);
 }
 
 // 显示使用流程
 function showHelp() {
-	window.open('https://apisix.apache.org/docs/apisix/getting-started/README/');
+    window.open('https://apisix.apache.org/docs/apisix/getting-started/README/');
 }
 

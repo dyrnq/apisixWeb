@@ -22,12 +22,12 @@ $("#div_CA").hide();
 
 
 var demo3 = xmSelect.render({
-	el: '#demo3',
-	radio: true,
-	name: 'dnsapi',
-	filterable: true,
-	clickClose: true,
-	data: dnsapiData
+    el: '#demo3',
+    radio: true,
+    name: 'dnsapi',
+    filterable: true,
+    clickClose: true,
+    data: dnsapiData
 })
 
 
