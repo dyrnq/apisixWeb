@@ -6,6 +6,9 @@ import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.utils.JwtUtils;
 import com.dyrnq.utils.VersionUtils;
+import freemarker.template.Configuration;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 import io.jsonwebtoken.Claims;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack.ONode;
@@ -20,6 +23,7 @@ import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
 import org.noear.solon.i18n.I18nUtil;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
+import org.noear.solon.view.freemarker.FreemarkerRender;
 import org.noear.wood.WoodConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,24 +38,45 @@ public class WebApp {
         Solon.start(WebApp.class, args, app -> {
             //LogUtil.globalSet(new LogUtilToSlf4j());
             //app.onError(e -> logger.error(e.getMessage(), e));
+            app.context().getBeanAsync(FreemarkerRender.class, e -> {
+                freemarker.template.Configuration cfg = e.getProvider();
+                try {
+                    //cfg.setClassicCompatible(false);
+                    //cfg.setStrictSyntaxMode(false);
+                    cfg.setSetting(Configuration.NUMBER_FORMAT_KEY, "0.##");
+                    cfg.setSetting(Configuration.DEFAULT_ENCODING_KEY, "UTF-8");
+                    cfg.setSetting(Configuration.TEMPLATE_UPDATE_DELAY_KEY, "0");
+                    cfg.setSetting(Configuration.CACHE_STORAGE_KEY, "strong:20, soft:250");
+                    // rethrow,debug,html_debug,ignore;
+                    if (Solon.cfg().isDebugMode()) {
+                        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
+                    } else {
+                        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+                    }
+                } catch (TemplateException ex) {
+                    logger.error(ex.getMessage(), ex);
+                }
 
-            app.before(c -> {
+            });
+            app.filter((c, chain) -> {
                 String path = c.path();
                 while (path.contains("//")) {
                     path = path.replace("//", "/");
                 }
                 c.pathNew(path);
+                chain.doFilter(c);
             });
 
-            app.onEvent(freemarker.template.Configuration.class, cfg -> {
-                cfg.setSetting("classic_compatible", "true");
-                cfg.setSetting("number_format", "0.##");
-                cfg.setSetting("default_encoding", "UTF-8");
-                cfg.setSetting("template_update_delay", "0");
-                cfg.setSetting("cache_storage", "soft:1");
-                //cfg.setSetting("strict_syntax","false");
 
-            });
+//            app.onEvent(freemarker.template.Configuration.class, cfg -> {
+//                cfg.setSetting("classic_compatible", "true");
+//                cfg.setSetting("number_format", "0.##");
+//                cfg.setSetting("default_encoding", "UTF-8");
+//                cfg.setSetting("template_update_delay", "0");
+//                cfg.setSetting("cache_storage", "soft:1");
+//                //cfg.setSetting("strict_syntax","false");
+//
+//            });
 
 
             WoodConfig.isUsingValueExpression = false;

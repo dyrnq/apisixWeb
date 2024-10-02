@@ -17,9 +17,9 @@
 
 	// 翻页参数
 	var page = {
-			count : '${page.count!0}',
-			curr : '${page.curr!1}',
-			limit : '${page.limit!10}'
+			count : '<#if page??>${page.count}<#else>0</#if>',
+			curr : '<#if page??>${page.curr}<#else>1</#if>',
+			limit : '<#if page??>${page.limit}<#else>10</#if>',
 	};
 
 	var cfg = ${cfg};
