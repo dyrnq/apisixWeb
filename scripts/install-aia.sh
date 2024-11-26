@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-[ "$(uname -m)" = "x86_64" ] && arch="amd64";
-[ "$(uname -m)" = "aarch64" ] && arch="arm64";
+if [ "$(uname -m)" = "x86_64" ]; then arch="amd64"; fi
+if [ "$(uname -m)" = "aarch64" ]; then arch="arm64"; fi
 url="https://github.com/dyrnq/aia/releases/download/v0.0.4/aia-linux-${arch}"
 # url=${url/github.com/mirror.ghproxy.com/github.com}
 url=${url/github.com/files.m.daocloud.io/github.com}
