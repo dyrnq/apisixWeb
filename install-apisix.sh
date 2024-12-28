@@ -198,6 +198,7 @@ docker run -d --name apisix \
 --net host \
 -u root \
 --ulimit nofile=40000:40000 \
+-v /etc/localtime:/etc/localtime:ro \
 -v ${apisix_home}/dhparam.pem:/etc/ssl/certs/dhparam.pem \
 -v ${apisix_home}/conf/config.yaml:/usr/local/apisix/conf/config.yaml  \
 ${apisix_image}
