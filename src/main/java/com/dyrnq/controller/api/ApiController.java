@@ -81,7 +81,7 @@ public class ApiController extends BaseController {
             map.put("rawData", jsonStr);
             return Result.succeed(map);
         } catch (Exception e) {
-            if("pluginMetadata".equalsIgnoreCase(cls) && StringUtils.contains(e.getMessage(),"Key not found")){
+            if("pluginMetadata".equalsIgnoreCase(cls) && StringUtils.containsAny(e.getMessage(),"Key not found","500")){
                 map.put("rawData", "");
                 //logger.error(e.getMessage(), e);
                 return Result.succeed(map);
