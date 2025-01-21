@@ -3,12 +3,18 @@ import com.dyrnq.apisix.domain.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Map;
 
 public class ApisixClientListTest extends BaseJunit {
 
     @Test
     public void test_listPlugins() throws ApisixSDKException {
         client.listPlugins();
+    }
+
+    @Test
+    public void test_listPlugins_subsystem() throws ApisixSDKException {
+        client.listPlugins("stream");
     }
 
 
@@ -73,6 +79,12 @@ public class ApisixClientListTest extends BaseJunit {
     @Test
     public void test_listServices() throws ApisixSDKException {
         List<Service> listRoute = client.listServices();
+    }
+
+    @Test
+    public void test_getPluginMetadata() throws ApisixSDKException{
+        client.putPluginMetadataRaw("authz-casbin","{\"model\": \"\",\"policy\":\"\"}");
+        Map map = client.getPluginMetadata("authz-casbin");
     }
 
 }

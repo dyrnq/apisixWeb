@@ -67,6 +67,10 @@ public class AdminClient extends BaseClient {
         return new PluginClient(getProfile()).list();
     }
 
+    public List<Map> listPlugins(String subsystem) throws ApisixSDKException {
+        return new PluginClient(getProfile()).list(subsystem);
+    }
+
 
     public List<GlobalRule> listGlobalRules() throws ApisixSDKException {
         return new GlobalRuleClient(getProfile()).list();

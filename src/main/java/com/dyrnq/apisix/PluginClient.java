@@ -1,6 +1,7 @@
 package com.dyrnq.apisix;
 
 
+import cn.hutool.core.util.StrUtil;
 import com.dyrnq.apisix.domain.Plugin;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
@@ -49,13 +50,20 @@ public class PluginClient extends BaseClient implements Stub<Map> {
     public void del(String id) throws ApisixSDKException {
         throw new ApisixSDKException("not support");
     }
-
     public List<Map> list() throws ApisixSDKException {
+        return list(null);
+    }
+
+    public List<Map> list(String subsystem) throws ApisixSDKException {
         Map<String, Map> rsp = null;
         try {
             Type type = new TypeToken<Map<String, Map>>() {
             }.getType();
-            rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PluginClient.PATH, "all=true"), type);
+            String param="all=true";
+            if(StrUtil.isNotBlank(subsystem)){
+                param=param+"&subsystem="+subsystem;
+            }
+            rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PluginClient.PATH, param), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
                 throw e;
