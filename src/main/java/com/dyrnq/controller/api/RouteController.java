@@ -77,7 +77,7 @@ public class RouteController extends ApiController {
                 try {
                     route = getAdminClient().getRoute(id);
                 } catch (Exception e) {
-                    logger.warn(e.getMessage(), e);
+                    logger.warn(e.getMessage());
                 }
 
             }
