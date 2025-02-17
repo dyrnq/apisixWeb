@@ -1,5 +1,6 @@
 package com.dyrnq.controller.api;
 
+import cn.hutool.core.util.StrUtil;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.StreamRoute;
 import com.dyrnq.apisix.response.Multi;
@@ -12,6 +13,7 @@ import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,11 +44,27 @@ public class StreamRouteController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit) {
+    public PageResult query(Context ctx, String page, String limit, String id) {
         try {
-            Multi<StreamRoute> rsp = getAdminClient().queryStreamRoutes(page, limit);
-            List<StreamRoute> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result, rsp.getTotal());
+
+            StreamRoute route = null;
+            if (StrUtil.isNotBlank(id)) {
+                try {
+                    route = getAdminClient().getStreamRoute(id);
+                } catch (Exception e) {
+                    logger.warn(e.getMessage());
+                }
+
+            }
+            if (route == null) {
+                Multi<StreamRoute> rsp = getAdminClient().queryStreamRoutes(page, limit);
+                List<StreamRoute> result = getAdminClient().arrangeMulti(rsp.getNodes());
+                return PageResult.succeed(result, rsp.getTotal());
+            } else {
+                List<StreamRoute> result = new ArrayList<>();
+                result.add(route);
+                return PageResult.succeed(result, new Integer(1));
+            }
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
             return PageResult.failure(e.getMessage());
