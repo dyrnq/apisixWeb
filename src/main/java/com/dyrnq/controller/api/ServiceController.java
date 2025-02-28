@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@Mapping(path = "api/service", produces = "application/json;charset=UTF-8")
+@Mapping("api/service")
 public class ServiceController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(ServiceController.class);
 

@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@Mapping(path = "api/upstream", produces = "application/json;charset=UTF-8")
+@Mapping("api/upstream")
 public class UpstreamController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(UpstreamController.class);
 

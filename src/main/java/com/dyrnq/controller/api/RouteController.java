@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@Mapping(path = "api/route", produces = "application/json;charset=UTF-8")
+@Mapping("api/route")
 public class RouteController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(RouteController.class);
 

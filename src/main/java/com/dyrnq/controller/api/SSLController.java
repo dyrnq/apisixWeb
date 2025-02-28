@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-@Mapping(path = "api/ssl", produces = "application/json;charset=UTF-8")
+@Mapping("api/ssl")
 @Controller
 public class SSLController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(SSLController.class);

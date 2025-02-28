@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-@Mapping(path = "api/secret", produces = "application/json;charset=UTF-8")
+@Mapping("api/secret")
 @Controller
 public class SecretController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(SecretController.class);

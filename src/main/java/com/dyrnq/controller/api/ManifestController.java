@@ -16,7 +16,7 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Mapping(path = "api/manifest", produces = "application/json;charset=UTF-8")
+@Mapping("api/manifest")
 @Controller
 public class ManifestController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(ManifestController.class);

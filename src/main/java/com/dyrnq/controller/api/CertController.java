@@ -31,7 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapping(path = "api/cert", produces = "application/json;charset=UTF-8")
+@Mapping("api/cert")
 @Controller
 public class CertController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(CertController.class);
