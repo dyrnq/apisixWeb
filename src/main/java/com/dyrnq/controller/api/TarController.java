@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-@Mapping("api/tar")
+@Mapping(path = "api/tar", produces = "application/json;charset=UTF-8")
 @Controller
 public class TarController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(TarController.class);

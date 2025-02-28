@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-@Mapping("api/pluginConfig")
+@Mapping(path = "api/pluginConfig", produces = "application/json;charset=UTF-8")
 @Controller
 public class PluginConfigController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(PluginConfigController.class);

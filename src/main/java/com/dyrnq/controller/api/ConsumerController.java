@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Map;
 
-@Mapping("api/consumer")
+@Mapping(path = "api/consumer", produces = "application/json;charset=UTF-8")
 @Controller
 public class ConsumerController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(ConsumerController.class);

@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-@Mapping("api/globalRule")
+@Mapping(path = "api/globalRule", produces = "application/json;charset=UTF-8")
 @Controller
 public class GlobalRuleController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(GlobalRuleController.class);

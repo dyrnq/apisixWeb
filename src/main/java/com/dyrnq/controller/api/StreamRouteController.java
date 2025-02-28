@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
-@Mapping("api/streamRoute")
+@Mapping(path = "api/streamRoute", produces = "application/json;charset=UTF-8")
 public class StreamRouteController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(StreamRouteController.class);
 

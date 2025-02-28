@@ -8,7 +8,7 @@ import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Mapping("api/plugin")
+@Mapping(path = "api/plugin", produces = "application/json;charset=UTF-8")
 @Controller
 public class PluginController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(PluginController.class);

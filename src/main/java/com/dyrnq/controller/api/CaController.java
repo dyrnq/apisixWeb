@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapping("api/ca")
+@Mapping(path = "api/ca", produces = "application/json;charset=UTF-8")
 @Controller
 public class CaController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(CaController.class);

@@ -5,7 +5,10 @@ import com.dyrnq.apisix.agentclient.AgentClient;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.InstMapper;
 import com.dyrnq.model.Inst;
-import org.noear.solon.annotation.*;
+import org.noear.solon.annotation.Controller;
+import org.noear.solon.annotation.Inject;
+import org.noear.solon.annotation.Mapping;
+import org.noear.solon.annotation.Path;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.MethodType;
 import org.noear.solon.core.handle.Result;
@@ -18,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapping("api/inst")
+@Mapping(path = "api/inst", produces = "application/json;charset=UTF-8")
 @Controller
 public class InstController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(InstController.class);

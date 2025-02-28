@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapping("api/pluginMetadata")
+@Mapping(path = "api/pluginMetadata", produces = "application/json;charset=UTF-8")
 @Controller
 public class PluginMetadataController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(PluginMetadataController.class);

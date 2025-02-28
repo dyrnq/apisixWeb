@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Mapping("api")
+@Mapping(path = "api", produces = "application/json;charset=UTF-8")
 @Controller
 public class ApiController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(ApiController.class);

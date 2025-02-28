@@ -25,7 +25,7 @@ import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-@Mapping("api/deploy")
+@Mapping(path = "api/deploy", produces = "application/json;charset=UTF-8")
 @Controller
 public class DeployController extends ApiController {
 
