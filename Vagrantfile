@@ -7,7 +7,7 @@
 # you're doing.
 
 Vagrant.configure("2") do |config|
-    config.vm.box = "ubuntu/focal64"
+    config.vm.box = "ubuntu/jammy64"
 
     config.vm.box_check_update = false
     config.ssh.insert_key = false
@@ -38,12 +38,18 @@ Vagrant.configure("2") do |config|
             machine.vm.provision "shell", inline: <<-SHELL
                 echo "root:vagrant" | sudo chpasswd
                 timedatectl set-timezone "Asia/Shanghai"
-                curl -fsSL https://mirror.ghproxy.com/https://github.com/dyrnq/install-docker/raw/main/install-docker.sh | bash -s docker \
+                curl -fsSL https://ghfast.top/https://github.com/dyrnq/install-docker/raw/main/install-docker.sh | bash -s docker \
                 --mirror tencent \
-                --version 25.0.4 \
-                --systemd-mirror ghproxy && \
+                --version 28.0.1 \
+                --systemd-mirror https://ghfast.top && \
                 usermod -aG docker vagrant
                 docker ps
+
+                cat /etc/docker/daemon.json && \
+                sed -i "s@https://docker.mirrors.ustc.edu.cn@https://docker.m.daocloud.io@g" /etc/docker/daemon.json && \
+                systemctl restart docker && \
+                cat /etc/docker/daemon.json
+
             SHELL
         end
     end
