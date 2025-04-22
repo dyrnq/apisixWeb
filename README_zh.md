@@ -190,3 +190,16 @@ java -cp apisixWeb.jar cli jwt
 | --spring.datasource.url      | 数据源 url                         |                 |
 | --spring.datasource.username | 数据源 username                    |                 |
 | --spring.datasource.password | 数据源 password                    |                 |
+
+Supports environment variables
+
+| Variable Name                        | Meaning                                       | Default Value     |
+|--------------------------------------|-----------------------------------------------|-------------------|
+| SERVER_PORT                          | Server port                                   | 8080              |
+| PROJECT_HOME                         | Data directory                                | $HOME/apisixWeb   |
+| SPRING_DATABASE_TYPE                 | Database type (h2, mysql, sqlite, postgresql) | h2                |
+| SPRING_DATASOURCE_URL                | Database URL                                  |                   |
+| SPRING_DATASOURCE_USERNAME           | Database username                             |                   |
+| SPRING_DATASOURCE_PASSWORD           | Database password                             |                   |
+| JWT_SECRET                           | jwt secret                                    |                   |
+| SEVER_SESSION_TIMEOUT                | session timeout                               | 7200              |
