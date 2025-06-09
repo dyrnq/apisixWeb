@@ -18,10 +18,10 @@ var dropdown = layui.dropdown;
     viewEditor.resize();
 
 
-    var default_limt = localStorage.getItem('pageLimit');
+    var default_limit = localStorage.getItem('pageLimit');
 
-    if ('' == default_limt || null == default_limt || undefined == default_limt) {
-        default_limt = cfg.pageLimit;
+    if ('' == default_limit || null == default_limit || undefined == default_limit) {
+        default_limit = cfg.pageLimit;
     }
 
 function cleanData(d){
@@ -199,7 +199,7 @@ if (windowWidth <= 1900) {
         , url: ctx + '/api/route' //数据接口
         , title: '用户表'
         , page: true //开启分页
-        , limit: default_limt
+        , limit: default_limit
         , limits: cfg.pageLimits
         , toolbar: '#toolbarDemo' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
         , defaultToolbar: [
