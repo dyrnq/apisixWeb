@@ -65,7 +65,10 @@ docker run \
 -v $HOME/apisixWeb:/app/apisixWeb \
 -p 8080:8080 \
 -e TZ="Asia/Shanghai" \
--e JAVA_OPTS="-server -Xms512m -Xmx512m -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai -Djava.net.preferIPv4Stack=true --server.port=8080 --server.session.timeout=172800 --jwt.secret=IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==" \
+-e SERVER_PORT="8080" \
+-e SERVER_SESSION_TIMEOUT="172800" \
+-e JWT_SECRET="IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==" \
+-e JAVA_OPTS="-server -Xms512m -Xmx512m -Djava.awt.headless=true -Dfile.encoding=UTF-8 -Duser.timezone=Asia/Shanghai -Djava.net.preferIPv4Stack=true" \
 dyrnq/apisixweb:latest-jre21
 ```
 
