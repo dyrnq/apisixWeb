@@ -64,8 +64,8 @@ chmod +x ./docker/rootfs/etc/s6-overlay/s6-rc.d/apisixweb/run
 line="${base_image}"
 
 echo "base_image=${base_image}"
-#image=$(awk --field-separator=":" '{print $1}' <<< "${line}")
-tag=$(awk --field-separator=":" '{print $2}' <<< "${line}")
+#image=$(awk -F: '{print $1}' <<< "${line}")
+tag=$(awk -F: '{print $2}' <<< "${line}")
 dockerfile="${line}_Dockerfile"
 
 
