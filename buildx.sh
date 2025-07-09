@@ -76,23 +76,23 @@ echo "$short_sha"
 
 latest_tag="";
 
-if [ "$tag" = "21-jre-jammy"  ]; then
+if [ "$tag" = "21-jre-noble"  ]; then
     latest_tag="--tag $repo/$image_name:latest"
     latest_tag="${latest_tag} --tag $repo/$image_name:latest-jre21"
     latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jre21"
-elif [ "$tag" = "11-jre-jammy"  ]; then
+elif [ "$tag" = "11-jre-noble"  ]; then
     latest_tag="--tag $repo/$image_name:latest-jre11"
     latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jre11"
-elif [ "$tag" = "8-jre-jammy"  ]; then
+elif [ "$tag" = "8-jre-noble"  ]; then
     latest_tag="--tag $repo/$image_name:latest-jre8"
     latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jre8"
-elif [ "$tag" = "21-jdk-jammy"  ]; then
+elif [ "$tag" = "21-jdk-noble"  ]; then
     latest_tag="--tag $repo/$image_name:latest-jdk21"
     latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jdk21"
-elif [ "$tag" = "11-jdk-jammy"  ]; then
+elif [ "$tag" = "11-jdk-noble"  ]; then
     latest_tag="--tag $repo/$image_name:latest-jdk11"
     latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jdk11"
-elif [ "$tag" = "8-jdk-jammy"  ]; then
+elif [ "$tag" = "8-jdk-noble"  ]; then
     latest_tag="--tag $repo/$image_name:latest-jdk8"
     latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jdk8"
 fi
