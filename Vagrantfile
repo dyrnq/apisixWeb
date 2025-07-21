@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
                 echo "root:vagrant" | sudo chpasswd
                 timedatectl set-timezone "Asia/Shanghai"
                 curl -fsSL https://ghfast.top/https://github.com/dyrnq/install-docker/raw/main/install-docker.sh | bash -s docker \
-                --mirror tencent \
+                --mirror aliyun \
                 --version 28.0.1 \
                 --systemd-mirror https://ghfast.top && \
                 usermod -aG docker vagrant
