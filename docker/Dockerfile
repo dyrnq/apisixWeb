@@ -33,6 +33,7 @@ RUN \
     jq \
     && \
     localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+    ( if id ubuntu 2>/dev/null; then  userdel -r ubuntu; fi ) && \
     groupadd -g 1000 app && useradd -d /app -u 1000 -g 1000 -m -s /bin/bash app; \
     rm -rf /var/lib/apt/lists/*; \
     ARCH="$(uname -m)"; \
