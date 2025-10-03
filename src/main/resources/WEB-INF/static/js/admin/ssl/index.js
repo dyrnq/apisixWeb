@@ -260,7 +260,7 @@ layui.use(function () {
         , totalRow: false //开启合计行
         , cols: [[ //表头
             {type: 'checkbox', fixed: 'left'}
-            , {field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：'}
+            , {field: 'id', title: 'id', width: 100, sort: true, totalRowText: '合计：'}
             , {field: 'type', title: 'type', width: 80}
             , {field: 'snis', title: 'snis', width: 200}
             , {
@@ -278,7 +278,7 @@ layui.use(function () {
                 templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"
             }
             , {field: 'status', title: 'status', width: 200}
-            , {field: 'upstream', title: 'operation', fixed: 'right', templet: addLink}
+            , {field: 'upstream', title: 'operation', templet: addLink}
 
         ]]
         , done: function (res, curr, count) {
