@@ -241,6 +241,39 @@ layui.use(function () {
      return false; // 阻止默认 form 跳转
    });
 
+  // 状态 - 开关操作
+  form.on('switch(demo-templet-status)', function(obj){
+    var id = this.value;
+    var name = this.name;
+
+    url=ctx + '/api/ssl/disable'
+    if (obj.elem.checked === true){
+        url=ctx + '/api/ssl/enable'
+    }else{
+        url=ctx + '/api/ssl/disable'
+    }
+    console.log(url);
+    console.log(id + ' ' + name + ': '+ obj.elem.checked, obj.othis);
+    formData = encodeURIComponent('id') + '=' + encodeURIComponent(id);
+    $.ajax({
+        type : 'post',
+        url : url,
+        content: 'json',
+        data: formData,
+        success : function(data) {
+            if(data.code=='200'){
+                table.reload('demo',{});
+            } else {
+                layer.msg(data.description);
+            }
+        },
+        error : function() {
+            layer.alert(commonStr.errorInfo);
+        }
+    });
+
+  });
+
 
     //执行一个 table 实例
     table.render({
@@ -277,7 +310,7 @@ layui.use(function () {
                 width: 300,
                 templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>"
             }
-            , {field: 'status', title: 'status', width: 200}
+            , {field: 'status', title: 'status', width: 80, templet: '<input type="checkbox" name="status" value="{{= d.id }}" title="开|" lay-skin="switch" lay-filter="demo-templet-status" {{= d.status == 1 ? "checked" : "" }}>'}
             , {field: 'upstream', title: 'operation', templet: addLink}
 
         ]]
