@@ -88,7 +88,7 @@ public class CaController extends ApiController {
             List<Map<String, String>> o = new ArrayList<>();
             for (Ca inst : p) {
                 Map<String, String> m = new HashMap<>();
-                m.put("title", inst.getTitle());
+                m.put("title", StringUtils.isNotBlank(inst.getTitle()) ? inst.getTitle() : inst.getId());
                 m.put("id", inst.getId());
                 o.add(m);
             }
