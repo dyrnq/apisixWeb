@@ -12,7 +12,8 @@ import okhttp3.Headers;
 import okhttp3.Headers.Builder;
 import okhttp3.Response;
 import org.apache.commons.lang3.StringUtils;
-import org.noear.snack.ONode;
+//import org.noear.snack.ONode;
+import org.noear.snack4.ONode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +106,7 @@ public abstract class BaseClient {
                 Matcher matcher = pattern.matcher(strResp);
 
                 if (matcher.find()) {
-                    ONode o = ONode.loadStr(strResp);
+                    ONode o = ONode.ofJson(strResp);
                     String errorMsg = o.get("error_msg").toString();
                     throw new ApisixSDKException(errorMsg, String.valueOf(okRsp.code()));
                 } else {
