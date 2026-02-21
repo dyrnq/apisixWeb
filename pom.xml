@@ -38,18 +38,9 @@
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-web</artifactId>
-<!--            <exclusions>-->
-<!--                <exclusion>-->
-<!--                    <groupId>org.noear</groupId>-->
-<!--                    <artifactId>solon-boot-smarthttp</artifactId>-->
-<!--                </exclusion>-->
-<!--            </exclusions>-->
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.noear</groupId>-->
-<!--            <artifactId>solon-boot-jlhttp</artifactId>-->
-<!--        </dependency>-->
+
         <dependency>
             <groupId>org.noear</groupId>
             <artifactId>solon-view-freemarker</artifactId>
@@ -69,7 +60,12 @@
             <version>1.79</version>
         </dependency>
 
-
+        <!--Lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>info.picocli</groupId>
             <artifactId>picocli</artifactId>
@@ -85,10 +81,7 @@
             <artifactId>solon-scheduling-simple</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.noear</groupId>-->
-<!--            <artifactId>solon.sessionstate.jwt</artifactId>-->
-<!--        </dependency>-->
+
 
         <dependency>
             <groupId>org.noear</groupId>
@@ -115,21 +108,7 @@
             <artifactId>solon-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--
-        <dependency>
-            <groupId>org.noear</groupId>
-            <artifactId>solonhat-smartdoc</artifactId>
-            <version>1.0.0-m1</version>
-            <scope>test</scope>
-        </dependency>
 
-        <dependency>
-            <groupId>org.antlr</groupId>
-            <artifactId>antlr4-runtime</artifactId>
-            <version>4.7.2</version>
-            <scope>test</scope>
-        </dependency>
-    -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-compress</artifactId>
@@ -384,21 +363,7 @@
 
     <build>
         <plugins>
-            <!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>2.1.0</version>
-                <executions>
-                    <execution>
-                        <id>download-licenses</id>
-                        <goals>
-                            <goal>download-licenses</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            -->
+
 
             <plugin>
                 <groupId>com.rodiontsev.maven.plugins</groupId>
@@ -449,11 +414,7 @@
             </plugin>
 
 
-            <plugin>
-                <groupId>org.noear</groupId>
-                <artifactId>wood-maven-plugin</artifactId>
-                <version>1.1.0</version>
-            </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -474,34 +435,15 @@
                     <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
-
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <groupId>org.noear</groupId>
+                <artifactId>solon-maven-plugin</artifactId>
                 <configuration>
-                    <finalName>${project.name}-${project.version}</finalName>
-                    <appendAssemblyId>false</appendAssemblyId>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.dyrnq.WebApp</mainClass>
-                        </manifest>
-                    </archive>
+                    <mainClass>com.dyrnq.WebApp</mainClass>
                 </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
+
+
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>license-maven-plugin</artifactId>
