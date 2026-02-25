@@ -76,29 +76,29 @@ echo "$short_sha"
 
 latest_tag="";
 
-if [ "$tag" = "21-jre-noble"  ]; then
-    latest_tag="--tag $repo/$image_name:latest"
-    latest_tag="${latest_tag} --tag $repo/$image_name:latest-jre21"
-    latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jre21"
-elif [ "$tag" = "11-jre-noble"  ]; then
-    latest_tag="--tag $repo/$image_name:latest-jre11"
-    latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jre11"
-elif [ "$tag" = "8-jre-noble"  ]; then
-    latest_tag="--tag $repo/$image_name:latest-jre8"
-    latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jre8"
-elif [ "$tag" = "21-jdk-noble"  ]; then
-    latest_tag="--tag $repo/$image_name:latest-jdk21"
-    latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jdk21"
-elif [ "$tag" = "11-jdk-noble"  ]; then
-    latest_tag="--tag $repo/$image_name:latest-jdk11"
-    latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jdk11"
-elif [ "$tag" = "8-jdk-noble"  ]; then
-    latest_tag="--tag $repo/$image_name:latest-jdk8"
-    latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-jdk8"
-fi
+case "$tag" in
+  "21-jre-noble")
+    latest_tag="--tag $repo/$image_name:latest --tag $repo/$image_name:latest-jre21 "
+    ;;
+  "11-jre-noble")
+    latest_tag="--tag $repo/$image_name:latest-jre11 "
+    ;;
+  "8-jre-noble")
+    latest_tag="--tag $repo/$image_name:latest-jre8 "
+    ;;
+  "21-jdk-noble")
+    latest_tag="--tag $repo/$image_name:latest-jdk21 "
+    ;;
+  "11-jdk-noble")
+    latest_tag="--tag $repo/$image_name:latest-jdk11 "
+    ;;
+  "8-jdk-noble")
+    latest_tag="--tag $repo/$image_name:latest-jdk8 "
+    ;;
+esac
 
 latest_tag="${latest_tag} --tag $repo/$image_name:latest-${tag}"
-latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-${tag}"
+#latest_tag="${latest_tag} --tag $repo/$image_name:git-${short_sha}-${tag}"
 
 echo "${latest_tag}"
 sed -e "s@__BASE_IMAGE__@$line@g" ./docker/Dockerfile > ./docker/${dockerfile}
