@@ -34,23 +34,8 @@ Vagrant.configure("2") do |config|
                 vb.customize ["modifyvm", :id, "--cpus", "2"]
                 vb.customize ["modifyvm", :id, "--memory", "3072"]
             end
+            machine.vm.provision "shell", path: "scripts/provision.sh"
 
-            machine.vm.provision "shell", inline: <<-SHELL
-                echo "root:vagrant" | sudo chpasswd
-                timedatectl set-timezone "Asia/Shanghai"
-                curl -fsSL https://ghfast.top/https://github.com/dyrnq/install-docker/raw/main/install-docker.sh | bash -s docker \
-                --mirror aliyun \
-                --version 28.0.1 \
-                --systemd-mirror https://ghfast.top && \
-                usermod -aG docker vagrant
-                docker ps
-
-                cat /etc/docker/daemon.json && \
-                sed -i "s@https://docker.mirrors.ustc.edu.cn@https://docker.m.daocloud.io@g" /etc/docker/daemon.json && \
-                systemctl restart docker && \
-                cat /etc/docker/daemon.json
-
-            SHELL
         end
     end
 
