@@ -1,4 +1,5 @@
-package cli;
+package com.dyrnq.apisix.cli;
+
 
 public class CommonOptions {
 }

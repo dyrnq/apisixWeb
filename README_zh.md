@@ -52,7 +52,7 @@ apisixWeb是一个Apisix的webui界面，该项目使用apisix的管理API（即
 mkdir -p $HOME/apisixWeb
 chown -R 1000:1000 $HOME/apisixWeb
 # 产生一个新的jwt secret 替换默认的 IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==
-docker run -it --rm --entrypoint="" dyrnq/apisixweb:latest-jre21 bash -c "java -cp /app/apisixWeb.jar cli jwt"
+docker run -it --rm --entrypoint="" dyrnq/apisixweb:latest-jre21 bash -c "java -jar /app/apisixWeb.jar cli jwt"
 
 # 删除 旧的 apisixweb 容器
 docker rm -f apisixweb >/dev/null 2>&1

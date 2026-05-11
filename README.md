@@ -52,7 +52,7 @@ Inspired by [nginxWebUI](https://gitee.com/cym1102/nginxWebUI).
 mkdir -p $HOME/apisixWeb
 chown -R 1000:1000 $HOME/apisixWeb
 # gen a new jwt secret replace default IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==
-docker run -it --rm --entrypoint="" dyrnq/apisixweb:latest-jre21 bash -c "java -cp /app/apisixWeb.jar cli jwt"
+docker run -it --rm --entrypoint="" dyrnq/apisixweb:latest-jre21 bash -c "java -jar /app/apisixWeb.jar cli jwt"
 
 # rm old apisixweb continer
 docker rm -f apisixweb >/dev/null 2>&1

@@ -23,6 +23,11 @@ public class WebApp {
     public static void main(String[] args) {
         Solon.start(WebApp.class, args, app -> {
 
+            if (args.length > 0 && "cli".equals(args[0])) {
+                String[] cliArgs = java.util.Arrays.copyOfRange(args, 1, args.length);
+                System.exit(new picocli.CommandLine(new com.dyrnq.apisix.cli.CliMain()).execute(cliArgs));
+            }
+
             Set<String> allNodes = Solon.cfg().stringPropertyNames();
             for (String entry : allNodes) {
                 String envName1 = StringUtils.upperCase(StringUtils.replace(entry, "-", "").replace(".", "_"));

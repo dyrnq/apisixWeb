@@ -1,4 +1,5 @@
-package cli;
+package com.dyrnq.apisix.cli;
+
 
 
 import io.jsonwebtoken.Jwts;
@@ -17,7 +18,8 @@ public class Jwt extends CommonOptions implements Callable<Integer> {
 //        Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
         String jwtSecret = Encoders.BASE64.encode(Jwts.SIG.HS512.key().build().getEncoded());
         //System.out.println(jwtSecret);
-        System.out.println("--jwt.secret="+jwtSecret);
+        System.out.println("--jwt.secret=" + jwtSecret);
+        System.out.println("JWT_SECRET=" + jwtSecret);
         return 0;
     }
 }
