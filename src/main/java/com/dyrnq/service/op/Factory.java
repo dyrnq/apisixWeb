@@ -11,6 +11,10 @@ public class Factory {
         if (StringUtils.equalsIgnoreCase("ssl", cls)) {
             cls = "SSL";
         }
+        // 特殊处理credential
+        if (StringUtils.equalsIgnoreCase("credential", cls)) {
+            return new CredentialOp();
+        }
         Class c = null;
         try {
             c = Class.forName(Route.class.getPackage().getName() + "." + StringUtils.capitalize(cls));
@@ -51,6 +55,9 @@ public class Factory {
     }
 
     public static Sample createSample(String cls) {
+        if (StringUtils.equalsIgnoreCase("credential", cls)) {
+            return new CredentialOp();
+        }
         Class c = null;
         try {
             c = Class.forName(Route.class.getPackage().getName() + "." + StringUtils.capitalize(cls));
