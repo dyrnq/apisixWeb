@@ -87,25 +87,7 @@ layui.use(function () {
   //    var text = editor.getValue();
   //    formData['content'] = text;
   //
-  //    $.ajax({
-  //        type : 'POST',
-  //        url: ctx + '/api/deploy/'+u,
-  //        data : JSON.stringify(formData),
-  //        dataType : 'json',
-  //        contentType: 'application/json',
-  //        success : function(data) {
-  //            if(data.code=='200'){
-  //                layer.closeAll();
-  //                layer.msg(commonStr.success);
-  //                table.reload('demo',{});
-  //            } else {
-  //                layer.msg(data.description);
-  //            }
-  //        },
-  //        error : function() {
-  //            layer.alert(commonStr.errorInfo);
-  //        }
-  //    });
+
   //});
 
   $('#addOver').click(function () {

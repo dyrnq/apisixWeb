@@ -77,13 +77,17 @@ $(function () {
         const jsonData = jsyaml.load(text)
         const jsonText = JSON.stringify(jsonData, null, 2)
         editor.setValue(jsonText, -1)
-      } catch (error) {}
+      } catch (error) {
+        console.warn('YAML parse error:', error)
+      }
     } else if (/json/.test(modeName)) {
       try {
         const jsonObject = JSON.parse(text)
         const yamlText = jsyaml.dump(jsonObject)
         editor.setValue(yamlText, -1)
-      } catch (error) {}
+      } catch (error) {
+        console.warn('JSON parse error:', error)
+      }
     }
 
     var path = window.location.pathname

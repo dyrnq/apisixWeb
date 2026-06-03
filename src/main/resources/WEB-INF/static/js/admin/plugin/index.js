@@ -26,7 +26,7 @@ function init(d) {
       error: function () {},
     })
   } catch (error) {
-    // 处理错误的代码
+    console.warn('pluginMetadata error:', error)
   }
 }
 
