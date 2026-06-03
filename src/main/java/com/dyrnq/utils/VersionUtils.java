@@ -24,4 +24,14 @@ public class VersionUtils {
             return Constants.VERSION;
         }
     }
+
+    public static String getBuildDatetime() throws Exception {
+        try {
+            Properties properties = new Properties();
+            properties.load(ResourceUtil.getStreamSafe("build.info"));
+            return properties.getProperty("build.time");
+        } catch (Exception e) {
+            return "dev";
+        }
+    }
 }
