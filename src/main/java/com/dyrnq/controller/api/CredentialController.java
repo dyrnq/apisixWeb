@@ -2,7 +2,6 @@ package com.dyrnq.controller.api;
 
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Credential;
-import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.service.op.Factory;
 import java.util.List;
@@ -21,7 +20,8 @@ public class CredentialController extends ApiController {
     @Mapping("del")
     public Result del(Context ctx, String... id) {
         try {
-            Factory.create(Credential.class).del(getAdminClient(), id);
+            com.dyrnq.service.op.Op<Credential> op = new com.dyrnq.service.op.CredentialOp();
+            op.del(getAdminClient(), id);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
@@ -30,9 +30,9 @@ public class CredentialController extends ApiController {
     }
 
     @Mapping("put")
-    public Result put(Context ctx, String id, String rawData) {
+    public Result put(Context ctx, String username, String id, String rawData) {
         try {
-            getAdminClient().putCredentialRaw(id, rawData);
+            getAdminClient().putCredentialRaw(username, id, rawData);
             return Result.succeed("ok");
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
@@ -41,14 +41,13 @@ public class CredentialController extends ApiController {
     }
 
     @Mapping("")
-    public PageResult query(Context ctx, String page, String limit) {
+    public Result query(Context ctx) {
         try {
-            Multi<Credential> rsp = getAdminClient().queryCredentials(page, limit);
-            List<Credential> result = getAdminClient().arrangeMulti(rsp.getNodes());
-            return PageResult.succeed(result, rsp.getTotal());
+            List<Credential> result = getAdminClient().listAllCredentials();
+            return Result.succeed(result);
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
-            return PageResult.failure(e.getMessage());
+            return Result.failure(e.getMessage());
         }
     }
 }
