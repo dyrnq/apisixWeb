@@ -31,7 +31,7 @@ public class AgentClient {
     }
 
     public AgentClient(Integer connTimeout, Integer readTimeout, Integer writeTimeout) {
-        this(connTimeout, readTimeout, writeTimeout, false);
+        this(connTimeout, readTimeout, writeTimeout, true);
     }
 
     public AgentClient(Integer connTimeout, Integer readTimeout, Integer writeTimeout, boolean sslVerify) {
