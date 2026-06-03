@@ -14,8 +14,14 @@ function cleanData(d) {
 function addLink(d) {
   if (!d.id) return ''
   var username = d.username || ''
-  var editBtn = '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' + commonStr.edit + '</button>'
-  var delBtn = '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">' + commonStr.del + '</button>'
+  var editBtn =
+    '<button type="button" class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit">' +
+    commonStr.edit +
+    '</button>'
+  var delBtn =
+    '<button type="button" class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">' +
+    commonStr.del +
+    '</button>'
   return editBtn + '&nbsp;' + delBtn
 }
 
@@ -38,9 +44,15 @@ layui.use(function () {
   $('#add').click(function () {
     cleanData(false)
     layer.open({
-      type: 1, area: ['800px', '600px'], title: 'Add',
-      content: $('#windowDiv'), anim: 'slideRight',
-      shade: 0.6, shadeClose: true, maxmin: true, skin: 'layui-layer-win10',
+      type: 1,
+      area: ['800px', '600px'],
+      title: 'Add',
+      content: $('#windowDiv'),
+      anim: 'slideRight',
+      shade: 0.6,
+      shadeClose: true,
+      maxmin: true,
+      skin: 'layui-layer-win10',
     })
   })
 
@@ -54,7 +66,8 @@ layui.use(function () {
       text = JSON.stringify(jsonData, null, 2)
     }
     $.ajax({
-      type: 'POST', url: ctx + '/api/credential/put',
+      type: 'POST',
+      url: ctx + '/api/credential/put',
       contentType: 'application/json',
       data: JSON.stringify({ username: username, id: id, rawData: text }),
       dataType: 'json',
@@ -67,33 +80,46 @@ layui.use(function () {
           layer.msg(data.description)
         }
       },
-      error: function () { layer.alert(commonStr.errorInfo) },
+      error: function () {
+        layer.alert(commonStr.errorInfo)
+      },
     })
   })
 
   $('#dropAll').click(function () {
     layer.confirm(commonStr.confirmClear, function (index) {
       $.ajax({
-        type: 'POST', url: ctx + '/api/credential/drop',
+        type: 'POST',
+        url: ctx + '/api/credential/drop',
         dataType: 'json',
         success: function (data) {
           if (data.code == 0 || data.code == 200) {
             layer.closeAll()
             layer.msg(commonStr.success)
             table.reload('demo', {})
-          } else { layer.msg(data.description) }
+          } else {
+            layer.msg(data.description)
+          }
         },
       })
     })
   })
 
   table.render({
-    elem: '#demo', height: 620,
+    elem: '#demo',
+    height: 620,
     url: ctx + '/api/credential',
-    title: 'Credential Table', page: true,
-    limit: default_limit, limits: cfg.pageLimits,
+    title: 'Credential Table',
+    page: true,
+    limit: default_limit,
+    limits: cfg.pageLimits,
     toolbar: '#toolbarDemo',
-    defaultToolbar: ['filter', 'exports', 'print', { title: '提示', layEvent: 'LAYTABLE_TIPS', icon: 'layui-icon-tips' }],
+    defaultToolbar: [
+      'filter',
+      'exports',
+      'print',
+      { title: '提示', layEvent: 'LAYTABLE_TIPS', icon: 'layui-icon-tips' },
+    ],
     totalRow: false,
     response: {
       statusCode: 200,
@@ -106,22 +132,30 @@ layui.use(function () {
         data: res.data,
       }
     },
-    cols: [[
-      { type: 'checkbox', fixed: 'left' },
-      { field: 'id', title: 'id', width: 120, sort: true, fixed: 'left' },
-      { field: 'username', title: 'consumer', width: 120 },
-      { field: 'name', title: 'name', width: 120 },
-      { field: 'desc', title: 'desc', width: 200 },
-      {
-        field: 'createTime', title: 'create_time', sort: false, width: 180,
-        templet: "<div>{{ layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss') }}</div>",
-      },
-      {
-        field: 'updateTime', title: 'update_time', sort: true, width: 180,
-        templet: "<div>{{ layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss') }}</div>",
-      },
-      { field: 'uri', title: 'operation', fixed: 'right', templet: addLink },
-    ]],
+    cols: [
+      [
+        { type: 'checkbox', fixed: 'left' },
+        { field: 'id', title: 'id', width: 120, sort: true, fixed: 'left' },
+        { field: 'username', title: 'consumer', width: 120 },
+        { field: 'name', title: 'name', width: 120 },
+        { field: 'desc', title: 'desc', width: 200 },
+        {
+          field: 'createTime',
+          title: 'create_time',
+          sort: false,
+          width: 180,
+          templet: "<div>{{ layui.util.toDateString(d.createTime*1000, 'yyyy-MM-dd HH:mm:ss') }}</div>",
+        },
+        {
+          field: 'updateTime',
+          title: 'update_time',
+          sort: true,
+          width: 180,
+          templet: "<div>{{ layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss') }}</div>",
+        },
+        { field: 'uri', title: 'operation', fixed: 'right', templet: addLink },
+      ],
+    ],
     done: function (res) {
       localStorage.setItem('pageLimit', table.getOptions('demo').limit)
     },
@@ -133,41 +167,54 @@ layui.use(function () {
       case 'clear':
         layer.confirm(commonStr.confirmClear, function (index) {
           $.ajax({
-            type: 'POST', url: ctx + '/api/credential/drop',
+            type: 'POST',
+            url: ctx + '/api/credential/drop',
             dataType: 'json',
             success: function (data) {
               if (data.code == 0 || data.code == 200) {
                 layer.closeAll()
                 layer.msg(commonStr.success)
                 table.reload('demo', {})
-              } else { layer.msg(data.description) }
+              } else {
+                layer.msg(data.description)
+              }
             },
           })
         })
         break
       case 'more':
         dropdown.render({
-          elem: this, align: 'right', style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);',
-          data: [
-            { title: commonStr.batchDelete, id: 'deleteSelected' },
-          ],
+          elem: this,
+          align: 'right',
+          style: 'box-shadow: 1px 1px 10px rgb(0 0 0 / 12%);',
+          data: [{ title: commonStr.batchDelete, id: 'deleteSelected' }],
           click: function (data) {
             if (data.id == 'deleteSelected') {
               var dataX = checkStatus.data
-              if (dataX.length === 0) { layer.msg(commonStr.pleaseSelect); return }
+              if (dataX.length === 0) {
+                layer.msg(commonStr.pleaseSelect)
+                return
+              }
               layer.confirm(commonStr.confirmBatchDelete, function (index) {
-                var ids = dataX.map(function (v) { return v.username + '/' + v.id })
+                var ids = dataX.map(function (v) {
+                  return v.username + '/' + v.id
+                })
                 $.ajax({
-                  url: ctx + '/api/credential/del', type: 'post',
+                  url: ctx + '/api/credential/del',
+                  type: 'post',
                   contentType: 'application/json',
                   data: JSON.stringify({ id: ids }),
                   success: function (d) {
                     if (d.code == '200') {
                       table.reload('demo', {})
                       layer.msg(commonStr.delSuccess)
-                    } else { layer.msg(d.description) }
+                    } else {
+                      layer.msg(d.description)
+                    }
                   },
-                  error: function () { layer.msg(commonStr.errorInfo) },
+                  error: function () {
+                    layer.msg(commonStr.errorInfo)
+                  },
                 })
                 layer.close(index)
               })
@@ -178,9 +225,15 @@ layui.use(function () {
       case 'add':
         cleanData(false)
         layer.open({
-          type: 1, area: ['800px', '600px'], title: 'Add',
-          content: $('#windowDiv'), anim: 'slideRight',
-          shade: 0.6, shadeClose: true, maxmin: true, skin: 'layui-layer-win10',
+          type: 1,
+          area: ['800px', '600px'],
+          title: 'Add',
+          content: $('#windowDiv'),
+          anim: 'slideRight',
+          shade: 0.6,
+          shadeClose: true,
+          maxmin: true,
+          skin: 'layui-layer-win10',
         })
         break
     }
@@ -192,16 +245,21 @@ layui.use(function () {
       case 'del':
         layer.confirm(commonStr.confirmDel, function (index) {
           $.ajax({
-            url: ctx + '/api/credential/del', type: 'post',
+            url: ctx + '/api/credential/del',
+            type: 'post',
             contentType: 'application/json',
             data: JSON.stringify({ id: [data.username + '/' + data.id] }),
             success: function (d) {
               if (d.code == '200') {
                 obj.del()
                 layer.msg(commonStr.delSuccess)
-              } else { layer.msg(d.description) }
+              } else {
+                layer.msg(d.description)
+              }
             },
-            error: function () { layer.msg(commonStr.errorInfo) },
+            error: function () {
+              layer.msg(commonStr.errorInfo)
+            },
           })
           layer.close(index)
         })
@@ -209,7 +267,8 @@ layui.use(function () {
       case 'edit':
         cleanData(true)
         $.ajax({
-          url: ctx + '/api/raw', type: 'post',
+          url: ctx + '/api/raw',
+          type: 'post',
           contentType: 'application/json',
           data: JSON.stringify({ id: data.username + '/' + data.id, cls: 'credential' }),
           success: function (d) {
@@ -224,13 +283,23 @@ layui.use(function () {
                 editor.setValue(d.data.rawData, -1)
               }
               layer.open({
-                type: 1, area: ['800px', '600px'], title: 'Edit',
-                content: $('#windowDiv'), anim: 'slideRight',
-                shade: 0.6, shadeClose: true, maxmin: true, skin: 'layui-layer-win10',
+                type: 1,
+                area: ['800px', '600px'],
+                title: 'Edit',
+                content: $('#windowDiv'),
+                anim: 'slideRight',
+                shade: 0.6,
+                shadeClose: true,
+                maxmin: true,
+                skin: 'layui-layer-win10',
               })
-            } else { layer.msg(d.description) }
+            } else {
+              layer.msg(d.description)
+            }
           },
-          error: function () { layer.msg(commonStr.errorInfo) },
+          error: function () {
+            layer.msg(commonStr.errorInfo)
+          },
         })
         break
     }
