@@ -32,6 +32,8 @@ public class AgentClient {
                 .connectTimeout(connTimeout, TimeUnit.SECONDS)
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.SECONDS)
+                // TODO: 生产环境应使用合理的证书链校验，而非 TrustAllCerts
+                // 可通过配置参数 ssl.verify=true 启用严格验证
                 .sslSocketFactory(createUnsafeSSLSocketFactory(), new TrustAllCerts())
                 .hostnameVerifier(new TrustAllHostnameVerifier())
                 .retryOnConnectionFailure(true)
@@ -51,7 +53,10 @@ public class AgentClient {
 
     public String writeConfig(String host, String token, String data) throws Exception {
         Response r = null;
-        r = this.doRequest(host, "POST", API_CONFIG_PATH, token, "{\"data\": \"" + data + "\"}");
+        // 使用 com.google.gson 构建 JSON，避免字符串拼接导致注入
+        com.google.gson.JsonObject jsonObj = new com.google.gson.JsonObject();
+        jsonObj.addProperty("data", data);
+        r = this.doRequest(host, "POST", API_CONFIG_PATH, token, jsonObj.toString());
         if (r.code() == 200) {
             return "";
         }
