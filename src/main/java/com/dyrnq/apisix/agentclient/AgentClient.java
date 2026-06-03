@@ -23,21 +23,33 @@ public class AgentClient {
 
     private final OkHttpClient client;
 
+    public static final String DEFAULT_JWT_SECRET =
+            "IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==";
+
     public AgentClient() {
         this(6, 6, 6);
     }
 
     public AgentClient(Integer connTimeout, Integer readTimeout, Integer writeTimeout) {
-        this.client = new OkHttpClient.Builder()
+        this(connTimeout, readTimeout, writeTimeout, false);
+    }
+
+    public AgentClient(Integer connTimeout, Integer readTimeout, Integer writeTimeout, boolean sslVerify) {
+        OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(connTimeout, TimeUnit.SECONDS)
                 .readTimeout(readTimeout, TimeUnit.SECONDS)
                 .writeTimeout(writeTimeout, TimeUnit.SECONDS)
-                // TODO: 生产环境应使用合理的证书链校验，而非 TrustAllCerts
-                // 可通过配置参数 ssl.verify=true 启用严格验证
-                .sslSocketFactory(createUnsafeSSLSocketFactory(), new TrustAllCerts())
-                .hostnameVerifier(new TrustAllHostnameVerifier())
-                .retryOnConnectionFailure(true)
-                .build();
+                .retryOnConnectionFailure(true);
+        if (sslVerify) {
+            // 标准证书校验（默认使用系统信任库）
+            logger.info("AgentClient: SSL verification enabled");
+        } else {
+            // 信任所有证书（用于自签名证书或内部网络）
+            logger.warn("AgentClient: SSL verification disabled, trusting all certificates");
+            builder.sslSocketFactory(createUnsafeSSLSocketFactory(), new TrustAllCerts())
+                    .hostnameVerifier(new TrustAllHostnameVerifier());
+        }
+        this.client = builder.build();
     }
 
     public String readConfig(String host, String token) throws Exception {

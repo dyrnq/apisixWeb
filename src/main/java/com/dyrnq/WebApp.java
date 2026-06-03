@@ -22,6 +22,21 @@ public class WebApp {
             System.exit(new picocli.CommandLine(new com.dyrnq.apisix.cli.CliMain()).execute(cliArgs));
         }
 
+        // 启动时检查 JWT Secret 是否仍为默认值
+        String jwtSecret = System.getProperty("jwt.secret", "");
+        if (StringUtils.isBlank(jwtSecret)) {
+            jwtSecret = System.getenv("JWT_SECRET");
+        }
+        if (StringUtils.isBlank(jwtSecret)) {
+            jwtSecret = "IDP32XTulsVIUZU+srFEUC9Lhu1wV+nd8iCJPoPA2zSFVAtWhCgpMEymxy5wFAZKMB9yROX31UjDzjwL66r1RA==";
+        }
+        if (com.dyrnq.apisix.agentclient.AgentClient.DEFAULT_JWT_SECRET.equals(jwtSecret)) {
+            log.error("JWT secret is still using the default value! "
+                    + "Please set a custom secret via -Djwt.secret=<key> or JWT_SECRET environment variable. "
+                    + "Generate one with: java -jar apisixWeb-1.0.0.jar cli jwt");
+            System.exit(1);
+        }
+
         Solon.start(WebApp.class, args, app -> {
             // 白名单：仅允许以下配置项从环境变量覆盖，防止意外覆盖非预期配置
             Set<String> allowEnvOverride = new java.util.HashSet<>();
