@@ -104,7 +104,7 @@ public class DataSourceEmbed {
                     }
                     if (process.exitValue() != 0) {
                         logger.error(RuntimeUtil.getErrorResult(process));
-                        System.exit(process.exitValue());
+                        throw new RuntimeException("H2 migration failed with exit code " + process.exitValue());
                     }
                     FileUtil.del(new File(h2DbPath));
                     process = RuntimeUtil.exec(cmd2);
@@ -118,7 +118,7 @@ public class DataSourceEmbed {
                                 new File(h2DbPath),
                                 true);
                         logger.error(RuntimeUtil.getErrorResult(process));
-                        System.exit(process.exitValue());
+                        throw new RuntimeException("H2 migration failed with exit code " + process.exitValue());
                     }
 
                 } else if (Constants.VERSION_MAJOR == 2
@@ -153,7 +153,7 @@ public class DataSourceEmbed {
                     }
                     if (process.exitValue() != 0) {
                         logger.error(RuntimeUtil.getErrorResult(process));
-                        System.exit(process.exitValue());
+                        throw new RuntimeException("H2 migration failed with exit code " + process.exitValue());
                     }
                     FileUtil.del(new File(h2DbPath));
                     process = RuntimeUtil.exec(cmd2);
@@ -167,7 +167,7 @@ public class DataSourceEmbed {
                                 new File(h2DbPath),
                                 true);
                         logger.error(RuntimeUtil.getErrorResult(process));
-                        System.exit(process.exitValue());
+                        throw new RuntimeException("H2 migration failed with exit code " + process.exitValue());
                     }
                 }
             }
