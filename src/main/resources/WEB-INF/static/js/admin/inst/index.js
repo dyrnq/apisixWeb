@@ -250,9 +250,9 @@ layui.use(function () {
       [
         //表头
         { type: 'checkbox', fixed: 'left' },
-        { field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：' },
-        { field: 'name', title: 'name', width: 200 },
-        { field: 'url', title: 'url', width: 300, sort: true },
+        { field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：' },
+        { field: 'name', title: 'name' },
+        { field: 'url', title: 'url', sort: true },
         { field: 'upstream', title: 'operation', fixed: 'right', templet: addLink },
       ],
     ],

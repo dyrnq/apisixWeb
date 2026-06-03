@@ -445,11 +445,11 @@ layui.use(function () {
       [
         //表头
         { type: 'checkbox', fixed: 'left' },
-        { field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：' },
-        { field: 'domain', title: 'domain', width: 200 },
-        { field: 'approachDisplay', title: 'approach', width: 200 },
-        { field: 'encryptionDisplay', title: 'encry', width: 100 },
-        { field: 'renew', title: 'renew', width: 100 },
+        { field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：' },
+        { field: 'domain', title: 'domain' },
+        { field: 'approachDisplay', title: 'approach' },
+        { field: 'encryptionDisplay', title: 'encry' },
+        { field: 'renew', title: 'renew' },
         {
           field: 'notBefore',
           title: 'notBefore',

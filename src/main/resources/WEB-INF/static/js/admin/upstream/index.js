@@ -153,8 +153,8 @@ layui.use(function () {
         //表头
         { type: 'checkbox', fixed: 'left' },
         { field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：' },
-        { field: 'name', title: 'name', width: 120 },
-        { field: 'desc', title: 'desc', width: 200 },
+        { field: 'name', title: 'name' },
+        { field: 'desc', title: 'desc' },
         {
           field: 'createTime',
           title: 'create_time',

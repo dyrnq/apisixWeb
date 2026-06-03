@@ -218,11 +218,11 @@ layui.use(function () {
         //表头
         { type: 'checkbox', fixed: 'left' },
         { field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：' },
-        { field: 'priority', title: 'priority', width: 80, sort: true },
-        { field: 'name', title: 'name', width: 200 },
-        { field: 'desc', title: 'desc', width: 200, hide: defaultHidden },
-        { field: 'host', title: 'host(s)', width: 200, templet: host },
-        { field: 'uri', title: 'uri(s)', width: 200, templet: uri },
+        { field: 'priority', title: 'priority', sort: true },
+        { field: 'name', title: 'name' },
+        { field: 'desc', title: 'desc', hide: defaultHidden },
+        { field: 'host', title: 'host(s)', templet: host },
+        { field: 'uri', title: 'uri(s)', templet: uri },
         {
           field: 'createTime',
           title: 'create_time',

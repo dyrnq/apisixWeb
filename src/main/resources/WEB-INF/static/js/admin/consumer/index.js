@@ -152,8 +152,8 @@ layui.use(function () {
       [
         //表头
         { type: 'checkbox', fixed: 'left' },
-        { field: 'username', title: 'username', width: 100, sort: true, fixed: 'left', totalRowText: '合计：' },
-        { field: 'desc', title: 'desc', width: 200 },
+        { field: 'username', title: 'username', sort: true, fixed: 'left', totalRowText: '合计：' },
+        { field: 'desc', title: 'desc' },
         {
           field: 'createTime',
           title: 'create_time',

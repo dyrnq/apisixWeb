@@ -155,7 +155,7 @@ layui.use(function () {
           width: 300,
           templet: "<div>{{layui.util.toDateString(d.updateTime*1000, 'yyyy-MM-dd HH:mm:ss')}}</div>",
         },
-        { field: 'uri', title: 'uri', width: 150 },
+        { field: 'uri', title: 'uri' },
         { field: 'upstream', title: 'operation', fixed: 'right', templet: addLink },
       ],
     ],

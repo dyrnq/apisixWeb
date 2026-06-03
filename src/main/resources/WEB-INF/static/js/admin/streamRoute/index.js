@@ -153,8 +153,8 @@ layui.use(function () {
         //表头
         { type: 'checkbox', fixed: 'left' },
         { field: 'id', title: 'id', width: 100, sort: true, fixed: 'left', totalRowText: '合计：' },
-        { field: 'serverAddr', title: 'server_addr', width: 80 },
-        { field: 'serverPort', title: 'server_port', width: 90, sort: true },
+        { field: 'serverAddr', title: 'server_addr' },
+        { field: 'serverPort', title: 'server_port', sort: true },
         {
           field: 'createTime',
           title: 'create_time',

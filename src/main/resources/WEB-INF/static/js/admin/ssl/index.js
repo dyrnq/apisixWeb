@@ -288,8 +288,8 @@ layui.use(function () {
         //表头
         { type: 'checkbox', fixed: 'left' },
         { field: 'id', title: 'id', width: 100, sort: true, totalRowText: '合计：' },
-        { field: 'type', title: 'type', width: 80 },
-        { field: 'snis', title: 'snis', width: 200 },
+        { field: 'type', title: 'type' },
+        { field: 'snis', title: 'snis' },
         {
           field: 'createTime',
           title: 'create_time',
