@@ -32,10 +32,9 @@ public class WebApp {
             }
             if (StringUtils.isBlank(jwtSecret)
                     || com.dyrnq.apisix.agentclient.AgentClient.DEFAULT_JWT_SECRET.equals(jwtSecret)) {
-                log.error("JWT secret is still using the default value! "
-                        + "Please set a custom secret via --jwt.secret=<key> or JWT_SECRET environment variable. "
+                log.warn("JWT secret is still using the default value! "
+                        + "Please set a custom secret via --jwt.secret=<key> or JWT_SECRET environment variable in production. "
                         + "Generate one with: java -jar apisixWeb-1.0.0.jar cli jwt");
-                System.exit(1);
             }
             // 白名单：仅允许以下配置项从环境变量覆盖，防止意外覆盖非预期配置
             Set<String> allowEnvOverride = new java.util.HashSet<>();
