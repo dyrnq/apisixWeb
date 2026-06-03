@@ -181,6 +181,15 @@ public class AdminController extends BaseController {
 
         if (Utils.isEmpty(token)) {
             ModelAndView model = new ModelAndView("admin/index-noauth.html");
+            String ctxStr = ctx.header("X-Forwarded-Host");
+            if (ctxStr == null) ctxStr = ctx.header("Host");
+            if (ctxStr == null) ctxStr = ctx.url().split("/")[2];
+            String realPort = ctx.header("X-Forwarded-Port");
+            String ctxResult = "//" + ctxStr;
+            if (ctxStr != null && !ctxStr.contains(":") && realPort != null && !realPort.isEmpty()) {
+                ctxResult += ":" + realPort;
+            }
+            model.put("ctx", ctxResult);
             return model;
         } else {
             ModelAndView model = new ModelAndView("admin/index-auth.html");
