@@ -93,6 +93,31 @@ public class Config {
         return new HomeDir(homeAbsolutePath, tmpAbsolutePath, acmeShDir, acmeSh, acmeHome);
     }
 
+    @Bean
+    public void startupCheck() {
+        boolean hasAppFilter = false;
+        boolean hasJwtInterceptor = false;
+        try {
+            for (org.noear.solon.core.handle.Filter f :
+                    org.noear.solon.Solon.context().getBeansOfType(org.noear.solon.core.handle.Filter.class)) {
+                if (f.getClass().getName().contains("AppFilter")) hasAppFilter = true;
+            }
+            org.noear.solon.Solon.context().getBean(com.dyrnq.filter.JwtInterceptor.class);
+            hasJwtInterceptor = true;
+        } catch (Exception e) {
+            // ignore
+        }
+        if (!hasAppFilter) {
+            logger.error("SELF-CHECK FAILED: AppFilter not loaded! Check package declaration.");
+        }
+        if (!hasJwtInterceptor) {
+            logger.error("SELF-CHECK FAILED: JwtInterceptor not loaded! AUTH DISABLED!");
+        }
+        if (hasAppFilter && hasJwtInterceptor) {
+            logger.info("SELF-CHECK: All critical filters loaded OK.");
+        }
+    }
+
     @Bean(value = "cfgExtractor", typed = true)
     public CfgExtractor getCfgExtractor() {
         String tokenCookieName = StringUtils.isNotBlank(jwtName) ? jwtName : CookieName.NAME_TOKEN;
