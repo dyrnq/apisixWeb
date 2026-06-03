@@ -26,23 +26,23 @@ input[name='param']{
     <script>
         var enum_Approach={};
         <#list approach as item>
-        enum_Approach.${item}=${item.id};
+        enum_Approach["${item?js_string}"]=${item.id};
         </#list>
         var enum_Supplier={};
         <#list supplier as item>
-        enum_Supplier.${item}=${item.id};
+        enum_Supplier["${item?js_string}"]=${item.id};
         </#list>
         var enum_Challenge={};
         <#list challenge as item>
-        enum_Challenge.${item}=${item.id};
+        enum_Challenge["${item?js_string}"]=${item.id};
         </#list>
         var enum_Encryption={};
         <#list encryption as item>
-        enum_Encryption.${item}=${item.id};
+        enum_Encryption["${item?js_string}"]=${item.id};
         </#list>
         var dnsapiData=[];
         <#list dnsapi as item>
-            dnsapiData.push({name:"${item}",value:"${item}"});
+            dnsapiData.push({name:"${item?js_string}",value:"${item?js_string}"});
         </#list>
 
     </script>
