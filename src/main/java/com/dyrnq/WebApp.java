@@ -25,6 +25,37 @@ public class WebApp {
         }
 
         Solon.start(WebApp.class, args, app -> {
+            // 启动后自检（AppLoadEndEvent时所有组件已加载完毕）
+            app.onEvent(
+                    org.noear.solon.core.event.AppLoadEndEvent.class,
+                    new org.noear.solon.core.event.EventListener<org.noear.solon.core.event.AppLoadEndEvent>() {
+                        @Override
+                        public void onEvent(org.noear.solon.core.event.AppLoadEndEvent e) {
+                            boolean hasAppFilter = false;
+                            boolean hasJwtInterceptor = false;
+                            try {
+                                for (org.noear.solon.core.handle.Filter f : org.noear.solon.Solon.context()
+                                        .getBeansOfType(org.noear.solon.core.handle.Filter.class)) {
+                                    if (f.getClass().getName().contains("AppFilter")) hasAppFilter = true;
+                                }
+                                org.noear.solon.Solon.context().getBean(com.dyrnq.filter.JwtInterceptor.class);
+                                hasJwtInterceptor = true;
+                            } catch (Exception ex) {
+                                // ignore
+                            }
+                            if (!hasAppFilter) {
+                                log.warn(
+                                        "SELF-CHECK WARN: AppFilter not found by getBeansOfType (may use different registration).");
+                            }
+                            if (!hasJwtInterceptor) {
+                                log.warn(
+                                        "SELF-CHECK WARN: JwtInterceptor not found by getBean (may use different registration).");
+                            }
+                            if (hasAppFilter && hasJwtInterceptor) {
+                                log.info("SELF-CHECK: All critical filters loaded OK.");
+                            }
+                        }
+                    });
             // 启动后检查 JWT Secret 是否仍为默认值
             String jwtSecret = Solon.cfg().get("jwt.secret", "");
             if (StringUtils.isBlank(jwtSecret)) {
