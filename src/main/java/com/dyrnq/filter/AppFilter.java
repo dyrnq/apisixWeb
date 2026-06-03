@@ -1,3 +1,5 @@
+package com.dyrnq.filter;
+
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.CfgExtractor;

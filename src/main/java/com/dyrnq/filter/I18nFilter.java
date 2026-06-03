@@ -1,4 +1,5 @@
-import com.dyrnq.filter.Message;
+package com.dyrnq.filter;
+
 import java.util.*;
 import lombok.extern.slf4j.Slf4j;
 import org.noear.solon.annotation.Component;
