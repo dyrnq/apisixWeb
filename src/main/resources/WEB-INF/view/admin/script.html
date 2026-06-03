@@ -4,7 +4,7 @@
 <script>
   // zTree依赖全局jQuery，layui内置了jQuery但未暴露到全局
   if (typeof jQuery === 'undefined' && typeof layui !== 'undefined') {
-    window.jQuery = layui.$;
+    window.jQuery = layui.$
   }
 </script>
 <script src="${ctx}/lib/ztree/js/jquery.ztree.core.js" type="text/javascript"></script>
