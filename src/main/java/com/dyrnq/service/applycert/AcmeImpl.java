@@ -75,8 +75,14 @@ public class AcmeImpl implements ApplyCertificate {
         } else {
             keylength = " --keylength 2048 ";
         }
-        cmd = homeDir.getAcmeSh() + " --issue --force --debug 1 --home " + acmeHome + " --dns " + cert.getDnsapi()
-                + domain + keylength + " --server letsencrypt ";
+        // 对用户输入的 dnsapi 和 domain 做 shell 转义，防止命令注入
+        String safeDnsapi = "'" + cert.getDnsapi().replace("'", "'\\''") + "'";
+        StringBuilder safeDomain = new StringBuilder();
+        for (String s : split) {
+            safeDomain.append(" --domain '").append(s.replace("'", "'\\''")).append("'");
+        }
+        cmd = homeDir.getAcmeSh() + " --issue --force --debug 1 --home " + acmeHome + " --dns " + safeDnsapi
+                + safeDomain + keylength + " --server letsencrypt ";
         logger.info(cmd);
         // --staging
         rs = acmeshCmd.execCMD(cmd, env, 5 * 60 * 1000);
