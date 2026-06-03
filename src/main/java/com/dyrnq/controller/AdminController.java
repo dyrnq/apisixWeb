@@ -31,6 +31,9 @@ public class AdminController extends BaseController {
     @Inject
     CfgExtractor cfgExtractor;
 
+    @Inject("${solon.app.name}")
+    String projectName;
+
     @Inject
     CertService certService;
 
@@ -115,6 +118,17 @@ public class AdminController extends BaseController {
     @Mapping("login")
     public Object login() {
         ModelAndView model = new ModelAndView("admin/login.html");
+        Context ctx = Context.current();
+        String ctxStr = ctx.header("X-Forwarded-Host");
+        if (ctxStr == null) ctxStr = ctx.header("Host");
+        if (ctxStr == null) ctxStr = ctx.url().split("/")[2];
+        String realPort = ctx.header("X-Forwarded-Port");
+        String ctxResult = "//" + ctxStr;
+        if (ctxStr != null && !ctxStr.contains(":") && realPort != null && !realPort.isEmpty()) {
+            ctxResult += ":" + realPort;
+        }
+        model.put("ctx", ctxResult);
+        model.put("projectName", projectName);
         return model;
     }
 
