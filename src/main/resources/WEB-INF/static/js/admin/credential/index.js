@@ -95,6 +95,17 @@ layui.use(function () {
     toolbar: '#toolbarDemo',
     defaultToolbar: ['filter', 'exports', 'print', { title: '提示', layEvent: 'LAYTABLE_TIPS', icon: 'layui-icon-tips' }],
     totalRow: false,
+    response: {
+      statusCode: 200,
+    },
+    parseData: function (res) {
+      return {
+        code: res.code,
+        msg: res.description,
+        count: res.total || (res.data ? res.data.length : 0),
+        data: res.data,
+      }
+    },
     cols: [[
       { type: 'checkbox', fixed: 'left' },
       { field: 'id', title: 'id', width: 120, sort: true, fixed: 'left' },
