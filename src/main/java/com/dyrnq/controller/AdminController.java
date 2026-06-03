@@ -196,23 +196,24 @@ public class AdminController extends BaseController {
     @Mapping("")
     public Object index(Context ctx) {
         String token = ctx.cookie(cfgExtractor.tokenCookieName());
-
+        ModelAndView model;
         if (Utils.isEmpty(token)) {
-            ModelAndView model = new ModelAndView("admin/index-noauth.html");
-            String ctxStr = ctx.header("X-Forwarded-Host");
-            if (ctxStr == null) ctxStr = ctx.header("Host");
-            if (ctxStr == null) ctxStr = ctx.url().split("/")[2];
-            String realPort = ctx.header("X-Forwarded-Port");
-            String ctxResult = "//" + ctxStr;
-            if (ctxStr != null && !ctxStr.contains(":") && realPort != null && !realPort.isEmpty()) {
-                ctxResult += ":" + realPort;
-            }
-            model.put("ctx", ctxResult);
-            return model;
+            model = new ModelAndView("admin/index-noauth.html");
         } else {
-            ModelAndView model = new ModelAndView("admin/index-auth.html");
-            return model;
+            model = new ModelAndView("admin/index-auth.html");
         }
+        String ctxStr = ctx.header("X-Forwarded-Host");
+        if (ctxStr == null) ctxStr = ctx.header("Host");
+        if (ctxStr == null) ctxStr = ctx.url().split("/")[2];
+        String realPort = ctx.header("X-Forwarded-Port");
+        String ctxResult = "//" + ctxStr;
+        if (ctxStr != null && !ctxStr.contains(":") && realPort != null && !realPort.isEmpty()) {
+            ctxResult += ":" + realPort;
+        }
+        model.put("ctx", ctxResult);
+        model.put("projectName", projectName);
+        model.put("jsrandom", System.currentTimeMillis());
+        return model;
     }
 
     @Mapping("cert")
