@@ -260,10 +260,6 @@ function getQueryString(name) {
 }
 
 // 下载文件
-function downloadFile(url, name) {
-  window.open(ctx + '/downloadFile?url=' + encodeURIComponent(url) + '&name=' + encodeURIComponent(name))
-}
-
 // form转json
 function form2JsonString(formId) {
   let fm = formId.startsWith('#') ? formId : '#' + formId
@@ -276,23 +272,7 @@ function form2JsonString(formId) {
   return JSON.stringify(jsonObj)
 }
 
-var loaded
-function autoUpdate(url) {
-  if (confirm(commonStr.confirmUpdate)) {
-    loaded = layer.load()
-    $.ajax({
-      type: 'POST',
-      url: ctx + '/api/autoUpdate',
-      data: {
-        url: url,
-      },
-      dataType: 'json',
-      success: function (data) {
-        if (!data.success) {
-          layer.close(loaded)
-          layer.alert(data.msg)
-          return
-        }
+
 
         setTimeout(function () {
           layer.close(loaded)

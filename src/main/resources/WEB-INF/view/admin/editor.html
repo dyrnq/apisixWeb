@@ -42,8 +42,8 @@
     <#include "script.html"/>
 
     <script>
-      var id = '${id!}'
-      var cls = '${cls!}'
+      var id = '${id!?js_string}'
+      var cls = '${cls!?js_string}'
     </script>
     <script src="${ctx}/lib/js-yaml/js-yaml.js?v=${jsrandom}" type="text/javascript"></script>
     <script src="${ctx}/js/admin/editor/index.js?v=${jsrandom}" type="text/javascript"></script>
