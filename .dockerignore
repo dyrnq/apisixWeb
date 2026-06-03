@@ -13,7 +13,6 @@ scripts/
 *.zip
 insecure_private_key
 Vagrantfile
-build.sh
 buildx.sh
 install-apisix.sh
 mvnw
@@ -21,11 +20,7 @@ mvnw.cmd
 pom.xml
 settings.xml
 test.xml
-tpl.lua
-reload.sh
 node_modules/
 .prettierrc
 .prettierignore
 spotbugs-exclude.xml
-codex.sh
-c.sh
