@@ -372,7 +372,6 @@ public class AdminClient extends BaseClient {
         return new ProtoClient(getProfile()).get(id);
     }
 
-    
     // ======== Credential methods (nested under Consumer) ========
 
     public Credential getCredential(String username, String id) throws ApisixSDKException {

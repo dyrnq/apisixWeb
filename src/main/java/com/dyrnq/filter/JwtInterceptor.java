@@ -1,6 +1,4 @@
 package com.dyrnq.filter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.dyrnq.CfgExtractor;
 import com.dyrnq.model.User;
@@ -15,9 +13,10 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Handler;
 import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
-
 public class JwtInterceptor implements RouterInterceptor {
     static final Logger log = LoggerFactory.getLogger(JwtInterceptor.class);
 

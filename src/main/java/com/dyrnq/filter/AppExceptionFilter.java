@@ -1,6 +1,4 @@
 package com.dyrnq.filter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cn.hutool.core.exceptions.ExceptionUtil;
 import org.noear.solon.annotation.Component;
@@ -10,11 +8,13 @@ import org.noear.solon.core.handle.Filter;
 import org.noear.solon.core.handle.FilterChain;
 import org.noear.solon.core.handle.Result;
 import org.noear.solon.validation.ValidatorException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(index = 0) // index 为顺序位（不加，则默认为0）
-
 public class AppExceptionFilter implements Filter {
     static final Logger log = LoggerFactory.getLogger(AppExceptionFilter.class);
+
     @Override
     public void doFilter(Context ctx, FilterChain chain) throws Throwable {
         try {

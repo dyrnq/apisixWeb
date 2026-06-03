@@ -1,6 +1,4 @@
 package com.dyrnq;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import cn.hutool.system.SystemUtil;
 import freemarker.template.Configuration;
@@ -13,9 +11,10 @@ import org.noear.solon.Solon;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
 import org.noear.solon.view.freemarker.FreemarkerRender;
 import org.noear.wood.WoodConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @EnableScheduling
-
 public class WebApp {
     static final Logger log = LoggerFactory.getLogger(WebApp.class);
 

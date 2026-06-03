@@ -82,8 +82,7 @@ public class CredentialClient extends BaseClient {
         Wrap<Credential> rsp;
         try {
             Type type = new TypeToken<Wrap<Credential>>() {}.getType();
-            rsp = gson.fromJson(
-                    this.doRequest(null, HttpMethod.REQ_PUT, path(id), rawData), type);
+            rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, path(id), rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) throw e;
             else throw new ApisixSDKException(e.getMessage());
@@ -97,8 +96,7 @@ public class CredentialClient extends BaseClient {
         try {
             // 先获取所有consumer
             com.dyrnq.apisix.domain.Consumer consumerPlaceholder = new com.dyrnq.apisix.domain.Consumer();
-            com.dyrnq.apisix.ConsumerClient consumerClient =
-                    new com.dyrnq.apisix.ConsumerClient(profile);
+            com.dyrnq.apisix.ConsumerClient consumerClient = new com.dyrnq.apisix.ConsumerClient(profile);
             List<com.dyrnq.apisix.domain.Consumer> consumers = consumerClient.list();
             if (consumers != null) {
                 for (com.dyrnq.apisix.domain.Consumer c : consumers) {
