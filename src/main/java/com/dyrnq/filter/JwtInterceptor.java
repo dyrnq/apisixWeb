@@ -1,3 +1,5 @@
+package com.dyrnq.filter;
+
 import com.dyrnq.CfgExtractor;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
