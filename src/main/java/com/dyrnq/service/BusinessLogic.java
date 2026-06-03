@@ -278,7 +278,11 @@ public class BusinessLogic {
             }
             File folder = new File(targetFolderPath + File.separator + simpleName);
             Op op = Factory.create(obj);
-            for (File item : folder.listFiles()) {
+            File[] files = folder.listFiles();
+            if (files == null) {
+                continue;
+            }
+            for (File item : files) {
                 FileReader reader = new FileReader(item);
                 String content = IOUtils.toString(reader);
                 String fileName = item.getName();

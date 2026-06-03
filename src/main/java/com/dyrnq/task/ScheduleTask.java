@@ -56,6 +56,9 @@ public class ScheduleTask {
         try {
             File file = new File(homeDir.getTmpAbsolutePath());
             File[] list = file.listFiles();
+            if (list == null) {
+                return;
+            }
             long curr = System.currentTimeMillis();
             for (File f : list) {
                 long last = f.lastModified();
