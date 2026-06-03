@@ -1,22 +1,19 @@
-package com.dyrnq;
-
 import cn.hutool.system.SystemUtil;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack4.ONode;
 import org.noear.solon.Solon;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
 import org.noear.solon.view.freemarker.FreemarkerRender;
 import org.noear.wood.WoodConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @EnableScheduling
+@Slf4j
 public class WebApp {
-    static final Logger log = LoggerFactory.getLogger(WebApp.class);
 
     public static void main(String[] args) {
 
