@@ -6,8 +6,8 @@ iface="${iface:-enp0s8}"
 etcd_home="${etcd_home:-$HOME/etcd}"
 apisix_home="${apisix_home:-$HOME/apisix}"
 apisix_dashboard_home="${apisix_dashboard_home:-$HOME/apisix-dashboard}"
-apisix_image="${apisix_image:-apache/apisix:3.13.0-debian}"
-#apisix_image="${apisix_image:-bitnami/apisix:3.13.0-debian-12-r1}"
+apisix_image="${apisix_image:-apache/apisix:3.14.1-debian}"
+#apisix_image="${apisix_image:-bitnamilegacy/apisix:3.13.0-debian-12-r1}"
 apisix_dashboard_image="${apisix_dashboard_image:-apache/apisix-dashboard:3.0.1-alpine}"
 etcd_image="${etcd_image:-quay.io/coreos/etcd:v3.5.13}"
 wait4x_image="${wait4x_image:-atkrad/wait4x:2.14}"
@@ -179,7 +179,7 @@ EOF
 
 
 docker rm -f apisix 2>/dev/null || true
-if grep "bitnami" <<< ${apisix_image}; then
+if grep "bitnamilegacy" <<< ${apisix_image}; then
 docker run --net host --rm --name='wait4x' ${wait4x_image} tcp -i 1s -q -t 5s 127.0.0.1:2379 && \
 docker run -d --name apisix \
 --restart always \

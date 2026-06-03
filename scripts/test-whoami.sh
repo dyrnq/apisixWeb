@@ -24,7 +24,13 @@ curl http://127.0.0.1:9180/apisix/admin/routes/9002 -H 'X-API-KEY: edd1c9f034335
       "regex_uri": [
         "^/([^/]+)/(.*)$",
         "/${2}"
-      ]
+      ],
+      "headers":{
+        "set": {
+          "Connection": "close",
+          "BBBB": "BBBB"
+          }
+      }
     }
   },
   "priority": 10,
@@ -57,5 +63,5 @@ curl http://127.0.0.1:9180/apisix/admin/routes/9002 -H 'X-API-KEY: edd1c9f034335
 fun_install_whoami
 fun_install_whoami_route
 
-curl -iv http://127.0.0.1:9080/whoami/
+curl -iv http://127.0.0.1:9080/whoami/ --header "Connection: close"
 
