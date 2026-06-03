@@ -489,6 +489,24 @@
                             <goal>run</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>Execute prettier-format</id>
+                        <phase>compile</phase>
+                        <configuration>
+                            <target description="Format JS and HTML files with Prettier" name="PrettierFormat">
+                                <exec executable="npx" failonerror="false">
+                                    <arg value="prettier"/>
+                                    <arg value="--write"/>
+                                    <arg value="--loglevel=warn"/>
+                                    <arg value="${basedir}/src/main/resources/WEB-INF/static/js/admin/**/*.js"/>
+                                    <arg value="${basedir}/src/main/resources/WEB-INF/view/**/*.html"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
 
 
 
@@ -509,6 +527,14 @@
                         <removeUnusedImports/>
                     </java>
                 </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>apply</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
 
