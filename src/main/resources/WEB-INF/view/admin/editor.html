@@ -1,16 +1,16 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<#include "common.html"/>
-<meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Editor</title>
-<style type="text/css" media="screen">
-    body {
+  <head>
+    <#include "common.html"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>Editor</title>
+    <style type="text/css" media="screen">
+      body {
         overflow: hidden;
-    }
+      }
 
-    #editor {
+      #editor {
         margin: 0;
         top: 0;
         bottom: 0;
@@ -18,36 +18,34 @@
         right: 0;
         width: 100%;
         height: 300px;
-    }
-</style>
-</head>
-<body class="layui-layout-body">
-<div class="layui-layout layui-layout-admin">
+      }
+    </style>
+  </head>
+  <body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+      <#include "header.html"/> <#include "menu.html"/>
 
-<#include "header.html"/>
-<#include "menu.html"/>
-
-    <div class="layui-body">
-
-
+      <div class="layui-body">
         <div style="padding: 25px">
-            <span id="toolbar"></span><br/>
-            <pre id="editor"></pre>
+          <span id="toolbar"></span><br />
+          <pre id="editor"></pre>
 
-            <div style="margin-top: 10px;">
-                <button class="layui-btn layui-btn-md" lay-filter="save" id="save">${i18n.get("commonStr.submit")}</button>
-                <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display:none">获取选中行数据</button>
-            </div>
+          <div style="margin-top: 10px">
+            <button class="layui-btn layui-btn-md" lay-filter="save" id="save">${i18n.get("commonStr.submit")}</button>
+            <button class="layui-btn layui-btn-sm" lay-event="getCheckData" style="display: none">
+              获取选中行数据
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-<#include "script.html"/>
+    <#include "script.html"/>
 
-<script>
-    var id="${id!}"
-    var cls="${cls!}"
-</script>
-<script src="${ctx}/lib/js-yaml/js-yaml.js?v=${jsrandom}" type="text/javascript"></script>
-<script src="${ctx}/js/admin/editor/index.js?v=${jsrandom}" type="text/javascript"></script>
-</body>
+    <script>
+      var id = '${id!}'
+      var cls = '${cls!}'
+    </script>
+    <script src="${ctx}/lib/js-yaml/js-yaml.js?v=${jsrandom}" type="text/javascript"></script>
+    <script src="${ctx}/js/admin/editor/index.js?v=${jsrandom}" type="text/javascript"></script>
+  </body>
 </html>

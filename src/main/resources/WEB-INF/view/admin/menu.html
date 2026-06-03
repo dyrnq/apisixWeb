@@ -1,87 +1,87 @@
 <div class="layui-side layui-bg-black">
-    <div class="layui-side-scroll">
-        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-        <ul class="layui-nav layui-nav-tree" lay-filter="test">
+  <div class="layui-side-scroll">
+    <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+    <ul class="layui-nav layui-nav-tree" lay-filter="test">
+      <li
+        class="layui-nav-item <#if cookieMap['menuToggle_menu_titleTraffic']??>${(cookieMap['menuToggle_menu_titleTraffic']=='true')?string('layui-nav-itemed', '')}</#if>"
+      >
+        <a class="" href="javascript:;" id="menu_titleTraffic">
+          <span style="color: aqua">${i18n.get("menu.titleTraffic")}</span>
+        </a>
+        <dl class="layui-nav-child">
+          <dd>
+            <a href="${ctx}/admin/route">${i18n.get("menu.route")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/streamRoute">${i18n.get("menu.streamRoute")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/upstream">${i18n.get("menu.upstream")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/service">${i18n.get("menu.service")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/ssl">${i18n.get("menu.ssl")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/secret">${i18n.get("menu.secret")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/consumer">${i18n.get("menu.consumer")}</a>
+          </dd>
 
-            <li class="layui-nav-item <#if cookieMap['menuToggle_menu_titleTraffic']??>${(cookieMap['menuToggle_menu_titleTraffic']=='true')?string('layui-nav-itemed', '')}</#if>">
-                <a class="" href="javascript:;" id="menu_titleTraffic">
-                    <span style="color: aqua;">${i18n.get("menu.titleTraffic")}</span>
-                </a>
-                <dl class="layui-nav-child">
+          <dd>
+            <a href="${ctx}/admin/consumerGroup">${i18n.get("menu.consumerGroup")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/globalRule">${i18n.get("menu.globalRule")}</a>
+          </dd>
 
-                    <dd>
-                        <a href="${ctx}/admin/route">${i18n.get("menu.route")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/streamRoute">${i18n.get("menu.streamRoute")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/upstream">${i18n.get("menu.upstream")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/service">${i18n.get("menu.service")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/ssl">${i18n.get("menu.ssl")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/secret">${i18n.get("menu.secret")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/consumer">${i18n.get("menu.consumer")}</a>
-                    </dd>
+          <dd>
+            <a href="${ctx}/admin/pluginConfig">${i18n.get("menu.pluginConfig")}</a>
+          </dd>
 
-                    <dd>
-                        <a href="${ctx}/admin/consumerGroup">${i18n.get("menu.consumerGroup")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/globalRule">${i18n.get("menu.globalRule")}</a>
-                    </dd>
+          <dd>
+            <a href="${ctx}/admin/proto">${i18n.get("menu.proto")}</a>
+          </dd>
 
-                    <dd>
-                        <a href="${ctx}/admin/pluginConfig">${i18n.get("menu.pluginConfig")}</a>
-                    </dd>
+          <dd>
+            <a href="${ctx}/admin/plugin">${i18n.get("menu.plugin")}</a>
+          </dd>
+        </dl>
+      </li>
 
-                    <dd>
-                        <a href="${ctx}/admin/proto">${i18n.get("menu.proto")}</a>
-                    </dd>
-
-                    <dd>
-                        <a href="${ctx}/admin/plugin">${i18n.get("menu.plugin")}</a>
-                    </dd>
-
-                </dl>
-            </li>
-
-            <li class="layui-nav-item <#if cookieMap['menuToggle_menu_titleSystem']??>${(cookieMap['menuToggle_menu_titleSystem']=='true')?string('layui-nav-itemed', '')}</#if>">
-                <a class="" href="javascript:;" id="menu_titleSystem">
-                    <span style="color: aqua;">${i18n.get("menu.titleSystem")}</span>
-                </a>
-                <dl class="layui-nav-child">
-                    <dd>
-                        <a href="${ctx}/admin/inst">${i18n.get("menu.inst")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/manifest">${i18n.get("menu.manifest")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/deploy">${i18n.get("menu.deploy")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/cert">${i18n.get("menu.cert")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/user">${i18n.get("menu.user")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/monitor">${i18n.get("menu.monitor")}</a>
-                    </dd>
-                    <dd>
-                        <a href="${ctx}/admin/about">${i18n.get("menu.about")}</a>
-                    </dd>
-
-                </dl>
-            </li>
-        </ul>
-    </div>
+      <li
+        class="layui-nav-item <#if cookieMap['menuToggle_menu_titleSystem']??>${(cookieMap['menuToggle_menu_titleSystem']=='true')?string('layui-nav-itemed', '')}</#if>"
+      >
+        <a class="" href="javascript:;" id="menu_titleSystem">
+          <span style="color: aqua">${i18n.get("menu.titleSystem")}</span>
+        </a>
+        <dl class="layui-nav-child">
+          <dd>
+            <a href="${ctx}/admin/inst">${i18n.get("menu.inst")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/manifest">${i18n.get("menu.manifest")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/deploy">${i18n.get("menu.deploy")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/cert">${i18n.get("menu.cert")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/user">${i18n.get("menu.user")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/monitor">${i18n.get("menu.monitor")}</a>
+          </dd>
+          <dd>
+            <a href="${ctx}/admin/about">${i18n.get("menu.about")}</a>
+          </dd>
+        </dl>
+      </li>
+    </ul>
+  </div>
 </div>
