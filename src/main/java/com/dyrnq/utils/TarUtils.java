@@ -1,14 +1,12 @@
 package com.dyrnq.utils;
 
+import java.io.*;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.apache.commons.compress.compressors.gzip.GzipCompressorOutputStream;
 import org.apache.commons.io.IOUtils;
-
-import java.io.*;
-
 
 public class TarUtils {
     /**
@@ -40,7 +38,8 @@ public class TarUtils {
         }
     }
 
-    private static void addFileToTarGz(TarArchiveOutputStream tarArchiveOutputStream, String base, File file) throws IOException {
+    private static void addFileToTarGz(TarArchiveOutputStream tarArchiveOutputStream, String base, File file)
+            throws IOException {
         String entryName = base + file.getName();
         TarArchiveEntry tarEntry = new TarArchiveEntry(file, entryName);
         tarArchiveOutputStream.putArchiveEntry(tarEntry);
@@ -63,7 +62,6 @@ public class TarUtils {
         }
     }
 
-
     /**
      * 解压缩tar.gz文件
      *
@@ -79,11 +77,23 @@ public class TarUtils {
         TarArchiveEntry entry;
         while ((entry = tais.getNextTarEntry()) != null) {
             String fileName = entry.getName();
-            if (fileName.contains("..")) {
-                // 跳过包含..的文件名
+            // 路径穿越防护：三层校验
+            // 1. 禁止包含 ..（目录回溯）
+            // 2. 禁止绝对路径（/ 开头或 Windows 盘符如 C:）
+            // 3. 规范化路径后检查是否在目标目录内
+            if (fileName.contains("..") || fileName.startsWith("/")) {
+                continue;
+            }
+            if (fileName.length() >= 2 && fileName.charAt(1) == ':') {
                 continue;
             }
             File outputFile = new File(destDirectory, fileName);
+            String canonicalPath = outputFile.getCanonicalPath();
+            String destCanonicalPath = new File(destDirectory).getCanonicalPath();
+            if (!canonicalPath.startsWith(destCanonicalPath + File.separator)
+                    && !canonicalPath.equals(destCanonicalPath)) {
+                continue;
+            }
             if (entry.isDirectory()) {
                 // 如果是目录，则创建目录
                 outputFile.mkdirs();
@@ -101,5 +111,4 @@ public class TarUtils {
         }
         tais.close();
     }
-
 }
