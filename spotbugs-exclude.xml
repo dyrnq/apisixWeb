@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Gson serialization models use public fields with @Expose, that's intentional -->
+    <Match>
+        <Package name="~com\.dyrnq\.apisix\.plugins\..*"/>
+        <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD,BC_UNCONFIRMED_CAST_OF_RETURN_VALUE"/>
+    </Match>
+    <Match>
+        <Package name="~com\.dyrnq\.apisix\.domain\..*"/>
+        <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD"/>
+    </Match>
+    <!-- Test files can have unused fields -->
+    <Match>
+        <Package name="~.*\.test\..*"/>
+        <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD,URF_UNREAD_FIELD"/>
+    </Match>
+</FindBugsFilter>

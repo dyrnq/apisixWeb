@@ -1,0 +1,11 @@
+target/
+docker/
+logs/
+schema/
+.git/
+.idea/
+*.jar
+*.tar.gz
+*.zip
+*.msg
+WEB-INF/static/lib/
