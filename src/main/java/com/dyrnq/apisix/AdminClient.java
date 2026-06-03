@@ -372,6 +372,48 @@ public class AdminClient extends BaseClient {
         return new ProtoClient(getProfile()).get(id);
     }
 
+    
+    // ======== Credential methods ========
+
+    public Multi<Credential> queryCredentials(String page, String page_size) throws ApisixSDKException {
+        return new CredentialClient(getProfile()).query(page, page_size);
+    }
+
+    public Credential getCredential(String id) throws ApisixSDKException {
+        return new CredentialClient(getProfile()).get(id);
+    }
+
+    public void delCredential(String id) throws ApisixSDKException {
+        new CredentialClient(getProfile()).del(id);
+    }
+
+    public List<Credential> listCredentials() throws ApisixSDKException {
+        return new CredentialClient(getProfile()).list();
+    }
+
+    public Credential putCredentialRaw(String id, String rawData) throws ApisixSDKException {
+        return new CredentialClient(getProfile()).putRaw(id, rawData);
+    }
+
+    public Credential putCredential(String id, Credential obj) throws ApisixSDKException {
+        Wrap<Credential> rsp = null;
+        try {
+            Type type = new TypeToken<Wrap<Credential>>() {}.getType();
+            rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, "/apisix/admin/credentials/" + id), type);
+        } catch (JsonSyntaxException | ApisixSDKException e) {
+            if (e instanceof ApisixSDKException) {
+                throw e;
+            } else {
+                throw new ApisixSDKException(e.getMessage());
+            }
+        }
+        return rsp.getValue();
+    }
+
+    public Credential patchCredentialRaw(String id, String rawData) throws ApisixSDKException {
+        return new CredentialClient(getProfile()).patchRaw(id, rawData);
+    }
+
     public Proto putProtoRaw(String id, String rawData) throws ApisixSDKException {
         return new ProtoClient(getProfile()).putRaw(id, rawData);
     }

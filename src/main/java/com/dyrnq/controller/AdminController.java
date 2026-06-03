@@ -150,6 +150,12 @@ public class AdminController extends BaseController {
         return model;
     }
 
+    @Mapping("credential")
+    public Object credential() {
+        ModelAndView model = new ModelAndView("admin/credential.html");
+        return model;
+    }
+
     @Mapping("monitor")
     public Object monitor() {
         ModelAndView model = new ModelAndView("admin/monitor.html");

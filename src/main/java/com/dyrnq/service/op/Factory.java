@@ -1,6 +1,7 @@
 package com.dyrnq.service.op;
 
 import com.dyrnq.apisix.domain.*;
+import com.dyrnq.apisix.domain.Credential;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
@@ -85,6 +86,8 @@ public class Factory {
             return new ServiceOp();
         } else if (cls.equals(SSL.class)) {
             return new SSLOp();
+        } else if (cls.equals(Credential.class)) {
+            return new CredentialOp();
         } else if (cls.equals(HashMap.class)) {
             return new HashMapSample();
         }

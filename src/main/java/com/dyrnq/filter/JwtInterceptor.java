@@ -1,4 +1,6 @@
 package com.dyrnq.filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.dyrnq.CfgExtractor;
 import com.dyrnq.model.User;
@@ -6,7 +8,6 @@ import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
 import java.util.Date;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
@@ -16,8 +17,9 @@ import org.noear.solon.core.route.RouterInterceptor;
 import org.noear.solon.core.route.RouterInterceptorChain;
 
 @Component
-@Slf4j
+
 public class JwtInterceptor implements RouterInterceptor {
+    static final Logger log = LoggerFactory.getLogger(JwtInterceptor.class);
 
     @Inject
     BusinessLogic businessLogic;

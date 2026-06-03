@@ -1,7 +1,8 @@
 package com.dyrnq.filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import lombok.extern.slf4j.Slf4j;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Filter;
@@ -9,8 +10,9 @@ import org.noear.solon.core.handle.FilterChain;
 import org.noear.solon.i18n.I18nUtil;
 
 @Component
-@Slf4j
+
 public class I18nFilter implements Filter {
+    static final Logger log = LoggerFactory.getLogger(I18nFilter.class);
 
     @Override
     public void doFilter(Context ctx, FilterChain chain) throws Throwable {
