@@ -44,7 +44,12 @@ public class CredentialController extends ApiController {
     public Result query(Context ctx) {
         try {
             List<Credential> result = getAdminClient().listAllCredentials();
-            return Result.succeed(result);
+            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            map.put("code", 0);
+            map.put("description", "");
+            map.put("data", result);
+            map.put("total", result.size());
+            return Result.succeed(map);
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());

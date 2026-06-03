@@ -59,7 +59,7 @@ layui.use(function () {
       data: JSON.stringify({ username: username, id: id, rawData: text }),
       dataType: 'json',
       success: function (data) {
-        if (data.code == '200') {
+        if (data.code == 0 || data.code == 200) {
           layer.closeAll()
           layer.msg(commonStr.success)
           table.reload('demo', {})
@@ -77,7 +77,7 @@ layui.use(function () {
         type: 'POST', url: ctx + '/api/credential/drop',
         dataType: 'json',
         success: function (data) {
-          if (data.code == '200') {
+          if (data.code == 0 || data.code == 200) {
             layer.closeAll()
             layer.msg(commonStr.success)
             table.reload('demo', {})
@@ -100,7 +100,7 @@ layui.use(function () {
     },
     parseData: function (res) {
       return {
-        code: res.code,
+        code: res.code === 200 || res.code === 0 ? 0 : res.code,
         msg: res.description,
         count: res.total || (res.data ? res.data.length : 0),
         data: res.data,
@@ -136,7 +136,7 @@ layui.use(function () {
             type: 'POST', url: ctx + '/api/credential/drop',
             dataType: 'json',
             success: function (data) {
-              if (data.code == '200') {
+              if (data.code == 0 || data.code == 200) {
                 layer.closeAll()
                 layer.msg(commonStr.success)
                 table.reload('demo', {})
