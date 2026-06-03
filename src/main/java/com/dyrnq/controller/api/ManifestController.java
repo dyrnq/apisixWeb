@@ -98,7 +98,8 @@ public class ManifestController extends ApiController {
             if (manifest == null || StringUtils.isBlank(manifest.getContent())) {
                 return Result.failure("manifest not found or content is empty");
             }
-            org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml(new org.yaml.snakeyaml.constructor.SafeConstructor(new org.yaml.snakeyaml.LoaderOptions()));
+            org.yaml.snakeyaml.Yaml yaml = new org.yaml.snakeyaml.Yaml(
+                    new org.yaml.snakeyaml.constructor.SafeConstructor(new org.yaml.snakeyaml.LoaderOptions()));
             Iterable<Object> blocks = yaml.loadAll(new java.io.StringReader(manifest.getContent()));
             for (Object block : blocks) {
                 if (block instanceof java.util.Map) {
@@ -106,7 +107,8 @@ public class ManifestController extends ApiController {
                     if (map.containsKey("kind")) {
                         String className = map.get("kind").toString();
                         String _id = map.get("id").toString();
-                        String json = cn.hutool.json.JSONUtil.toJsonStr(cn.hutool.core.map.MapUtil.removeAny(map, "kind"));
+                        String json =
+                                cn.hutool.json.JSONUtil.toJsonStr(cn.hutool.core.map.MapUtil.removeAny(map, "kind"));
                         com.dyrnq.service.op.Factory.create(className).putRaw(client, _id, json);
                     }
                 }
