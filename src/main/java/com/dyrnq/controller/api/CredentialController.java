@@ -41,18 +41,18 @@ public class CredentialController extends ApiController {
     }
 
     @Mapping("")
-    public Result query(Context ctx) {
+    public void query(Context ctx) throws Throwable {
         try {
             List<Credential> result = getAdminClient().listAllCredentials();
-            java.util.Map<String, Object> map = new java.util.HashMap<>();
+            java.util.Map<String, Object> map = new java.util.LinkedHashMap<>();
             map.put("code", 0);
             map.put("description", "");
-            map.put("data", result);
             map.put("total", result.size());
-            return Result.succeed(map);
+            map.put("data", result);
+            ctx.render(map);
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
-            return Result.failure(e.getMessage());
+            ctx.render(Result.failure(e.getMessage()));
         }
     }
 }
