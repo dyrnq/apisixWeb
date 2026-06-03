@@ -23,6 +23,8 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.LoaderOptions;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 @Mapping("api/deploy")
 @Controller
@@ -131,7 +133,7 @@ public class DeployController extends ApiController {
     @Mapping("deploy")
     public Result deploy(Context ctx, String id) {
         try {
-            Yaml yaml = new Yaml();
+            Yaml yaml = new Yaml(new SafeConstructor(new LoaderOptions()));
             Deploy deploy = deployMapper.selectById(id);
             Iterable<Object> blocks = yaml.loadAll(new StringReader(deploy.getContent()));
 
@@ -177,7 +179,7 @@ public class DeployController extends ApiController {
     @Mapping("undeploy")
     public Result undeploy(Context ctx, String id) {
         try {
-            Yaml yaml = new Yaml();
+            Yaml yaml = new Yaml(new SafeConstructor(new LoaderOptions()));
             Deploy deploy = deployMapper.selectById(id);
             Iterable<Object> blocks = yaml.loadAll(new StringReader(deploy.getContent()));
             // 按照依赖关系删除部署
