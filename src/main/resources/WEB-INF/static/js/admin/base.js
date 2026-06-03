@@ -276,23 +276,6 @@ function form2JsonString(formId) {
   return JSON.stringify(jsonObj)
 }
 
-
-
-        setTimeout(function () {
-          layer.close(loaded)
-          layer.alert(commonStr.updateOver)
-        }, 10000)
-      },
-      error: function () {
-        setTimeout(function () {
-          layer.close(loaded)
-          layer.alert(commonStr.updateOver)
-        }, 10000)
-      },
-    })
-  }
-}
-
 function setParamOrder(id, seq) {
   if (seq == -1) {
     // 前移
