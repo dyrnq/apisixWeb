@@ -178,7 +178,7 @@ systemctl status -l apisixWeb --no-pager
 更改默认 session jwt secret
 
 ```bash
-java -cp apisixWeb.jar cli jwt
+java -jar apisixWeb-1.0.0.jar cli jwt
 ```
 
 将参数 `--jwt.secret=your-secret` 增加到 `java -jar`。
@@ -205,4 +205,4 @@ Supports environment variables
 | SPRING_DATASOURCE_USERNAME           | Database username                             |                   |
 | SPRING_DATASOURCE_PASSWORD           | Database password                             |                   |
 | JWT_SECRET                           | jwt secret                                    |                   |
-| SEVER_SESSION_TIMEOUT                | session timeout                               | 7200              |
+| SERVER_SESSION_TIMEOUT                | session timeout                               | 7200              |
