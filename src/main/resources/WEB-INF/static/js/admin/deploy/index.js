@@ -187,7 +187,7 @@ layui.use(function () {
       [
         //表头
         { type: 'checkbox', fixed: 'left' },
-        { field: 'id', title: 'id', width: 300, sort: true, fixed: 'left', totalRowText: '合计：' },
+        { field: 'id', title: 'id', width: 200, sort: true, fixed: 'left', totalRowText: '合计：' },
         { field: 'title', title: 'title' },
         { field: 'state', title: 'state' },
         { field: 'instId', title: 'instId' },
