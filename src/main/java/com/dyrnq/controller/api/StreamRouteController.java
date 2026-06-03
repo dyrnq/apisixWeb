@@ -61,7 +61,7 @@ public class StreamRouteController extends ApiController {
             } else {
                 List<StreamRoute> result = new ArrayList<>();
                 result.add(route);
-                return PageResult.succeed(result, new Integer(1));
+                return PageResult.succeed(result, Integer.valueOf(1));
             }
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);

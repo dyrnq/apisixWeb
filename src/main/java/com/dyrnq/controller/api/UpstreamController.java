@@ -60,7 +60,7 @@ public class UpstreamController extends ApiController {
             } else {
                 List<Upstream> result = new ArrayList<>();
                 result.add(route);
-                return PageResult.succeed(result, new Integer(1));
+                return PageResult.succeed(result, Integer.valueOf(1));
             }
 
         } catch (ApisixSDKException e) {
