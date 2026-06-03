@@ -54,30 +54,34 @@ layui.use(function () {
   }
 
   function escHtml(s) {
-    return String(s).replace(/[&<>"']/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      if (m === '"') return '&quot;';
-      if (m === "'") return '&#39;';
-      return m;
-    });
+    return String(s).replace(/[&<>"']/g, function (m) {
+      if (m === '&') return '&amp;'
+      if (m === '<') return '&lt;'
+      if (m === '>') return '&gt;'
+      if (m === '"') return '&quot;'
+      if (m === "'") return '&#39;'
+      return m
+    })
   }
   function uri(d) {
     var arr = []
     if (undefined !== d.uri) arr.push(d.uri)
     if (undefined !== d.uris) arr = arr.concat(d.uris)
-    return arr.map(function(u) {
-      return '<span class="layui-badge layui-bg-blue">' + escHtml(u) + '</span>'
-    }).join('&nbsp;')
+    return arr
+      .map(function (u) {
+        return '<span class="layui-badge layui-bg-blue">' + escHtml(u) + '</span>'
+      })
+      .join('&nbsp;')
   }
   function host(d) {
     var arr = []
     if (undefined !== d.host) arr.push(d.host)
     if (undefined !== d.hosts) arr = arr.concat(d.hosts)
-    return arr.map(function(h) {
-      return '<span class="layui-badge layui-bg-green">' + escHtml(h) + '</span>'
-    }).join('&nbsp;')
+    return arr
+      .map(function (h) {
+        return '<span class="layui-badge layui-bg-green">' + escHtml(h) + '</span>'
+      })
+      .join('&nbsp;')
   }
 
   $('#add').click(function () {
