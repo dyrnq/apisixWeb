@@ -129,6 +129,10 @@ public class AdminController extends BaseController {
         }
         model.put("ctx", ctxResult);
         model.put("projectName", projectName);
+        model.put("jsrandom", System.currentTimeMillis());
+        model.put("cookieMap", ctx.cookieMap());
+        model.put("cookName", "{\"token\":\"TOKEN\",\"instId\":\"instId\"}");
+        model.put("cfg", "{ \"pageLimit\":10, \"pageLimits\":[10,20,50,100,1000], \"aceMode\": \"yaml\" }");
         return model;
     }
 
