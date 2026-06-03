@@ -20,14 +20,17 @@ public class H2FormatVersionChecker {
         byte[] header = new byte[512];
         try {
             fis = new FileInputStream(filePath);
-            fis.read(header);
+            int bytesRead = fis.read(header);
+            if (bytesRead < 0) {
+                return false;
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
             IOUtils.closeQuietly(fis);
         }
 
-        String fileHeader = new String(header);
+        String fileHeader = new String(header, java.nio.charset.StandardCharsets.UTF_8);
         return StringUtils.contains(fileHeader, "format:" + ver);
     }
 }
