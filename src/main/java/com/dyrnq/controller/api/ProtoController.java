@@ -5,14 +5,13 @@ import com.dyrnq.apisix.domain.Proto;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.service.op.Factory;
+import java.util.List;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 @Mapping("api/proto")
 @Controller
@@ -66,5 +65,4 @@ public class ProtoController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 }

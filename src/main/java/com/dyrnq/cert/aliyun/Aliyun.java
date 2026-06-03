@@ -14,6 +14,10 @@ import com.jayway.jsonpath.spi.json.GsonJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.GsonMappingProvider;
 import com.jayway.jsonpath.spi.mapper.MappingProvider;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -21,26 +25,16 @@ import okhttp3.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-
 /**
  * https://help.aliyun.com/document_detail/108602.html
  * https://www.alibabacloud.com/help/en/vod/signature-method
  */
-
 public class Aliyun {
     private static final Logger logger = LoggerFactory.getLogger(Aliyun.class);
     private String accessSecretId;
     private String acceccSecretKey;
 
-    private Aliyun() {
-
-    }
-
+    private Aliyun() {}
 
     public Aliyun(String accessSecretId, String acceccSecretKey) {
         this.accessSecretId = accessSecretId;
@@ -66,9 +60,7 @@ public class Aliyun {
                 return EnumSet.noneOf(Option.class);
             }
         });
-
     }
-
 
     public static String generateTimestamp() {
         Date date = new Date(System.currentTimeMillis());
@@ -81,7 +73,6 @@ public class Aliyun {
         String signatureNonce = UUID.randomUUID().toString(true);
         return signatureNonce;
     }
-
 
     public String invoke(String url, String version, String action, Map<String, String> q) {
         final String ACCESS_KEY_ID = accessSecretId;
@@ -108,8 +99,11 @@ public class Aliyun {
         }
         Headers.Builder hb = new Headers.Builder();
         Headers headers = hb.build();
-        Request request = new Request.Builder().url(url + "?" + UrlUtil.canonicalizeQueryString(map, true) + "&Signature=" + signature).headers(headers).get().build();
-
+        Request request = new Request.Builder()
+                .url(url + "?" + UrlUtil.canonicalizeQueryString(map, true) + "&Signature=" + signature)
+                .headers(headers)
+                .get()
+                .build();
 
         OkHttpClient client = new OkHttpClient.Builder().build();
         Response response = null;
@@ -120,7 +114,8 @@ public class Aliyun {
             logger.debug(jsonResponse);
             if (response.code() >= 400) {
                 Map mapRes = gson.fromJson(jsonResponse, Map.class);
-                throw new AliyunRuntimeException(mapRes.get("Message") + " " + mapRes.get("Recommend") + " " + mapRes.get("Code"));
+                throw new AliyunRuntimeException(
+                        mapRes.get("Message") + " " + mapRes.get("Recommend") + " " + mapRes.get("Code"));
             }
 
         } catch (IOException e) {
@@ -188,8 +183,7 @@ public class Aliyun {
      */
     public List<Region> describeRegions() {
         String json = invoke_ecs("DescribeRegions", null);
-        TypeRef<List<Region>> typeRef = new TypeRef<List<Region>>() {
-        };
+        TypeRef<List<Region>> typeRef = new TypeRef<List<Region>>() {};
         return JsonPath.parse(json).read("$.Regions.Region", typeRef);
     }
 
@@ -198,7 +192,7 @@ public class Aliyun {
      */
     public Long createCertificateForPackageRequest(String domain, String validateType) {
         Map<String, String> q = new HashMap<>();
-        //symantec-free-1-free（默认）：表示DigiCert DV单域名证书（免费试用）。
+        // symantec-free-1-free（默认）：表示DigiCert DV单域名证书（免费试用）。
         q.put("ProductCode", "digicert-free-1-free");
         q.put("Domain", domain);
         q.put("ValidateType", validateType);
@@ -233,15 +227,14 @@ public class Aliyun {
         }
         String json = invoke_cas("ListUserCertificateOrder", q);
 
-        TypeRef<List<CertificateOrder>> typeRef = new TypeRef<List<CertificateOrder>>() {
-        };
+        TypeRef<List<CertificateOrder>> typeRef = new TypeRef<List<CertificateOrder>>() {};
         return JsonPath.parse(json).read("$.CertificateOrderList", typeRef);
 
-//        String jsonResult = JsonPath.read(json, "$.CertificateOrderList").toString();
-//        Type type = new TypeToken<List<CertificateOrder>>() {
-//        }.getType();
-//        Gson gson = new Gson();
-//        return gson.fromJson(jsonResult, type);
+        //        String jsonResult = JsonPath.read(json, "$.CertificateOrderList").toString();
+        //        Type type = new TypeToken<List<CertificateOrder>>() {
+        //        }.getType();
+        //        Gson gson = new Gson();
+        //        return gson.fromJson(jsonResult, type);
     }
 
     /**
@@ -255,11 +248,8 @@ public class Aliyun {
         q.put("OrderId", String.valueOf(orderId));
         String json = invoke_cas("DescribeCertificateState", q);
 
-        Type type = new TypeToken<DescribeCertificateStateResult>() {
-        }.getType();
+        Type type = new TypeToken<DescribeCertificateStateResult>() {}.getType();
         Gson gson = new Gson();
         return gson.fromJson(json, type);
     }
-
-
 }

@@ -7,12 +7,15 @@ public class Filter {
     @SerializedName("regex")
     @Expose
     public String regex;
+
     @SerializedName("scope")
     @Expose
     public String scope;
+
     @SerializedName("replace")
     @Expose
     public String replace;
+
     @SerializedName("options")
     @Expose
     public String options;

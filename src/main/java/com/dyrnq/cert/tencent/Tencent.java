@@ -5,12 +5,6 @@ import com.dyrnq.cert.tencent.vo.*;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jayway.jsonpath.JsonPath;
-import okhttp3.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.nio.charset.Charset;
@@ -22,24 +16,25 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.TimeZone;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * https://github.com/TencentCloud/signature-process-demo/blob/main/cvm/signature-v3/java/TencentCloudAPITC3Demo.java
  */
 public class Tencent {
 
+    private static final Charset UTF8 = StandardCharsets.UTF_8;
 
-    private final static Charset UTF8 = StandardCharsets.UTF_8;
-
-    private final static String CT_JSON = "application/json; charset=utf-8";
+    private static final String CT_JSON = "application/json; charset=utf-8";
     private static final Logger logger = LoggerFactory.getLogger(Tencent.class);
     private String secretId;
     private String secretKey;
 
-    private Tencent() {
-
-    }
-
+    private Tencent() {}
 
     public Tencent(String secretId, String secretKey) {
         this.secretId = secretId;
@@ -81,12 +76,11 @@ public class Tencent {
      * @throws Exception
      */
     public DownloadCertificateResult downloadCertificate(DownloadCertificateArg arg) {
-        Type type = new TypeToken<ResponseWrap<DownloadCertificateResult>>() {
-        }.getType();
-        ResponseWrap<DownloadCertificateResult> w = (ResponseWrap<DownloadCertificateResult>) invoke_ssl("DownloadCertificate", "", arg, type);
+        Type type = new TypeToken<ResponseWrap<DownloadCertificateResult>>() {}.getType();
+        ResponseWrap<DownloadCertificateResult> w =
+                (ResponseWrap<DownloadCertificateResult>) invoke_ssl("DownloadCertificate", "", arg, type);
         return w.getResponse();
     }
-
 
     /**
      * 免费证书申请 https://cloud.tencent.com/document/api/400/41678
@@ -95,11 +89,10 @@ public class Tencent {
      * @return
      * @throws Exception
      */
-
     public ApplyCertificateResult applyCertificate(ApplyCertificateArg arg) {
-        Type type = new TypeToken<ResponseWrap<ApplyCertificateResult>>() {
-        }.getType();
-        ResponseWrap<ApplyCertificateResult> w = (ResponseWrap<ApplyCertificateResult>) invoke_ssl("ApplyCertificate", "", arg, type);
+        Type type = new TypeToken<ResponseWrap<ApplyCertificateResult>>() {}.getType();
+        ResponseWrap<ApplyCertificateResult> w =
+                (ResponseWrap<ApplyCertificateResult>) invoke_ssl("ApplyCertificate", "", arg, type);
         return w.getResponse();
     }
 
@@ -109,14 +102,12 @@ public class Tencent {
      * @param arg
      * @return
      */
-
     public DescribeCertificateResult describeCertificate(DescribeCertificateArg arg) {
-        Type type = new TypeToken<ResponseWrap<DescribeCertificateResult>>() {
-        }.getType();
-        ResponseWrap<DescribeCertificateResult> w = (ResponseWrap<DescribeCertificateResult>) invoke_ssl("DescribeCertificate", "", arg, type);
+        Type type = new TypeToken<ResponseWrap<DescribeCertificateResult>>() {}.getType();
+        ResponseWrap<DescribeCertificateResult> w =
+                (ResponseWrap<DescribeCertificateResult>) invoke_ssl("DescribeCertificate", "", arg, type);
         return w.getResponse();
     }
-
 
     /**
      * 获取证书列表 https://cloud.tencent.com/document/product/400/41671
@@ -126,9 +117,9 @@ public class Tencent {
      * @throws Exception
      */
     public DescribeCertificatesResult describeCertificates(DescribeCertificatesArg arg) {
-        Type type = new TypeToken<ResponseWrap<DescribeCertificatesResult>>() {
-        }.getType();
-        ResponseWrap<DescribeCertificatesResult> w = (ResponseWrap<DescribeCertificatesResult>) invoke_ssl("DescribeCertificates", "", arg, type);
+        Type type = new TypeToken<ResponseWrap<DescribeCertificatesResult>>() {}.getType();
+        ResponseWrap<DescribeCertificatesResult> w =
+                (ResponseWrap<DescribeCertificatesResult>) invoke_ssl("DescribeCertificates", "", arg, type);
         return w.getResponse();
     }
 
@@ -147,17 +138,16 @@ public class Tencent {
     }
 
     public DescribeRegionsResult describeRegions() {
-        Type type = new TypeToken<ResponseWrap<DescribeRegionsResult>>() {
-        }.getType();
-        ResponseWrap<DescribeRegionsResult> w = (ResponseWrap<DescribeRegionsResult>) invoke_cvm("DescribeRegions", "", new HashMap<>(), type);
+        Type type = new TypeToken<ResponseWrap<DescribeRegionsResult>>() {}.getType();
+        ResponseWrap<DescribeRegionsResult> w =
+                (ResponseWrap<DescribeRegionsResult>) invoke_cvm("DescribeRegions", "", new HashMap<>(), type);
         return w.getResponse();
     }
 
-
-    private ResponseWrap<?> invoke(String service, String host, String version, String action, String region, Object arg, Type type) {
+    private ResponseWrap<?> invoke(
+            String service, String host, String version, String action, String region, Object arg, Type type) {
         String SECRET_KEY = this.secretKey;
         String SECRET_ID = this.secretId;
-
 
         String algorithm = "TC3-HMAC-SHA256";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
@@ -176,25 +166,26 @@ public class Tencent {
         String payload = "";
         Gson gson = new Gson();
         payload = gson.toJson(arg);
-        //logger.info(payload);
+        // logger.info(payload);
         String hashedRequestPayload = sha256Hex(payload);
-        String canonicalRequest = httpRequestMethod + "\n" + canonicalUri + "\n" + canonicalQueryString + "\n" + canonicalHeaders + "\n" + signedHeaders + "\n" + hashedRequestPayload;
-
+        String canonicalRequest = httpRequestMethod + "\n" + canonicalUri + "\n" + canonicalQueryString + "\n"
+                + canonicalHeaders + "\n" + signedHeaders + "\n" + hashedRequestPayload;
 
         // ************* 步骤 2：拼接待签名字符串 *************
         String credentialScope = date + "/" + service + "/" + "tc3_request";
         String hashedCanonicalRequest = sha256Hex(canonicalRequest);
         String stringToSign = algorithm + "\n" + timestamp + "\n" + credentialScope + "\n" + hashedCanonicalRequest;
-        //logger.info(stringToSign);
+        // logger.info(stringToSign);
         // ************* 步骤 3：计算签名 *************
         byte[] secretDate = hmac256(("TC3" + SECRET_KEY).getBytes(UTF8), date);
         byte[] secretService = hmac256(secretDate, service);
         byte[] secretSigning = hmac256(secretService, "tc3_request");
-        String signature = HexUtil.encodeHexStr(hmac256(secretSigning, stringToSign)).toLowerCase();
+        String signature =
+                HexUtil.encodeHexStr(hmac256(secretSigning, stringToSign)).toLowerCase();
 
         // ************* 步骤 4：拼接 Authorization *************
-        String authorization = algorithm + " " + "Credential=" + SECRET_ID + "/" + credentialScope + ", " + "SignedHeaders=" + signedHeaders + ", " + "Signature=" + signature;
-
+        String authorization = algorithm + " " + "Credential=" + SECRET_ID + "/" + credentialScope + ", "
+                + "SignedHeaders=" + signedHeaders + ", " + "Signature=" + signature;
 
         Headers.Builder hb = new Headers.Builder();
         hb.add("Content-Type", CT_JSON)
@@ -206,12 +197,11 @@ public class Tencent {
                 .add("X-TC-Region", region);
         Headers headers = hb.build();
         MediaType contentType = MediaType.parse(headers.get("Content-Type"));
-        Request request =
-                new Request.Builder()
-                        .url("https://" + host)
-                        .post(RequestBody.create(contentType, payload))
-                        .headers(headers)
-                        .build();
+        Request request = new Request.Builder()
+                .url("https://" + host)
+                .post(RequestBody.create(contentType, payload))
+                .headers(headers)
+                .build();
         OkHttpClient client = new OkHttpClient.Builder().build();
         Response response = null;
         String jsonResponse = null;

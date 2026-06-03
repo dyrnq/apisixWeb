@@ -23,6 +23,9 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import com.google.gson.*;
+import java.io.*;
+import java.net.URLDecoder;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -36,18 +39,16 @@ import org.noear.wood.ext.Act1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.net.URLDecoder;
-import java.util.List;
-
 @Component
 public class BusinessLogic {
     static Logger logger = LoggerFactory.getLogger(BusinessLogic.class);
+
     @Db
     UserMapper userMapper;
 
     @Db
     InstMapper instMapper;
+
     @Inject
     HomeDir homeDir;
 
@@ -99,7 +100,7 @@ public class BusinessLogic {
             throw new RuntimeException(I18nUtil.getMessage("loginStr.backError5"));
         }
 
-        //return null;
+        // return null;
     }
 
     /**
@@ -130,19 +131,29 @@ public class BusinessLogic {
     }
 
     public void drop(String instId) throws ApisixSDKException {
-        Class[] clss = new Class[]{Route.class, Service.class, Upstream.class, StreamRoute.class, SSL.class, Secret.class, ConsumerGroup.class, Consumer.class, GlobalRule.class, PluginConfig.class, Proto.class};
+        Class[] clss = new Class[] {
+            Route.class,
+            Service.class,
+            Upstream.class,
+            StreamRoute.class,
+            SSL.class,
+            Secret.class,
+            ConsumerGroup.class,
+            Consumer.class,
+            GlobalRule.class,
+            PluginConfig.class,
+            Proto.class
+        };
         AdminClient client = getAdminClient(instId);
-        //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
+        // 2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
         for (Class obj : clss) {
             Op op = Factory.create(obj);
             op.drop(client);
         }
-
     }
 
-
     public byte[] export(String instId, long currentTimeMillis, String format) throws ApisixSDKException, IOException {
-        //创建gson对象，含有转化的toJson方法
+        // 创建gson对象，含有转化的toJson方法
         Gson gson = new GsonBuilder()
                 .excludeFieldsWithoutExposeAnnotation()
                 .disableHtmlEscaping()
@@ -152,7 +163,7 @@ public class BusinessLogic {
                     @Override
                     public boolean shouldSkipField(FieldAttributes f) {
                         return "createTime".equals(f.getName()) || "updateTime".equals(f.getName()); // 如果是特殊字段，则排除
-// 其他字段都保留
+                        // 其他字段都保留
                     }
 
                     @Override
@@ -162,26 +173,36 @@ public class BusinessLogic {
                 })
                 .create();
 
-
         JsonMapper jsonMapper = new JsonMapper();
         YAMLMapper yamlMapper = new YAMLMapper();
         // 配置 ObjectMapper 忽略值为 null 的字段
-        //jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        // jsonMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
         String rdm = Long.toString(currentTimeMillis);
         String targetFolderPath = homeDir.getTmpAbsolutePath() + File.separator + rdm;
         String targetTarFile = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
         FileUtils.forceMkdir(new File(targetFolderPath));
-        //1，设立一个含有所有队列信息的数组
-        Class[] clss = new Class[]{Route.class, StreamRoute.class, Upstream.class, Service.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, PluginConfig.class, Proto.class};
-
+        // 1，设立一个含有所有队列信息的数组
+        Class[] clss = new Class[] {
+            Route.class,
+            StreamRoute.class,
+            Upstream.class,
+            Service.class,
+            SSL.class,
+            Secret.class,
+            Consumer.class,
+            ConsumerGroup.class,
+            GlobalRule.class,
+            PluginConfig.class,
+            Proto.class
+        };
 
         AdminClient client = getAdminClient(instId);
-        //2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
+        // 2.用增强for循环进行遍历，并根据不同的队列选择不同的list方法。
         for (Class obj : clss) {
             Op op = Factory.create(obj);
             List<?> list = op.list(client);
-            //3，根据不同情况进行不同的文件名创建
+            // 3，根据不同情况进行不同的文件名创建
             String simpleName = obj.getSimpleName();
             simpleName = StringUtils.uncapitalize(simpleName);
             if (obj == SSL.class) {
@@ -192,9 +213,10 @@ public class BusinessLogic {
             String fileEnd = StringUtils.equalsIgnoreCase("yaml", format) ? "yaml" : "json";
             for (Object item : list) {
                 String id = op.encodeId(item);
-                File file = new File(targetFolderPath + File.separator + simpleName + File.separator + id + "." + fileEnd);//创建file文件地址对象，作为载体
-                FileWriter writer = new FileWriter(file);//创建writer对象，含有写入方法。
-                String content = null; //创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
+                File file = new File(targetFolderPath + File.separator + simpleName + File.separator + id + "."
+                        + fileEnd); // 创建file文件地址对象，作为载体
+                FileWriter writer = new FileWriter(file); // 创建writer对象，含有写入方法。
+                String content = null; // 创立json字符串形式对象，接收转化后的route （java对象）→（字符串）
 
                 if (StringUtils.equalsIgnoreCase("yaml", format)) {
                     // 将JSON字符串转换为JsonNode对象
@@ -208,22 +230,19 @@ public class BusinessLogic {
                     content = gson.toJson(item);
                 }
 
-                writer.write(content);//执行写入方法。
-                writer.close();//关闭写入方法。
+                writer.write(content); // 执行写入方法。
+                writer.close(); // 关闭写入方法。
             }
 
             TarUtils.tarGz(targetFolderPath, targetTarFile);
-
-
         }
         byte[] bytes = FileUtils.readFileToByteArray(new File(targetTarFile));
 
-//        FileUtils.forceDelete(new File(targetFolderPath));
-//        FileUtils.forceDelete(new File(targetTarFile));
+        //        FileUtils.forceDelete(new File(targetFolderPath));
+        //        FileUtils.forceDelete(new File(targetTarFile));
 
         return bytes;
     }
-
 
     public void importData(String instId, byte[] b, long currentTimeMillis) throws ApisixSDKException, IOException {
         String rdm = Long.toString(currentTimeMillis);
@@ -232,12 +251,24 @@ public class BusinessLogic {
         JsonMapper jsonMapper = new JsonMapper();
         YAMLMapper yamlMapper = new YAMLMapper();
 
-        Class[] clss = new Class[]{PluginConfig.class, Upstream.class, Service.class, Route.class, StreamRoute.class, SSL.class, Secret.class, Consumer.class, ConsumerGroup.class, GlobalRule.class, Proto.class};
+        Class[] clss = new Class[] {
+            PluginConfig.class,
+            Upstream.class,
+            Service.class,
+            Route.class,
+            StreamRoute.class,
+            SSL.class,
+            Secret.class,
+            Consumer.class,
+            ConsumerGroup.class,
+            GlobalRule.class,
+            Proto.class
+        };
 
         AdminClient client = getAdminClient(instId);
         String tarGzFilepath = homeDir.getTmpAbsolutePath() + File.separator + rdm + ".tar.gz";
         IOUtils.write(b, new FileOutputStream(new File(tarGzFilepath)));
-        TarUtils.extractTarGz(tarGzFilepath, targetFolderPath);//执行解压方法
+        TarUtils.extractTarGz(tarGzFilepath, targetFolderPath); // 执行解压方法
 
         for (Class obj : clss) {
             String simpleName = obj.getSimpleName();
@@ -265,7 +296,7 @@ public class BusinessLogic {
 
                 JsonNode jsonNode = null;
 
-                //将yaml转化为json
+                // 将yaml转化为json
                 if (!StringUtils.endsWithIgnoreCase(fileName, ".json")) {
                     jsonNode = yamlMapper.readTree(content);
                 } else {
@@ -274,7 +305,7 @@ public class BusinessLogic {
 
                 ObjectNode objectNode = (ObjectNode) jsonNode;
 
-                for (String removeKey : new String[]{"create_time", "update_time"})
+                for (String removeKey : new String[] {"create_time", "update_time"})
                     if (objectNode.has(removeKey)) {
                         objectNode.remove(removeKey);
                     }
@@ -284,9 +315,8 @@ public class BusinessLogic {
                 reader.close();
             }
         }
-//        FileUtils.forceDelete(new File(targetFolderPath));
-//        FileUtils.forceDelete(new File(tarGzFilepath));
+        //        FileUtils.forceDelete(new File(targetFolderPath));
+        //        FileUtils.forceDelete(new File(tarGzFilepath));
 
     }
-
 }

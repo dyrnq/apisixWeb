@@ -1,11 +1,10 @@
 package com.dyrnq.apisix.profile;
 
+import java.io.IOException;
+import java.util.List;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
-
-import java.io.IOException;
-import java.util.List;
 
 public class RetryInterceptor implements Interceptor {
     int retryCount;
@@ -25,7 +24,7 @@ public class RetryInterceptor implements Interceptor {
         Endpoint endpoint = this.profile.getCurrentEndpoint();
         try {
             Response response = chain.proceed(request);
-            //有结果就认为是成功了，只有连接不上或者超时才重试其他IP
+            // 有结果就认为是成功了，只有连接不上或者超时才重试其他IP
             if (response != null && response.code() > 0) {
                 return response;
             }
@@ -33,9 +32,9 @@ public class RetryInterceptor implements Interceptor {
                 String url = request.url().toString();
                 for (Endpoint ep : endpoints) {
                     if (!url.contains(ep.getAddress())) {
-                        //替换
+                        // 替换
                         url = url.replace(endpoint.getAddress(), ep.getAddress());
-                        //设置为当前
+                        // 设置为当前
                         this.profile.setCurrentEndpoint(ep);
                     }
                 }
@@ -50,14 +49,14 @@ public class RetryInterceptor implements Interceptor {
             String url = request.url().toString();
             for (Endpoint ep : endpoints) {
                 if (!url.contains(ep.getAddress())) {
-                    //替换
+                    // 替换
                     url = url.replace(endpoint.getAddress(), ep.getAddress());
-                    //设置为当前
+                    // 设置为当前
                     this.profile.setCurrentEndpoint(ep);
                 }
             }
             Request newRequest = request.newBuilder().url(url).build();
-            //retryCount++;
+            // retryCount++;
             // retry the request
             Response response = chain.proceed(newRequest);
 

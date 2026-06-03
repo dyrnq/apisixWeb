@@ -1,12 +1,14 @@
 package com.dyrnq.controller;
 
-import com.dyrnq.utils.JwtUtils;
 import com.dyrnq.model.User;
 import com.dyrnq.service.BusinessLogic;
+import com.dyrnq.utils.JwtUtils;
 import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.DefaultClaims;
+import java.util.HashMap;
+import java.util.Map;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
 import org.noear.solon.annotation.Mapping;
@@ -14,10 +16,6 @@ import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Mapping("token")
 @Controller
@@ -29,8 +27,10 @@ public class TokenController extends BaseController {
 
     @Inject("${server.session.state.jwt.secret:${jwt.secret:}}")
     String jwt_secret;
+
     @Inject("${server.session.state.jwt.prefix:${jwt.prefix:}}")
     String jwt_prefix;
+
     @Inject("${jwt.expire:864000000}")
     long jwt_expire;
 
@@ -45,9 +45,9 @@ public class TokenController extends BaseController {
         try {
             User user = businessLogic.login(name, pass);
             Map<String, Object> map = new HashMap<>();
-            map.put(Claims.SUBJECT,user.getName());
+            map.put(Claims.SUBJECT, user.getName());
             Claims claims = new DefaultClaims(map);
-            return Result.succeed(JwtUtils.buildJwt(claims,jwt_expire,jwt_secret,jwt_prefix));
+            return Result.succeed(JwtUtils.buildJwt(claims, jwt_expire, jwt_secret, jwt_prefix));
         } catch (Exception e) {
             return Result.failure(e.getMessage());
         }

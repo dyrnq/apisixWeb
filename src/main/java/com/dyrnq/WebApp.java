@@ -4,6 +4,7 @@ import cn.hutool.system.SystemUtil;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
+import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.snack4.ONode;
@@ -11,10 +12,6 @@ import org.noear.solon.Solon;
 import org.noear.solon.scheduling.annotation.EnableScheduling;
 import org.noear.solon.view.freemarker.FreemarkerRender;
 import org.noear.wood.WoodConfig;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Set;
 
 @EnableScheduling
 @Slf4j
@@ -28,14 +25,15 @@ public class WebApp {
         }
 
         Solon.start(WebApp.class, args, app -> {
-
-
-
             Set<String> allNodes = Solon.cfg().stringPropertyNames();
             for (String entry : allNodes) {
-                String envName1 = StringUtils.upperCase(StringUtils.replace(entry, "-", "").replace(".", "_"));
-                String envName2 = StringUtils.upperCase(StringUtils.replace(entry, "-", "_").replace(".", "_"));
-                String envName3 = StringUtils.upperCase(StringUtils.replace(entry.replaceAll("(?<!^)(?=[A-Z])", "_"), "-", "_").replace(".", "_"));
+                String envName1 = StringUtils.upperCase(
+                        StringUtils.replace(entry, "-", "").replace(".", "_"));
+                String envName2 = StringUtils.upperCase(
+                        StringUtils.replace(entry, "-", "_").replace(".", "_"));
+                String envName3 =
+                        StringUtils.upperCase(StringUtils.replace(entry.replaceAll("(?<!^)(?=[A-Z])", "_"), "-", "_")
+                                .replace(".", "_"));
 
                 String getValue = SystemUtil.get(envName1, true);
                 if (getValue != null) {
@@ -51,14 +49,13 @@ public class WebApp {
                 }
             }
 
-
-            //LogUtil.globalSet(new LogUtilToSlf4j());
-            //app.onError(e -> logger.error(e.getMessage(), e));
+            // LogUtil.globalSet(new LogUtilToSlf4j());
+            // app.onError(e -> logger.error(e.getMessage(), e));
             app.context().getBeanAsync(FreemarkerRender.class, e -> {
                 freemarker.template.Configuration cfg = e.getProvider();
                 try {
-                    //cfg.setClassicCompatible(false);
-                    //cfg.setStrictSyntaxMode(false);
+                    // cfg.setClassicCompatible(false);
+                    // cfg.setStrictSyntaxMode(false);
                     cfg.setSetting(Configuration.NUMBER_FORMAT_KEY, "0.##");
                     cfg.setSetting(Configuration.DEFAULT_ENCODING_KEY, "UTF-8");
                     cfg.setSetting(Configuration.TEMPLATE_UPDATE_DELAY_KEY, "0");
@@ -72,7 +69,6 @@ public class WebApp {
                 } catch (TemplateException ex) {
                     log.error(ex.getMessage(), ex);
                 }
-
             });
             app.filter((c, chain) -> {
                 String path = c.path();
@@ -83,10 +79,9 @@ public class WebApp {
                 chain.doFilter(c);
             });
 
-
             WoodConfig.isUsingValueExpression = false;
             if (Solon.cfg().isDebugMode()) {
-                //执行后打印下sql
+                // 执行后打印下sql
                 WoodConfig.onExecuteAft(cmd -> {
                     System.out.println(cmd.text + "\r\n" + ONode.serialize(cmd.paramMap()));
                 });
@@ -95,10 +90,6 @@ public class WebApp {
                     System.out.println(cmd.text + "\r\n" + ONode.serialize(cmd.paramMap()));
                 });
             }
-
-
         });
     }
-
-
 }

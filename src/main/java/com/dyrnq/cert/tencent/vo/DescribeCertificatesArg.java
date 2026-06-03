@@ -10,19 +10,19 @@ public class DescribeCertificatesArg {
 
     @SerializedName("Offset")
     @Expose
-    private Integer offset; //分页偏移量，从0开始。
+    private Integer offset; // 分页偏移量，从0开始。
+
     @SerializedName("SearchKey")
     @Expose
-    private String searchKey; //搜索关键词，可搜索证书 ID、备注名称、域名。例如： a8xHcaIs。
+    private String searchKey; // 搜索关键词，可搜索证书 ID、备注名称、域名。例如： a8xHcaIs。
 
     @SerializedName("CertificateStatus")
     @Expose
     private Integer[] certificateStatus;
 
-
     @SerializedName("Limit")
     @Expose
-    private Integer limit; //每页数量，默认20。最大1000
+    private Integer limit; // 每页数量，默认20。最大1000
 
     public Integer getOffset() {
         return offset;

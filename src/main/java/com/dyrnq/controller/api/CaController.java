@@ -9,6 +9,11 @@ import com.dyrnq.model.Ca;
 import com.dyrnq.service.CertService;
 import com.dyrnq.utils.CertUtils;
 import com.dyrnq.utils.X509Holder;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -21,21 +26,17 @@ import org.noear.wood.ext.Act1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Mapping("api/ca")
 @Controller
 public class CaController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(CaController.class);
+
     @Inject
     CertService certService;
 
     @Inject
     CaMapper caMapper;
+
     @Inject
     CertMapper certMapper;
 
@@ -59,7 +60,7 @@ public class CaController extends ApiController {
     @Mapping("add")
     public Result add(Context ctx, Ca ca) {
         try {
-            //自签名
+            // 自签名
             if (StringUtils.isBlank(ca.getSubject())) {
                 ca.setSubject("CN=" + ca.getTitle());
             }

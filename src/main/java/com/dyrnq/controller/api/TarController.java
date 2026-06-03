@@ -1,6 +1,7 @@
 package com.dyrnq.controller.api;
 
 import com.dyrnq.apisix.ApisixSDKException;
+import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
@@ -10,8 +11,6 @@ import org.noear.solon.core.handle.Result;
 import org.noear.solon.core.handle.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
 
 @Mapping("api/tar")
 @Controller

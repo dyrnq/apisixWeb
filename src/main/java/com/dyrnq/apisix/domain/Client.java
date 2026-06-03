@@ -1,19 +1,22 @@
 package com.dyrnq.apisix.domain;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-public class Client{
-    public Client(){
+
+public class Client {
+    public Client() {
         super();
     }
+
     @SerializedName("ca")
     @Expose
     private String ca;
 
-    public void setCa(String ca){
-        this.ca=ca;
+    public void setCa(String ca) {
+        this.ca = ca;
     }
 
-    public String getCa(){
+    public String getCa() {
         return this.ca;
     }
 
@@ -21,11 +24,11 @@ public class Client{
     @Expose
     private Integer depth;
 
-    public void setDepth(Integer depth){
-        this.depth=depth;
+    public void setDepth(Integer depth) {
+        this.depth = depth;
     }
 
-    public Integer getDepth(){
+    public Integer getDepth() {
         return this.depth;
     }
 
@@ -33,17 +36,17 @@ public class Client{
     @Expose
     private String[] skipMtlsUriRegex;
 
-    public void setSkipMtlsUriRegex(String[] skipMtlsUriRegex){
-        this.skipMtlsUriRegex=skipMtlsUriRegex;
+    public void setSkipMtlsUriRegex(String[] skipMtlsUriRegex) {
+        this.skipMtlsUriRegex = skipMtlsUriRegex;
     }
 
-    public String[] getSkipMtlsUriRegex(){
+    public String[] getSkipMtlsUriRegex() {
         return this.skipMtlsUriRegex;
     }
 
-    public Client(String ca,Integer depth,String[] skipMtlsUriRegex){
-        this.ca=ca;
-        this.depth=depth;
-        this.skipMtlsUriRegex=skipMtlsUriRegex;
+    public Client(String ca, Integer depth, String[] skipMtlsUriRegex) {
+        this.ca = ca;
+        this.depth = depth;
+        this.skipMtlsUriRegex = skipMtlsUriRegex;
     }
 }

@@ -8,15 +8,13 @@ import org.noear.wood.annotation.Table;
 public class Manifest {
     @Column("id")
     @PrimaryKey
-    private
-    String id;
+    private String id;
+
     @Column("title")
     private String title;
 
     @Column("content")
-    private
-    String content;
-
+    private String content;
 
     public String getId() {
         return id;
@@ -41,6 +39,4 @@ public class Manifest {
     public void setContent(String content) {
         this.content = content;
     }
-
-
 }

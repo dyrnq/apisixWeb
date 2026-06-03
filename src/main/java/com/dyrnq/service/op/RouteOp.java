@@ -6,7 +6,6 @@ import com.dyrnq.apisix.domain.Node;
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.domain.Timeout;
 import com.dyrnq.apisix.domain.Upstream;
-
 import java.util.ArrayList;
 import java.util.List;
 

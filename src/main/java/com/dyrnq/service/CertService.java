@@ -16,15 +16,6 @@ import enumeration.Approach;
 import enumeration.Challenge;
 import enumeration.Encryption;
 import enumeration.Supplier;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.operator.OperatorCreationException;
-import org.noear.solon.annotation.Component;
-import org.noear.solon.annotation.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -38,6 +29,14 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.naming.InvalidNameException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.noear.solon.annotation.Component;
+import org.noear.solon.annotation.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component
 public class CertService {
@@ -60,8 +59,10 @@ public class CertService {
 
     @Inject(value = "aliyunImpl")
     ApplyCertificate aliyun;
+
     @Inject
     BusinessLogic businessLogic;
+
     @Inject
     HomeDir homeDir;
 
@@ -93,8 +94,9 @@ public class CertService {
         return dnsapiList;
     }
 
-
-    public void privateCA(Cert cert) throws CertificateException, IOException, NoSuchAlgorithmException, OperatorCreationException, InvalidAlgorithmParameterException {
+    public void privateCA(Cert cert)
+            throws CertificateException, IOException, NoSuchAlgorithmException, OperatorCreationException,
+                    InvalidAlgorithmParameterException {
         if (StringUtils.isBlank(cert.getSubject())) {
             cert.setSubject("CN=" + StringUtils.split(cert.getDomain(), ",")[0]);
         }
@@ -107,9 +109,11 @@ public class CertService {
             issuerCAKey = CertUtils.load(ca.getKey());
         }
         if (cert.getEncryption() != null && cert.getEncryption() == Encryption.ECC.getId()) {
-            x509Holder = CertUtils.genECC(cert.getSubject(), StringUtils.split(cert.getDomain(), ","), issuerCA, issuerCAKey);
+            x509Holder = CertUtils.genECC(
+                    cert.getSubject(), StringUtils.split(cert.getDomain(), ","), issuerCA, issuerCAKey);
         } else {
-            x509Holder = CertUtils.genRSA(cert.getSubject(), StringUtils.split(cert.getDomain(), ","), issuerCA, issuerCAKey);
+            x509Holder = CertUtils.genRSA(
+                    cert.getSubject(), StringUtils.split(cert.getDomain(), ","), issuerCA, issuerCAKey);
         }
 
         cert.setCert(x509Holder.getCert());
@@ -118,7 +122,6 @@ public class CertService {
         cert.setNotAfter(x509Cert.getNotAfter().getTime());
         cert.setNotBefore(x509Cert.getNotBefore().getTime());
     }
-
 
     public void manual(Cert cert) throws CertificateException, InvalidNameException, IOException {
         if (cert.getCertFile() != null) {
@@ -135,7 +138,6 @@ public class CertService {
         cert.setDomain(StringUtils.join(sniArray, ","));
     }
 
-
     private ApplyCertificate getApplyCertificate(int id) {
         if (id == Supplier.acme.getId()) {
             return acme;
@@ -147,7 +149,6 @@ public class CertService {
         return acme;
     }
 
-
     public void trustCA(Cert cert) throws CertificateException, IOException {
         if (cert.getChallenge() != null && cert.getChallenge().intValue() == Challenge.dns.getId()) {
             getApplyCertificate(cert.getSupplier().intValue()).dns(cert);
@@ -156,8 +157,9 @@ public class CertService {
         }
     }
 
-
-    public void issue(Cert cert) throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, OperatorCreationException {
+    public void issue(Cert cert)
+            throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException,
+                    NoSuchAlgorithmException, OperatorCreationException {
         if (cert.getApproach() == Approach.trustCA.getId()) {
             this.trustCA(cert);
         } else if (cert.getApproach() == Approach.privateCA.getId()) {
@@ -166,7 +168,9 @@ public class CertService {
         upsertSSL(cert);
     }
 
-    public void renew(Cert cert) throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, OperatorCreationException {
+    public void renew(Cert cert)
+            throws InvalidNameException, CertificateException, IOException, InvalidAlgorithmParameterException,
+                    NoSuchAlgorithmException, OperatorCreationException {
         if (cert.getApproach() == Approach.trustCA.getId()) {
             this.trustCA(cert);
         } else if (cert.getApproach() == Approach.privateCA.getId()) {
@@ -193,14 +197,13 @@ public class CertService {
                 ssl.setStatus(1);
                 ssl.setCert(cert.getCert());
                 ssl.setKey(cert.getKey());
-                getAdminClient().putSSL(id,ssl);
+                getAdminClient().putSSL(id, ssl);
             }
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         } catch (ApisixSDKException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     /**
@@ -226,5 +229,4 @@ public class CertService {
         }
         return sb.toString();
     }
-
 }

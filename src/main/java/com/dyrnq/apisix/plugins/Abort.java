@@ -2,7 +2,6 @@ package com.dyrnq.apisix.plugins;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Map;
 
 public class Abort {
@@ -16,7 +15,7 @@ public class Abort {
 
     @SerializedName("headers")
     @Expose
-    public Map<String,String> headers;
+    public Map<String, String> headers;
 
     @SerializedName("percentage")
     @Expose

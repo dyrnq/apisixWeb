@@ -2,7 +2,6 @@ package com.dyrnq.apisix.domain;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,9 +11,11 @@ public class Healthy__1 {
     @SerializedName("successes")
     @Expose
     private Integer successes = 2;
+
     @SerializedName("http_statuses")
     @Expose
     private Set<Integer> httpStatuses = new LinkedHashSet<Integer>(Arrays.asList(200, 302));
+
     @SerializedName("interval")
     @Expose
     private Integer interval = 1;
@@ -42,5 +43,4 @@ public class Healthy__1 {
     public void setInterval(Integer interval) {
         this.interval = interval;
     }
-
 }

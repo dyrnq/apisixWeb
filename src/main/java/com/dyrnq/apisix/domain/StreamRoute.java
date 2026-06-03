@@ -1,30 +1,29 @@
 package com.dyrnq.apisix.domain;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
-import java.util.List;
-public class StreamRoute{
-    public StreamRoute(){
+
+public class StreamRoute {
+    public StreamRoute() {
         super();
     }
-    //@SerializedName("protocol.conf")
-    //@Expose
-    //private String protocol.conf;
+    // @SerializedName("protocol.conf")
+    // @Expose
+    // private String protocol.conf;
 
-    //@SerializedName("protocol.name")
-    //@Expose
-    //private String protocol.name;
+    // @SerializedName("protocol.name")
+    // @Expose
+    // private String protocol.name;
 
     @SerializedName("remote_addr")
     @Expose
     private String remoteAddr;
 
-    public void setRemoteAddr(String remoteAddr){
-        this.remoteAddr=remoteAddr;
+    public void setRemoteAddr(String remoteAddr) {
+        this.remoteAddr = remoteAddr;
     }
 
-    public String getRemoteAddr(){
+    public String getRemoteAddr() {
         return this.remoteAddr;
     }
 
@@ -32,11 +31,11 @@ public class StreamRoute{
     @Expose
     private String serverAddr;
 
-    public void setServerAddr(String serverAddr){
-        this.serverAddr=serverAddr;
+    public void setServerAddr(String serverAddr) {
+        this.serverAddr = serverAddr;
     }
 
-    public String getServerAddr(){
+    public String getServerAddr() {
         return this.serverAddr;
     }
 
@@ -44,11 +43,11 @@ public class StreamRoute{
     @Expose
     private Integer serverPort;
 
-    public void setServerPort(Integer serverPort){
-        this.serverPort=serverPort;
+    public void setServerPort(Integer serverPort) {
+        this.serverPort = serverPort;
     }
 
-    public Integer getServerPort(){
+    public Integer getServerPort() {
         return this.serverPort;
     }
 
@@ -56,11 +55,11 @@ public class StreamRoute{
     @Expose
     private String sni;
 
-    public void setSni(String sni){
-        this.sni=sni;
+    public void setSni(String sni) {
+        this.sni = sni;
     }
 
-    public String getSni(){
+    public String getSni() {
         return this.sni;
     }
 
@@ -68,11 +67,11 @@ public class StreamRoute{
     @Expose
     private Upstream upstream;
 
-    public void setUpstream(Upstream upstream){
-        this.upstream=upstream;
+    public void setUpstream(Upstream upstream) {
+        this.upstream = upstream;
     }
 
-    public Upstream getUpstream(){
+    public Upstream getUpstream() {
         return this.upstream;
     }
 
@@ -80,11 +79,11 @@ public class StreamRoute{
     @Expose
     private String upstreamId;
 
-    public void setUpstreamId(String upstreamId){
-        this.upstreamId=upstreamId;
+    public void setUpstreamId(String upstreamId) {
+        this.upstreamId = upstreamId;
     }
 
-    public String getUpstreamId(){
+    public String getUpstreamId() {
         return this.upstreamId;
     }
 
@@ -92,11 +91,11 @@ public class StreamRoute{
     @Expose
     private Protocol protocol;
 
-    public void setProtocol(Protocol protocol){
-        this.protocol=protocol;
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
     }
 
-    public Protocol getProtocol(){
+    public Protocol getProtocol() {
         return this.protocol;
     }
 
@@ -104,11 +103,11 @@ public class StreamRoute{
     @Expose
     private String id;
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -116,11 +115,11 @@ public class StreamRoute{
     @Expose
     private String serviceId;
 
-    public void setServiceId(String serviceId){
-        this.serviceId=serviceId;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
-    public String getServiceId(){
+    public String getServiceId() {
         return this.serviceId;
     }
 }

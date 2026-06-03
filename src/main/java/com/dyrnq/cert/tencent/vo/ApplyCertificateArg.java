@@ -7,36 +7,47 @@ public class ApplyCertificateArg {
     @SerializedName("DvAuthMethod")
     @Expose
     private String dvAuthMethod;
+
     @SerializedName("DomainName")
     @Expose
     private String domainName;
+
     @SerializedName("ProjectId")
     @Expose
     private Integer projectId;
+
     @SerializedName("PackageType")
     @Expose
     private String packageType;
+
     @SerializedName("ContactEmail")
     @Expose
     private String contactEmail;
+
     @SerializedName("ContactPhone")
     @Expose
     private String contactPhone;
+
     @SerializedName("ValidityPeriod")
     @Expose
     private String validityPeriod;
+
     @SerializedName("CsrEncryptAlgo")
     @Expose
     private String csrEncryptAlgo;
+
     @SerializedName("Alias")
     @Expose
     private String alias;
+
     @SerializedName("OldCertificateId")
     @Expose
     private String oldCertificateId;
+
     @SerializedName("PackageId")
     @Expose
     private String packageId;
+
     @SerializedName("DeleteDnsAutoRecord")
     @Expose
     private Boolean deleteDnsAutoRecord;

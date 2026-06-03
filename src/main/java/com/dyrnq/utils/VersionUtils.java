@@ -1,9 +1,7 @@
 package com.dyrnq.utils;
 
-
 import cn.hutool.core.io.resource.ResourceUtil;
 import com.dyrnq.Constants;
-
 import java.util.Properties;
 
 public class VersionUtils {

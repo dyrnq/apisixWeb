@@ -9,10 +9,13 @@ public class Inst {
     @Column("id")
     @PrimaryKey
     private String id;
+
     @Column("name")
     private String name;
+
     @Column("url")
     private String url;
+
     @Column("api_key")
     private String apiKey;
 

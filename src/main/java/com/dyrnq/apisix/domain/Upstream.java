@@ -1,13 +1,16 @@
 package com.dyrnq.apisix.domain;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
 import java.util.List;
-public class Upstream{
-    public Upstream(){
+import java.util.Map;
+
+public class Upstream {
+    public Upstream() {
         super();
     }
+
     @SerializedName("discovery_args")
     @Expose
     private DiscoveryArgs discoveryArgs;
@@ -16,11 +19,11 @@ public class Upstream{
     @Expose
     private Checks checks;
 
-    public void setChecks(Checks checks){
-        this.checks=checks;
+    public void setChecks(Checks checks) {
+        this.checks = checks;
     }
 
-    public Checks getChecks(){
+    public Checks getChecks() {
         return this.checks;
     }
 
@@ -28,11 +31,11 @@ public class Upstream{
     @Expose
     private Long createTime;
 
-    public void setCreateTime(Long createTime){
-        this.createTime=createTime;
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getCreateTime(){
+    public Long getCreateTime() {
         return this.createTime;
     }
 
@@ -40,11 +43,11 @@ public class Upstream{
     @Expose
     private String desc;
 
-    public void setDesc(String desc){
-        this.desc=desc;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getDesc(){
+    public String getDesc() {
         return this.desc;
     }
 
@@ -52,11 +55,11 @@ public class Upstream{
     @Expose
     private String discoveryType;
 
-    public void setDiscoveryType(String discoveryType){
-        this.discoveryType=discoveryType;
+    public void setDiscoveryType(String discoveryType) {
+        this.discoveryType = discoveryType;
     }
 
-    public String getDiscoveryType(){
+    public String getDiscoveryType() {
         return this.discoveryType;
     }
 
@@ -64,47 +67,47 @@ public class Upstream{
     @Expose
     private String hashOn;
 
-    public void setHashOn(String hashOn){
-        this.hashOn=hashOn;
+    public void setHashOn(String hashOn) {
+        this.hashOn = hashOn;
     }
 
-    public String getHashOn(){
+    public String getHashOn() {
         return this.hashOn;
     }
 
-    //@SerializedName("keepalive_pool.idle_timeout")
-    //@Expose
-    //private String keepalivePool.idleTimeout;
+    // @SerializedName("keepalive_pool.idle_timeout")
+    // @Expose
+    // private String keepalivePool.idleTimeout;
 
-    //@SerializedName("keepalive_pool.requests")
-    //@Expose
-    //private String keepalivePool.requests;
+    // @SerializedName("keepalive_pool.requests")
+    // @Expose
+    // private String keepalivePool.requests;
 
-    //@SerializedName("keepalive_pool.size")
-    //@Expose
-    //private String keepalivePool.size;
+    // @SerializedName("keepalive_pool.size")
+    // @Expose
+    // private String keepalivePool.size;
 
     @SerializedName("key")
     @Expose
     private String key;
 
-    public void setKey(String key){
-        this.key=key;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getKey(){
+    public String getKey() {
         return this.key;
     }
 
     @SerializedName("labels")
     @Expose
-    private Map<String,String> labels;
+    private Map<String, String> labels;
 
-    public void setLabels(Map<String,String> labels){
-        this.labels=labels;
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
     }
 
-    public Map<String,String> getLabels(){
+    public Map<String, String> getLabels() {
         return this.labels;
     }
 
@@ -112,11 +115,11 @@ public class Upstream{
     @Expose
     private String name;
 
-    public void setName(String name){
-        this.name=name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -125,11 +128,11 @@ public class Upstream{
     @JsonAdapter(NodeAdapterFactory.class)
     private List<Node> nodes;
 
-    public void setNodes(List<Node> nodes){
-        this.nodes=nodes;
+    public void setNodes(List<Node> nodes) {
+        this.nodes = nodes;
     }
 
-    public List<Node> getNodes(){
+    public List<Node> getNodes() {
         return this.nodes;
     }
 
@@ -137,11 +140,11 @@ public class Upstream{
     @Expose
     private String passHost;
 
-    public void setPassHost(String passHost){
-        this.passHost=passHost;
+    public void setPassHost(String passHost) {
+        this.passHost = passHost;
     }
 
-    public String getPassHost(){
+    public String getPassHost() {
         return this.passHost;
     }
 
@@ -149,11 +152,11 @@ public class Upstream{
     @Expose
     private Integer retries;
 
-    public void setRetries(Integer retries){
-        this.retries=retries;
+    public void setRetries(Integer retries) {
+        this.retries = retries;
     }
 
-    public Integer getRetries(){
+    public Integer getRetries() {
         return this.retries;
     }
 
@@ -161,11 +164,11 @@ public class Upstream{
     @Expose
     private String retryTimeout;
 
-    public void setRetryTimeout(String retryTimeout){
-        this.retryTimeout=retryTimeout;
+    public void setRetryTimeout(String retryTimeout) {
+        this.retryTimeout = retryTimeout;
     }
 
-    public String getRetryTimeout(){
+    public String getRetryTimeout() {
         return this.retryTimeout;
     }
 
@@ -173,11 +176,11 @@ public class Upstream{
     @Expose
     private String scheme;
 
-    public void setScheme(String scheme){
-        this.scheme=scheme;
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
     }
 
-    public String getScheme(){
+    public String getScheme() {
         return this.scheme;
     }
 
@@ -185,11 +188,11 @@ public class Upstream{
     @Expose
     private String serviceName;
 
-    public void setServiceName(String serviceName){
-        this.serviceName=serviceName;
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
     }
 
-    public String getServiceName(){
+    public String getServiceName() {
         return this.serviceName;
     }
 
@@ -197,35 +200,35 @@ public class Upstream{
     @Expose
     private Timeout timeout;
 
-    public void setTimeout(Timeout timeout){
-        this.timeout=timeout;
+    public void setTimeout(Timeout timeout) {
+        this.timeout = timeout;
     }
 
-    public Timeout getTimeout(){
+    public Timeout getTimeout() {
         return this.timeout;
     }
 
-    //@SerializedName("tls.client_cert")
-    //@Expose
-    //private String tls.clientCert;
+    // @SerializedName("tls.client_cert")
+    // @Expose
+    // private String tls.clientCert;
 
-    //@SerializedName("tls.client_cert_id")
-    //@Expose
-    //private String tls.clientCertId;
+    // @SerializedName("tls.client_cert_id")
+    // @Expose
+    // private String tls.clientCertId;
 
-    //@SerializedName("tls.client_key")
-    //@Expose
-    //private String tls.clientKey;
+    // @SerializedName("tls.client_key")
+    // @Expose
+    // private String tls.clientKey;
 
     @SerializedName("type")
     @Expose
     private String type;
 
-    public void setType(String type){
-        this.type=type;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getType(){
+    public String getType() {
         return this.type;
     }
 
@@ -233,11 +236,11 @@ public class Upstream{
     @Expose
     private Long updateTime;
 
-    public void setUpdateTime(Long updateTime){
-        this.updateTime=updateTime;
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Long getUpdateTime(){
+    public Long getUpdateTime() {
         return this.updateTime;
     }
 
@@ -245,11 +248,11 @@ public class Upstream{
     @Expose
     private String upstreamHost;
 
-    public void setUpstreamHost(String upstreamHost){
-        this.upstreamHost=upstreamHost;
+    public void setUpstreamHost(String upstreamHost) {
+        this.upstreamHost = upstreamHost;
     }
 
-    public String getUpstreamHost(){
+    public String getUpstreamHost() {
         return this.upstreamHost;
     }
 
@@ -257,11 +260,11 @@ public class Upstream{
     @Expose
     private KeepalivePool keepalivePool;
 
-    public void setKeepalivePool(KeepalivePool keepalivePool){
-        this.keepalivePool=keepalivePool;
+    public void setKeepalivePool(KeepalivePool keepalivePool) {
+        this.keepalivePool = keepalivePool;
     }
 
-    public KeepalivePool getKeepalivePool(){
+    public KeepalivePool getKeepalivePool() {
         return this.keepalivePool;
     }
 
@@ -269,11 +272,11 @@ public class Upstream{
     @Expose
     private Tls tls;
 
-    public void setTls(Tls tls){
-        this.tls=tls;
+    public void setTls(Tls tls) {
+        this.tls = tls;
     }
 
-    public Tls getTls(){
+    public Tls getTls() {
         return this.tls;
     }
 
@@ -281,11 +284,11 @@ public class Upstream{
     @Expose
     private String id;
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 

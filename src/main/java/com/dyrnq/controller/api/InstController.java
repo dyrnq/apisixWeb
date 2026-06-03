@@ -5,6 +5,10 @@ import com.dyrnq.apisix.agentclient.AgentClient;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.InstMapper;
 import com.dyrnq.model.Inst;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.noear.solon.annotation.*;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.MethodType;
@@ -13,15 +17,11 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Mapping("api/inst")
 @Controller
 public class InstController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(InstController.class);
+
     @Inject
     InstMapper instMapper;
 
@@ -137,11 +137,11 @@ public class InstController extends ApiController {
     }
 
     @Mapping(value = "config/{id}", method = MethodType.POST)
-    public Result writeConfig(Context ctx, @Path("id") String id, String data ) {
+    public Result writeConfig(Context ctx, @Path("id") String id, String data) {
         try {
             Inst inst = instMapper.selectById(id);
             AgentClient agentClient = new AgentClient();
-            agentClient.writeConfig(inst.getAgentUrl(), inst.getAgentApiKey(),data);
+            agentClient.writeConfig(inst.getAgentUrl(), inst.getAgentApiKey(), data);
             return Result.succeed(data);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -161,6 +161,7 @@ public class InstController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
+
     @Mapping(value = "reload/{id}", method = MethodType.GET)
     public Result reload(Context ctx, @Path("id") String id) {
         try {
@@ -173,6 +174,7 @@ public class InstController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
+
     @Mapping(value = "stop/{id}", method = MethodType.GET)
     public Result stop(Context ctx, @Path("id") String id) {
         try {
@@ -198,5 +200,4 @@ public class InstController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 }

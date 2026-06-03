@@ -2,7 +2,6 @@ package com.dyrnq.apisix.domain;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +10,6 @@ public class Protocol {
     @Expose
     private String name;
 
-
     @SerializedName("superior_id")
     @Expose
     private String superiorId;
@@ -19,6 +17,7 @@ public class Protocol {
     @SerializedName("logger")
     @Expose
     private List<Logger> logger;
+
     @SerializedName("conf")
     @Expose
     private Map<String, Object> conf;

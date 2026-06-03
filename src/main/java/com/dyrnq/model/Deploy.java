@@ -1,46 +1,38 @@
 package com.dyrnq.model;
 
+import java.util.Date;
 import org.noear.solon.core.handle.UploadedFile;
 import org.noear.wood.annotation.Column;
 import org.noear.wood.annotation.Exclude;
 import org.noear.wood.annotation.PrimaryKey;
 import org.noear.wood.annotation.Table;
 
-import java.util.Date;
-
 @Table("deploy")
 public class Deploy {
     @Column("id")
     @PrimaryKey
-    private
-    String id;
+    private String id;
 
     @Column("insert_time")
-    private
-    Date insertTime;
+    private Date insertTime;
 
     @Column("update_time")
-    private
-    Date updateTime;
+    private Date updateTime;
 
     @Column("title")
-    private
-    String title;
+    private String title;
 
     @Column("content")
-    private
-    String content;
+    private String content;
 
     @Column("inst_id")
-    private
-    String instId;
+    private String instId;
 
     @Column("state")
-    private
-    Integer state;
+    private Integer state;
+
     @Exclude
-    private
-    UploadedFile uploadFile;
+    private UploadedFile uploadFile;
 
     public String getId() {
         return id;

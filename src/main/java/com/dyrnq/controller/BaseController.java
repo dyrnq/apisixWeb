@@ -1,5 +1,3 @@
 package com.dyrnq.controller;
 
-
-public class BaseController {
-}
+public class BaseController {}

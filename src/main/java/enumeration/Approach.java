@@ -1,8 +1,6 @@
 package enumeration;
 
 public enum Approach {
-
-
     trustCA(1, "Trusted CA"),
     manual(2, "手工上传"),
     privateCA(3, "Private CA(自签)");

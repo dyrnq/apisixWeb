@@ -7,14 +7,6 @@ import com.dyrnq.cert.tencent.vo.*;
 import com.dyrnq.model.Cert;
 import com.dyrnq.service.ApplyCertificate;
 import com.dyrnq.utils.CertUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.noear.solon.annotation.Component;
-import org.noear.solon.annotation.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +19,13 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.noear.solon.annotation.Component;
+import org.noear.solon.annotation.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(name = "tencentImpl")
 public class TencentImpl implements ApplyCertificate {
@@ -73,33 +72,32 @@ public class TencentImpl implements ApplyCertificate {
 
         String certificateId = applyCertificateResult.getCertificateId();
 
-//        DescribeCertificatesArg deArg = new DescribeCertificatesArg();
-//        deArg.setLimit(1000);
-//        deArg.setOffset(0);
-//        deArg.setSearchKey(domain);
-//        deArg.setCertificateStatus(new Integer[]{1});
-//
-//
-//        List<Certificates> list = null;
-//
-//        //等待证书审批下发
-//        while (CollectionUtil.isEmpty(list)) {
-//            try {
-//                DescribeCertificatesResult r = tencentSDK.describeCertificates(deArg);
-//                list = r != null ? r.getCertificates() : null;
-//                if (CollectionUtil.isEmpty(list)) {
-//                    Thread.sleep(100);
-//                }
-//            } catch (Exception e) {
-//                logger.error(e.getMessage());
-//            }
-//        }
-
+        //        DescribeCertificatesArg deArg = new DescribeCertificatesArg();
+        //        deArg.setLimit(1000);
+        //        deArg.setOffset(0);
+        //        deArg.setSearchKey(domain);
+        //        deArg.setCertificateStatus(new Integer[]{1});
+        //
+        //
+        //        List<Certificates> list = null;
+        //
+        //        //等待证书审批下发
+        //        while (CollectionUtil.isEmpty(list)) {
+        //            try {
+        //                DescribeCertificatesResult r = tencentSDK.describeCertificates(deArg);
+        //                list = r != null ? r.getCertificates() : null;
+        //                if (CollectionUtil.isEmpty(list)) {
+        //                    Thread.sleep(100);
+        //                }
+        //            } catch (Exception e) {
+        //                logger.error(e.getMessage());
+        //            }
+        //        }
 
         DescribeCertificateArg deArg = new DescribeCertificateArg();
         deArg.setCertificateId(certificateId);
 
-        //等待证书审批下发
+        // 等待证书审批下发
 
         boolean ISSUED = false;
         while (!ISSUED) {
@@ -111,7 +109,7 @@ public class TencentImpl implements ApplyCertificate {
             }
         }
 
-        //下载证书
+        // 下载证书
         DownloadCertificateArg downloadCertificateArg = new DownloadCertificateArg();
         downloadCertificateArg.setCertificateId(certificateId);
         DownloadCertificateResult downloadCertificateResult = tencentSDK.downloadCertificate(downloadCertificateArg);
@@ -124,7 +122,7 @@ public class TencentImpl implements ApplyCertificate {
             while (entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 if (!entry.isDirectory()) {
-                    //logger.info("zip files: " + entry.getName());
+                    // logger.info("zip files: " + entry.getName());
                     if (StringUtils.equalsIgnoreCase(entry.getName(), domain + ".key")) {
                         cert.setKey(IOUtils.toString(zipFile.getInputStream(entry), StandardCharsets.UTF_8));
                     } else if (StringUtils.equalsIgnoreCase(entry.getName(), domain + ".pem")) {
@@ -139,13 +137,11 @@ public class TencentImpl implements ApplyCertificate {
             cert.setNotBefore(x509Cert.getNotBefore().getTime());
             cert.setSubject(x509Cert.getSubjectDN().toString());
         }
-
     }
 
     @Override
     public void http(Cert cert) throws CertificateException, IOException {
-        //没有找到相关接口实现这个HTTP
+        // 没有找到相关接口实现这个HTTP
         throw new RuntimeException("not support");
     }
-
 }

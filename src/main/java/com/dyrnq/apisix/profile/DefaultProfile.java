@@ -1,6 +1,6 @@
 package com.dyrnq.apisix.profile;
 
-//import org.slf4j.Logger;
+// import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,17 +58,17 @@ public class DefaultProfile implements Profile {
         return this.endpoints;
     }
 
-//    public void setEndpoints(List<Endpoint> endpoints) {
-//        this.endpoints = endpoints;
-//    }
+    //    public void setEndpoints(List<Endpoint> endpoints) {
+    //        this.endpoints = endpoints;
+    //    }
 
-//    public Logger getLogger() {
-//        return this.logger;
-//    }
-//
-//    public void setLogger(Logger logger) {
-//        this.logger = logger;
-//    }
+    //    public Logger getLogger() {
+    //        return this.logger;
+    //    }
+    //
+    //    public void setLogger(Logger logger) {
+    //        this.logger = logger;
+    //    }
 
     public String getVersion() {
         return this.version;
@@ -81,5 +81,4 @@ public class DefaultProfile implements Profile {
     public Timeout timeout() {
         return this.timeOut;
     }
-
 }

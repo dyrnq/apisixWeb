@@ -1,6 +1,6 @@
 package com.dyrnq.apisix.profile;
 
-//import org.slf4j.Logger;
+// import org.slf4j.Logger;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ public interface Profile {
 
     Timeout timeout();
 
-//    Logger getLogger();
+    //    Logger getLogger();
 
-//    void setLogger(Logger logger);
+    //    void setLogger(Logger logger);
 
     String getVersion();
 
@@ -23,5 +23,5 @@ public interface Profile {
 
     List<Endpoint> getEndpoints();
 
-    //void setEndpoints(List<Endpoint> endpoints);
+    // void setEndpoints(List<Endpoint> endpoints);
 }

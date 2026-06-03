@@ -1,7 +1,6 @@
 package enumeration;
 
 public enum Encryption {
-
     RSA(1, "RSA"),
     ECC(2, "ECC");
 

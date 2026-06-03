@@ -6,15 +6,14 @@ import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.service.op.Factory;
+import java.util.ArrayList;
+import java.util.List;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Mapping("api/route")
@@ -79,7 +78,6 @@ public class RouteController extends ApiController {
                 } catch (Exception e) {
                     logger.warn(e.getMessage());
                 }
-
             }
             if (route == null) {
                 Multi<Route> rsp = getAdminClient().queryRoutes(page, limit, toMap(name, label, uri));

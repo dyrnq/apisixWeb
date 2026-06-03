@@ -1,27 +1,10 @@
-import cn.hutool.core.io.FileUtil;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
-import com.dyrnq.apisix.plugins.Echo;
-import com.dyrnq.utils.CertUtils;
-import org.apache.commons.io.IOUtils;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
-import javax.naming.InvalidNameException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.security.Security;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-
 public class ApisixClientPostTest extends BaseJunit {
-
-
 
     @Test
     public void test_postRoute() throws ApisixSDKException {
@@ -63,8 +46,6 @@ public class ApisixClientPostTest extends BaseJunit {
             list.add(new Node("127.0.0.1", 8082, 100));
             upstream.setNodes(list);
             client.postUpstream(upstream);
-
         }
     }
-
 }

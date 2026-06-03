@@ -2,13 +2,11 @@ package com.dyrnq.cert.acme;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.RuntimeUtil;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.TimeUnit;
-
 
 @Component
 public class AcmeshCmd {
@@ -18,13 +16,15 @@ public class AcmeshCmd {
         Process process = null;
         String sbStd = "";
 
-        String[] allEnvs = ArrayUtil.addAll(System.getenv() //
-                .entrySet()//
-                .stream()//
-                .map(r -> String.format("%s=%s", r.getKey(), r.getValue()))//
-                .toArray(String[]::new), envs);
+        String[] allEnvs = ArrayUtil.addAll(
+                System.getenv() //
+                        .entrySet() //
+                        .stream() //
+                        .map(r -> String.format("%s=%s", r.getKey(), r.getValue())) //
+                        .toArray(String[]::new),
+                envs);
 
-//        long start = System.currentTimeMillis();
+        //        long start = System.currentTimeMillis();
         try {
             process = RuntimeUtil.exec(allEnvs, "/bin/sh", "-c", cmd);
 

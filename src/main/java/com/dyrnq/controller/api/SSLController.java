@@ -7,6 +7,15 @@ import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.service.op.Factory;
 import com.dyrnq.utils.CertUtils;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import javax.naming.InvalidNameException;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
@@ -16,16 +25,6 @@ import org.noear.solon.core.handle.Result;
 import org.noear.solon.core.handle.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.naming.InvalidNameException;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 @Mapping("api/ssl")
 @Controller
@@ -94,7 +93,14 @@ public class SSLController extends ApiController {
     }
 
     @Mapping("upload")
-    public Result addSSLFile(Context ctx, UploadedFile certFile, UploadedFile keyFile, String id, String snis, String type, UploadedFile caCertFile) {
+    public Result addSSLFile(
+            Context ctx,
+            UploadedFile certFile,
+            UploadedFile keyFile,
+            String id,
+            String snis,
+            String type,
+            UploadedFile caCertFile) {
         try {
             SSL ssl = new SSL();
             byte[] byteCert = IOUtils.toByteArray(certFile.getContent());
@@ -124,5 +130,4 @@ public class SSLController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 }

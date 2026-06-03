@@ -4,6 +4,8 @@ import com.dyrnq.HomeDir;
 import com.dyrnq.dso.CertMapper;
 import com.dyrnq.model.Cert;
 import com.dyrnq.service.CertService;
+import java.io.File;
+import java.util.List;
 import org.apache.commons.io.FileUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
@@ -12,9 +14,6 @@ import org.noear.wood.MapperWhereQ;
 import org.noear.wood.ext.Act1;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.List;
 
 @Component
 public class ScheduleTask {
@@ -25,6 +24,7 @@ public class ScheduleTask {
 
     @Inject
     CertService certService;
+
     @Inject
     HomeDir homeDir;
 
@@ -38,7 +38,7 @@ public class ScheduleTask {
         Long now = System.currentTimeMillis();
         for (Cert cert : list) {
             Long exp = cert.getNotAfter();
-            //提前6天覆盖证书
+            // 提前6天覆盖证书
             Long exp1 = Long.sum(now, 6 * 24 * 60 * 60 * 1000L);
             if (exp > exp1) {
                 try {
@@ -50,7 +50,7 @@ public class ScheduleTask {
         }
     }
 
-    //清理tmp目录,30s执行一次,清理十小时之前的数据
+    // 清理tmp目录,30s执行一次,清理十小时之前的数据
     @Scheduled(cron = "0/30 * * * * ?")
     public void clearTmp() {
         try {
@@ -70,9 +70,9 @@ public class ScheduleTask {
     }
 
     // 测试任务
-//	@Scheduled(cron = "* * * * * ?")
-//	public void test() throws InterruptedException {
-//		Thread.sleep(3000);
-//		System.out.println(DateUtil.format(new Date(), "HHmmss"));
-//	}
+    //	@Scheduled(cron = "* * * * * ?")
+    //	public void test() throws InterruptedException {
+    //		Thread.sleep(3000);
+    //		System.out.println(DateUtil.format(new Date(), "HHmmss"));
+    //	}
 }

@@ -1,18 +1,16 @@
 package com.dyrnq.apisix;
 
-
 import com.dyrnq.apisix.domain.GlobalRule;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
 
@@ -25,8 +23,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
     public GlobalRule get(String id) throws ApisixSDKException {
         Wrap<GlobalRule> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -57,8 +54,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
                     }
                 }
             }
-            Type type = new TypeToken<Multi<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -86,8 +82,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
     public List<GlobalRule> list() throws ApisixSDKException {
         Multi<GlobalRule> rsp = null;
         try {
-            Type type = new TypeToken<Multi<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -103,8 +98,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
     public GlobalRule put(String id, GlobalRule obj) throws ApisixSDKException {
         Wrap<GlobalRule> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -119,8 +113,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
     public GlobalRule putRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<GlobalRule> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -135,8 +128,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
     public GlobalRule patchRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<GlobalRule> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PATCH, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -151,8 +143,7 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
     public GlobalRule post(GlobalRule obj) throws ApisixSDKException {
         Wrap<GlobalRule> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<GlobalRule>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<GlobalRule>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_POST, PATH + "/"), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -163,5 +154,4 @@ public class GlobalRuleClient extends BaseClient implements Stub<GlobalRule> {
         }
         return rsp.getValue();
     }
-
 }

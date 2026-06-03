@@ -7,30 +7,39 @@ public class DescribeCertificateStateResult {
     @SerializedName("Type")
     @Expose
     private String type;
+
     @SerializedName("Domain")
     @Expose
     private String domain;
+
     @SerializedName("RecordType")
     @Expose
     private String recordType;
+
     @SerializedName("Certificate")
     @Expose
     private String certificate;
+
     @SerializedName("RecordDomain")
     @Expose
     private String recordDomain;
+
     @SerializedName("PrivateKey")
     @Expose
     private String privateKey;
+
     @SerializedName("ValidateType")
     @Expose
     private String validateType;
+
     @SerializedName("RecordValue")
     @Expose
     private String recordValue;
+
     @SerializedName("Content")
     @Expose
     private String content;
+
     @SerializedName("Uri")
     @Expose
     private String uri;

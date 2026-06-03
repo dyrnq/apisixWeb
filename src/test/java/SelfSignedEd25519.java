@@ -1,5 +1,16 @@
 import cn.hutool.core.util.RuntimeUtil;
 import com.dyrnq.utils.CertUtils;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.X509Certificate;
+import java.security.spec.ECGenParameterSpec;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 import org.apache.commons.io.IOUtils;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.BasicConstraints;
@@ -15,18 +26,6 @@ import org.bouncycastle.pkcs.PKCS10CertificationRequest;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 import org.bouncycastle.pkcs.jcajce.JcaPKCS10CertificationRequestBuilder;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.math.BigInteger;
-import java.security.*;
-import java.security.cert.X509Certificate;
-import java.security.spec.ECGenParameterSpec;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 public class SelfSignedEd25519 extends BaseJunit {
     @Test
@@ -48,7 +47,6 @@ public class SelfSignedEd25519 extends BaseJunit {
         Date startDate = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000); // 一天前
         Date endDate = new Date(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000); // 一年后
 
-
         // 构建证书请求
         X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
                 issuer,
@@ -56,8 +54,7 @@ public class SelfSignedEd25519 extends BaseJunit {
                 startDate,
                 endDate,
                 subject,
-                keyPair.getPublic()
-        );
+                keyPair.getPublic());
 
         X509CertificateHolder certHolder = certBuilder.build(contentSigner);
         JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter().setProvider("BC");
@@ -93,7 +90,6 @@ public class SelfSignedEd25519 extends BaseJunit {
         Date startDate = new Date(System.currentTimeMillis() - 24 * 60 * 60 * 1000); // 一天前
         Date endDate = new Date(System.currentTimeMillis() + 365L * 24 * 60 * 60 * 1000); // 一年后
 
-
         // 构建证书请求
         X509v3CertificateBuilder certBuilder = new JcaX509v3CertificateBuilder(
                 issuer,
@@ -101,8 +97,7 @@ public class SelfSignedEd25519 extends BaseJunit {
                 startDate,
                 endDate,
                 subject,
-                keyPair.getPublic()
-        );
+                keyPair.getPublic());
 
         X509CertificateHolder certHolder = certBuilder.build(contentSigner);
         JcaX509CertificateConverter certConverter = new JcaX509CertificateConverter().setProvider("BC");
@@ -130,7 +125,6 @@ public class SelfSignedEd25519 extends BaseJunit {
                     .forEach(algorithms::add);
         }
         algorithms.forEach(System.out::println);
-
     }
 
     /**
@@ -147,23 +141,19 @@ public class SelfSignedEd25519 extends BaseJunit {
         // 加载 CA 密钥
         PrivateKey caKey = CertUtils.load(new File("src/test/resources/example-ca.key"));
 
-
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("X25519", "BC");
         keyPairGenerator.initialize(new ECGenParameterSpec("X25519"));
         KeyPair keyPair = keyPairGenerator.generateKeyPair();
         PrivateKey privKey = keyPair.getPrivate();
         PublicKey publicKey = keyPair.getPublic();
 
-
         Date notBefore = Date.from(LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC));
         Date notAfter = Date.from(LocalDate.now().plusYears(1).atStartOfDay().toInstant(ZoneOffset.UTC));
-
 
         // 构造 X.509 证书请求
         PKCS10CertificationRequestBuilder p10Builder = new JcaPKCS10CertificationRequestBuilder(
                 new X500Name("CN=hello.com"), // 填写主题名称
-                publicKey
-        );
+                publicKey);
         JcaContentSignerBuilder csBuilder = new JcaContentSignerBuilder("SHA256withRSA");
         ContentSigner signer = csBuilder.build(caKey);
         PKCS10CertificationRequest csr = p10Builder.build(signer);
@@ -176,9 +166,12 @@ public class SelfSignedEd25519 extends BaseJunit {
                 notAfter,
                 csr.getSubject(), // 使用证书请求中的主题名称
                 publicKey // 使用证书请求中的公钥
-        );
+                );
         JcaX509ExtensionUtils extUtils = new JcaX509ExtensionUtils();
-        certificateBuilder.addExtension(Extension.subjectKeyIdentifier, false, extUtils.createSubjectKeyIdentifier(csr.getSubjectPublicKeyInfo()));
+        certificateBuilder.addExtension(
+                Extension.subjectKeyIdentifier,
+                false,
+                extUtils.createSubjectKeyIdentifier(csr.getSubjectPublicKeyInfo()));
         certificateBuilder.addExtension(Extension.basicConstraints, true, new BasicConstraints(false)); // 非 CA 证书
         X509CertificateHolder certHolder = certificateBuilder.build(signer);
 
@@ -190,6 +183,5 @@ public class SelfSignedEd25519 extends BaseJunit {
         IOUtils.write(CertUtils.content(privKey), new FileOutputStream(new File("src/test/resources/X25519.key")));
 
         System.out.println(RuntimeUtil.execForStr("openssl x509 -in src/test/resources/X25519.crt -text -noout"));
-
     }
 }

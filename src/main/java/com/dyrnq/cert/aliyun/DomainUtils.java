@@ -26,5 +26,4 @@ public class DomainUtils {
         String baseDomain = domainx[domainx.length - 2] + "." + domainx[domainx.length - 1];
         return baseDomain;
     }
-
 }

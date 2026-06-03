@@ -8,15 +8,6 @@ import com.dyrnq.apisix.response.Item;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
-import okhttp3.Headers;
-import okhttp3.Headers.Builder;
-import okhttp3.Response;
-import org.apache.commons.lang3.StringUtils;
-//import org.noear.snack.ONode;
-import org.noear.snack4.ONode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -24,6 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import okhttp3.Headers;
+import okhttp3.Headers.Builder;
+import okhttp3.Response;
+import org.apache.commons.lang3.StringUtils;
+import org.noear.snack4.ONode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class BaseClient {
     public static final int HTTP_OK = 200;
@@ -38,13 +36,13 @@ public abstract class BaseClient {
     private final String apiVersion;
     public Gson gson;
 
-
     public BaseClient(Profile profile) {
         this.credential = profile.getCredential();
         this.profile = profile;
         this.sdkVersion = BaseClient.SDK_VERSION;
         this.apiVersion = profile.getVersion();
-        this.gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
+        this.gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .disableHtmlEscaping()
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
                 .setObjectToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
@@ -52,12 +50,12 @@ public abstract class BaseClient {
     }
 
     protected static String mapToQueryString(Map<String, String> params) {
-//        List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
-//        for (Map.Entry<String, String> entry : params.entrySet()) {
-//            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-//        }
-//
-//        return URLEncodedUtils.format(nameValuePairs, StandardCharsets.UTF_8);
+        //        List<BasicNameValuePair> nameValuePairs = new ArrayList<BasicNameValuePair>();
+        //        for (Map.Entry<String, String> entry : params.entrySet()) {
+        //            nameValuePairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+        //        }
+        //
+        //        return URLEncodedUtils.format(nameValuePairs, StandardCharsets.UTF_8);
 
         return UrlQuery.of(params, false).build(StandardCharsets.UTF_8);
     }
@@ -89,7 +87,7 @@ public abstract class BaseClient {
     protected String doRequest(Object model, String reqMethod, String path, String param) throws ApisixSDKException {
         String strParam = model != null ? gson.toJson(model) : param;
 
-        //logger.info(strParam);
+        // logger.info(strParam);
         Response okRsp = doRequest(reqMethod, path, strParam);
 
         String strResp = null;
@@ -122,17 +120,15 @@ public abstract class BaseClient {
         return strResp;
     }
 
-    private Response doRequest(String reqMethod, String path, String param)
-            throws ApisixSDKException {
+    private Response doRequest(String reqMethod, String path, String param) throws ApisixSDKException {
 
         String contentType = "application/json; charset=utf-8";
 
-        Connection conn =
-                new Connection(
-                        this.profile.timeout().getConn(),
-                        this.profile.timeout().getRead(),
-                        this.profile.timeout().getWrite(),
-                        this.profile);
+        Connection conn = new Connection(
+                this.profile.timeout().getConn(),
+                this.profile.timeout().getRead(),
+                this.profile.timeout().getWrite(),
+                this.profile);
 
         Endpoint currentEndpoint = this.profile.getCurrentEndpoint();
         if (currentEndpoint == null) {
@@ -186,4 +182,3 @@ public abstract class BaseClient {
         return result;
     }
 }
-

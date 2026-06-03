@@ -1,10 +1,5 @@
 import com.dyrnq.utils.CertUtils;
 import com.dyrnq.utils.X509Holder;
-import org.apache.commons.io.IOUtils;
-import org.bouncycastle.asn1.ASN1InputStream;
-import org.bouncycastle.asn1.util.ASN1Dump;
-import org.junit.jupiter.api.Test;
-
 import java.io.*;
 import java.math.BigInteger;
 import java.security.PrivateKey;
@@ -12,31 +7,34 @@ import java.security.PublicKey;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+import org.apache.commons.io.IOUtils;
+import org.bouncycastle.asn1.ASN1InputStream;
+import org.bouncycastle.asn1.util.ASN1Dump;
+import org.junit.jupiter.api.Test;
 
 public class CertUtilsTest {
 
-
     public static void processShell(String command) throws IOException, InterruptedException {
-//        String[] command = {"ls", "-l","src/test/resources"};
-//        command = StringUtils.splitByWholeSeparator(" ",cmd);
-//        System.out.println(JSONUtil.toJsonStr(command));
-//        ProcessBuilder processBuilder = new ProcessBuilder(command);
-//        Process process = processBuilder.start();
-//
-//        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-//
-//        String line = null;
-//        while ((line = reader.readLine()) != null) {
-//            System.out.println(line);
-//        }
-//
-//        int exitCode = process.waitFor();
-//        System.out.println("\nExited with error code : " + exitCode);
+        //        String[] command = {"ls", "-l","src/test/resources"};
+        //        command = StringUtils.splitByWholeSeparator(" ",cmd);
+        //        System.out.println(JSONUtil.toJsonStr(command));
+        //        ProcessBuilder processBuilder = new ProcessBuilder(command);
+        //        Process process = processBuilder.start();
+        //
+        //        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        //
+        //        String line = null;
+        //        while ((line = reader.readLine()) != null) {
+        //            System.out.println(line);
+        //        }
+        //
+        //        int exitCode = process.waitFor();
+        //        System.out.println("\nExited with error code : " + exitCode);
 
-// 执行shell命令
+        // 执行shell命令
         Process process = Runtime.getRuntime().exec(command);
 
-// 读取命令的输出结果
+        // 读取命令的输出结果
         InputStream inputStream = process.getInputStream();
         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
@@ -51,15 +49,13 @@ public class CertUtilsTest {
             System.out.println(lineError);
         }
 
-
-// 等待命令执行完毕并检查返回值
+        // 等待命令执行完毕并检查返回值
         int exitCode = process.waitFor();
         if (exitCode == 0) {
             System.out.println("Command executed successfully.");
         } else {
             System.out.println("Command failed with exit code: " + exitCode);
         }
-
     }
 
     @Test
@@ -125,12 +121,14 @@ public class CertUtilsTest {
         processShell("openssl x509 -in " + certPath + " -text -noout");
     }
 
-
     @Test
     public void test_genRSA() throws Exception {
 
-        for (int keylen : new int[]{2048, 3072, 4096, 8192}) {
-            X509Holder holderDomain = CertUtils.genRSA("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, keylen);
+        for (int keylen : new int[] {2048, 3072, 4096, 8192}) {
+            X509Holder holderDomain = CertUtils.genRSA(
+                    "C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com",
+                    new String[] {"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"},
+                    keylen);
 
             String certPath = "src/test/resources/example-domain-" + keylen + ".crt";
             String keyPath = "src/test/resources/example-domain-" + keylen + ".key";
@@ -143,9 +141,11 @@ public class CertUtilsTest {
     @Test
     public void test_genECC() throws Exception {
 
-
-        for (int keylen : new int[]{256, 384, 521}) {
-            X509Holder holderDomain = CertUtils.genECC("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, keylen);
+        for (int keylen : new int[] {256, 384, 521}) {
+            X509Holder holderDomain = CertUtils.genECC(
+                    "C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com",
+                    new String[] {"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"},
+                    keylen);
 
             String certPath = "src/test/resources/ecc-example-domain-" + keylen + ".crt";
             String keyPath = "src/test/resources/ecc-example-domain-" + keylen + ".key";
@@ -153,15 +153,17 @@ public class CertUtilsTest {
             IOUtils.write(holderDomain.getKey(), new FileOutputStream(new File(keyPath)));
             processShell("openssl x509 -in " + certPath + " -text -noout");
         }
-
     }
-
 
     @Test
     public void test_genByCA() throws Exception {
         X509Certificate caCert = CertUtils.loadCertificate(new File("src/test/resources/example-ca.crt"));
         PrivateKey caKey = CertUtils.load(new File("src/test/resources/example-ca.key"));
-        X509Holder domain = CertUtils.genRSA("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, caCert, caKey);
+        X509Holder domain = CertUtils.genRSA(
+                "C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com",
+                new String[] {"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"},
+                caCert,
+                caKey);
         IOUtils.write(domain.getCert(), new FileOutputStream(new File("src/test/resources/example-domain-by-ca.crt")));
         IOUtils.write(domain.getKey(), new FileOutputStream(new File("src/test/resources/example-domain-by-ca.key")));
         processShell("openssl x509 -in src/test/resources/example-domain-by-ca.crt -text -noout");
@@ -171,12 +173,17 @@ public class CertUtilsTest {
     public void test_genByCAuseECC() throws Exception {
         X509Certificate caCert = CertUtils.loadCertificate(new File("src/test/resources/ecc-example-ca.crt"));
         PrivateKey caKey = CertUtils.load(new File("src/test/resources/ecc-example-ca.key"));
-        X509Holder domain = CertUtils.genECC("C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com", new String[]{"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"}, caCert, caKey);
-        IOUtils.write(domain.getCert(), new FileOutputStream(new File("src/test/resources/ecc-example-domain-by-ca.crt")));
-        IOUtils.write(domain.getKey(), new FileOutputStream(new File("src/test/resources/ecc-example-domain-by-ca.key")));
+        X509Holder domain = CertUtils.genECC(
+                "C = CN, ST = GD, L = SZ, O = vihoo, OU = dev, CN = hello.com, emailAddress = yy@vivo.com",
+                new String[] {"hello.com", "www.hello.com", "127.0.0.1", "192.168.100.22"},
+                caCert,
+                caKey);
+        IOUtils.write(
+                domain.getCert(), new FileOutputStream(new File("src/test/resources/ecc-example-domain-by-ca.crt")));
+        IOUtils.write(
+                domain.getKey(), new FileOutputStream(new File("src/test/resources/ecc-example-domain-by-ca.key")));
         processShell("openssl x509 -in src/test/resources/ecc-example-domain-by-ca.crt -text -noout");
     }
-
 
     @Test
     public void test_genAll_RSA() throws Exception {
@@ -191,7 +198,6 @@ public class CertUtilsTest {
         test_genByCAuseECC();
         test_genECC();
     }
-
 
     @Test
     public void test_convert() throws Exception {
@@ -211,6 +217,4 @@ public class CertUtilsTest {
         X509Certificate x509Certificate = (X509Certificate) certificateFactory.generateCertificate(certFileInputStream);
         System.out.println(ASN1Dump.dumpAsString(new ASN1InputStream(x509Certificate.getEncoded()).readObject()));
     }
-
-
 }

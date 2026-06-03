@@ -1,7 +1,6 @@
 package com.dyrnq.apisix;
 
 import com.dyrnq.apisix.response.Multi;
-
 import java.util.List;
 import java.util.Map;
 
@@ -23,5 +22,5 @@ public interface Stub<T> {
 
     T patchRaw(String id, String rawData) throws ApisixSDKException;
 
-    //T post(T obj) throws ApisixSDKException;
+    // T post(T obj) throws ApisixSDKException;
 }

@@ -2,7 +2,6 @@ package com.dyrnq.cert.tencent.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class DescribeCertificatesResult extends Base {
@@ -10,6 +9,7 @@ public class DescribeCertificatesResult extends Base {
     @SerializedName("TotalCount")
     @Expose
     private Integer totalCount;
+
     @SerializedName("Certificates")
     @Expose
     private List<Certificates> certificates;
@@ -29,5 +29,4 @@ public class DescribeCertificatesResult extends Base {
     public void setCertificates(List<Certificates> certificates) {
         this.certificates = certificates;
     }
-
 }

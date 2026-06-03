@@ -7,24 +7,31 @@ public class CertificateOrder {
     @SerializedName("AliyunOrderId")
     @Expose
     private Long aliyunOrderId;
+
     @SerializedName("CertEndTime")
     @Expose
     private Long certEndTime;
+
     @SerializedName("CertStartTime")
     @Expose
     private Long certStartTime;
+
     @SerializedName("OrderId")
     @Expose
     private Long orderId;
+
     @SerializedName("Status")
     @Expose
     private String status;
+
     @SerializedName("StartDate")
     @Expose
     private String startDate;
+
     @SerializedName("EndDate")
     @Expose
     private String endDate;
+
     @SerializedName("Domain")
     @Expose
     private String domain;

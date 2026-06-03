@@ -10,12 +10,6 @@ import com.dyrnq.model.Cert;
 import com.dyrnq.service.ApplyCertificate;
 import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.utils.CertUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.noear.solon.annotation.Component;
-import org.noear.solon.annotation.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,11 +17,17 @@ import java.rmi.RemoteException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import org.apache.commons.lang3.StringUtils;
+import org.noear.solon.annotation.Component;
+import org.noear.solon.annotation.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(name = "aliyunImpl")
 public class AliyunImpl implements ApplyCertificate {
     static Logger logger = LoggerFactory.getLogger(AliyunImpl.class);
     static int SLEEP = 1200;
+
     @Inject
     BusinessLogic businessLogic;
 
@@ -39,7 +39,6 @@ public class AliyunImpl implements ApplyCertificate {
             e.printStackTrace();
         }
     }
-
 
     @Override
     public void dns(Cert cert) throws CertificateException, IOException {
@@ -64,7 +63,6 @@ public class AliyunImpl implements ApplyCertificate {
 
         Long orderId = aliyunSDK.createCertificateForPackageRequest(domain, "DNS");
 
-
         String recordDomain = null;
         String recodeValue = null;
         String recodeType = null;
@@ -86,38 +84,38 @@ public class AliyunImpl implements ApplyCertificate {
                 logger.error(e.getMessage());
             }
         }
-        //此处要将拿到的recordDomain转化为dns中的rr记录,比如 hello.dyrnq.com, hello是RR记录,dyrnq.com为域名
+        // 此处要将拿到的recordDomain转化为dns中的rr记录,比如 hello.dyrnq.com, hello是RR记录,dyrnq.com为域名
         String rr = StringUtils.replace(recordDomain, "." + baseDomain, "");
-        //插入域名校验记录，腾讯云那边有AUTO_DNS，不需要这一步
+        // 插入域名校验记录，腾讯云那边有AUTO_DNS，不需要这一步
         aliyunSDK.addDomainRecord(baseDomain, rr, recodeType, recodeValue);
 
-
-//        List<CertificateOrder> list = null;
-//        while (CollectionUtil.isEmpty(list)) {
-//            try {
-//                list = aliyunSDK.listUserCertificateOrder(domain, "ISSUED");
-//                if (CollectionUtil.isEmpty(list)) {
-//                    Thread.sleep(100);
-//                }
-//            } catch (Exception e) {
-//                logger.error(e.getMessage());
-//            }
-//        }
-//
-//        for (CertificateOrder obj : list) {
-//            DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(obj.getOrderId());
-//            if (result != null) {
-//                cert.setKey(result.getPrivateKey());
-//                cert.setCert(result.getCertificate());
-//                break;
-//            }
-//        }
+        //        List<CertificateOrder> list = null;
+        //        while (CollectionUtil.isEmpty(list)) {
+        //            try {
+        //                list = aliyunSDK.listUserCertificateOrder(domain, "ISSUED");
+        //                if (CollectionUtil.isEmpty(list)) {
+        //                    Thread.sleep(100);
+        //                }
+        //            } catch (Exception e) {
+        //                logger.error(e.getMessage());
+        //            }
+        //        }
+        //
+        //        for (CertificateOrder obj : list) {
+        //            DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(obj.getOrderId());
+        //            if (result != null) {
+        //                cert.setKey(result.getPrivateKey());
+        //                cert.setCert(result.getCertificate());
+        //                break;
+        //            }
+        //        }
 
         post(cert, domain, aliyunSDK, orderId);
     }
 
-    private void post(Cert cert, String domain, Aliyun aliyunSDK, Long orderId) throws CertificateException, IOException {
-        //等待证书审批下发,用orderId去查询,不能根据domain去模糊匹配,那样会查询到多个同时ISSUED的证书,不好判断哪个是新的
+    private void post(Cert cert, String domain, Aliyun aliyunSDK, Long orderId)
+            throws CertificateException, IOException {
+        // 等待证书审批下发,用orderId去查询,不能根据domain去模糊匹配,那样会查询到多个同时ISSUED的证书,不好判断哪个是新的
         String certificateTxt = null;
         String keyTxt = null;
         while (certificateTxt == null) {
@@ -142,7 +140,6 @@ public class AliyunImpl implements ApplyCertificate {
             cert.setSubject(x509Cert.getSubjectDN().toString());
         }
     }
-
 
     @Override
     public void http(Cert cert) throws CertificateException, IOException {
@@ -180,7 +177,7 @@ public class AliyunImpl implements ApplyCertificate {
                 }
                 uri = result.getUri();
 
-                //使用当前apisix instance充当80端口验证
+                // 使用当前apisix instance充当80端口验证
                 AdminClient client = businessLogic.getAdminClient();
                 Route r = new Route();
                 List<String> hosts = new ArrayList<>();
@@ -201,9 +198,6 @@ public class AliyunImpl implements ApplyCertificate {
             }
         }
 
-
         post(cert, domain, aliyunSDK, orderId);
-
-
     }
 }

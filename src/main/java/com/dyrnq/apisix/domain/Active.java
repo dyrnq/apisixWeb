@@ -1,11 +1,8 @@
 package com.dyrnq.apisix.domain;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,30 +12,39 @@ public class Active {
     @SerializedName("host")
     @Expose
     private String host;
+
     @SerializedName("timeout")
     @Expose
     private BigDecimal timeout = new BigDecimal("1");
+
     @SerializedName("port")
     @Expose
     private Integer port;
+
     @SerializedName("concurrency")
     @Expose
     private Integer concurrency = 10;
+
     @SerializedName("http_path")
     @Expose
     private String httpPath = "/";
+
     @SerializedName("https_verify_certificate")
     @Expose
     private Boolean httpsVerifyCertificate = true;
+
     @SerializedName("req_headers")
     @Expose
     private List<String> reqHeaders;
+
     @SerializedName("unhealthy")
     @Expose
     private Unhealthy__1 unhealthy;
+
     @SerializedName("healthy")
     @Expose
     private Healthy__1 healthy;
+
     @SerializedName("type")
     @Expose
     private Type type = Type.fromValue("http");
@@ -124,14 +130,13 @@ public class Active {
     }
 
     public enum Type {
-
         @SerializedName("http")
         HTTP("http"),
         @SerializedName("https")
         HTTPS("https"),
         @SerializedName("tcp")
         TCP("tcp");
-        private final static Map<String, Type> CONSTANTS = new HashMap<String, Type>();
+        private static final Map<String, Type> CONSTANTS = new HashMap<String, Type>();
 
         static {
             for (Type c : values()) {
@@ -162,7 +167,5 @@ public class Active {
         public String value() {
             return this.value;
         }
-
     }
-
 }

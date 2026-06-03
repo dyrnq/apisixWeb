@@ -7,6 +7,7 @@ public class DescribeCertificateResult extends Base {
     @SerializedName("Status")
     @Expose
     private Integer status;
+
     @SerializedName("StatusName")
     @Expose
     private String statusName;

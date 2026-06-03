@@ -8,35 +8,26 @@ import org.noear.wood.annotation.Table;
 public class Ca {
     @Column("id")
     @PrimaryKey
-    private
-    String id;
+    private String id;
 
     @Column("cert")
-    private
-    String cert;
+    private String cert;
 
-    //在关系型数据库中，字段名不应该使用数据库的保留字作为名称。_r 表示raw(data)
+    // 在关系型数据库中，字段名不应该使用数据库的保留字作为名称。_r 表示raw(data)
     @Column("key_r")
-    private
-    String key;
+    private String key;
 
     @Column("not_after")
-    private
-    Long notAfter;
+    private Long notAfter;
 
     @Column("not_before")
-    private
-    Long notBefore;
-
+    private Long notBefore;
 
     @Column("subject")
-    private
-    String subject;
+    private String subject;
 
     @Column("title")
-    private
-    String title;
-
+    private String title;
 
     public String getId() {
         return id;

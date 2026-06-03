@@ -3,10 +3,6 @@ import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
 import com.dyrnq.apisix.plugins.Echo;
 import com.dyrnq.utils.CertUtils;
-import org.apache.commons.io.IOUtils;
-import org.junit.jupiter.api.Test;
-
-import javax.naming.InvalidNameException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -18,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import javax.naming.InvalidNameException;
+import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Test;
 
 public class ApisixClientPutTest extends BaseJunit {
 
@@ -26,9 +25,9 @@ public class ApisixClientPutTest extends BaseJunit {
 
         for (int i = 1; i < 51; i++) {
             StreamRoute r = new StreamRoute();
-//            r.setName("test"+i);
-//            r.setDesc("test"+i);
-//            r.setUri("/*");
+            //            r.setName("test"+i);
+            //            r.setDesc("test"+i);
+            //            r.setUri("/*");
             Upstream upstream = new Upstream();
             upstream.setType("roundrobin");
             upstream.setName("test");
@@ -42,7 +41,6 @@ public class ApisixClientPutTest extends BaseJunit {
             upstream.setNodes(list);
             r.setUpstream(upstream);
             client.putStreamRoute(String.valueOf(i), r);
-
         }
     }
 
@@ -67,7 +65,6 @@ public class ApisixClientPutTest extends BaseJunit {
             upstream.setNodes(list);
             r.setUpstream(upstream);
             client.putRoute(String.valueOf(i), r);
-
         }
     }
 
@@ -87,7 +84,6 @@ public class ApisixClientPutTest extends BaseJunit {
             list.add(new Node("127.0.0.1", 8082, 100));
             upstream.setNodes(list);
             client.putUpstream(String.valueOf(i), upstream);
-
         }
     }
 
@@ -111,7 +107,6 @@ public class ApisixClientPutTest extends BaseJunit {
             upstream.setNodes(list);
             service.setUpstream(upstream);
 
-
             client.putService(String.valueOf(i), service);
         }
     }
@@ -126,7 +121,6 @@ public class ApisixClientPutTest extends BaseJunit {
             secret.setToken("343effad");
             client.putSecret(String.valueOf(i), "vault", secret);
         }
-
     }
 
     @Test
@@ -135,7 +129,7 @@ public class ApisixClientPutTest extends BaseJunit {
             Consumer consumer = new Consumer();
             consumer.setUsername(String.valueOf(i));
             consumer.setDesc(String.valueOf(i));
-            //consumer.setGroupId(i+"");
+            // consumer.setGroupId(i+"");
             client.putConsumer(String.valueOf(i), consumer);
         }
     }
@@ -145,7 +139,7 @@ public class ApisixClientPutTest extends BaseJunit {
         for (int i = 1; i < 51; i++) {
             ConsumerGroup consumer = new ConsumerGroup();
             consumer.setDesc(String.valueOf(i));
-            //consumer.setGroupId(i+"");
+            // consumer.setGroupId(i+"");
             java.util.Map map = new HashMap();
             Echo e = new Echo();
             e.afterBody = "<!-- apisix-HTML-mark -->";
@@ -153,7 +147,6 @@ public class ApisixClientPutTest extends BaseJunit {
             consumer.setPlugins(map);
             client.putConsumerGroup(String.valueOf(i), consumer);
         }
-
     }
 
     @Test
@@ -181,18 +174,17 @@ public class ApisixClientPutTest extends BaseJunit {
             e.afterBody = "<!-- apisix-HTML-mark -->";
             map.put("echo", e);
             globalRule.setPlugins(map);
-            //consumer.setGroupId(i+"");
+            // consumer.setGroupId(i+"");
             client.putGlobalRule(String.valueOf(i), globalRule);
         }
-
-
     }
 
     @Test
     public void test_putProto() throws ApisixSDKException, IOException {
         for (int i = 1; i < 105; i++) {
             Proto proto = new Proto();
-            proto.setContent(IOUtils.toString(new FileInputStream(new File("src/test/resources/demo.proto")), StandardCharsets.UTF_8));
+            proto.setContent(IOUtils.toString(
+                    new FileInputStream(new File("src/test/resources/demo.proto")), StandardCharsets.UTF_8));
             client.putProto(String.valueOf(i), proto);
         }
     }
@@ -202,9 +194,8 @@ public class ApisixClientPutTest extends BaseJunit {
         Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
         for (int i = 1; i < 51; i++) {
 
-
             String file = "src/test/resources/server";
-            //file="src/test/resources/server";
+            // file="src/test/resources/server";
             SSL ssl = new SSL();
             ssl.setCert(FileUtil.readString(new File(file + ".crt"), StandardCharsets.UTF_8));
             ssl.setKey(FileUtil.readString(new File(file + ".key"), StandardCharsets.UTF_8));
@@ -213,7 +204,6 @@ public class ApisixClientPutTest extends BaseJunit {
             ssl.setSnis(Arrays.asList(sniArray));
             ssl.setStatus(1);
             client.putSSL(String.valueOf(i), ssl);
-
         }
     }
 }

@@ -1,9 +1,5 @@
 package com.dyrnq.cert.aliyun;
 
-import org.apache.commons.codec.binary.Base64;
-
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -13,6 +9,9 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.TreeMap;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * API 签名工具。
@@ -22,13 +21,13 @@ import java.util.TreeMap;
  */
 public class SignatureUtils {
 
-    private final static String CHARSET_UTF8 = "utf8";
+    private static final String CHARSET_UTF8 = "utf8";
 
-    private final static String ALGORITHM = "UTF-8";
+    private static final String ALGORITHM = "UTF-8";
 
-    private final static String SEPARATOR = "&";
+    private static final String SEPARATOR = "&";
 
-    private final static String METHOD_NAME_POST = "POST";
+    private static final String METHOD_NAME_POST = "POST";
 
     /**
      * 分解请求串中的参数。
@@ -37,8 +36,7 @@ public class SignatureUtils {
      * @return 分解后的参数名、参数值对的映射
      */
     public static Map<String, String> splitQueryString(String url)
-            throws URISyntaxException,
-            UnsupportedEncodingException {
+            throws URISyntaxException, UnsupportedEncodingException {
 
         URI uri = new URI(url);
         String query = uri.getQuery();
@@ -73,7 +71,6 @@ public class SignatureUtils {
             return "";
         }
 
-
         if (METHOD_NAME_POST.equals(httpMethod)) {
             return signature;
         }
@@ -87,8 +84,7 @@ public class SignatureUtils {
      * @param parameter  原始请求串中参数名、参数值对的映射。
      * @return 签名中间产物 StringToSign。
      */
-    public static String generateStringToSign(String httpMethod, Map<String, String> parameter)
-            throws IOException {
+    public static String generateStringToSign(String httpMethod, Map<String, String> parameter) throws IOException {
 
         TreeMap<String, String> sortParameter = new TreeMap<String, String>(parameter);
         String canonicalizedQueryString = UrlUtil.canonicalizeQueryString(sortParameter, true);
@@ -96,9 +92,8 @@ public class SignatureUtils {
             throw new RuntimeException("httpMethod can not be empty");
         }
 
-        String stringToSign = httpMethod + SEPARATOR +
-                percentEncode("/") + SEPARATOR +
-                percentEncode(canonicalizedQueryString);
+        String stringToSign =
+                httpMethod + SEPARATOR + percentEncode("/") + SEPARATOR + percentEncode(canonicalizedQueryString);
         return stringToSign;
     }
 
@@ -111,11 +106,12 @@ public class SignatureUtils {
     public static String percentEncode(String text) {
 
         try {
-            return text == null ? null
+            return text == null
+                    ? null
                     : URLEncoder.encode(text, CHARSET_UTF8)
-                    .replace("+", "%20")
-                    .replace("*", "%2A")
-                    .replace("%7E", "~");
+                            .replace("+", "%20")
+                            .replace("*", "%2A")
+                            .replace("%7E", "~");
         } catch (Exception e) {
             System.out.println("Percentage encoding error:" + e.getMessage());
         }
@@ -129,8 +125,7 @@ public class SignatureUtils {
      * @param baseString 原文。
      * @return 散列值。
      */
-    public static byte[] hmacSHA1Signature(String secret, String baseString)
-            throws Exception {
+    public static byte[] hmacSHA1Signature(String secret, String baseString) throws Exception {
 
         if (secret == null || secret.isEmpty()) {
             throw new IOException("secret can not be empty");
@@ -151,8 +146,7 @@ public class SignatureUtils {
      * @param bytes 原文。
      * @return Base 64 编码。
      */
-    public static String newStringByBase64(byte[] bytes)
-            throws UnsupportedEncodingException {
+    public static String newStringByBase64(byte[] bytes) throws UnsupportedEncodingException {
 
         if (bytes == null || bytes.length == 0) {
             return null;

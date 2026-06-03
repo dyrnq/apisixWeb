@@ -1,11 +1,10 @@
 import com.dyrnq.apisix.domain.SSL;
-import org.junit.jupiter.api.Test;
-
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import org.junit.jupiter.api.Test;
 
 public class AESDecryptor extends BaseJunit {
     private static final String ALGORITHM = "AES";

@@ -9,14 +9,16 @@ public class User {
     @Column("id")
     @PrimaryKey
     private String id;
+
     @Column("name")
     private String name;
+
     @Column("pass")
     private String pass;
 
-
     @Column("email")
     private String email;
+
     @Column("phone")
     private String phone;
 
@@ -59,5 +61,4 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 }

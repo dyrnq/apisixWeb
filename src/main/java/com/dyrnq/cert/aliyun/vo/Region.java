@@ -7,10 +7,10 @@ public class Region {
     @SerializedName("RegionId")
     @Expose
     private String regionId;
+
     @SerializedName("LocalName")
     @Expose
     private String localName;
-
 
     public String getRegionId() {
         return regionId;

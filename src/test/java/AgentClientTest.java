@@ -18,6 +18,4 @@ public class AgentClientTest {
         String s = agentClient.readConfig(host, token);
         System.out.println(Base64Decoder.decodeStr(s));
     }
-
-
 }

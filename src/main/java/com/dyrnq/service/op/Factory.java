@@ -1,13 +1,12 @@
 package com.dyrnq.service.op;
 
 import com.dyrnq.apisix.domain.*;
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.HashMap;
+import org.apache.commons.lang3.StringUtils;
 
 public class Factory {
     public static Op create(String cls) {
-        //特殊处理SSL类
+        // 特殊处理SSL类
         if (StringUtils.equalsIgnoreCase("ssl", cls)) {
             cls = "SSL";
         }

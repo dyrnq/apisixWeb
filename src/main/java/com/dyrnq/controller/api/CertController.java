@@ -12,6 +12,12 @@ import enumeration.Approach;
 import enumeration.Challenge;
 import enumeration.Encryption;
 import enumeration.Supplier;
+import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
@@ -24,22 +30,16 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Mapping("api/cert")
 @Controller
 public class CertController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(CertController.class);
+
     @Inject
     CertService certService;
+
     @Inject
     CertMapper certMapper;
-
 
     @Mapping("dnsapi")
     public Result dnsapi() {
@@ -50,7 +50,6 @@ public class CertController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 
     @Mapping("")
     public PageResult query(Context ctx, int page, int limit) {
@@ -87,8 +86,6 @@ public class CertController extends ApiController {
                         break;
                     }
                 }
-
-
             });
             return PageResult.succeed(cerList, p.getTotal());
 
@@ -107,7 +104,7 @@ public class CertController extends ApiController {
             if (cert.getApproach() == Approach.manual.getId()) {
                 certService.manual(cert);
             }
-            //界面选中马上申请才去申请
+            // 界面选中马上申请才去申请
             if (cert.getIssue() != null && cert.getIssue().intValue() == 1) {
                 certService.issue(cert);
             }
@@ -210,7 +207,7 @@ public class CertController extends ApiController {
     public Result view(Context ctx, String id) {
         try {
             Cert cert = certMapper.selectById(id);
-            Map<String,String> map = new HashMap<>();
+            Map<String, String> map = new HashMap<>();
             map.put("cert", cert.getCert());
             map.put("key", cert.getKey());
             return Result.succeed(map);
@@ -219,5 +216,4 @@ public class CertController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 }

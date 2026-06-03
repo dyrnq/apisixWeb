@@ -3,9 +3,8 @@ import com.dyrnq.apisix.domain.GlobalRule;
 import com.dyrnq.apisix.plugins.Echo;
 import com.dyrnq.apisix.plugins.Headers;
 import com.dyrnq.apisix.plugins.ProxyRewrite;
-import org.junit.jupiter.api.Test;
-
 import java.util.HashMap;
+import org.junit.jupiter.api.Test;
 
 public class GlobalRuleTest extends BaseJunit {
     @Test
@@ -29,7 +28,7 @@ public class GlobalRuleTest extends BaseJunit {
 
         map.put(ProxyRewrite.PLUGIN_NAME, proxyRewrite);
         globalRule.setPlugins(map);
-        //consumer.setGroupId(i+"");
+        // consumer.setGroupId(i+"");
         client.putGlobalRule("1", globalRule);
     }
 }

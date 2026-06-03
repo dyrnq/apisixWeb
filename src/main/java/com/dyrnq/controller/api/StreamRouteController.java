@@ -6,15 +6,14 @@ import com.dyrnq.apisix.domain.StreamRoute;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.service.op.Factory;
+import java.util.ArrayList;
+import java.util.List;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @Mapping("api/streamRoute")
@@ -54,7 +53,6 @@ public class StreamRouteController extends ApiController {
                 } catch (Exception e) {
                     logger.warn(e.getMessage());
                 }
-
             }
             if (route == null) {
                 Multi<StreamRoute> rsp = getAdminClient().queryStreamRoutes(page, limit);
@@ -70,5 +68,4 @@ public class StreamRouteController extends ApiController {
             return PageResult.failure(e.getMessage());
         }
     }
-
 }

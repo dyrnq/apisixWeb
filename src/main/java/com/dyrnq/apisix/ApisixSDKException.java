@@ -9,7 +9,6 @@ public class ApisixSDKException extends Exception {
         this(message, "");
     }
 
-
     public ApisixSDKException(String message, String errorCode) {
         super(message);
         this.errorCode = errorCode;
@@ -20,10 +19,6 @@ public class ApisixSDKException extends Exception {
     }
 
     public String toString() {
-        return "[ApisixSDKException]"
-                + "message:"
-                + this.getMessage()
-                + " errorCode:"
-                + this.getErrorCode();
+        return "[ApisixSDKException]" + "message:" + this.getMessage() + " errorCode:" + this.getErrorCode();
     }
 }

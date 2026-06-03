@@ -14,16 +14,11 @@ public class HomeDir {
     private String acmeShDir;
     private String acmeSh;
 
-
     public HomeDir() {
         super();
     }
 
-    public HomeDir(String homeAbsolutePath,
-                   String tmpAbsolutePath,
-                   String acmeShDir,
-                   String acmeSh,
-                   String acmeHome) {
+    public HomeDir(String homeAbsolutePath, String tmpAbsolutePath, String acmeShDir, String acmeSh, String acmeHome) {
         this.homeAbsolutePath = homeAbsolutePath;
         this.tmpAbsolutePath = tmpAbsolutePath;
         this.acmeSh = acmeSh;
@@ -51,7 +46,7 @@ public class HomeDir {
         return acmeSh;
     }
 
-//    public void setAcmeSh(String acmeSh) {
-//        this.acmeSh = acmeSh;
-//    }
+    //    public void setAcmeSh(String acmeSh) {
+    //        this.acmeSh = acmeSh;
+    //    }
 }

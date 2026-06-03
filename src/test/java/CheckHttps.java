@@ -1,9 +1,3 @@
-import org.junit.jupiter.api.Test;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -11,6 +5,11 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateEncodingException;
 import java.security.cert.X509Certificate;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import org.junit.jupiter.api.Test;
 
 public class CheckHttps {
     @Test
@@ -30,17 +29,15 @@ public class CheckHttps {
 
         // 打印证书信息
         for (java.security.cert.Certificate cert : certificates) {
-            //System.out.println(cert);
+            // System.out.println(cert);
             System.out.println(cert);
         }
-
     }
-
 
     private SSLContext prepareContext() {
         try {
             SSLContext sslCtx = SSLContext.getInstance("TLS");
-            sslCtx.init(null, new TrustManager[]{new SSLTrustingX509TrustManager()}, null);
+            sslCtx.init(null, new TrustManager[] {new SSLTrustingX509TrustManager()}, null);
             return sslCtx;
         } catch (NoSuchAlgorithmException | KeyManagementException e) {
             throw new RuntimeException(e);
@@ -51,8 +48,7 @@ public class CheckHttps {
         private X509Certificate[] accepted;
 
         @Override
-        public void checkClientTrusted(X509Certificate[] xcs, String string) {
-        }
+        public void checkClientTrusted(X509Certificate[] xcs, String string) {}
 
         @Override
         public void checkServerTrusted(X509Certificate[] xcs, String string) {

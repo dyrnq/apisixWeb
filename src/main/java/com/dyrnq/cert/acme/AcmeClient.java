@@ -7,6 +7,14 @@ import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.plugins.ResponseRewrite;
 import com.dyrnq.service.BusinessLogic;
+import java.io.*;
+import java.net.URI;
+import java.net.URL;
+import java.security.KeyPair;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
@@ -21,15 +29,6 @@ import org.shredzone.acme4j.util.KeyPairUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
-import java.net.URI;
-import java.net.URL;
-import java.security.KeyPair;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * A simple client test tool.
  * <p>
@@ -37,21 +36,27 @@ import java.util.Map;
  */
 @Component
 public class AcmeClient {
-    //Challenge type to be used
+    // Challenge type to be used
     private static final ChallengeType CHALLENGE_TYPE = ChallengeType.HTTP;
     // RSA key size of generated key pairs
     private static final int KEY_SIZE = 2048;
     private static final Logger logger = LoggerFactory.getLogger(AcmeClient.class);
+
     @Inject
     HomeDir homeDir;
 
     @Inject
     BusinessLogic businessLogic;
 
-
-    //兼容acme.sh,公用一个account.key
+    // 兼容acme.sh,公用一个account.key
     public File getUserKeyFile() {
-        return new File(StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), "ca", "acme-v02.api.letsencrypt.org", "directory", "account.key"));
+        return new File(StringUtils.joinWith(
+                File.separator,
+                homeDir.getAcmeHome(),
+                "ca",
+                "acme-v02.api.letsencrypt.org",
+                "directory",
+                "account.key"));
     }
 
     public String getFirstDomain(Collection<String> domains) {
@@ -79,7 +84,6 @@ public class AcmeClient {
         return getFile(domains, "domain.key");
     }
 
-
     private File getDomainCsrFile(Collection<String> domains) {
         return getFile(domains, "domain.csr");
     }
@@ -87,7 +91,6 @@ public class AcmeClient {
     public File getDomainChainFile(Collection<String> domains) {
         return getFile(domains, "domain-chain.crt");
     }
-
 
     /**
      * Generates a certificate for the given domains. Also takes care for the registration
@@ -101,7 +104,7 @@ public class AcmeClient {
 
         // Create a session for Let's Encrypt.
         // Use "acme://letsencrypt.org" for production server
-        //Session session = new Session("acme://letsencrypt.org/staging");
+        // Session session = new Session("acme://letsencrypt.org/staging");
         Session session = new Session("acme://letsencrypt.org");
         // Get the Account.
         // If there is no account yet, create a new one.
@@ -339,14 +342,16 @@ public class AcmeClient {
 
         // Output the challenge, wait for acknowledge...
         logger.info("Please create a file in your web server's base directory.");
-        logger.info("It must be reachable at: http://{}/.well-known/acme-challenge/{}",
-                auth.getIdentifier().getDomain(), challenge.getToken());
+        logger.info(
+                "It must be reachable at: http://{}/.well-known/acme-challenge/{}",
+                auth.getIdentifier().getDomain(),
+                challenge.getToken());
         logger.info("File name: {}", challenge.getToken());
         logger.info("Content: {}", challenge.getAuthorization());
         logger.info("The file must not contain any leading or trailing whitespaces or line breaks!");
         logger.info("If you're ready, dismiss the dialog...");
 
-        //使用当前apisix instance充当80端口验证
+        // 使用当前apisix instance充当80端口验证
         try {
             AdminClient client = businessLogic.getAdminClient();
             Route r = new Route();
@@ -364,15 +369,13 @@ public class AcmeClient {
             throw new RuntimeException(e);
         }
 
-
-        String message = "Please create a file in your web server's base directory.\n\n" +
-                "http://" +
-                auth.getIdentifier().getDomain() +
-                "/.well-known/acme-challenge/" +
-                challenge.getToken() +
-                "\n\n" +
-                "Content:\n\n" +
-                challenge.getAuthorization();
+        String message = "Please create a file in your web server's base directory.\n\n" + "http://"
+                + auth.getIdentifier().getDomain()
+                + "/.well-known/acme-challenge/"
+                + challenge.getToken()
+                + "\n\n"
+                + "Content:\n\n"
+                + challenge.getAuthorization();
         acceptChallenge(message);
 
         return challenge;
@@ -398,14 +401,12 @@ public class AcmeClient {
 
         // Output the challenge, wait for acknowledge...
         logger.info("Please create a TXT record:");
-        logger.info("{} IN TXT {}",
-                Dns01Challenge.toRRName(auth.getIdentifier()), challenge.getDigest());
+        logger.info("{} IN TXT {}", Dns01Challenge.toRRName(auth.getIdentifier()), challenge.getDigest());
         logger.info("If you're ready, dismiss the dialog...");
 
-        String message = "Please create a TXT record:\n\n" +
-                Dns01Challenge.toRRName(auth.getIdentifier()) +
-                " IN TXT " +
-                challenge.getDigest();
+        String message = "Please create a TXT record:\n\n" + Dns01Challenge.toRRName(auth.getIdentifier())
+                + " IN TXT "
+                + challenge.getDigest();
         acceptChallenge(message);
 
         return challenge;
@@ -441,6 +442,8 @@ public class AcmeClient {
         logger.warn("Please review carefully and accept TOS {}", agreement);
     }
 
-    private enum ChallengeType {HTTP, DNS}
-
+    private enum ChallengeType {
+        HTTP,
+        DNS
+    }
 }

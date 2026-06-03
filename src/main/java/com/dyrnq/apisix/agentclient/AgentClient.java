@@ -3,16 +3,15 @@ package com.dyrnq.apisix.agentclient;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.HttpMethod;
 import com.jayway.jsonpath.JsonPath;
-import okhttp3.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.net.ssl.*;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.concurrent.TimeUnit;
+import javax.net.ssl.*;
+import okhttp3.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AgentClient {
     static Logger logger = LoggerFactory.getLogger(AgentClient.class);
@@ -123,10 +122,10 @@ public class AgentClient {
         }
     }
 
-    private Response doRequest(String host, String reqMethod, String path, String token, String param) throws ApisixSDKException {
+    private Response doRequest(String host, String reqMethod, String path, String token, String param)
+            throws ApisixSDKException {
 
         String contentType = "application/json; charset=utf-8";
-
 
         String url = host + path;
 
@@ -148,17 +147,15 @@ public class AgentClient {
         }
     }
 
-    private Response postRequest(String url, String body, Headers headers)
-            throws ApisixSDKException {
+    private Response postRequest(String url, String body, Headers headers) throws ApisixSDKException {
         MediaType contentType = MediaType.parse(headers.get("Content-Type"));
         Request request = null;
         try {
-            request =
-                    new Request.Builder()
-                            .url(url)
-                            .post(RequestBody.create(contentType, body))
-                            .headers(headers)
-                            .build();
+            request = new Request.Builder()
+                    .url(url)
+                    .post(RequestBody.create(contentType, body))
+                    .headers(headers)
+                    .build();
         } catch (IllegalArgumentException e) {
             throw new ApisixSDKException(e.getClass().getName() + "-" + e.getMessage());
         }
@@ -177,7 +174,6 @@ public class AgentClient {
         return this.doRequest(request);
     }
 
-
     public Response doRequest(Request request) throws ApisixSDKException {
         Response response = null;
         try {
@@ -192,20 +188,25 @@ public class AgentClient {
     private SSLSocketFactory createUnsafeSSLSocketFactory() {
         try {
             SSLContext sslContext = SSLContext.getInstance("SSL");
-            sslContext.init(null, new TrustManager[]{new X509TrustManager() {
-                @Override
-                public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                }
+            sslContext.init(
+                    null,
+                    new TrustManager[] {
+                        new X509TrustManager() {
+                            @Override
+                            public void checkClientTrusted(X509Certificate[] chain, String authType)
+                                    throws CertificateException {}
 
-                @Override
-                public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-                }
+                            @Override
+                            public void checkServerTrusted(X509Certificate[] chain, String authType)
+                                    throws CertificateException {}
 
-                @Override
-                public X509Certificate[] getAcceptedIssuers() {
-                    return new X509Certificate[0];
-                }
-            }}, new SecureRandom());
+                            @Override
+                            public X509Certificate[] getAcceptedIssuers() {
+                                return new X509Certificate[0];
+                            }
+                        }
+                    },
+                    new SecureRandom());
             return sslContext.getSocketFactory();
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -214,12 +215,10 @@ public class AgentClient {
 
     private class TrustAllCerts implements X509TrustManager {
         @Override
-        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
+        public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
 
         @Override
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-        }
+        public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {}
 
         @Override
         public X509Certificate[] getAcceptedIssuers() {

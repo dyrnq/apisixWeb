@@ -5,15 +5,14 @@ import com.dyrnq.apisix.domain.Consumer;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.controller.PageResult;
 import com.dyrnq.service.op.Factory;
+import java.util.List;
+import java.util.Map;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.Map;
 
 @Mapping("api/consumer")
 @Controller
@@ -42,7 +41,6 @@ public class ConsumerController extends ApiController {
         }
     }
 
-
     @Mapping("")
     public PageResult query(Context ctx, String page, String limit, String label) {
         try {
@@ -55,5 +53,4 @@ public class ConsumerController extends ApiController {
             return PageResult.failure(e.getMessage());
         }
     }
-
 }

@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 
 public class BaseJunit {
 
-
     AdminClient client = null;
 
     @BeforeEach
@@ -19,5 +18,4 @@ public class BaseJunit {
             client = new AdminClient(p);
         }
     }
-
 }

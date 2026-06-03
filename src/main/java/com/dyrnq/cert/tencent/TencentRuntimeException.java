@@ -9,7 +9,6 @@ public class TencentRuntimeException extends RuntimeException {
         super(message, cause);
     }
 
-
     public TencentRuntimeException(Throwable cause) {
         super(cause);
     }

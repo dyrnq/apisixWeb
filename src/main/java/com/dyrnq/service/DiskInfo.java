@@ -8,7 +8,6 @@ public class DiskInfo {
 
     String percent;
 
-
     public String getPercent() {
         return percent;
     }
@@ -24,7 +23,6 @@ public class DiskInfo {
     public void setPath(String path) {
         this.path = path;
     }
-
 
     public String getUseSpace() {
         return useSpace;

@@ -1,18 +1,16 @@
 package com.dyrnq.apisix;
 
-
 import com.dyrnq.apisix.domain.Service;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class ServiceClient extends BaseClient implements Stub<Service> {
 
@@ -25,8 +23,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
     public Service get(String id) throws ApisixSDKException {
         Wrap<Service> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -57,8 +54,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
                     }
                 }
             }
-            Type type = new TypeToken<Multi<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -86,8 +82,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
     public List<Service> list() throws ApisixSDKException {
         Multi<Service> rsp = null;
         try {
-            Type type = new TypeToken<Multi<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -103,8 +98,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
     public Service put(String id, Service obj) throws ApisixSDKException {
         Wrap<Service> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -119,8 +113,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
     public Service putRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<Service> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -135,8 +128,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
     public Service patchRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<Service> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PATCH, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -151,8 +143,7 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
     public Service post(Service obj) throws ApisixSDKException {
         Wrap<Service> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Service>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Service>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_POST, PATH + "/"), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -163,5 +154,4 @@ public class ServiceClient extends BaseClient implements Stub<Service> {
         }
         return rsp.getValue();
     }
-
 }

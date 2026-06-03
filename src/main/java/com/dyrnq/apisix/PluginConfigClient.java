@@ -1,18 +1,16 @@
 package com.dyrnq.apisix;
 
-
 import com.dyrnq.apisix.domain.PluginConfig;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class PluginConfigClient extends BaseClient implements Stub<PluginConfig> {
 
@@ -25,8 +23,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
     public PluginConfig get(String id) throws ApisixSDKException {
         Wrap<PluginConfig> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -57,8 +54,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
                     }
                 }
             }
-            Type type = new TypeToken<Multi<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -86,8 +82,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
     public List<PluginConfig> list() throws ApisixSDKException {
         Multi<PluginConfig> rsp = null;
         try {
-            Type type = new TypeToken<Multi<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -103,8 +98,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
     public PluginConfig put(String id, PluginConfig obj) throws ApisixSDKException {
         Wrap<PluginConfig> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -119,8 +113,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
     public PluginConfig putRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<PluginConfig> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -135,8 +128,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
     public PluginConfig patchRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<PluginConfig> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PATCH, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -151,8 +143,7 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
     public PluginConfig post(PluginConfig obj) throws ApisixSDKException {
         Wrap<PluginConfig> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginConfig>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginConfig>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_POST, PATH + "/"), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -163,5 +154,4 @@ public class PluginConfigClient extends BaseClient implements Stub<PluginConfig>
         }
         return rsp.getValue();
     }
-
 }

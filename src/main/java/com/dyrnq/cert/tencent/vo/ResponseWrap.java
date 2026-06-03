@@ -9,7 +9,6 @@ public class ResponseWrap<T> {
     @Expose
     private T response;
 
-
     public T getResponse() {
         return response;
     }

@@ -45,5 +45,4 @@ public class DiscoveryArgs {
     public void setGroupName(String groupName) {
         this.groupName = groupName;
     }
-
 }

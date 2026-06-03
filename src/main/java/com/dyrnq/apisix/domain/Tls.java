@@ -1,19 +1,22 @@
 package com.dyrnq.apisix.domain;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-public class Tls{
-    public Tls(){
+
+public class Tls {
+    public Tls() {
         super();
     }
+
     @SerializedName("client_cert")
     @Expose
     private String clientCert;
 
-    public void setClientCert(String clientCert){
-        this.clientCert=clientCert;
+    public void setClientCert(String clientCert) {
+        this.clientCert = clientCert;
     }
 
-    public String getClientCert(){
+    public String getClientCert() {
         return this.clientCert;
     }
 
@@ -25,12 +28,11 @@ public class Tls{
     @Expose
     private Boolean verify;
 
-
-    public void setClientKey(String clientKey){
-        this.clientKey=clientKey;
+    public void setClientKey(String clientKey) {
+        this.clientKey = clientKey;
     }
 
-    public String getClientKey(){
+    public String getClientKey() {
         return this.clientKey;
     }
 
@@ -38,17 +40,17 @@ public class Tls{
     @Expose
     private String clientCertId;
 
-    public void setClientCertId(String clientCertId){
-        this.clientCertId=clientCertId;
+    public void setClientCertId(String clientCertId) {
+        this.clientCertId = clientCertId;
     }
 
-    public String getClientCertId(){
+    public String getClientCertId() {
         return this.clientCertId;
     }
 
-    public Tls(String clientCert,String clientKey){
-        this.clientCert=clientCert;
-        this.clientKey=clientKey;
+    public Tls(String clientCert, String clientKey) {
+        this.clientCert = clientCert;
+        this.clientKey = clientKey;
     }
 
     /**

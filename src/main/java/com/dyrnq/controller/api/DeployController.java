@@ -9,6 +9,9 @@ import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.DeployMapper;
 import com.dyrnq.model.Deploy;
 import com.dyrnq.service.op.Factory;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
@@ -21,18 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-
 @Mapping("api/deploy")
 @Controller
 public class DeployController extends ApiController {
 
     static Logger logger = LoggerFactory.getLogger(DeployController.class);
+
     @Inject
     DeployMapper deployMapper;
-
 
     @Mapping("")
     public PageResult query(Context ctx, int page, int limit) {
@@ -120,7 +119,9 @@ public class DeployController extends ApiController {
         String className = map.get("kind") != null ? map.get("kind").toString() : "";
         Class class_ = null;
         try {
-            class_ = StringUtils.contains(className, ".") ? Class.forName(className) : Class.forName("com.dyrnq.apisix.domain." + className);
+            class_ = StringUtils.contains(className, ".")
+                    ? Class.forName(className)
+                    : Class.forName("com.dyrnq.apisix.domain." + className);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -134,8 +135,7 @@ public class DeployController extends ApiController {
             Deploy deploy = deployMapper.selectById(id);
             Iterable<Object> blocks = yaml.loadAll(new StringReader(deploy.getContent()));
 
-
-            //按照依赖关系部署
+            // 按照依赖关系部署
             List<Map<String, ?>> list = new LinkedList<Map<String, ?>>();
 
             for (Object block : blocks) {
@@ -160,7 +160,7 @@ public class DeployController extends ApiController {
                 if (map.containsKey("kind")) {
                     String className = map.get("kind").toString();
                     String _id = map.get("id").toString();
-                    String json = JSONUtil.toJsonStr(MapUtil.removeAny(map,"kind"));
+                    String json = JSONUtil.toJsonStr(MapUtil.removeAny(map, "kind"));
                     logger.debug(json);
                     Factory.create(className).putRaw(businessLogic.getAdminClient(deploy.getInstId()), _id, json);
                 }
@@ -180,7 +180,7 @@ public class DeployController extends ApiController {
             Yaml yaml = new Yaml();
             Deploy deploy = deployMapper.selectById(id);
             Iterable<Object> blocks = yaml.loadAll(new StringReader(deploy.getContent()));
-            //按照依赖关系删除部署
+            // 按照依赖关系删除部署
             List<Map<String, ?>> list = new LinkedList<Map<String, ?>>();
 
             for (Object block : blocks) {
@@ -191,7 +191,6 @@ public class DeployController extends ApiController {
                     throw new RuntimeException("not support! must yaml!");
                 }
             }
-
 
             class OrderComparator implements Comparator<Map<String, ?>> {
                 @Override
@@ -217,5 +216,4 @@ public class DeployController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 }

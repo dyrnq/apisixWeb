@@ -10,94 +10,75 @@ import org.noear.wood.annotation.Table;
 public class Cert {
     @Column("id")
     @PrimaryKey
-    private
-    String id;
+    private String id;
 
     @Column("domain")
-    private
-    String domain;
+    private String domain;
 
     @Column("cert")
-    private
-    String cert;
+    private String cert;
 
     @Column("ca_id")
-    private
-    String caId; //如果是自签名证书 关联数据库中ca表的id字段
+    private String caId; // 如果是自签名证书 关联数据库中ca表的id字段
 
     @Column("approach")
-    private
-    Integer approach;
+    private Integer approach;
 
     @Column("renew")
-    private
-    Integer renew;// 开启自动renew证书,1为开启
-
+    private Integer renew; // 开启自动renew证书,1为开启
 
     @Column("supplier")
-    private
-    Integer supplier;
-
+    private Integer supplier;
 
     @Column("encryption")
-    private
-    Integer encryption;
+    private Integer encryption;
 
     @Column("subject")
-    private
-    String subject;
+    private String subject;
 
     @Column("challenge")
-    private
-    Integer challenge; // 使用 ACME 标准定义的验证方式来验证您对证书中域名的控制权。80=HTTP-01  53=DNS-01
-    //https://letsencrypt.org/zh-cn/docs/challenge-types/
+    private Integer challenge; // 使用 ACME 标准定义的验证方式来验证您对证书中域名的控制权。80=HTTP-01  53=DNS-01
+    // https://letsencrypt.org/zh-cn/docs/challenge-types/
 
-    //在关系型数据库中，字段名不应该使用数据库的保留字作为名称。_r 表示raw(data)
+    // 在关系型数据库中，字段名不应该使用数据库的保留字作为名称。_r 表示raw(data)
     @Column("key_r")
-    private
-    String key;
+    private String key;
 
     @Column("not_after")
-    private
-    Long notAfter;
+    private Long notAfter;
 
     @Column("not_before")
-    private
-    Long notBefore;
+    private Long notBefore;
 
     @Column("aux")
-    private
-    String aux; //辅助字段
+    private String aux; // 辅助字段
 
     @Column("inst_id")
-    private
-    String instId; //inst table id
+    private String instId; // inst table id
 
     @Column("dnsapi")
-    private
-    String dnsapi; //对应 acme.sh --dns <dnsapi>
+    private String dnsapi; // 对应 acme.sh --dns <dnsapi>
 
     @Exclude
     private UploadedFile certFile;
+
     @Exclude
     private UploadedFile keyFile;
-    @Exclude
-    private
-    Integer issue;// 立即申请?
-    @Exclude
-    private
-    String encryptionDisplay;
 
     @Exclude
-    private
-    String approachDisplay;
+    private Integer issue; // 立即申请?
 
     @Exclude
-    private
-    String challengeDisplay;
+    private String encryptionDisplay;
+
     @Exclude
-    private
-    String supplierDisplay;
+    private String approachDisplay;
+
+    @Exclude
+    private String challengeDisplay;
+
+    @Exclude
+    private String supplierDisplay;
 
     public String getEncryptionDisplay() {
         return this.encryptionDisplay;
@@ -234,7 +215,6 @@ public class Cert {
     public void setKeyFile(UploadedFile keyFile) {
         this.keyFile = keyFile;
     }
-
 
     public Long getNotBefore() {
         return notBefore;

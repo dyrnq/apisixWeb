@@ -1,7 +1,6 @@
 package com.dyrnq.service;
 
 import com.dyrnq.model.Cert;
-
 import java.io.IOException;
 import java.security.cert.CertificateException;
 

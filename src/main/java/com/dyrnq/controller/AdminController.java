@@ -1,6 +1,5 @@
 package com.dyrnq.controller;
 
-
 import cn.hutool.json.JSONUtil;
 import com.dyrnq.CfgExtractor;
 import com.dyrnq.service.CertService;
@@ -20,16 +19,18 @@ import org.noear.solon.i18n.annotation.I18n;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 @Mapping("admin")
 @Controller
 @I18n
 public class AdminController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(AdminController.class);
+
     @Inject
     MonitorService monitorService;
+
     @Inject
     CfgExtractor cfgExtractor;
+
     @Inject
     CertService certService;
 
@@ -179,7 +180,6 @@ public class AdminController extends BaseController {
             ModelAndView model = new ModelAndView("admin/index-auth.html");
             return model;
         }
-
     }
 
     @Mapping("cert")
@@ -198,5 +198,4 @@ public class AdminController extends BaseController {
         ModelAndView model = new ModelAndView("admin/ca.html");
         return model;
     }
-
 }

@@ -5,11 +5,9 @@ import com.google.gson.annotations.SerializedName;
 
 public class Wrap<T> {
 
-
     @SerializedName("value")
     @Expose
     private T value;
-
 
     @SerializedName("createdIndex")
     @Expose
@@ -22,7 +20,6 @@ public class Wrap<T> {
     @SerializedName("key")
     @Expose
     private String key;
-
 
     public String getModifiedIndex() {
         return modifiedIndex;
@@ -52,13 +49,13 @@ public class Wrap<T> {
         return createdIndex;
     }
 
-//	public Item<T> getValue() {
-//		return value;
-//	}
-//
-//	public void setValue(Item<T> value) {
-//		this.value = value;
-//	}
+    //	public Item<T> getValue() {
+    //		return value;
+    //	}
+    //
+    //	public void setValue(Item<T> value) {
+    //		this.value = value;
+    //	}
 
     public void setCreatedIndex(String createdIndex) {
         this.createdIndex = createdIndex;

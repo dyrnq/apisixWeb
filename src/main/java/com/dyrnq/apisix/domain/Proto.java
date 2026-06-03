@@ -1,22 +1,22 @@
 package com.dyrnq.apisix.domain;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
-import java.util.List;
-public class Proto{
-    public Proto(){
+
+public class Proto {
+    public Proto() {
         super();
     }
+
     @SerializedName("content")
     @Expose
     private String content;
 
-    public void setContent(String content){
-        this.content=content;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getContent(){
+    public String getContent() {
         return this.content;
     }
 
@@ -24,11 +24,11 @@ public class Proto{
     @Expose
     private Long createTime;
 
-    public void setCreateTime(Long createTime){
-        this.createTime=createTime;
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getCreateTime(){
+    public Long getCreateTime() {
         return this.createTime;
     }
 
@@ -36,12 +36,11 @@ public class Proto{
     @Expose
     private String id;
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
-
 }

@@ -1,22 +1,24 @@
 package com.dyrnq.apisix.domain;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
 import java.util.List;
-public class Route{
-    public Route(){
+import java.util.Map;
+
+public class Route {
+    public Route() {
         super();
     }
+
     @SerializedName("create_time")
     @Expose
     private Long createTime;
 
-    public void setCreateTime(Long createTime){
-        this.createTime=createTime;
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getCreateTime(){
+    public Long getCreateTime() {
         return this.createTime;
     }
 
@@ -24,11 +26,11 @@ public class Route{
     @Expose
     private String desc;
 
-    public void setDesc(String desc){
-        this.desc=desc;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getDesc(){
+    public String getDesc() {
         return this.desc;
     }
 
@@ -36,11 +38,11 @@ public class Route{
     @Expose
     private Boolean enableWebsocket;
 
-    public void setEnableWebsocket(Boolean enableWebsocket){
-        this.enableWebsocket=enableWebsocket;
+    public void setEnableWebsocket(Boolean enableWebsocket) {
+        this.enableWebsocket = enableWebsocket;
     }
 
-    public Boolean isEnableWebsocket(){
+    public Boolean isEnableWebsocket() {
         return this.enableWebsocket;
     }
 
@@ -48,11 +50,11 @@ public class Route{
     @Expose
     private String filterFunc;
 
-    public void setFilterFunc(String filterFunc){
-        this.filterFunc=filterFunc;
+    public void setFilterFunc(String filterFunc) {
+        this.filterFunc = filterFunc;
     }
 
-    public String getFilterFunc(){
+    public String getFilterFunc() {
         return this.filterFunc;
     }
 
@@ -60,11 +62,11 @@ public class Route{
     @Expose
     private String host;
 
-    public void setHost(String host){
-        this.host=host;
+    public void setHost(String host) {
+        this.host = host;
     }
 
-    public String getHost(){
+    public String getHost() {
         return this.host;
     }
 
@@ -72,23 +74,23 @@ public class Route{
     @Expose
     private List<String> hosts;
 
-    public void setHosts(List<String> hosts){
-        this.hosts=hosts;
+    public void setHosts(List<String> hosts) {
+        this.hosts = hosts;
     }
 
-    public List<String> getHosts(){
+    public List<String> getHosts() {
         return this.hosts;
     }
 
     @SerializedName("labels")
     @Expose
-    private Map<String,String> labels;
+    private Map<String, String> labels;
 
-    public void setLabels(Map<String,String> labels){
-        this.labels=labels;
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
     }
 
-    public Map<String,String> getLabels(){
+    public Map<String, String> getLabels() {
         return this.labels;
     }
 
@@ -96,11 +98,11 @@ public class Route{
     @Expose
     private List<String> methods;
 
-    public void setMethods(List<String> methods){
-        this.methods=methods;
+    public void setMethods(List<String> methods) {
+        this.methods = methods;
     }
 
-    public List<String> getMethods(){
+    public List<String> getMethods() {
         return this.methods;
     }
 
@@ -108,11 +110,11 @@ public class Route{
     @Expose
     private String name;
 
-    public void setName(String name){
-        this.name=name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -120,23 +122,23 @@ public class Route{
     @Expose
     private String pluginConfigId;
 
-    public void setPluginConfigId(String pluginConfigId){
-        this.pluginConfigId=pluginConfigId;
+    public void setPluginConfigId(String pluginConfigId) {
+        this.pluginConfigId = pluginConfigId;
     }
 
-    public String getPluginConfigId(){
+    public String getPluginConfigId() {
         return this.pluginConfigId;
     }
 
     @SerializedName("plugins")
     @Expose
-    private Map<String,Object> plugins;
+    private Map<String, Object> plugins;
 
-    public void setPlugins(Map<String,Object> plugins){
-        this.plugins=plugins;
+    public void setPlugins(Map<String, Object> plugins) {
+        this.plugins = plugins;
     }
 
-    public Map<String,Object> getPlugins(){
+    public Map<String, Object> getPlugins() {
         return this.plugins;
     }
 
@@ -144,11 +146,11 @@ public class Route{
     @Expose
     private Integer priority;
 
-    public void setPriority(Integer priority){
-        this.priority=priority;
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
-    public Integer getPriority(){
+    public Integer getPriority() {
         return this.priority;
     }
 
@@ -156,11 +158,11 @@ public class Route{
     @Expose
     private String remoteAddr;
 
-    public void setRemoteAddr(String remoteAddr){
-        this.remoteAddr=remoteAddr;
+    public void setRemoteAddr(String remoteAddr) {
+        this.remoteAddr = remoteAddr;
     }
 
-    public String getRemoteAddr(){
+    public String getRemoteAddr() {
         return this.remoteAddr;
     }
 
@@ -168,11 +170,11 @@ public class Route{
     @Expose
     private List<String> remoteAddrs;
 
-    public void setRemoteAddrs(List<String> remoteAddrs){
-        this.remoteAddrs=remoteAddrs;
+    public void setRemoteAddrs(List<String> remoteAddrs) {
+        this.remoteAddrs = remoteAddrs;
     }
 
-    public List<String> getRemoteAddrs(){
+    public List<String> getRemoteAddrs() {
         return this.remoteAddrs;
     }
 
@@ -180,11 +182,11 @@ public class Route{
     @Expose
     private String script;
 
-    public void setScript(String script){
-        this.script=script;
+    public void setScript(String script) {
+        this.script = script;
     }
 
-    public String getScript(){
+    public String getScript() {
         return this.script;
     }
 
@@ -192,11 +194,11 @@ public class Route{
     @Expose
     private String serviceId;
 
-    public void setServiceId(String serviceId){
-        this.serviceId=serviceId;
+    public void setServiceId(String serviceId) {
+        this.serviceId = serviceId;
     }
 
-    public String getServiceId(){
+    public String getServiceId() {
         return this.serviceId;
     }
 
@@ -204,11 +206,11 @@ public class Route{
     @Expose
     private Integer status;
 
-    public void setStatus(Integer status){
-        this.status=status;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public Integer getStatus(){
+    public Integer getStatus() {
         return this.status;
     }
 
@@ -216,11 +218,11 @@ public class Route{
     @Expose
     private Timeout timeout;
 
-    public void setTimeout(Timeout timeout){
-        this.timeout=timeout;
+    public void setTimeout(Timeout timeout) {
+        this.timeout = timeout;
     }
 
-    public Timeout getTimeout(){
+    public Timeout getTimeout() {
         return this.timeout;
     }
 
@@ -228,11 +230,11 @@ public class Route{
     @Expose
     private Long updateTime;
 
-    public void setUpdateTime(Long updateTime){
-        this.updateTime=updateTime;
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Long getUpdateTime(){
+    public Long getUpdateTime() {
         return this.updateTime;
     }
 
@@ -240,11 +242,11 @@ public class Route{
     @Expose
     private Upstream upstream;
 
-    public void setUpstream(Upstream upstream){
-        this.upstream=upstream;
+    public void setUpstream(Upstream upstream) {
+        this.upstream = upstream;
     }
 
-    public Upstream getUpstream(){
+    public Upstream getUpstream() {
         return this.upstream;
     }
 
@@ -252,11 +254,11 @@ public class Route{
     @Expose
     private String upstreamId;
 
-    public void setUpstreamId(String upstreamId){
-        this.upstreamId=upstreamId;
+    public void setUpstreamId(String upstreamId) {
+        this.upstreamId = upstreamId;
     }
 
-    public String getUpstreamId(){
+    public String getUpstreamId() {
         return this.upstreamId;
     }
 
@@ -264,11 +266,11 @@ public class Route{
     @Expose
     private String uri;
 
-    public void setUri(String uri){
-        this.uri=uri;
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 
-    public String getUri(){
+    public String getUri() {
         return this.uri;
     }
 
@@ -276,11 +278,11 @@ public class Route{
     @Expose
     private List<String> uris;
 
-    public void setUris(List<String> uris){
-        this.uris=uris;
+    public void setUris(List<String> uris) {
+        this.uris = uris;
     }
 
-    public List<String> getUris(){
+    public List<String> getUris() {
         return this.uris;
     }
 
@@ -288,11 +290,11 @@ public class Route{
     @Expose
     private List<List<String>> vars;
 
-    public void setVars(List<List<String>> vars){
-        this.vars=vars;
+    public void setVars(List<List<String>> vars) {
+        this.vars = vars;
     }
 
-    public List<List<String>> getVars(){
+    public List<List<String>> getVars() {
         return this.vars;
     }
 
@@ -300,12 +302,11 @@ public class Route{
     @Expose
     private String id;
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
-
 }

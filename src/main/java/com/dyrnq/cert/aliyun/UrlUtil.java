@@ -13,7 +13,7 @@ public class UrlUtil {
     /**
      * UTF-8 编码。
      */
-    private final static String CHARSET_UTF8 = "utf8";
+    private static final String CHARSET_UTF8 = "utf8";
 
     /**
      * 编码 URL。
@@ -47,12 +47,14 @@ public class UrlUtil {
         for (Map.Entry<String, String> entry : params.entrySet()) {
 
             if (shouldEncodeKv) {
-                canonicalizedQueryString.append(percentEncode(entry.getKey()))
+                canonicalizedQueryString
+                        .append(percentEncode(entry.getKey()))
                         .append("=")
                         .append(percentEncode(entry.getValue()))
                         .append("&");
             } else {
-                canonicalizedQueryString.append(entry.getKey())
+                canonicalizedQueryString
+                        .append(entry.getKey())
                         .append("=")
                         .append(entry.getValue())
                         .append("&");
@@ -77,9 +79,9 @@ public class UrlUtil {
             return text == null
                     ? null
                     : URLEncoder.encode(text, CHARSET_UTF8)
-                    .replace("+", "%20")
-                    .replace("*", "%2A")
-                    .replace("%7E", "~");
+                            .replace("+", "%20")
+                            .replace("*", "%2A")
+                            .replace("%7E", "~");
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

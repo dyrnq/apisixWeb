@@ -1,18 +1,16 @@
 package com.dyrnq.apisix;
 
-
 import com.dyrnq.apisix.domain.SSL;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class SSLClient extends BaseClient implements Stub<SSL> {
 
@@ -25,8 +23,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
     public SSL get(String id) throws ApisixSDKException {
         Wrap<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -57,8 +54,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
                     }
                 }
             }
-            Type type = new TypeToken<Multi<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -86,8 +82,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
     public List<SSL> list() throws ApisixSDKException {
         Multi<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Multi<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -103,8 +98,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
     public SSL put(String id, SSL obj) throws ApisixSDKException {
         Wrap<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -119,8 +113,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
     public SSL putRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -135,8 +128,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
     public SSL patchRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PATCH, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -151,8 +143,7 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
     public SSL post(SSL obj) throws ApisixSDKException {
         Wrap<SSL> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<SSL>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<SSL>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_POST, PATH + "/"), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -163,5 +154,4 @@ public class SSLClient extends BaseClient implements Stub<SSL> {
         }
         return rsp.getValue();
     }
-
 }

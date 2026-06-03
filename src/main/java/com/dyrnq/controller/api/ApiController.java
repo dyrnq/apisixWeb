@@ -8,6 +8,9 @@ import com.dyrnq.service.BusinessLogic;
 import com.dyrnq.service.op.Factory;
 import com.dyrnq.service.op.Sample;
 import com.google.gson.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -18,14 +21,11 @@ import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 @Mapping("api")
 @Controller
 public class ApiController extends BaseController {
     static Logger logger = LoggerFactory.getLogger(ApiController.class);
+
     @Inject
     BusinessLogic businessLogic;
 
@@ -38,7 +38,6 @@ public class ApiController extends BaseController {
         return instId;
     }
 
-
     private Gson g() {
         Gson gson = new GsonBuilder()
                 .setNumberToNumberStrategy(ToNumberPolicy.LONG_OR_DOUBLE)
@@ -48,8 +47,10 @@ public class ApiController extends BaseController {
                 .setExclusionStrategies(new ExclusionStrategy() {
                     @Override
                     public boolean shouldSkipField(FieldAttributes f) {
-                        return "id".equals(f.getName()) || "createTime".equals(f.getName()) || "updateTime".equals(f.getName()); // 如果是特殊字段，则排除
-// 其他字段都保留
+                        return "id".equals(f.getName())
+                                || "createTime".equals(f.getName())
+                                || "updateTime".equals(f.getName()); // 如果是特殊字段，则排除
+                        // 其他字段都保留
                     }
 
                     @Override
@@ -81,16 +82,16 @@ public class ApiController extends BaseController {
             map.put("rawData", jsonStr);
             return Result.succeed(map);
         } catch (Exception e) {
-            if("pluginMetadata".equalsIgnoreCase(cls) && StringUtils.containsAny(e.getMessage(),"Key not found","500")){
+            if ("pluginMetadata".equalsIgnoreCase(cls)
+                    && StringUtils.containsAny(e.getMessage(), "Key not found", "500")) {
                 map.put("rawData", "");
-                //logger.error(e.getMessage(), e);
+                // logger.error(e.getMessage(), e);
                 return Result.succeed(map);
             }
             logger.error(e.getMessage(), e);
             return Result.failure(e.getMessage());
         }
     }
-
 
     @Mapping("{cls}/drop")
     public Result drop(Context ctx, @Path("cls") String cls) {
@@ -103,7 +104,6 @@ public class ApiController extends BaseController {
         }
     }
 
-
     @Mapping("{cls}/sample")
     public Result sample(Context ctx, @Path("cls") String cls) {
         String jsonStr = "{}";
@@ -114,7 +114,6 @@ public class ApiController extends BaseController {
         return Result.succeed(map);
     }
 
-
     protected Map<String, String> toMap(String name, String label, String uri) {
         Map<String, String> qp = new HashMap<>();
         qp.put("name", name);
@@ -122,5 +121,4 @@ public class ApiController extends BaseController {
         qp.put("uri", uri);
         return qp;
     }
-
 }

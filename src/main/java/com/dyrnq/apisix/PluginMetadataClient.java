@@ -1,13 +1,11 @@
 package com.dyrnq.apisix;
 
-
 import com.dyrnq.apisix.domain.PluginMetadata;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +21,7 @@ public class PluginMetadataClient extends BaseClient implements Stub<PluginMetad
     public PluginMetadata get(String id) throws ApisixSDKException {
         Wrap<PluginMetadata> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginMetadata>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginMetadata>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -40,7 +37,8 @@ public class PluginMetadataClient extends BaseClient implements Stub<PluginMetad
         throw new ApisixSDKException("not support");
     }
 
-    public Multi<PluginMetadata> query(String page, String page_size, Map<String, String> qp) throws ApisixSDKException {
+    public Multi<PluginMetadata> query(String page, String page_size, Map<String, String> qp)
+            throws ApisixSDKException {
         throw new ApisixSDKException("not support");
     }
 
@@ -64,8 +62,7 @@ public class PluginMetadataClient extends BaseClient implements Stub<PluginMetad
     public PluginMetadata put(String id, PluginMetadata obj) throws ApisixSDKException {
         Wrap<PluginMetadata> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginMetadata>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginMetadata>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -80,8 +77,7 @@ public class PluginMetadataClient extends BaseClient implements Stub<PluginMetad
     public PluginMetadata putRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<PluginMetadata> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginMetadata>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginMetadata>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -104,8 +100,7 @@ public class PluginMetadataClient extends BaseClient implements Stub<PluginMetad
     public PluginMetadata put(String id, Map map) throws ApisixSDKException {
         Wrap<PluginMetadata> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<PluginMetadata>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<PluginMetadata>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(map, HttpMethod.REQ_PUT, PluginMetadataClient.PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {

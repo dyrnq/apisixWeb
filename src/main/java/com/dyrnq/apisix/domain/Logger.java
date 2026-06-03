@@ -1,9 +1,7 @@
 package com.dyrnq.apisix.domain;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +20,7 @@ public class Logger {
     @SerializedName("conf")
     @Expose
     private Map<String, Object> conf;
+
     @SerializedName("name")
     @Expose
     private String name;
@@ -61,5 +60,4 @@ public class Logger {
     public void setName(String name) {
         this.name = name;
     }
-
 }

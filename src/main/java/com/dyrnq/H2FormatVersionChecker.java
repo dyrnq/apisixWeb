@@ -1,11 +1,10 @@
 package com.dyrnq;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 public class H2FormatVersionChecker {
     public static boolean isVer2(String filePath) {

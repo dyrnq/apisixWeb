@@ -1,6 +1,5 @@
 package com.dyrnq.service;
 
-
 /**
  * 监视信息的JavaBean类.
  *
@@ -14,8 +13,8 @@ public class MonitorInfo {
      */
     private String totalMemorySize;
 
-//	/** 剩余的物理内存. */
-//	private String freePhysicalMemorySize;
+    //	/** 剩余的物理内存. */
+    //	private String freePhysicalMemorySize;
 
     /**
      * 已使用的物理内存.
@@ -73,13 +72,13 @@ public class MonitorInfo {
         this.totalMemorySize = totalMemorySize;
     }
 
-//	public String getFreePhysicalMemorySize() {
-//		return freePhysicalMemorySize;
-//	}
-//
-//	public void setFreePhysicalMemorySize(String freePhysicalMemorySize) {
-//		this.freePhysicalMemorySize = freePhysicalMemorySize;
-//	}
+    //	public String getFreePhysicalMemorySize() {
+    //		return freePhysicalMemorySize;
+    //	}
+    //
+    //	public void setFreePhysicalMemorySize(String freePhysicalMemorySize) {
+    //		this.freePhysicalMemorySize = freePhysicalMemorySize;
+    //	}
 
     public String getUsedMemory() {
         return usedMemory;
@@ -96,5 +95,4 @@ public class MonitorInfo {
     public void setCpuRatio(String cpuRatio) {
         this.cpuRatio = cpuRatio;
     }
-
 }

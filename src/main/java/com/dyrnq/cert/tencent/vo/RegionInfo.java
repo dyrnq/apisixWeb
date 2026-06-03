@@ -7,13 +7,14 @@ public class RegionInfo {
     @SerializedName("Region")
     @Expose
     private String region;
+
     @SerializedName("RegionName")
     @Expose
     private String regionName;
+
     @SerializedName("RegionState")
     @Expose
     private String regionState;
-
 
     public String getRegion() {
         return region;

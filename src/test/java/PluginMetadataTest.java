@@ -1,12 +1,10 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.plugins.Ai;
-import org.junit.jupiter.api.Test;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.junit.jupiter.api.Test;
 
 public class PluginMetadataTest extends BaseJunit {
-
 
     @Test
     public void test_putPluginMetadata() throws ApisixSDKException {
@@ -19,5 +17,4 @@ public class PluginMetadataTest extends BaseJunit {
     public void test_getPluginMetadata() throws ApisixSDKException {
         Map p = client.getPluginMetadata(Ai.PLUGIN_NAME);
     }
-
 }

@@ -9,7 +9,6 @@ public class AliyunRuntimeException extends RuntimeException {
         super(message, cause);
     }
 
-
     public AliyunRuntimeException(Throwable cause) {
         super(cause);
     }

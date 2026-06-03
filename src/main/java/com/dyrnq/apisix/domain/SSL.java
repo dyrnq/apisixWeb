@@ -1,22 +1,24 @@
 package com.dyrnq.apisix.domain;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
 import java.util.List;
-public class SSL{
-    public SSL(){
+import java.util.Map;
+
+public class SSL {
+    public SSL() {
         super();
     }
+
     @SerializedName("cert")
     @Expose
     private String cert;
 
-    public void setCert(String cert){
-        this.cert=cert;
+    public void setCert(String cert) {
+        this.cert = cert;
     }
 
-    public String getCert(){
+    public String getCert() {
         return this.cert;
     }
 
@@ -24,35 +26,35 @@ public class SSL{
     @Expose
     private List<String> certs;
 
-    public void setCerts(List<String> certs){
-        this.certs=certs;
+    public void setCerts(List<String> certs) {
+        this.certs = certs;
     }
 
-    public List<String> getCerts(){
+    public List<String> getCerts() {
         return this.certs;
     }
 
-    //@SerializedName("client.ca")
-    //@Expose
-    //private String client.ca;
+    // @SerializedName("client.ca")
+    // @Expose
+    // private String client.ca;
 
-    //@SerializedName("client.depth")
-    //@Expose
-    //private String client.depth;
+    // @SerializedName("client.depth")
+    // @Expose
+    // private String client.depth;
 
-    //@SerializedName("client.skip_mtls_uri_regex")
-    //@Expose
-    //private String client.skipMtlsUriRegex;
+    // @SerializedName("client.skip_mtls_uri_regex")
+    // @Expose
+    // private String client.skipMtlsUriRegex;
 
     @SerializedName("create_time")
     @Expose
     private Long createTime;
 
-    public void setCreateTime(Long createTime){
-        this.createTime=createTime;
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getCreateTime(){
+    public Long getCreateTime() {
         return this.createTime;
     }
 
@@ -60,11 +62,11 @@ public class SSL{
     @Expose
     private String key;
 
-    public void setKey(String key){
-        this.key=key;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getKey(){
+    public String getKey() {
         return this.key;
     }
 
@@ -72,23 +74,23 @@ public class SSL{
     @Expose
     private List<String> keys;
 
-    public void setKeys(List<String> keys){
-        this.keys=keys;
+    public void setKeys(List<String> keys) {
+        this.keys = keys;
     }
 
-    public List<String> getKeys(){
+    public List<String> getKeys() {
         return this.keys;
     }
 
     @SerializedName("labels")
     @Expose
-    private Map<String,String> labels;
+    private Map<String, String> labels;
 
-    public void setLabels(Map<String,String> labels){
-        this.labels=labels;
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
     }
 
-    public Map<String,String> getLabels(){
+    public Map<String, String> getLabels() {
         return this.labels;
     }
 
@@ -96,11 +98,11 @@ public class SSL{
     @Expose
     private List<String> snis;
 
-    public void setSnis(List<String> snis){
-        this.snis=snis;
+    public void setSnis(List<String> snis) {
+        this.snis = snis;
     }
 
-    public List<String> getSnis(){
+    public List<String> getSnis() {
         return this.snis;
     }
 
@@ -108,11 +110,11 @@ public class SSL{
     @Expose
     private Integer status;
 
-    public void setStatus(Integer status){
-        this.status=status;
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
-    public Integer getStatus(){
+    public Integer getStatus() {
         return this.status;
     }
 
@@ -120,11 +122,11 @@ public class SSL{
     @Expose
     private String type;
 
-    public void setType(String type){
-        this.type=type;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getType(){
+    public String getType() {
         return this.type;
     }
 
@@ -132,11 +134,11 @@ public class SSL{
     @Expose
     private Long updateTime;
 
-    public void setUpdateTime(Long updateTime){
-        this.updateTime=updateTime;
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Long getUpdateTime(){
+    public Long getUpdateTime() {
         return this.updateTime;
     }
 
@@ -144,11 +146,11 @@ public class SSL{
     @Expose
     private Client client;
 
-    public void setClient(Client client){
-        this.client=client;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return this.client;
     }
 
@@ -156,11 +158,11 @@ public class SSL{
     @Expose
     private String id;
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
 
@@ -168,11 +170,11 @@ public class SSL{
     @Expose
     private List<String> sslProtocols;
 
-    public void setSslProtocols(List<String> sslProtocols){
-        this.sslProtocols=sslProtocols;
+    public void setSslProtocols(List<String> sslProtocols) {
+        this.sslProtocols = sslProtocols;
     }
 
-    public List<String> getSslProtocols(){
+    public List<String> getSslProtocols() {
         return this.sslProtocols;
     }
 }

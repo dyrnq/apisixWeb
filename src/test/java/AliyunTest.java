@@ -4,11 +4,10 @@ import com.dyrnq.cert.aliyun.DomainUtils;
 import com.dyrnq.cert.aliyun.vo.CertificateOrder;
 import com.dyrnq.cert.aliyun.vo.DescribeCertificateStateResult;
 import com.dyrnq.cert.aliyun.vo.Region;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 public class AliyunTest {
     static final String ACCESS_KEY_ID = "";
@@ -33,7 +32,8 @@ public class AliyunTest {
     public void test_listUserCertificateOrder() {
         List<CertificateOrder> list = aliyunSDK.listUserCertificateOrder(null, "ISSUED");
         for (CertificateOrder obj : list) {
-            System.out.println(obj.getCertStartTime() + " domain " + obj.getCertEndTime() + " " + obj.getDomain() + obj.getOrderId());
+            System.out.println(obj.getCertStartTime() + " domain " + obj.getCertEndTime() + " " + obj.getDomain()
+                    + obj.getOrderId());
             DescribeCertificateStateResult result = aliyunSDK.describeCertificateState(obj.getOrderId());
         }
     }
@@ -41,7 +41,7 @@ public class AliyunTest {
     @Test
     public void test_domain_listUserCertificateOrder() {
         String keyword = "";
-        //等待证书审批下发
+        // 等待证书审批下发
         List<CertificateOrder> list = null;
         while (CollectionUtil.isEmpty(list)) {
             try {
@@ -54,7 +54,8 @@ public class AliyunTest {
             }
         }
         for (CertificateOrder i : list) {
-            System.out.println("orderId=" + i.getOrderId() + "; aliyunOrderId=" + i.getAliyunOrderId() + "; domain=" + i.getDomain());
+            System.out.println("orderId=" + i.getOrderId() + "; aliyunOrderId=" + i.getAliyunOrderId() + "; domain="
+                    + i.getDomain());
         }
     }
 
@@ -91,12 +92,8 @@ public class AliyunTest {
         System.out.println(baseDomain);
         System.out.println(rr);
 
-
-        //插入域名校验记录，腾讯云那边有AUTO_DNS，不需要这一步
-        //aliyunSDK.addDomainRecord(baseDomain, rr, recodeType, recodeValue);
-
+        // 插入域名校验记录，腾讯云那边有AUTO_DNS，不需要这一步
+        // aliyunSDK.addDomainRecord(baseDomain, rr, recodeType, recodeValue);
 
     }
-
-
 }

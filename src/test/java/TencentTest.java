@@ -8,9 +8,8 @@ import org.junit.jupiter.api.Test;
  */
 public class TencentTest {
 
-
-    private final static String SECRET_ID = "";
-    private final static String SECRET_KEY = "";
+    private static final String SECRET_ID = "";
+    private static final String SECRET_KEY = "";
     Tencent tencentSDK = null;
 
     @BeforeEach
@@ -37,7 +36,6 @@ public class TencentTest {
         arg.setDvAuthMethod("DNS_AUTO");
         tencentSDK.applyCertificate(arg);
 
-
         String certificateId = null;
 
         while (certificateId == null) {
@@ -45,16 +43,17 @@ public class TencentTest {
             deArg.setLimit(1000);
             deArg.setOffset(0);
             deArg.setSearchKey(domain);
-            deArg.setCertificateStatus(new Integer[]{1});
-            //查询已签发的证书
+            deArg.setCertificateStatus(new Integer[] {1});
+            // 查询已签发的证书
             DescribeCertificatesResult r = tencentSDK.describeCertificates(deArg);
-            if (r != null && r.getTotalCount() != null && r.getTotalCount() >= 1 && r.getCertificates() != null && r.getCertificates().get(0) != null) {
+            if (r != null
+                    && r.getTotalCount() != null
+                    && r.getTotalCount() >= 1
+                    && r.getCertificates() != null
+                    && r.getCertificates().get(0) != null) {
                 certificateId = r.getCertificates().get(0).getCertificateId();
             }
             Thread.sleep(2000L);
         }
-
     }
-
-
 }

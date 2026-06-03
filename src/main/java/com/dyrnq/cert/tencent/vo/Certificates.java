@@ -2,16 +2,17 @@ package com.dyrnq.cert.tencent.vo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 public class Certificates {
     @SerializedName("CertificateId")
     @Expose
     private String certificateId;
+
     @SerializedName("Status")
     @Expose
     private Integer status;
+
     @SerializedName("StatusName")
     @Expose
     private String statusName;
@@ -23,9 +24,11 @@ public class Certificates {
     @SerializedName("VerifyType")
     @Expose
     private String verifyType;
+
     @SerializedName("CertBeginTime")
     @Expose
     private String certBeginTime;
+
     @SerializedName("CertEndTime")
     @Expose
     private String certEndTime;
@@ -33,7 +36,6 @@ public class Certificates {
     @SerializedName("SubjectAltName")
     @Expose
     private List<String> subjectAltName;
-
 
     public String getCertificateId() {
         return certificateId;

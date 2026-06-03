@@ -2,7 +2,6 @@ package com.dyrnq.service.op;
 
 import com.dyrnq.apisix.AdminClient;
 import com.dyrnq.apisix.ApisixSDKException;
-
 import java.util.List;
 
 public interface Op<T> {

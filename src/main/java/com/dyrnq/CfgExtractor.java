@@ -1,6 +1,5 @@
 package com.dyrnq;
 
-
 public class CfgExtractor {
     private final String tokenCookieName;
 

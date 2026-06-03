@@ -20,13 +20,12 @@ import org.slf4j.LoggerFactory;
 @Controller
 public class ManifestController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(ManifestController.class);
+
     @Inject
     ManifestMapper manifestMapper;
 
-
     @Inject
     DeployMapper deployMapper;
-
 
     @Mapping("")
     public PageResult query(Context ctx, int page, int limit) {
@@ -48,7 +47,6 @@ public class ManifestController extends ApiController {
             }
             manifestMapper.insert(manifest, true);
 
-
             return Result.succeed("ok");
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -61,7 +59,6 @@ public class ManifestController extends ApiController {
         try {
             for (String i : id) {
                 manifestMapper.deleteById(i);
-
             }
             return Result.succeed("ok");
         } catch (Exception e) {
@@ -96,5 +93,4 @@ public class ManifestController extends ApiController {
     public Result deploy(Context ctx, String id) {
         throw new RuntimeException("not support");
     }
-
 }

@@ -8,12 +8,6 @@ import com.dyrnq.model.Cert;
 import com.dyrnq.service.ApplyCertificate;
 import com.dyrnq.utils.CertUtils;
 import enumeration.Encryption;
-import org.apache.commons.lang3.StringUtils;
-import org.noear.solon.annotation.Component;
-import org.noear.solon.annotation.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +16,11 @@ import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.*;
+import org.apache.commons.lang3.StringUtils;
+import org.noear.solon.annotation.Component;
+import org.noear.solon.annotation.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Component(name = "acmeImpl")
 public class AcmeImpl implements ApplyCertificate {
@@ -32,14 +31,17 @@ public class AcmeImpl implements ApplyCertificate {
 
     @Inject
     AcmeshCmd acmeshCmd;
+
     @Inject
     AcmeClient acmeClient;
-
 
     @Override
     public void dns(Cert cert) throws CertificateException, IOException {
         String acmeHome = homeDir.getAcmeHome();
-        acmeshCmd.execCMD(homeDir.getAcmeSh() + " --create-account-key --server letsencrypt --home " + acmeHome, new String[]{}, 5 * 60 * 1000);
+        acmeshCmd.execCMD(
+                homeDir.getAcmeSh() + " --create-account-key --server letsencrypt --home " + acmeHome,
+                new String[] {},
+                5 * 60 * 1000);
 
         String[] split = cert.getDomain().split(",");
         StringBuffer sb = new StringBuffer();
@@ -63,17 +65,18 @@ public class AcmeImpl implements ApplyCertificate {
             logger.error(e.getMessage());
         }
 
-
         String[] env = envList.toArray(new String[envList.size()]);
         String keylength = "";
         // 在 acme.sh 中，默认情况下使用的是 ECC 密钥对。
-        // -k, --keylength <bits>            Specifies the domain key length: 2048, 3072, 4096, 8192 or ec-256, ec-384, ec-521.
+        // -k, --keylength <bits>            Specifies the domain key length: 2048, 3072, 4096, 8192 or ec-256, ec-384,
+        // ec-521.
         if (cert.getEncryption() != null && cert.getEncryption().intValue() == Encryption.ECC.getId()) {
             keylength = " --keylength ec-256 ";
         } else {
             keylength = " --keylength 2048 ";
         }
-        cmd = homeDir.getAcmeSh() + " --issue --force --debug 1 --home " + acmeHome + " --dns " + cert.getDnsapi() + domain + keylength + " --server letsencrypt ";
+        cmd = homeDir.getAcmeSh() + " --issue --force --debug 1 --home " + acmeHome + " --dns " + cert.getDnsapi()
+                + domain + keylength + " --server letsencrypt ";
         logger.info(cmd);
         // --staging
         rs = acmeshCmd.execCMD(cmd, env, 5 * 60 * 1000);
@@ -106,7 +109,10 @@ public class AcmeImpl implements ApplyCertificate {
     public void http(Cert cert) throws CertificateException, IOException {
 
         String acmeHome = homeDir.getAcmeHome();
-        acmeshCmd.execCMD(homeDir.getAcmeSh() + " --create-account-key --server letsencrypt --home " + acmeHome, new String[]{}, 5 * 60 * 1000);
+        acmeshCmd.execCMD(
+                homeDir.getAcmeSh() + " --create-account-key --server letsencrypt --home " + acmeHome,
+                new String[] {},
+                5 * 60 * 1000);
 
         String[] dms = StringUtils.split(cert.getDomain(), ",");
         java.util.List<String> domains = new ArrayList<>();
@@ -116,7 +122,6 @@ public class AcmeImpl implements ApplyCertificate {
 
             String firstDomain = cert.getDomain().split(",")[0];
             String certDir = StringUtils.joinWith(File.separator, homeDir.getAcmeHome(), firstDomain);
-
 
             String crtPath = StringUtils.joinWith(File.separator, certDir, "domain-chain.crt");
             String keyPath = StringUtils.joinWith(File.separator, certDir, "domain.key");

@@ -1,22 +1,24 @@
 package com.dyrnq.apisix.domain;
-import com.google.gson.annotations.JsonAdapter;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
 import java.util.List;
-public class Service{
-    public Service(){
+import java.util.Map;
+
+public class Service {
+    public Service() {
         super();
     }
+
     @SerializedName("create_time")
     @Expose
     private Long createTime;
 
-    public void setCreateTime(Long createTime){
-        this.createTime=createTime;
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
     }
 
-    public Long getCreateTime(){
+    public Long getCreateTime() {
         return this.createTime;
     }
 
@@ -24,11 +26,11 @@ public class Service{
     @Expose
     private String desc;
 
-    public void setDesc(String desc){
-        this.desc=desc;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getDesc(){
+    public String getDesc() {
         return this.desc;
     }
 
@@ -36,11 +38,11 @@ public class Service{
     @Expose
     private Boolean enableWebsocket;
 
-    public void setEnableWebsocket(Boolean enableWebsocket){
-        this.enableWebsocket=enableWebsocket;
+    public void setEnableWebsocket(Boolean enableWebsocket) {
+        this.enableWebsocket = enableWebsocket;
     }
 
-    public Boolean isEnableWebsocket(){
+    public Boolean isEnableWebsocket() {
         return this.enableWebsocket;
     }
 
@@ -48,23 +50,23 @@ public class Service{
     @Expose
     private List<String> hosts;
 
-    public void setHosts(List<String> hosts){
-        this.hosts=hosts;
+    public void setHosts(List<String> hosts) {
+        this.hosts = hosts;
     }
 
-    public List<String> getHosts(){
+    public List<String> getHosts() {
         return this.hosts;
     }
 
     @SerializedName("labels")
     @Expose
-    private Map<String,String> labels;
+    private Map<String, String> labels;
 
-    public void setLabels(Map<String,String> labels){
-        this.labels=labels;
+    public void setLabels(Map<String, String> labels) {
+        this.labels = labels;
     }
 
-    public Map<String,String> getLabels(){
+    public Map<String, String> getLabels() {
         return this.labels;
     }
 
@@ -72,23 +74,23 @@ public class Service{
     @Expose
     private String name;
 
-    public void setName(String name){
-        this.name=name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
     @SerializedName("plugins")
     @Expose
-    private Map<String,Object> plugins;
+    private Map<String, Object> plugins;
 
-    public void setPlugins(Map<String,Object> plugins){
-        this.plugins=plugins;
+    public void setPlugins(Map<String, Object> plugins) {
+        this.plugins = plugins;
     }
 
-    public Map<String,Object> getPlugins(){
+    public Map<String, Object> getPlugins() {
         return this.plugins;
     }
 
@@ -96,11 +98,11 @@ public class Service{
     @Expose
     private Long updateTime;
 
-    public void setUpdateTime(Long updateTime){
-        this.updateTime=updateTime;
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
     }
 
-    public Long getUpdateTime(){
+    public Long getUpdateTime() {
         return this.updateTime;
     }
 
@@ -108,11 +110,11 @@ public class Service{
     @Expose
     private Upstream upstream;
 
-    public void setUpstream(Upstream upstream){
-        this.upstream=upstream;
+    public void setUpstream(Upstream upstream) {
+        this.upstream = upstream;
     }
 
-    public Upstream getUpstream(){
+    public Upstream getUpstream() {
         return this.upstream;
     }
 
@@ -120,11 +122,11 @@ public class Service{
     @Expose
     private String upstreamId;
 
-    public void setUpstreamId(String upstreamId){
-        this.upstreamId=upstreamId;
+    public void setUpstreamId(String upstreamId) {
+        this.upstreamId = upstreamId;
     }
 
-    public String getUpstreamId(){
+    public String getUpstreamId() {
         return this.upstreamId;
     }
 
@@ -132,12 +134,11 @@ public class Service{
     @Expose
     private String id;
 
-    public void setId(String id){
-        this.id=id;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
-
 }

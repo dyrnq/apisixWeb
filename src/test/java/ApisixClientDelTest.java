@@ -1,18 +1,14 @@
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.*;
-
+import java.util.List;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 
-
-import java.util.List;
-
-//@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+// @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class ApisixClientDelTest extends BaseJunit {
-
 
     @Test
     public void test_delRoute() throws ApisixSDKException {
@@ -110,7 +106,6 @@ public class ApisixClientDelTest extends BaseJunit {
             client.delPluginConfig(rr.getId());
         }
     }
-
 
     @Test
     public void test_cleanAll() throws Exception {

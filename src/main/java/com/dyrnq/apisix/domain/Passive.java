@@ -1,9 +1,7 @@
 package com.dyrnq.apisix.domain;
 
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,9 +10,11 @@ public class Passive {
     @SerializedName("unhealthy")
     @Expose
     private Unhealthy unhealthy;
+
     @SerializedName("healthy")
     @Expose
     private Healthy healthy;
+
     @SerializedName("type")
     @Expose
     private Type type = Type.fromValue("http");
@@ -44,14 +44,13 @@ public class Passive {
     }
 
     public enum Type {
-
         @SerializedName("http")
         HTTP("http"),
         @SerializedName("https")
         HTTPS("https"),
         @SerializedName("tcp")
         TCP("tcp");
-        private final static Map<String, Type> CONSTANTS = new HashMap<String, Type>();
+        private static final Map<String, Type> CONSTANTS = new HashMap<String, Type>();
 
         static {
             for (Type c : values()) {
@@ -82,7 +81,5 @@ public class Passive {
         public String value() {
             return this.value;
         }
-
     }
-
 }

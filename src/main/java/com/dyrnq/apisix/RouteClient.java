@@ -1,18 +1,16 @@
 package com.dyrnq.apisix;
 
-
 import com.dyrnq.apisix.domain.Route;
 import com.dyrnq.apisix.profile.Profile;
 import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import org.apache.commons.lang3.StringUtils;
-
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 public class RouteClient extends BaseClient implements Stub<Route> {
 
@@ -25,8 +23,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
     public Route get(String id) throws ApisixSDKException {
         Wrap<Route> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -57,8 +54,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
                     }
                 }
             }
-            Type type = new TypeToken<Multi<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PATH, mapToQueryString(paramsMap)), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -86,8 +82,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
     public List<Route> list() throws ApisixSDKException {
         Multi<Route> rsp = null;
         try {
-            Type type = new TypeToken<Multi<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Multi<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -103,8 +98,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
     public Route put(String id, Route obj) throws ApisixSDKException {
         Wrap<Route> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_PUT, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -119,8 +113,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
     public Route putRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<Route> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PUT, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -135,8 +128,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
     public Route patchRaw(String id, String rawData) throws ApisixSDKException {
         Wrap<Route> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_PATCH, PATH + "/" + id, rawData), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -151,8 +143,7 @@ public class RouteClient extends BaseClient implements Stub<Route> {
     public Route post(Route obj) throws ApisixSDKException {
         Wrap<Route> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Route>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Route>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(obj, HttpMethod.REQ_POST, PATH + "/"), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -163,5 +154,4 @@ public class RouteClient extends BaseClient implements Stub<Route> {
         }
         return rsp.getValue();
     }
-
 }

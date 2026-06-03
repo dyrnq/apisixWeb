@@ -1,6 +1,5 @@
 package com.dyrnq.apisix;
 
-
 import cn.hutool.core.util.StrUtil;
 import com.dyrnq.apisix.domain.Plugin;
 import com.dyrnq.apisix.profile.Profile;
@@ -8,7 +7,6 @@ import com.dyrnq.apisix.response.Multi;
 import com.dyrnq.apisix.response.Wrap;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,8 +24,7 @@ public class PluginClient extends BaseClient implements Stub<Map> {
     public Map get(String id) throws ApisixSDKException {
         Wrap<Map> rsp = null;
         try {
-            Type type = new TypeToken<Wrap<Map>>() {
-            }.getType();
+            Type type = new TypeToken<Wrap<Map>>() {}.getType();
             rsp = gson.fromJson(this.doRequest(HttpMethod.REQ_GET, PATH + "/" + id), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
             if (e instanceof ApisixSDKException) {
@@ -50,6 +47,7 @@ public class PluginClient extends BaseClient implements Stub<Map> {
     public void del(String id) throws ApisixSDKException {
         throw new ApisixSDKException("not support");
     }
+
     public List<Map> list() throws ApisixSDKException {
         return list(null);
     }
@@ -57,11 +55,10 @@ public class PluginClient extends BaseClient implements Stub<Map> {
     public List<Map> list(String subsystem) throws ApisixSDKException {
         Map<String, Map> rsp = null;
         try {
-            Type type = new TypeToken<Map<String, Map>>() {
-            }.getType();
-            String param="all=true";
-            if(StrUtil.isNotBlank(subsystem)){
-                param=param+"&subsystem="+subsystem;
+            Type type = new TypeToken<Map<String, Map>>() {}.getType();
+            String param = "all=true";
+            if (StrUtil.isNotBlank(subsystem)) {
+                param = param + "&subsystem=" + subsystem;
             }
             rsp = gson.fromJson(this.doRequest(null, HttpMethod.REQ_GET, PluginClient.PATH, param), type);
         } catch (JsonSyntaxException | ApisixSDKException e) {
@@ -84,7 +81,6 @@ public class PluginClient extends BaseClient implements Stub<Map> {
                 map.put("id", key);
                 result.add(map);
             }
-
         }
         return result;
     }
@@ -104,5 +100,4 @@ public class PluginClient extends BaseClient implements Stub<Map> {
     public Map post(Plugin obj) throws ApisixSDKException {
         throw new ApisixSDKException("not support");
     }
-
 }

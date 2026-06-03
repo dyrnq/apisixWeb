@@ -1,8 +1,7 @@
 import com.github.odiszapc.nginxparser.*;
-import org.junit.jupiter.api.Test;
-
 import java.io.IOException;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
 public class NginxparserTest {
     @Test
@@ -11,10 +10,10 @@ public class NginxparserTest {
         String nginxConf = "src/test/resources/nginx.conf";
         NgxConfig conf = NgxConfig.read(nginxConf);
 
-        NgxParam workers = conf.findParam("worker_processes");       // Ex.1
+        NgxParam workers = conf.findParam("worker_processes"); // Ex.1
         workers.getValue(); // "1"
         NgxParam listen = conf.findParam("http", "server", "listen"); // Ex.2
-        //listen.getValue(); // "8889"
+        // listen.getValue(); // "8889"
 
         List<NgxEntry> rtmpServers = conf.findAll(NgxConfig.BLOCK, "rtmp", "server"); // Ex.3
         for (NgxEntry entry : rtmpServers) {
@@ -23,9 +22,5 @@ public class NginxparserTest {
         }
         NgxDumper dumper = new NgxDumper(conf);
         dumper.dump(System.out);
-
-
     }
-
-
 }

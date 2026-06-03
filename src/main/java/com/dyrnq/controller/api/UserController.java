@@ -6,6 +6,7 @@ import com.dyrnq.controller.PageResult;
 import com.dyrnq.dso.UserMapper;
 import com.dyrnq.model.User;
 import com.dyrnq.utils.BCryptPasswordEncoder;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Inject;
@@ -17,12 +18,11 @@ import org.noear.wood.IPage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
-
 @Mapping("api/user")
 @Controller
 public class UserController extends ApiController {
     static Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Inject
     UserMapper userMapper;
 
@@ -82,7 +82,7 @@ public class UserController extends ApiController {
 
     @Mapping("update")
     public Result update(Context ctx, User user) {
-        //throw new RuntimeException("not support");
+        // throw new RuntimeException("not support");
         try {
             userMapper.updateById(user, true);
             return Result.succeed("ok");

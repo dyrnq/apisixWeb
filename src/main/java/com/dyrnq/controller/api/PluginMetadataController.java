@@ -3,16 +3,15 @@ package com.dyrnq.controller.api;
 import com.dyrnq.apisix.ApisixSDKException;
 import com.dyrnq.apisix.domain.PluginMetadata;
 import com.dyrnq.service.op.Factory;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.noear.solon.annotation.Controller;
 import org.noear.solon.annotation.Mapping;
 import org.noear.solon.core.handle.Context;
 import org.noear.solon.core.handle.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Mapping("api/pluginMetadata")
 @Controller
@@ -47,7 +46,6 @@ public class PluginMetadataController extends ApiController {
                 }
             }
 
-
             return Result.succeed(pluginMetadata);
         } catch (ApisixSDKException e) {
             logger.error(e.getMessage(), e);
@@ -75,5 +73,4 @@ public class PluginMetadataController extends ApiController {
             return Result.failure(e.getMessage());
         }
     }
-
 }
