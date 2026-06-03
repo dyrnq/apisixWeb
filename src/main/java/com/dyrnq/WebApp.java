@@ -105,6 +105,42 @@ public class WebApp {
                 } catch (TemplateException ex) {
                     log.error(ex.getMessage(), ex);
                 }
+                // 设置FreeMarker共享变量（解决ctx.attrSet不传递到模板的问题）
+                try {
+                    cfg.setSharedVariable("ctx", "");
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
+                try {
+                    cfg.setSharedVariable("projectName", Solon.cfg().appName());
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
+                try {
+                    cfg.setSharedVariable("jsrandom", String.valueOf(System.currentTimeMillis()));
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
+                try {
+                    cfg.setSharedVariable("messageHeaders", java.util.Collections.emptyList());
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
+                try {
+                    cfg.setSharedVariable("messages", java.util.Collections.emptyList());
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
+                try {
+                    cfg.setSharedVariable("cookName", "{}");
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
+                try {
+                    cfg.setSharedVariable("cfg", "{}");
+                } catch (Exception ignored) {
+                    log.warn(ignored.getMessage());
+                }
             });
             app.filter((c, chain) -> {
                 String path = c.path();
