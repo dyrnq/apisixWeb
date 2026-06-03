@@ -81,11 +81,11 @@ public class DataSourceEmbed {
                     String jar_2_2_224 = StringUtils.joinWith(File.separator, h2Path, "h2-2.2.224.jar");
 
                     HttpUtil.downloadFile(
-                            "http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar",
+                            "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar",
                             new File(jar_2_1_214),
                             60000);
                     HttpUtil.downloadFile(
-                            "http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar",
+                            "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar",
                             new File(jar_2_2_224),
                             60000);
 
@@ -130,11 +130,11 @@ public class DataSourceEmbed {
                     String jar_2_1_214 = StringUtils.joinWith(File.separator, h2Path, "h2-2.1.214.jar");
                     String jar_2_2_224 = StringUtils.joinWith(File.separator, h2Path, "h2-2.2.224.jar");
                     HttpUtil.downloadFile(
-                            "http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar",
+                            "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.1.214/h2-2.1.214.jar",
                             new File(jar_2_1_214),
                             60000);
                     HttpUtil.downloadFile(
-                            "http://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar",
+                            "https://mirrors.cloud.tencent.com/nexus/repository/maven-public/com/h2database/h2/2.2.224/h2-2.2.224.jar",
                             new File(jar_2_2_224),
                             60000);
 
