@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 
 public class AgentClient {
     static Logger logger = LoggerFactory.getLogger(AgentClient.class);
-    final String API_CONFIG_PATH = "/api/v1/config";
-    final String API_RELOAD_PATH = "/api/v1/reload";
-    final String API_RESTART_PATH = "/api/v1/restart";
-    final String API_STOP_PATH = "/api/v1/stop";
-    final String API_START_PATH = "/api/v1/start";
+    static final String API_CONFIG_PATH = "/api/v1/config";
+    static final String API_RELOAD_PATH = "/api/v1/reload";
+    static final String API_RESTART_PATH = "/api/v1/restart";
+    static final String API_STOP_PATH = "/api/v1/stop";
+    static final String API_START_PATH = "/api/v1/start";
 
     private final OkHttpClient client;
 

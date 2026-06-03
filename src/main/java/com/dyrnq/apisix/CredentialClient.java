@@ -94,8 +94,6 @@ public class CredentialClient extends BaseClient {
     public static List<Credential> listAll(Profile profile) throws ApisixSDKException {
         List<Credential> all = new ArrayList<>();
         try {
-            // 先获取所有consumer
-            com.dyrnq.apisix.domain.Consumer consumerPlaceholder = new com.dyrnq.apisix.domain.Consumer();
             com.dyrnq.apisix.ConsumerClient consumerClient = new com.dyrnq.apisix.ConsumerClient(profile);
             List<com.dyrnq.apisix.domain.Consumer> consumers = consumerClient.list();
             if (consumers != null) {
