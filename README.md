@@ -1,6 +1,6 @@
 # apisixWeb
 
-<img src="https://a.dyrnq.com/apisixWeb/images/logo.png" alt="apisixWeb" width="300" height="300">
+<img src="docs/images/logo.png" alt="apisixWeb" width="300" height="300">
 
 <!-- TOC -->
 
@@ -37,13 +37,13 @@ Inspired by [nginxWebUI](https://gitee.com/cym1102/nginxWebUI).
 - Automatic renewal of expired certificates.
 - Deploy management based on yaml files.
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-10-33%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-1.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-05%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-2.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-24%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-3.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-46%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-4.png" alt="apisixWeb" width="589" height="310">
 
 ## docker
 

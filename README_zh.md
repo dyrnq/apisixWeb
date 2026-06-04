@@ -1,6 +1,6 @@
 # apisixWeb
 
-<img src="https://a.dyrnq.com/apisixWeb/images/logo.png" alt="apisixWeb" width="300" height="300">
+<img src="docs/images/logo.png" alt="apisixWeb" width="300" height="300">
 
 <!-- TOC -->
 
@@ -37,13 +37,13 @@ apisixWeb是一个Apisix的webui界面，该项目使用apisix的管理API（即
 - 过期证书自动重新申请。
 - 使用yaml文件来实现规则的部署。
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-10-33%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-1.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-05%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-2.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-24%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-3.png" alt="apisixWeb" width="589" height="310">
 
-<img src="https://a.dyrnq.com/apisixWeb/images/web/Screenshot%202023-09-23%20at%2010-11-46%20apisixWeb.png" alt="apisixWeb" width="589" height="310">
+<img src="docs/images/screenshot-4.png" alt="apisixWeb" width="589" height="310">
 
 ## docker
 
