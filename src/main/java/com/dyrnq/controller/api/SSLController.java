@@ -9,7 +9,7 @@ import com.dyrnq.service.op.Factory;
 import com.dyrnq.utils.CertUtils;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
@@ -105,8 +105,8 @@ public class SSLController extends ApiController {
             SSL ssl = new SSL();
             byte[] byteCert = IOUtils.toByteArray(certFile.getContent());
             byte[] byteKey = IOUtils.toByteArray(keyFile.getContent());
-            ssl.setCert(new String(byteCert, Charset.defaultCharset()));
-            ssl.setKey(new String(byteKey, Charset.defaultCharset()));
+            ssl.setCert(new String(byteCert, StandardCharsets.UTF_8));
+            ssl.setKey(new String(byteKey, StandardCharsets.UTF_8));
 
             ssl.setType(type);
             if (StringUtils.isNotBlank(snis)) {
@@ -120,7 +120,7 @@ public class SSLController extends ApiController {
             }
             if (StringUtils.equalsIgnoreCase("client", type) && caCertFile != null) {
                 Client c = new Client();
-                c.setCa(new String(IOUtils.toByteArray(caCertFile.getContent()), Charset.defaultCharset()));
+                c.setCa(new String(IOUtils.toByteArray(caCertFile.getContent()), StandardCharsets.UTF_8));
                 ssl.setClient(c);
             }
             getAdminClient().putSSL(id, ssl);
