@@ -273,15 +273,11 @@
         <dependency>
             <groupId>org.shredzone.acme4j</groupId>
             <artifactId>acme4j-client</artifactId>
-            <version>2.16</version>
+            <version>5.1.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.bouncycastle</groupId>
                     <artifactId>*</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.bitbucket.b_c</groupId>
-                    <artifactId>jose4j</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -293,18 +289,8 @@
             <version>0.9.6</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.shredzone.acme4j/acme4j-client -->
-        <dependency>
-            <groupId>org.shredzone.acme4j</groupId>
-            <artifactId>acme4j-utils</artifactId>
-            <version>2.16</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bouncycastle</groupId>
-                    <artifactId>*</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
+        <!-- acme4j 5.x removed acme4j-utils, CSRBuilder / KeyPairUtils
+             moved into acme4j-client -->
 
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <dependency>

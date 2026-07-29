@@ -9,17 +9,23 @@ import com.dyrnq.apisix.plugins.ResponseRewrite;
 import com.dyrnq.service.BusinessLogic;
 import java.io.*;
 import java.net.URI;
-import java.net.URL;
 import java.security.KeyPair;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.noear.solon.annotation.Component;
 import org.noear.solon.annotation.Inject;
-import org.shredzone.acme4j.*;
+import org.shredzone.acme4j.AccountBuilder;
+import org.shredzone.acme4j.Authorization;
+import org.shredzone.acme4j.Certificate;
+import org.shredzone.acme4j.Login;
+import org.shredzone.acme4j.Order;
+import org.shredzone.acme4j.Session;
+import org.shredzone.acme4j.Status;
 import org.shredzone.acme4j.challenge.Challenge;
 import org.shredzone.acme4j.challenge.Dns01Challenge;
 import org.shredzone.acme4j.challenge.Http01Challenge;
@@ -103,18 +109,27 @@ public class AcmeClient {
         KeyPair userKeyPair = loadOrCreateUserKeyPair(false);
 
         // Create a session for Let's Encrypt.
-        // Use "acme://letsencrypt.org" for production server
-        // Session session = new Session("acme://letsencrypt.org/staging");
+        // Use "acme://letsencrypt.org/staging" for the staging server.
         Session session = new Session("acme://letsencrypt.org");
-        // Get the Account.
-        // If there is no account yet, create a new one.
-        Account acct = findOrRegisterAccount(session, userKeyPair);
+
+        // Ask the user to accept the TOS, if server provides us with a link.
+        Optional<URI> tos = session.getMetadata().getTermsOfService();
+        if (tos.isPresent()) {
+            acceptAgreement(tos.get());
+        }
+
+        // Bind the session to the user's key pair. If no account exists yet, a new one is
+        // automatically registered. Use AccountBuilder to create a Login directly.
+        Login login = new AccountBuilder()
+                .agreeToTermsOfService()
+                .useKeyPair(userKeyPair)
+                .createLogin(session);
 
         // Load or create a key pair for the domains. This should not be the userKeyPair!
         KeyPair domainKeyPair = loadOrCreateDomainKeyPair(getFirstDomain(domains));
 
         // Order the certificate
-        Order order = acct.newOrder().domains(domains).create();
+        Order order = login.newOrder().domains(domains).create();
 
         // Perform all required authorizations
         for (Authorization auth : order.getAuthorizations()) {
@@ -148,7 +163,7 @@ public class AcmeClient {
                 Thread.sleep(3000L);
 
                 // Then update the status
-                order.update();
+                order.fetch();
             }
         } catch (InterruptedException ex) {
             logger.error("interrupted", ex);
@@ -222,35 +237,6 @@ public class AcmeClient {
     }
 
     /**
-     * Finds your {@link Account} at the ACME server. It will be found by your user's
-     * public key. If your key is not known to the server yet, a new account will be
-     * created.
-     * <p>
-     * This is a simple way of finding your {@link Account}. A better way is to get the
-     * URL of your new account with {@link Account#getLocation()} and store it somewhere.
-     * If you need to get access to your account later, reconnect to it via {@link
-     * Session#login(URL, KeyPair)} by using the stored location.
-     *
-     * @param session {@link Session} to bind with
-     * @return {@link Account}
-     */
-    private Account findOrRegisterAccount(Session session, KeyPair accountKey) throws AcmeException {
-        // Ask the user to accept the TOS, if server provides us with a link.
-        URI tos = session.getMetadata().getTermsOfService();
-        if (tos != null) {
-            acceptAgreement(tos);
-        }
-
-        Account account = new AccountBuilder()
-                .agreeToTermsOfService()
-                .useKeyPair(accountKey)
-                .create(session);
-        logger.info("Registered a new user, URL: {}", account.getLocation());
-
-        return account;
-    }
-
-    /**
      * Authorize a domain. It will be associated with your account, so you will be able to
      * retrieve a signed certificate for the domain later.
      *
@@ -265,8 +251,7 @@ public class AcmeClient {
         }
 
         // Find the desired challenge and prepare it.
-        Challenge challenge = null;
-        challenge = httpChallenge(auth, domains);
+        Challenge challenge;
         switch (CHALLENGE_TYPE) {
             case HTTP:
                 challenge = httpChallenge(auth, domains);
@@ -275,6 +260,9 @@ public class AcmeClient {
             case DNS:
                 challenge = dnsChallenge(auth, domains);
                 break;
+
+            default:
+                throw new AcmeException("Unsupported challenge type: " + CHALLENGE_TYPE);
         }
 
         if (challenge == null) {
@@ -303,7 +291,7 @@ public class AcmeClient {
                 Thread.sleep(3000L);
 
                 // Then update the status
-                challenge.update();
+                challenge.fetch();
             }
         } catch (InterruptedException ex) {
             logger.error("interrupted", ex);
@@ -335,10 +323,9 @@ public class AcmeClient {
      */
     public Challenge httpChallenge(Authorization auth, Collection<String> domains) throws AcmeException {
         // Find a single http-01 challenge
-        Http01Challenge challenge = auth.findChallenge(Http01Challenge.class);
-        if (challenge == null) {
-            throw new AcmeException("Found no " + Http01Challenge.TYPE + " challenge, don't know what to do...");
-        }
+        Http01Challenge challenge = auth.findChallenge(Http01Challenge.class).orElseThrow(
+                () -> new AcmeException(
+                        "Found no " + Http01Challenge.TYPE + " challenge, don't know what to do..."));
 
         // Output the challenge, wait for acknowledge...
         logger.info("Please create a file in your web server's base directory.");
@@ -394,17 +381,17 @@ public class AcmeClient {
      */
     public Challenge dnsChallenge(Authorization auth, Collection<String> domains) throws AcmeException {
         // Find a single dns-01 challenge
-        Dns01Challenge challenge = auth.findChallenge(Dns01Challenge.TYPE);
-        if (challenge == null) {
-            throw new AcmeException("Found no " + Dns01Challenge.TYPE + " challenge, don't know what to do...");
-        }
+        Dns01Challenge challenge = auth.findChallenge(Dns01Challenge.class).orElseThrow(
+                () -> new AcmeException(
+                        "Found no " + Dns01Challenge.TYPE + " challenge, don't know what to do..."));
 
         // Output the challenge, wait for acknowledge...
         logger.info("Please create a TXT record:");
-        logger.info("{} IN TXT {}", Dns01Challenge.toRRName(auth.getIdentifier()), challenge.getDigest());
+        logger.info("{} IN TXT {}", challenge.getRRName(auth.getIdentifier()), challenge.getDigest());
         logger.info("If you're ready, dismiss the dialog...");
 
-        String message = "Please create a TXT record:\n\n" + Dns01Challenge.toRRName(auth.getIdentifier())
+        String message = "Please create a TXT record:\n\n"
+                + challenge.getRRName(auth.getIdentifier())
                 + " IN TXT "
                 + challenge.getDigest();
         acceptChallenge(message);
