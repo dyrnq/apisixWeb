@@ -88,14 +88,14 @@ Ubuntu
 
 ```bash
 apt update
-apt install openjdk-8-jdk -y
+apt install openjdk-21-jdk -y
 # apt install openjdk-11-jdk -y
 ```
 
 Centos
 
 ```bash
-yum install -y java-1.8.0-openjdk
+yum install -y java-21-openjdk
 # yum install -y java-11-openjdk
 ```
 
