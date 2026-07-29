@@ -323,9 +323,9 @@ public class AcmeClient {
      */
     public Challenge httpChallenge(Authorization auth, Collection<String> domains) throws AcmeException {
         // Find a single http-01 challenge
-        Http01Challenge challenge = auth.findChallenge(Http01Challenge.class).orElseThrow(
-                () -> new AcmeException(
-                        "Found no " + Http01Challenge.TYPE + " challenge, don't know what to do..."));
+        Http01Challenge challenge = auth.findChallenge(Http01Challenge.class)
+                .orElseThrow(() ->
+                        new AcmeException("Found no " + Http01Challenge.TYPE + " challenge, don't know what to do..."));
 
         // Output the challenge, wait for acknowledge...
         logger.info("Please create a file in your web server's base directory.");
@@ -381,9 +381,9 @@ public class AcmeClient {
      */
     public Challenge dnsChallenge(Authorization auth, Collection<String> domains) throws AcmeException {
         // Find a single dns-01 challenge
-        Dns01Challenge challenge = auth.findChallenge(Dns01Challenge.class).orElseThrow(
-                () -> new AcmeException(
-                        "Found no " + Dns01Challenge.TYPE + " challenge, don't know what to do..."));
+        Dns01Challenge challenge = auth.findChallenge(Dns01Challenge.class)
+                .orElseThrow(() ->
+                        new AcmeException("Found no " + Dns01Challenge.TYPE + " challenge, don't know what to do..."));
 
         // Output the challenge, wait for acknowledge...
         logger.info("Please create a TXT record:");
