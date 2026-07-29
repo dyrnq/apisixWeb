@@ -43,7 +43,7 @@ public class NodeAdapter extends TypeAdapter<List<Node>> {
                                 node.setHost(hostandport[0]);
                             }
                             if (hostandport.length == 2) {
-                                node.setPort(new Integer(hostandport[1]));
+                                node.setPort(Integer.valueOf(hostandport[1]));
                             } else {
                                 node.setPort(80);
                             }
