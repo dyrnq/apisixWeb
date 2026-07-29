@@ -264,14 +264,10 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>9.22.3</version>
+            <version>10.22.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-mysql</artifactId>
-            <version>9.22.3</version>
-        </dependency>
+        <!-- Flyway 10.x merged flyway-mysql into flyway-core, no longer needed -->
 
         <!-- https://mvnrepository.com/artifact/org.shredzone.acme4j/acme4j-client -->
         <dependency>
