@@ -156,6 +156,7 @@ menu.user = System User
 menu.titleTraffic = Traffic
 menu.titleSystem = System
 menu.proto = Proto
+menu.credential = Credential
 menu.cert        = Certificate
 menu.monitor     = System Status
 menu.manifest    = Manifest
