@@ -81,6 +81,9 @@ commonStr.stop       = stop
 commonStr.restart    = restart
 commonStr.reload     = reload
 commonStr.config     = config
+commonStr.editor     = Editor
+commonStr.langEn     = English
+commonStr.langZh     = 简体中文
 
 loginStr.add         = Add
 loginStr.authCode    = Auth code
@@ -188,3 +191,71 @@ add.inst = Add Apisix Inst
 add.user = Add User
 add.cert = Add Cert
 add.proto = Add Proto
+
+certStr.encryption     = Encryption
+certStr.approach       = Approach
+certStr.ca             = CA
+certStr.supplier       = Supplier
+certStr.domain         = Domain
+certStr.subject        = Subject
+certStr.challenge      = Challenge
+certStr.dnsapi         = DNS API
+certStr.aux            = Auxiliary
+certStr.renewAuto      = Auto renew certificate
+certStr.issueNow       = Issue now
+certStr.cert           = Certificate
+certStr.upload         = Upload
+certStr.idOptional     = Optional
+certStr.idRequired     = Required
+certStr.auxTips        = Optional, environment variables when using DNS-01 as Challenge
+certStr.title          = Title
+certStr.content        = Content
+certStr.id             = ID
+
+sslStr.label           = Label
+sslStr.id              = ID
+sslStr.type            = Type
+sslStr.snis            = SNI
+sslStr.certFile        = Cert File
+sslStr.keyFile         = Key File
+sslStr.clientCaFile    = Client CA File
+
+instStr.url            = Admin URL
+instStr.apiKey         = Admin API Key
+instStr.agentUrl       = Agent URL
+instStr.agentApiKey    = Agent API Key
+instStr.tarFile        = Tar File
+instStr.file           = File
+instStr.content        = Content
+instStr.json           = JSON
+instStr.yaml           = YAML
+instStr.default        = Default
+instStr.id             = ID
+instStr.name           = Name
+
+userStr.email          = Email
+userStr.phone          = Phone
+userStr.pass           = Password
+userStr.id             = ID
+userStr.name           = Username
+
+deployStr.title        = Title
+deployStr.content      = Content
+deployStr.file         = File
+deployStr.upload       = Upload
+deployStr.id           = ID
+
+manifestStr.title      = Title
+manifestStr.content    = Content
+manifestStr.id         = ID
+
+credentialStr.consumer           = Consumer
+credentialStr.consumerUsername   = Consumer Username
+credentialStr.id                 = Credential ID
+
+headerStr.switchApisix  = Switch APISIX
+headerStr.officialDocs  = Official Docs
+headerStr.officialCode  = Official Code
+headerStr.apisixImage   = APISIX Image
+headerStr.apisixWebImage = apisixWeb Image
+headerStr.configExample = config.yaml.example

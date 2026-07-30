@@ -8,7 +8,7 @@
     <li class="layui-nav-item">
       <!--            <div class="layui-inline layui-word-aux layui-font-white">-->
       <a href="javascript:;" class="layui-font-white" id="ID-dropdown-demo-base-text">
-        切换apisix<i class="layui-icon layui-font-12 layui-icon-down"></i>
+        ${i18n.get("headerStr.switchApisix")}<i class="layui-icon layui-font-12 layui-icon-down"></i>
       </a>
       <!--            </div>-->
     </li>
@@ -47,20 +47,22 @@
         ${langType}</a
       >
       <dl class="layui-nav-child">
-        <dd><a href="javascript:i18n('en_US');">English</a></dd>
-        <dd><a href="javascript:i18n('zh');">简体中文</a></dd>
+        <dd><a href="javascript:i18n('en_US');">${i18n.get("commonStr.langEn")}</a></dd>
+        <dd><a href="javascript:i18n('zh');">${i18n.get("commonStr.langZh")}</a></dd>
       </dl>
     </li>
 
     <li class="layui-nav-item">
       <a href="javascript:;">${i18n.get("commonStr.userTutorial")}</a>
       <dl class="layui-nav-child">
-        <a href="https://apisix.apache.org/docs/apisix/getting-started/README/" target="_blank">官方文档</a>
-        <a href="https://github.com/apache/apisix" target="_blank">官方代码库</a>
-        <a href="https://hub.docker.com/r/apache/apisix" target="_blank">apisix镜像</a>
-        <a href="https://hub.docker.com/r/dyrnq/apisixweb" target="_blank">apisixWeb镜像</a>
+        <a href="https://apisix.apache.org/docs/apisix/getting-started/README/" target="_blank"
+          >${i18n.get("headerStr.officialDocs")}</a
+        >
+        <a href="https://github.com/apache/apisix" target="_blank">${i18n.get("headerStr.officialCode")}</a>
+        <a href="https://hub.docker.com/r/apache/apisix" target="_blank">${i18n.get("headerStr.apisixImage")}</a>
+        <a href="https://hub.docker.com/r/dyrnq/apisixweb" target="_blank">${i18n.get("headerStr.apisixWebImage")}</a>
         <a href="https://github.com/apache/apisix/blob/master/conf/config.yaml.example" target="_blank"
-          >config.yaml.example</a
+          >${i18n.get("headerStr.configExample")}</a
         >
         <a href="https://github.com/apache/apisix/blob/master/apisix/cli/config.lua" target="_blank">config.lua</a>
         <a href="https://github.com/apache/apisix/blob/master/apisix/cli/ngx_tpl.lua" target="_blank">ngx_tpl.lua</a>

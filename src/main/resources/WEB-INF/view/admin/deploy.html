@@ -60,31 +60,33 @@
           <input type="hidden" name="u" />
 
           <div class="layui-form-item" id="div_id">
-            <label class="layui-form-label">id</label>
+            <label class="layui-form-label">${i18n.get("deployStr.id")}</label>
             <div class="layui-input-block">
               <input type="text" name="id" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">title</label>
+            <label class="layui-form-label">${i18n.get("deployStr.title")}</label>
             <div class="layui-input-block">
               <input type="text" name="title" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item" id="div_content">
-            <label class="layui-form-label">content</label>
+            <label class="layui-form-label">${i18n.get("deployStr.content")}</label>
             <div class="layui-input-block">
               <pre id="editor" class=".json-editor"></pre>
             </div>
           </div>
 
           <div class="layui-form-item" style="margin-top: 20px; margin-bottom: 20px" id="div_uploadFile">
-            <label class="layui-form-label">file</label>
+            <label class="layui-form-label">${i18n.get("deployStr.file")}</label>
 
             <div class="layui-input-inline short">
-              <button type="button" class="layui-btn layui-btn-normal" id="upload-file">upload</button>
+              <button type="button" class="layui-btn layui-btn-normal" id="upload-file">
+                ${i18n.get("deployStr.upload")}
+              </button>
             </div>
             <div class="layui-form-mid layui-word-aux">
               <span class="layui-inline layui-upload-choose" id="layui-upload-choose-cert"></span>

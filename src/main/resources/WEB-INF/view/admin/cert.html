@@ -98,9 +98,9 @@ input[name='param']{
 
 
                         <div class="layui-form-item" id="div_id">
-                            <label class="layui-form-label">id</label>
+                            <label class="layui-form-label">${i18n.get("certStr.id")}</label>
                             <div class="layui-input-block">
-                                <input type="text" name="id" class="layui-input" placeholder="可空">
+                                <input type="text" name="id" class="layui-input" placeholder="${i18n.get("certStr.idOptional")}">
                             </div>
                         </div>
 
@@ -117,7 +117,7 @@ input[name='param']{
 
                 <div class="layui-col-md3"><div class="grid-demo">
                     <div class="layui-form-item" id="div_encryption">
-                        <label class="layui-form-label">encryption</label>
+                        <label class="layui-form-label">${i18n.get("certStr.encryption")}</label>
                         <div class="layui-input-block">
                             <select name="encryption" lay-filter="encryption">
                                 <#list encryption as item><option value="${item.id}">${item.getName()}</option></#list>
@@ -139,7 +139,7 @@ input[name='param']{
                 <div class="layui-col-md4"><div class="grid-demo">
 
                         <div class="layui-form-item" id="div_approach">
-                            <label class="layui-form-label">approach</label>
+                            <label class="layui-form-label">${i18n.get("certStr.approach")}</label>
                             <div class="layui-input-block">
                                 <select name="approach" lay-filter="approach">
                                     <#list approach as item><option value="${item.id}">${item.getName()}</option></#list>
@@ -151,7 +151,7 @@ input[name='param']{
                     <div class="layui-col-md4"><div class="grid-demo">
 
                         <div class="layui-form-item" id="div_CA">
-                            <label class="layui-form-label">CA</label>
+                            <label class="layui-form-label">${i18n.get("certStr.ca")}</label>
                             <div class="layui-input-block">
                                 <select name="caId" lay-filter="demo-select-filter" id="CASelect">
                                     <option value="" selected></option>
@@ -165,7 +165,7 @@ input[name='param']{
                         <div class="layui-col-md4"><div class="grid-demo">
 
                         <div class="layui-form-item" id="div_supplier">
-                            <label class="layui-form-label">supplier</label>
+                            <label class="layui-form-label">${i18n.get("certStr.supplier")}</label>
                             <div class="layui-input-block">
                                 <select name="supplier" lay-filter="supplier">
                                     <#list supplier as item><option value="${item.id}">${item.getName()}</option></#list>
@@ -181,18 +181,18 @@ input[name='param']{
             <div class="layui-row">
                 <div class="layui-col-md4"><div class="grid-demo">
                     <div class="layui-form-item" id="div_domain">
-                        <label class="layui-form-label">domain</label>
+                        <label class="layui-form-label">${i18n.get("certStr.domain")}</label>
                         <div class="layui-input-block">
-                            <input type="text" name="domain" class="layui-input" placeholder="不可空">
+                            <input type="text" name="domain" class="layui-input" placeholder="${i18n.get("certStr.idRequired")}">
                         </div>
                     </div>
                 </div></div>
 
                 <div class="layui-col-md4"><div class="grid-demo">
                     <div class="layui-form-item" id="div_subject">
-                        <label class="layui-form-label">subject</label>
+                        <label class="layui-form-label">${i18n.get("certStr.subject")}</label>
                         <div class="layui-input-block">
-                            <input type="text" name="subject" class="layui-input" placeholder="可空">
+                            <input type="text" name="subject" class="layui-input" placeholder="${i18n.get("certStr.idOptional")}">
                         </div>
                     </div>
                 </div></div>
@@ -205,7 +205,7 @@ input[name='param']{
                 <div class="layui-col-md4"><div class="grid-demo">
 
                 <div class="layui-form-item" id="div_challenge">
-                    <label class="layui-form-label">challenge</label>
+                    <label class="layui-form-label">${i18n.get("certStr.challenge")}</label>
                     <div class="layui-input-block">
                         <select name="challenge" lay-filter="challenge">
                             <#list challenge as item><option value="${item.id}">${item.getName()}</option></#list>
@@ -219,7 +219,7 @@ input[name='param']{
                 <div class="layui-col-md4"><div class="grid-demo">
 
                     <div class="layui-form-item" id="div_dnsapi">
-                        <label class="layui-form-label">dnsapi</label>
+                        <label class="layui-form-label">${i18n.get("certStr.dnsapi")}</label>
                         <div class="layui-input-block">
 <!--                            <select name="dnsapi" lay-filter="dnsapi" lay-search="">-->
 <!--                                <#list dnsapi as item><option value="${item}">${item}</option></#list>-->
@@ -267,10 +267,10 @@ input[name='param']{
             <div class="layui-row">
                 <div class="layui-col-md8"><div class="grid-demo">
                     <div class="layui-form-item" id="div_aux">
-                        <label class="layui-form-label">aux &nbsp;<a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi#how-to-use-dns-api" target="_blank"><i class="layui-icon layui-icon-question" style="font-size: 14px; color: #1E9FFF;"></i></a>
+                        <label class="layui-form-label">${i18n.get("certStr.aux")} &nbsp;<a href="https://github.com/acmesh-official/acme.sh/wiki/dnsapi#how-to-use-dns-api" target="_blank"><i class="layui-icon layui-icon-question" style="font-size: 14px; color: #1E9FFF;"></i></a>
                         </label>
                         <div class="layui-input-block">
-                            <textarea name="aux" placeholder="可空,当使用DNS-01作为Challenge时的环境变量" class="layui-textarea"></textarea>
+                            <textarea name="aux" placeholder="${i18n.get("certStr.auxTips")}" class="layui-textarea"></textarea>
                         </div>
                     </div>
                 </div></div>
@@ -289,7 +289,7 @@ input[name='param']{
                     <div class="layui-form-item" id="div_renew">
                         <label class="layui-form-label">&nbsp;</label>
                         <div class="layui-input-block">
-                        <input type="checkbox" name="renew" lay-text="自动renew证书" value="checked_value">
+                        <input type="checkbox" name="renew" lay-text="${i18n.get("certStr.renewAuto")}" value="checked_value">
                         </div>
                     </div>
                 </div></div>
@@ -297,7 +297,7 @@ input[name='param']{
                 <div class="layui-col-md3"><div class="grid-demo">
                     <div class="layui-form-item" id="div_issue">
                         <div class="layui-input-block">
-                            <input type="checkbox" name="issue" lay-text="马上申请" value="checked_value">
+                            <input type="checkbox" name="issue" lay-text="${i18n.get("certStr.issueNow")}" value="checked_value">
                         </div>
                     </div>
                     &nbsp;
@@ -317,10 +317,10 @@ input[name='param']{
 
 
                 <div class="layui-form-item" style="margin-top:20px;margin-bottom:20px" id="div_certFile">
-                    <label class="layui-form-label">cert</label>
+                    <label class="layui-form-label">${i18n.get("certStr.cert")}</label>
 
                     <div class="layui-input-inline short">
-                        <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">upload</button>
+                        <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">${i18n.get("certStr.upload")}</button>
                     </div>
                     <div class="layui-form-mid layui-word-aux"><span class="layui-inline layui-upload-choose" id="layui-upload-choose-cert"></span></div>
 
@@ -329,10 +329,10 @@ input[name='param']{
 
 
                 <div class="layui-form-item" style="margin-top:20px;margin-bottom:20px" id="div_keyFile">
-                    <label class="layui-form-label">key</label>
+                    <label class="layui-form-label">${i18n.get("certStr.cert")} key</label>
 
                     <div class="layui-input-inline short">
-                        <button type="button" class="layui-btn layui-btn-normal" id="upload-key">upload</button>
+                        <button type="button" class="layui-btn layui-btn-normal" id="upload-key">${i18n.get("certStr.upload")}</button>
                     </div>
                     <div class="layui-form-mid layui-word-aux"><span class="layui-inline layui-upload-choose" id="layui-upload-choose-key"></span></div>
 
@@ -364,14 +364,14 @@ input[name='param']{
             </div>
 
             <div class="layui-form-item" id="title">
-                <label class="layui-form-label">title</label>
+                <label class="layui-form-label">${i18n.get("certStr.title")}</label>
                 <div class="layui-input-block">
                     <input type="text" name="title" class="layui-input">
                 </div>
             </div>
 
             <div class="layui-form-item" id="new subject">
-                <label class="layui-form-label">subject</label>
+                <label class="layui-form-label">${i18n.get("certStr.subject")}</label>
                 <div class="layui-input-block">
                     <input type="text" name="subject" class="layui-input">
                 </div>
@@ -399,7 +399,7 @@ input[name='param']{
                 </div>
             </div>
             <div class="layui-form-item" id="div_content">
-                <label class="layui-form-label">content</label>
+                <label class="layui-form-label">${i18n.get("certStr.content")}</label>
                 <div class="layui-input-block">
                     <pre id="editor1" class=".json-editor"></pre>
                 </div>

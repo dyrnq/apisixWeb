@@ -81,6 +81,9 @@ commonStr.stop       = 关闭
 commonStr.restart    = 重启
 commonStr.reload = 重新加载
 commonStr.config     = 配置
+commonStr.editor    = 编辑器
+commonStr.langEn    = English
+commonStr.langZh    = 简体中文
 
 loginStr.add         = 添加
 loginStr.authCode    = 身份码
@@ -188,3 +191,71 @@ add.inst = 新增Apisix实例
 add.user = 新增用户
 add.cert = 添加证书
 add.proto = 新增Proto
+
+certStr.encryption     = 加密方式
+certStr.approach       = 申请方式
+certStr.ca             = CA
+certStr.supplier       = 厂商
+certStr.domain         = 域名
+certStr.subject        = 主体
+certStr.challenge      = 验证方式
+certStr.dnsapi         = DNS API
+certStr.aux            = 附加参数
+certStr.renewAuto      = 自动 renew 证书
+certStr.issueNow       = 马上申请
+certStr.cert           = 证书
+certStr.upload         = 上传
+certStr.idOptional     = 可空
+certStr.idRequired     = 不可空
+certStr.auxTips        = 可空,当使用 DNS-01 作为 Challenge 时的环境变量
+certStr.title          = 标题
+certStr.content        = 内容
+certStr.id             = 标识
+
+sslStr.label           = 标签
+sslStr.id              = 标识
+sslStr.type            = 类型
+sslStr.snis            = SNI 域名
+sslStr.certFile        = 证书文件
+sslStr.keyFile         = 私钥文件
+sslStr.clientCaFile    = 客户端 CA 文件
+
+instStr.url            = Admin URL
+instStr.apiKey         = Admin API Key
+instStr.agentUrl       = Agent URL
+instStr.agentApiKey    = Agent API Key
+instStr.tarFile        = 压缩包文件
+instStr.file           = 文件
+instStr.content        = 内容
+instStr.json           = JSON
+instStr.yaml           = YAML
+instStr.default        = 默认
+instStr.id             = 标识
+instStr.name           = 名称
+
+userStr.email          = 邮箱
+userStr.phone          = 电话
+userStr.pass           = 密码
+userStr.id             = 标识
+userStr.name           = 用户名
+
+deployStr.title        = 标题
+deployStr.content      = 内容
+deployStr.file         = 文件
+deployStr.upload       = 上传
+deployStr.id           = 标识
+
+manifestStr.title      = 标题
+manifestStr.content    = 内容
+manifestStr.id         = 标识
+
+credentialStr.consumer           = 消费者
+credentialStr.consumerUsername   = 消费者用户名
+credentialStr.id                 = 凭据标识
+
+headerStr.switchApisix  = 切换 APISIX
+headerStr.officialDocs  = 官方文档
+headerStr.officialCode  = 官方代码库
+headerStr.apisixImage   = APISIX 镜像
+headerStr.apisixWebImage = apisixWeb 镜像
+headerStr.configExample = config.yaml.example

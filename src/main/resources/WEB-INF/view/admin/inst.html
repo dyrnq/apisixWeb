@@ -60,42 +60,42 @@
           <input type="hidden" name="u" />
 
           <div class="layui-form-item" id="div_id">
-            <label class="layui-form-label">id</label>
+            <label class="layui-form-label">${i18n.get("instStr.id")}</label>
             <div class="layui-input-block">
               <input type="text" name="id" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">name</label>
+            <label class="layui-form-label">${i18n.get("instStr.name")}</label>
             <div class="layui-input-block">
               <input type="text" name="name" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">url</label>
+            <label class="layui-form-label">${i18n.get("instStr.url")}</label>
             <div class="layui-input-block">
               <input type="text" name="url" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">apiKey</label>
+            <label class="layui-form-label">${i18n.get("instStr.apiKey")}</label>
             <div class="layui-input-block">
               <input type="text" name="apiKey" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">agentUrl</label>
+            <label class="layui-form-label">${i18n.get("instStr.agentUrl")}</label>
             <div class="layui-input-block">
               <input type="text" name="agentUrl" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">agentApiKey</label>
+            <label class="layui-form-label">${i18n.get("instStr.agentApiKey")}</label>
             <div class="layui-input-block">
               <input type="text" name="agentApiKey" class="layui-input" />
             </div>
@@ -113,19 +113,19 @@
       <div class="layui-form" id="guideDiv" style="padding: 15px; display: none">
         <form id="addForm3">
           <div class="layui-form-item" style="display: none">
-            <label class="layui-form-label">id</label>
+            <label class="layui-form-label">${i18n.get("instStr.id")}</label>
             <div class="layui-input-block">
               <input type="text" name="id" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item" style="margin-top: 20px; margin-bottom: 20px">
-            <label class="layui-form-label">tar file</label>
+            <label class="layui-form-label">${i18n.get("instStr.tarFile")}</label>
             <!--                <div class="layui-input-block">-->
             <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>-->
             <!--                </div>-->
             <div class="layui-input-inline short">
-              <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">file</button>
+              <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">${i18n.get("instStr.file")}</button>
             </div>
             <div class="layui-form-mid layui-word-aux">
               <span class="layui-inline layui-upload-choose" id="layui-upload-choose-cert"></span>
@@ -151,13 +151,13 @@
           <input type="hidden" name="u" />
 
           <div class="layui-form-item" style="display: none">
-            <label class="layui-form-label">id</label>
+            <label class="layui-form-label">${i18n.get("instStr.id")}</label>
             <div class="layui-input-block">
               <input type="text" name="id" class="layui-input" />
             </div>
           </div>
           <div class="layui-form-item" id="div_content">
-            <label class="layui-form-label">content</label>
+            <label class="layui-form-label">${i18n.get("instStr.content")}</label>
             <div class="layui-input-block">
               <pre id="editor1" class=".json-editor"></pre>
             </div>
@@ -177,13 +177,13 @@
           <input type="hidden" name="format" />
           <input type="hidden" name="id" />
 
-          <input type="radio" name="AAA" value="json" title="默认" lay-filter="demo-radio-filter" checked />
+          <input type="radio" name="AAA" value="json" title="${i18n.get("instStr.default")}" lay-filter="demo-radio-filter" checked />
           <div lay-radio>
-            <span style="color: blue">json</span>
+            <span style="color: blue">${i18n.get("instStr.json")}</span>
           </div>
-          <input type="radio" name="AAA" value="yaml" title="默认" lay-filter="demo-radio-filter" />
+          <input type="radio" name="AAA" value="yaml" title="${i18n.get("instStr.default")}" lay-filter="demo-radio-filter" />
           <div lay-radio>
-            <span style="color: green">yaml</span>
+            <span style="color: green">${i18n.get("instStr.yaml")}</span>
           </div>
           <div class="layui-form-item center">
             <button type="button" class="layui-btn layui-btn-normal" id="choose">

@@ -32,7 +32,7 @@
               <div class="layui-col-md2">
                 <div class="grid-demo">
                   <div class="layui-input-group">
-                    <div class="layui-input-split layui-input-prefix">label</div>
+                    <div class="layui-input-split layui-input-prefix">${i18n.get("sslStr.label")}</div>
                     <input type="text" name="label" class="layui-input" />
                   </div>
                 </div>
@@ -93,7 +93,7 @@
           <!--            </div>-->
 
           <div class="layui-form-item" id="div_id">
-            <input type="text" name="id" id="id" class="layui-input" placeholder="id" />
+            <input type="text" name="id" id="id" class="layui-input" placeholder="${i18n.get("sslStr.id")}" />
           </div>
 
           <div class="layui-row">
@@ -126,14 +126,14 @@
       <div class="layui-form" id="guideDiv" style="padding: 15px; display: none">
         <form id="addForm2">
           <div class="layui-form-item">
-            <label class="layui-form-label">id</label>
+            <label class="layui-form-label">${i18n.get("sslStr.id")}</label>
             <div class="layui-input-block">
               <input type="text" name="id" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">type</label>
+            <label class="layui-form-label">${i18n.get("sslStr.type")}</label>
             <div class="layui-input-block">
               <select name="type" lay-filter="type">
                 <option value="server">server</option>
@@ -143,39 +143,39 @@
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">snis</label>
+            <label class="layui-form-label">${i18n.get("sslStr.snis")}</label>
             <div class="layui-input-block">
               <input type="text" name="snis" class="layui-input" />
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">cert file</label>
+            <label class="layui-form-label">${i18n.get("sslStr.certFile")}</label>
             <!--                <div class="layui-input-block">-->
-            <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>-->
+            <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">${i18n.get("sslStr.certFile")}</button>-->
             <!--                </div>-->
             <div class="layui-input-inline short">
-              <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">cert file</button>
+              <button type="button" class="layui-btn layui-btn-normal" id="upload-cert">${i18n.get("sslStr.certFile")}</button>
             </div>
           </div>
 
           <div class="layui-form-item">
-            <label class="layui-form-label">key file</label>
+            <label class="layui-form-label">${i18n.get("sslStr.keyFile")}</label>
 
             <div class="layui-input-inline short">
-              <button type="button" class="layui-btn layui-btn-normal" id="upload-key">key file</button>
+              <button type="button" class="layui-btn layui-btn-normal" id="upload-key">${i18n.get("sslStr.keyFile")}</button>
             </div>
 
             <!--                <div class="layui-input-block">-->
-            <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-key">key file</button>-->
+            <!--                    <button type="button" class="layui-btn layui-btn-normal" id="upload-key">${i18n.get("sslStr.keyFile")}</button>-->
             <!--                </div>-->
           </div>
 
           <div class="layui-form-item" id="div_upload_client_ca">
-            <label class="layui-form-label">client ca file</label>
+            <label class="layui-form-label">${i18n.get("sslStr.clientCaFile")}</label>
 
             <div class="layui-input-inline short">
-              <button type="button" class="layui-btn layui-btn-normal" id="upload-client-ca">client ca file</button>
+              <button type="button" class="layui-btn layui-btn-normal" id="upload-client-ca">${i18n.get("sslStr.clientCaFile")}</button>
             </div>
           </div>
 
