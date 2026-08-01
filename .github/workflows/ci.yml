@@ -47,7 +47,7 @@ jobs:
 
       - name: Maven build
         run: |
-          ./mvnw -s ./settings.xml clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true
+          ./mvnw clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true -Dspotbugs.skip=true
 
       - name: Build dockerfile (without push)
         run: |
