@@ -43,4 +43,16 @@ public class Proto {
     public String getId() {
         return this.id;
     }
+
+    @SerializedName("update_time")
+    @Expose
+    private Long updateTime;
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUpdateTime() {
+        return this.updateTime;
+    }
 }
