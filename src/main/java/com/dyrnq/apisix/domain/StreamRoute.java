@@ -122,4 +122,28 @@ public class StreamRoute {
     public String getServiceId() {
         return this.serviceId;
     }
+
+    @SerializedName("create_time")
+    @Expose
+    private Long createTime;
+
+    public void setCreateTime(Long createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getCreateTime() {
+        return this.createTime;
+    }
+
+    @SerializedName("update_time")
+    @Expose
+    private Long updateTime;
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUpdateTime() {
+        return this.updateTime;
+    }
 }
