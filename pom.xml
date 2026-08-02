@@ -206,7 +206,7 @@
         <dependency>
             <groupId>com.github.oshi</groupId>
             <artifactId>oshi-core</artifactId>
-            <version>6.4.6</version>
+            <version>7.4.3</version>
         </dependency>
 
 <!--        <dependency>-->
@@ -232,7 +232,7 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.22.0</version>
+            <version>1.22.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
@@ -264,10 +264,14 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>10.22.0</version>
+            <version>13.1.0</version>
         </dependency>
 
-        <!-- Flyway 10.x merged flyway-mysql into flyway-core, no longer needed -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-mysql</artifactId>
+            <version>13.1.0</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.shredzone.acme4j/acme4j-client -->
         <dependency>
@@ -323,7 +327,7 @@
         <dependency>
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
-            <version>2.10.0</version>
+            <version>3.0.0</version>
         </dependency>
 
 
