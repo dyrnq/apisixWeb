@@ -156,11 +156,6 @@
             <version>5.8.47</version>
         </dependency>
 
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
-        </dependency>
 <!--        <dependency>-->
 <!--            <groupId>com.google.zxing</groupId>-->
 <!--            <artifactId>javase</artifactId>-->
