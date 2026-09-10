@@ -287,7 +287,7 @@
         <dependency>
             <groupId>org.bitbucket.b_c</groupId>
             <artifactId>jose4j</artifactId>
-            <version>0.9.6</version>
+            <version>0.9.7</version>
         </dependency>
 
         <!-- acme4j 5.x removed acme4j-utils, CSRBuilder / KeyPairUtils
